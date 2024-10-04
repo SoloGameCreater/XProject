@@ -7,6 +7,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityGameFramework.Runtime;
@@ -18,7 +19,7 @@ namespace StarForce
         public const int DepthFactor = 100;
         private const float FadeTime = 0.3f;
 
-        private static Font s_MainFont = null;
+        private static TMP_FontAsset s_MainFont = null;
         private Canvas m_CachedCanvas = null;
         private CanvasGroup m_CanvasGroup = null;
         private List<Canvas> m_CachedCanvasContainer = new List<Canvas>();
@@ -61,7 +62,7 @@ namespace StarForce
             GameEntry.Sound.PlayUISound(uiSoundId);
         }
 
-        public static void SetMainFont(Font mainFont)
+        public static void SetMainFont(TMP_FontAsset mainFont)
         {
             if (mainFont == null)
             {
@@ -86,15 +87,15 @@ namespace StarForce
 
             m_CanvasGroup = gameObject.GetOrAddComponent<CanvasGroup>();
 
-            RectTransform transform = GetComponent<RectTransform>();
-            transform.anchorMin = Vector2.zero;
-            transform.anchorMax = Vector2.one;
-            transform.anchoredPosition = Vector2.zero;
-            transform.sizeDelta = Vector2.zero;
+            RectTransform trans = GetComponent<RectTransform>();
+            trans.anchorMin = Vector2.zero;
+            trans.anchorMax = Vector2.one;
+            trans.anchoredPosition = Vector2.zero;
+            trans.sizeDelta = Vector2.zero;
 
             gameObject.GetOrAddComponent<GraphicRaycaster>();
 
-            Text[] texts = GetComponentsInChildren<Text>(true);
+            var texts = GetComponentsInChildren<TextMeshProUGUI>(true);
             for (int i = 0; i < texts.Length; i++)
             {
                 texts[i].font = s_MainFont;
