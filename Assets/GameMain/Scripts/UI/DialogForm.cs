@@ -6,6 +6,7 @@
 //------------------------------------------------------------
 
 using GameFramework;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityGameFramework.Runtime;
@@ -15,22 +16,22 @@ namespace StarForce
     public class DialogForm : UGuiForm
     {
         [SerializeField]
-        private Text m_TitleText = null;
+        private TextMeshProUGUI m_TitleText = null;
 
         [SerializeField]
-        private Text m_MessageText = null;
+        private TextMeshProUGUI m_MessageText = null;
 
         [SerializeField]
         private GameObject[] m_ModeObjects = null;
 
         [SerializeField]
-        private Text[] m_ConfirmTexts = null;
+        private TextMeshProUGUI[] m_ConfirmTexts = null;
 
         [SerializeField]
-        private Text[] m_CancelTexts = null;
+        private TextMeshProUGUI[] m_CancelTexts = null;
 
         [SerializeField]
-        private Text[] m_OtherTexts = null;
+        private TextMeshProUGUI[] m_OtherTexts = null;
 
         private int m_DialogMode = 1;
         private bool m_PauseGame = false;
