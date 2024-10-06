@@ -80,6 +80,10 @@ namespace StarForce
             entityComponent.ShowEntity(typeof(Effect), "Effect", Constant.AssetPriority.EffectAsset, data);
         }
 
+        public static void ShowBuff(this EntityComponent entityCompoennt, BuffData data)
+        {
+            entityCompoennt.ShowEntity(typeof(Buff), "Buff", Constant.AssetPriority.BuffAsset, data);
+        }
         private static void ShowEntity(this EntityComponent entityComponent, Type logicType, string entityGroup, int priority, EntityData data)
         {
             if (data == null)

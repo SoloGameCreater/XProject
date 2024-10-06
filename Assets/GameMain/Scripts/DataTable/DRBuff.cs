@@ -5,7 +5,7 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 // 此文件由工具自动生成，请勿直接修改。
-// 生成时间：2024-10-06 21:25:41.890
+// 生成时间：2024-10-06 21:25:41.896
 //------------------------------------------------------------
 
 using GameFramework;
@@ -19,14 +19,14 @@ using UnityGameFramework.Runtime;
 namespace StarForce
 {
     /// <summary>
-    /// 装甲表。
+    /// Buff表。
     /// </summary>
-    public class DRArmor : DataRowBase
+    public class DRBuff : DataRowBase
     {
         private int m_Id = 0;
 
         /// <summary>
-        /// 获取装甲编号。
+        /// 获取小行星编号。
         /// </summary>
         public override int Id
         {
@@ -37,18 +37,45 @@ namespace StarForce
         }
 
         /// <summary>
-        /// 获取最大生命。
+        /// 获取值类型。
         /// </summary>
-        public int MaxHP
+        public float Addition
         {
             get;
             private set;
         }
 
         /// <summary>
-        /// 获取防御力。
+        /// 获取百分比类型。
         /// </summary>
-        public int Defense
+        public float Ratio
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// 获取是否是增加值。
+        /// </summary>
+        public int IsAdd
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// 获取碰撞特效编号。
+        /// </summary>
+        public int EffectId
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// 获取碰撞声音编号。
+        /// </summary>
+        public int SoundId
         {
             get;
             private set;
@@ -66,8 +93,11 @@ namespace StarForce
             index++;
             m_Id = int.Parse(columnStrings[index++]);
             index++;
-            MaxHP = int.Parse(columnStrings[index++]);
-            Defense = int.Parse(columnStrings[index++]);
+            Addition = float.Parse(columnStrings[index++]);
+            Ratio = float.Parse(columnStrings[index++]);
+            IsAdd = int.Parse(columnStrings[index++]);
+            EffectId = int.Parse(columnStrings[index++]);
+            SoundId = int.Parse(columnStrings[index++]);
 
             GeneratePropertyArray();
             return true;
@@ -80,8 +110,11 @@ namespace StarForce
                 using (BinaryReader binaryReader = new BinaryReader(memoryStream, Encoding.UTF8))
                 {
                     m_Id = binaryReader.Read7BitEncodedInt32();
-                    MaxHP = binaryReader.Read7BitEncodedInt32();
-                    Defense = binaryReader.Read7BitEncodedInt32();
+                    Addition = binaryReader.ReadSingle();
+                    Ratio = binaryReader.ReadSingle();
+                    IsAdd = binaryReader.Read7BitEncodedInt32();
+                    EffectId = binaryReader.Read7BitEncodedInt32();
+                    SoundId = binaryReader.Read7BitEncodedInt32();
                 }
             }
 

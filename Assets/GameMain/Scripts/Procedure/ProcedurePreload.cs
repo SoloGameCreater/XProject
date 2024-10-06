@@ -23,6 +23,7 @@ namespace StarForce
             "Aircraft",
             "Armor",
             "Asteroid",
+            "Buff",
             "Entity",
             "Music",
             "Scene",
