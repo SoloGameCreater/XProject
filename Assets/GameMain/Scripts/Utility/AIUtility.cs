@@ -174,7 +174,6 @@ namespace StarForce
             if (buff != null)
             {
                 if (entity is not MyAircraft) return;
-                Log.Info($"{buff.BuffDataInfo.Id} was post.");
                 GameEntry.Event.Fire(buff, BuffOnTriggerEventArgs.Create(buff.BuffDataInfo));
                 GameEntry.Entity.HideEntity(buff);
                 return;

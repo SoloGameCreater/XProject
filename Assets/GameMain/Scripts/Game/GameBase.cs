@@ -91,7 +91,7 @@ namespace StarForce
             if (m_MyAircraft == null) return;
             
             BuffOnTriggerEventArgs ne = (BuffOnTriggerEventArgs)e;
-            Log.Info("BuffOnTriggerEventArgs get '{0}'.", ne.UserData.Id);
+            //Log.Info("BuffOnTriggerEventArgs get '{0}'.", ne.UserData.Id);
         }
         
     }

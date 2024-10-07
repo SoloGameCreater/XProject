@@ -5,7 +5,7 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 // 此文件由工具自动生成，请勿直接修改。
-// 生成时间：2024-10-06 21:25:41.896
+// 生成时间：2024-10-07 20:19:49.278
 //------------------------------------------------------------
 
 using GameFramework;
@@ -26,7 +26,7 @@ namespace StarForce
         private int m_Id = 0;
 
         /// <summary>
-        /// 获取小行星编号。
+        /// 获取buff编号。
         /// </summary>
         public override int Id
         {
@@ -37,18 +37,18 @@ namespace StarForce
         }
 
         /// <summary>
-        /// 获取值类型。
+        /// 获取增减。
         /// </summary>
-        public float Addition
+        public int Addition
         {
             get;
             private set;
         }
 
         /// <summary>
-        /// 获取百分比类型。
+        /// 获取乘除。
         /// </summary>
-        public float Ratio
+        public int Ratio
         {
             get;
             private set;
@@ -81,6 +81,15 @@ namespace StarForce
             private set;
         }
 
+        /// <summary>
+        /// 获取权重。
+        /// </summary>
+        public int Weight
+        {
+            get;
+            private set;
+        }
+
         public override bool ParseDataRow(string dataRowString, object userData)
         {
             string[] columnStrings = dataRowString.Split(DataTableExtension.DataSplitSeparators);
@@ -93,11 +102,12 @@ namespace StarForce
             index++;
             m_Id = int.Parse(columnStrings[index++]);
             index++;
-            Addition = float.Parse(columnStrings[index++]);
-            Ratio = float.Parse(columnStrings[index++]);
+            Addition = int.Parse(columnStrings[index++]);
+            Ratio = int.Parse(columnStrings[index++]);
             IsAdd = int.Parse(columnStrings[index++]);
             EffectId = int.Parse(columnStrings[index++]);
             SoundId = int.Parse(columnStrings[index++]);
+            Weight = int.Parse(columnStrings[index++]);
 
             GeneratePropertyArray();
             return true;
@@ -110,11 +120,12 @@ namespace StarForce
                 using (BinaryReader binaryReader = new BinaryReader(memoryStream, Encoding.UTF8))
                 {
                     m_Id = binaryReader.Read7BitEncodedInt32();
-                    Addition = binaryReader.ReadSingle();
-                    Ratio = binaryReader.ReadSingle();
+                    Addition = binaryReader.Read7BitEncodedInt32();
+                    Ratio = binaryReader.Read7BitEncodedInt32();
                     IsAdd = binaryReader.Read7BitEncodedInt32();
                     EffectId = binaryReader.Read7BitEncodedInt32();
                     SoundId = binaryReader.Read7BitEncodedInt32();
+                    Weight = binaryReader.Read7BitEncodedInt32();
                 }
             }
 

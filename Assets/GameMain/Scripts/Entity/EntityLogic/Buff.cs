@@ -1,3 +1,5 @@
+using System.Text;
+using TMPro;
 using UnityEngine;
 using UnityGameFramework.Runtime;
 
@@ -6,6 +8,9 @@ namespace StarForce
     public class Buff : Entity
     {
         [SerializeField] private BuffData m_BuffData = null;
+        private Transform m_AddTrans = null;
+        private Transform m_ReduceTrans = null;
+        private TextMeshPro m_Text = null;
         public BuffData BuffDataInfo => m_BuffData;
         private const float Speed = 5f;
 
@@ -13,6 +18,9 @@ namespace StarForce
         {
             base.OnInit(userData);
             m_BuffData = userData as BuffData;
+            m_AddTrans = transform.Find("Add");
+            m_ReduceTrans = transform.Find("Reduce");
+            m_Text = transform.Find("Text")?.GetComponent<TextMeshPro>();
         }
         protected override void OnShow(object userData)
         {
@@ -24,6 +32,22 @@ namespace StarForce
                 Log.Error("Buff data is invalid.");
                 return;
             }
+            m_AddTrans.gameObject.SetActive(m_BuffData.IsAdd);
+            m_ReduceTrans.gameObject.SetActive(!m_BuffData.IsAdd);
+            StringBuilder displayStr = new StringBuilder();
+            if (m_BuffData.Addition > 0)
+            {
+                var signStr = m_BuffData.IsAdd ? "+" : "-";
+                displayStr.Append(signStr);
+                displayStr.Append(m_BuffData.Addition);
+            }
+            else
+            {
+                var signStr = m_BuffData.IsAdd ? "x" : "÷";
+                displayStr.Append(signStr);
+                displayStr.Append(m_BuffData.Ratio);
+            }
+            m_Text.text = displayStr.ToString();
         }
         protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
         {
