@@ -18,25 +18,16 @@ namespace StarForce
     {
         private const string AttachPoint = "Weapon Point";
 
-        [SerializeField]
-        private WeaponData m_WeaponData = null;
+        [SerializeField] private WeaponData m_WeaponData = null;
 
         private float m_NextAttackTime = 0f;
 
-#if UNITY_2017_3_OR_NEWER
         protected override void OnInit(object userData)
-#else
-        protected internal override void OnInit(object userData)
-#endif
         {
             base.OnInit(userData);
         }
 
-#if UNITY_2017_3_OR_NEWER
         protected override void OnShow(object userData)
-#else
-        protected internal override void OnShow(object userData)
-#endif
         {
             base.OnShow(userData);
 
@@ -50,11 +41,7 @@ namespace StarForce
             GameEntry.Entity.AttachEntity(Entity, m_WeaponData.OwnerId, AttachPoint);
         }
 
-#if UNITY_2017_3_OR_NEWER
         protected override void OnAttachTo(EntityLogic parentEntity, Transform parentTransform, object userData)
-#else
-        protected internal override void OnAttachTo(EntityLogic parentEntity, Transform parentTransform, object userData)
-#endif
         {
             base.OnAttachTo(parentEntity, parentTransform, userData);
 
@@ -70,7 +57,8 @@ namespace StarForce
             }
 
             m_NextAttackTime = Time.time + m_WeaponData.AttackInterval;
-            GameEntry.Entity.ShowBullet(new BulletData(GameEntry.Entity.GenerateSerialId(), m_WeaponData.BulletId, m_WeaponData.OwnerId, m_WeaponData.OwnerCamp, m_WeaponData.Attack, m_WeaponData.BulletSpeed)
+            GameEntry.Entity.ShowBullet(new BulletData(GameEntry.Entity.GenerateSerialId(), m_WeaponData.BulletId, m_WeaponData.OwnerId, m_WeaponData.OwnerCamp,
+                m_WeaponData.Attack, m_WeaponData.BulletSpeed)
             {
                 Position = CachedTransform.position,
             });

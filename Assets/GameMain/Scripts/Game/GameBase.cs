@@ -36,6 +36,7 @@ namespace StarForce
         {
             GameEntry.Event.Subscribe(ShowEntitySuccessEventArgs.EventId, OnShowEntitySuccess);
             GameEntry.Event.Subscribe(ShowEntityFailureEventArgs.EventId, OnShowEntityFailure);
+            GameEntry.Event.Subscribe(BuffOnTriggerEventArgs.EventId, OnMyAircraftAddBuff);
 
             SceneBackground = Object.FindObjectOfType<ScrollableBackground>();
             if (SceneBackground == null)
@@ -59,6 +60,7 @@ namespace StarForce
         {
             GameEntry.Event.Unsubscribe(ShowEntitySuccessEventArgs.EventId, OnShowEntitySuccess);
             GameEntry.Event.Unsubscribe(ShowEntityFailureEventArgs.EventId, OnShowEntityFailure);
+            GameEntry.Event.Unsubscribe(BuffOnTriggerEventArgs.EventId, OnMyAircraftAddBuff);
         }
 
         public virtual void Update(float elapseSeconds, float realElapseSeconds)
@@ -84,5 +86,13 @@ namespace StarForce
             ShowEntityFailureEventArgs ne = (ShowEntityFailureEventArgs)e;
             Log.Warning("Show entity failure with error message '{0}'.", ne.ErrorMessage);
         }
+        protected virtual void OnMyAircraftAddBuff(object sender, GameEventArgs e)
+        {
+            if (m_MyAircraft == null) return;
+            
+            BuffOnTriggerEventArgs ne = (BuffOnTriggerEventArgs)e;
+            Log.Info("BuffOnTriggerEventArgs get '{0}'.", ne.Id);
+        }
+        
     }
 }

@@ -169,6 +169,16 @@ namespace StarForce
                 GameEntry.Entity.HideEntity(bullet);
                 return;
             }
+
+            var buff = other as Buff;
+            if (buff != null)
+            {
+                if (entity is MyAircraft)
+                {
+                    Log.Info("BuffOnTriggerEventArgs get '{0}'.", buff.Id);
+                    //GameEntry.Event.Fire(this,BuffOnTriggerEventArgs.Create(buff.BuffDataInfo));
+                }
+            }
         }
 
         private static int CalcDamageHP(int attack, int defense)

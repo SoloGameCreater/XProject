@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using UnityGameFramework.Runtime;
 
@@ -6,12 +5,17 @@ namespace StarForce
 {
     public class Buff : Entity
     {
+        [SerializeField] private BuffData m_BuffData = null;
+        public BuffData BuffDataInfo => m_BuffData;
         private const float Speed = 5f;
-#if UNITY_2017_3_OR_NEWER
+
+        protected override void OnInit(object userData)
+        {
+            base.OnInit(userData);
+            m_BuffData = userData as BuffData;
+        }
+
         protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
-#else
-        protected internal override void OnUpdate(float elapseSeconds, float realElapseSeconds)
-#endif
         {
             base.OnUpdate(elapseSeconds, realElapseSeconds);
 

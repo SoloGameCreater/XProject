@@ -13,19 +13,13 @@ namespace StarForce
 {
     public class AboutForm : UGuiForm
     {
-        [SerializeField]
-        private RectTransform m_Transform = null;
+        [SerializeField] private RectTransform m_Transform = null;
 
-        [SerializeField]
-        private float m_ScrollSpeed = 1f;
+        [SerializeField] private float m_ScrollSpeed = 1f;
 
         private float m_InitPosition = 0f;
 
-#if UNITY_2017_3_OR_NEWER
         protected override void OnInit(object userData)
-#else
-        protected internal override void OnInit(object userData)
-#endif
         {
             base.OnInit(userData);
 
@@ -39,11 +33,7 @@ namespace StarForce
             m_InitPosition = -0.5f * canvasScaler.referenceResolution.x * Screen.height / Screen.width;
         }
 
-#if UNITY_2017_3_OR_NEWER
         protected override void OnOpen(object userData)
-#else
-        protected internal override void OnOpen(object userData)
-#endif
         {
             base.OnOpen(userData);
 
@@ -53,11 +43,7 @@ namespace StarForce
             GameEntry.Sound.PlayMusic(3);
         }
 
-#if UNITY_2017_3_OR_NEWER
         protected override void OnClose(bool isShutdown, object userData)
-#else
-        protected internal override void OnClose(bool isShutdown, object userData)
-#endif
         {
             base.OnClose(isShutdown, userData);
 
@@ -65,11 +51,7 @@ namespace StarForce
             GameEntry.Sound.PlayMusic(1);
         }
 
-#if UNITY_2017_3_OR_NEWER
         protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
-#else
-        protected internal override void OnUpdate(float elapseSeconds, float realElapseSeconds)
-#endif
         {
             base.OnUpdate(elapseSeconds, realElapseSeconds);
 
