@@ -173,11 +173,11 @@ namespace StarForce
             var buff = other as Buff;
             if (buff != null)
             {
-                if (entity is MyAircraft)
-                {
-                    Log.Info("BuffOnTriggerEventArgs get '{0}'.", buff.Id);
-                    //GameEntry.Event.Fire(this,BuffOnTriggerEventArgs.Create(buff.BuffDataInfo));
-                }
+                if (entity is not MyAircraft) return;
+                Log.Info($"{buff.BuffDataInfo.Id} was post.");
+                GameEntry.Event.Fire(buff, BuffOnTriggerEventArgs.Create(buff.BuffDataInfo));
+                GameEntry.Entity.HideEntity(buff);
+                return;
             }
         }
 
@@ -210,18 +210,12 @@ namespace StarForce
 
             public CampType First
             {
-                get
-                {
-                    return m_First;
-                }
+                get { return m_First; }
             }
 
             public CampType Second
             {
-                get
-                {
-                    return m_Second;
-                }
+                get { return m_Second; }
             }
         }
     }

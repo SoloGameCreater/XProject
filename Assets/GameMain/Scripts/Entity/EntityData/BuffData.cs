@@ -6,21 +6,19 @@ namespace StarForce
 {
     public class BuffData : EntityData
     {
-        [SerializeField]
-        private float m_Addition = 0;
+        [SerializeField] private int m_Id = 0;
+        
+        [SerializeField] private float m_Addition = 0;
 
-        [SerializeField]
-        private float m_Ratio = 0;
-        
-        [SerializeField]
-        private bool m_IsAdd = false;
-        
-        [SerializeField]
-        private int m_EffectId = 0;
-        
-        [SerializeField]
-        private int m_SoundId = 0;
-        
+        [SerializeField] private float m_Ratio = 0;
+
+        [SerializeField] private bool m_IsAdd = false;
+
+        [SerializeField] private int m_EffectId = 0;
+
+        [SerializeField] private int m_SoundId = 0;
+
+        public int Id => m_Id;
         public float Addition => m_Addition;
         public float Ratio => m_Ratio;
         public bool IsAdd => m_IsAdd;
@@ -37,6 +35,7 @@ namespace StarForce
                 return;
             }
 
+            m_Id = typeId;
             m_Addition = drAsteroid.Addition;
             m_Ratio = drAsteroid.Ratio;
             m_IsAdd = drAsteroid.IsAdd == 1;

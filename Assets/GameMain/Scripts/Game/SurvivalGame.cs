@@ -8,6 +8,7 @@
 using GameFramework;
 using GameFramework.DataTable;
 using UnityEngine;
+using UnityGameFramework.Runtime;
 
 namespace StarForce
 {
@@ -47,11 +48,14 @@ namespace StarForce
             {
                 m_LastCreateBuffSeconds = 0f;
                 IDataTable<DRBuff> dtBuff = GameEntry.DataTable.GetDataTable<DRBuff>();
-                GameEntry.Entity.ShowBuff(new BuffData(GameEntry.Entity.GenerateSerialId(), 80000 + Utility.Random.GetRandom(dtBuff.Count))
+                var typeId_1 = Utility.Random.GetRandom(dtBuff.Count);
+                var typeId_2 = Utility.Random.GetRandom(dtBuff.Count);
+                Log.Info($"randomID : {typeId_1}, typeID : {typeId_2}");
+                GameEntry.Entity.ShowBuff(new BuffData(GameEntry.Entity.GenerateSerialId(), 80000 + typeId_1)
                 {
                     Position = new Vector3(3, 0f, 15f),
                 });
-                GameEntry.Entity.ShowBuff(new BuffData(GameEntry.Entity.GenerateSerialId(), 80000 + Utility.Random.GetRandom(dtBuff.Count))
+                GameEntry.Entity.ShowBuff(new BuffData(GameEntry.Entity.GenerateSerialId(), 80000 + typeId_2)
                 {
                     Position = new Vector3(-3, 0f, 15f),
                 });
