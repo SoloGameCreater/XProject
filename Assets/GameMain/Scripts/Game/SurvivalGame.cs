@@ -54,22 +54,22 @@ namespace StarForce
                  * 如果第一次随机出的是减益buff，那么下一次一定是增益buff
                  * 允许两个增益buff同时存在
                  */
-                var index_1 = Utility.Random.GetRandom(dtBuff.Count);
-                var buff_1 = dtBuff.GetDataRow(BuffStartId + index_1);
-                GameEntry.Entity.ShowBuff(new BuffData(GameEntry.Entity.GenerateSerialId(), BuffStartId, buff_1.Id)
+                var index1 = Utility.Random.GetRandom(dtBuff.Count);
+                var buff1 = dtBuff.GetDataRow(BuffStartId + index1);
+                GameEntry.Entity.ShowBuff(new BuffData(GameEntry.Entity.GenerateSerialId(), BuffStartId, buff1.Id)
                 {
                     Position = new Vector3(3, 0f, 15f),
                 });
-                var typeId_2 = Utility.Random.GetRandom(dtBuff.Count);
-                if (buff_1.IsAdd == 0)
+                var index2 = Utility.Random.GetRandom(dtBuff.Count);
+                if (buff1.IsAdd == 0)
                 {
                     var addDtBuffs = dtBuff.GetDataRows((x) => { return x.IsAdd == 1; });
-                    typeId_2 = Utility.Random.GetRandom(addDtBuffs.Length);
+                    index2 = Utility.Random.GetRandom(addDtBuffs.Length);
                 }
 
-                var buff_2 = dtBuff.GetDataRow(BuffStartId + typeId_2);
+                var buff2 = dtBuff.GetDataRow(BuffStartId + index2);
 
-                GameEntry.Entity.ShowBuff(new BuffData(GameEntry.Entity.GenerateSerialId(), BuffStartId, buff_2.Id)
+                GameEntry.Entity.ShowBuff(new BuffData(GameEntry.Entity.GenerateSerialId(), BuffStartId, buff2.Id)
                 {
                     Position = new Vector3(-3, 0f, 15f),
                 });
