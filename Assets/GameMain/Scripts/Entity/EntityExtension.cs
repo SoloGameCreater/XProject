@@ -45,6 +45,11 @@ namespace StarForce
             entityComponent.ShowEntity(typeof(MyAircraft), "Aircraft", Constant.AssetPriority.MyAircraftAsset, data);
         }
 
+        public static void ShowFollowAircraft(this EntityComponent entityComponent, AircraftData data)
+        {
+            entityComponent.ShowEntity(typeof(FollowAircraft), "Aircraft", Constant.AssetPriority.MyAircraftAsset, data);
+        }
+
         public static void ShowAircraft(this EntityComponent entityComponent, AircraftData data)
         {
             entityComponent.ShowEntity(typeof(Aircraft), "Aircraft", Constant.AssetPriority.AircraftAsset, data);
@@ -84,6 +89,7 @@ namespace StarForce
         {
             entityCompoennt.ShowEntity(typeof(Buff), "Buff", Constant.AssetPriority.BuffAsset, data);
         }
+
         private static void ShowEntity(this EntityComponent entityComponent, Type logicType, string entityGroup, int priority, EntityData data)
         {
             if (data == null)
