@@ -25,3 +25,21 @@ public class EditorHelper : EditorWindow
         AssetDatabase.OpenAsset(obj, 0);
     }
 }
+
+[InitializeOnLoad]
+public static class AutoRefreshOnPlay
+{
+    static AutoRefreshOnPlay()
+    {
+        EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+    }
+
+    private static void OnPlayModeStateChanged(PlayModeStateChange state)
+    {
+        if (state == PlayModeStateChange.ExitingEditMode)
+        {
+            Debug.Log("Refreshing assets before entering play mode...");
+            AssetDatabase.Refresh();
+        }
+    }
+}

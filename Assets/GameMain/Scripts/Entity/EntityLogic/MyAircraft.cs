@@ -16,7 +16,17 @@ namespace StarForce
 
         private Rect m_PlayerMoveBoundary = default(Rect);
         private Vector3 m_TargetPosition = Vector3.zero;
-
+        private bool m_IsMoving = false;
+        private int m_FollowAircraftCnt = 0;
+        public bool IsMoving => m_IsMoving;
+        /// <summary>
+        /// 僚机数量。
+        /// </summary>
+        public int FollowAircraftCnt
+        {
+            get => m_FollowAircraftCnt;
+            set => m_FollowAircraftCnt = value;
+        }
         protected override void OnInit(object userData)
         {
             base.OnInit(userData);
@@ -62,9 +72,11 @@ namespace StarForce
             Vector3 direction = m_TargetPosition - CachedTransform.localPosition;
             if (direction.sqrMagnitude <= Vector3.kEpsilon)
             {
+                m_IsMoving = false;
                 return;
             }
 
+            m_IsMoving = true;
             Vector3 speed = Vector3.ClampMagnitude(direction.normalized * m_MyAircraftData.Speed * elapseSeconds, direction.magnitude);
             CachedTransform.localPosition = new Vector3
             (

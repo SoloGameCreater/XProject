@@ -13,22 +13,11 @@ namespace StarForce
 {
     public abstract class GameBase
     {
-        public abstract GameMode GameMode
-        {
-            get;
-        }
+        public abstract GameMode GameMode { get; }
 
-        protected ScrollableBackground SceneBackground
-        {
-            get;
-            private set;
-        }
+        protected ScrollableBackground SceneBackground { get; private set; }
 
-        public bool GameOver
-        {
-            get;
-            protected set;
-        }
+        public bool GameOver { get; protected set; }
 
         private MyAircraft m_MyAircraft = null;
 
@@ -79,6 +68,11 @@ namespace StarForce
             {
                 m_MyAircraft = (MyAircraft)ne.Entity.Logic;
             }
+            else if (ne.EntityLogicType == typeof(FollowAircraft))
+            {
+                var aircraft = (FollowAircraft)ne.Entity.Logic;
+                aircraft.MyAircraft = m_MyAircraft;
+            }
         }
 
         protected virtual void OnShowEntityFailure(object sender, GameEventArgs e)
@@ -86,13 +80,24 @@ namespace StarForce
             ShowEntityFailureEventArgs ne = (ShowEntityFailureEventArgs)e;
             Log.Warning("Show entity failure with error message '{0}'.", ne.ErrorMessage);
         }
+
         protected virtual void OnMyAircraftAddBuff(object sender, GameEventArgs e)
         {
             if (m_MyAircraft == null) return;
-            
+
             BuffOnTriggerEventArgs ne = (BuffOnTriggerEventArgs)e;
-            //Log.Info("BuffOnTriggerEventArgs get '{0}'.", ne.UserData.Id);
+
+            if (ne.UserData.IsAdd)
+            {
+                GameEntry.Entity.ShowFollowAircraft(new FollowAircarftData(GameEntry.Entity.GenerateSerialId(), 10000)
+                    { Position = Vector3.zero, });
+                m_MyAircraft.FollowAircraftCnt++;
+            }
+            else
+            {
+                //todo 功能待定
+                //m_MyAircraft.FollowAircraftCnt--;
+            }
         }
-        
     }
 }
