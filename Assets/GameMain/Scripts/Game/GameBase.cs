@@ -89,7 +89,14 @@ namespace StarForce
 
             if (ne.UserData.IsAdd)
             {
-                GameEntry.Entity.ShowFollowAircraft(new FollowAircarftData(GameEntry.Entity.GenerateSerialId(), 10000) { Position = Vector3.zero, });
+                GameEntry.Entity.ShowFollowAircraft(new FollowAircarftData(GameEntry.Entity.GenerateSerialId(), 10000)
+                    { Position = Vector3.zero, });
+                m_MyAircraft.FollowAircraftCnt++;
+            }
+            else
+            {
+                //todo 功能待定
+                //m_MyAircraft.FollowAircraftCnt--;
             }
         }
     }

@@ -9,7 +9,8 @@ namespace StarForce
 
         private Vector3 m_TargetPosition = Vector3.zero;
         private MyAircraft m_MyAircraft = null;
-        private float m_MyAircraftWidth = 0;
+        //private float m_MyAircraftWidth = 0;
+        private Vector3 m_OffsetPosition = Vector3.zero;
 
         public MyAircraft MyAircraft
         {
@@ -19,7 +20,13 @@ namespace StarForce
                 m_MyAircraft = value;
                 m_TargetPosition = m_MyAircraft.CachedTransform.localPosition;
                 var coll = m_MyAircraft.GetComponent<Collider>();
-                m_MyAircraftWidth = coll.bounds.size.x / 2;
+                //m_MyAircraftWidth = coll.bounds.size.x / 2;
+                var sign = m_MyAircraft.FollowAircraftCnt % 2 == 0 ? -1 : 1;
+                // ReSharper disable once PossibleLossOfFraction
+                var offset = sign * (1 + (m_MyAircraft.FollowAircraftCnt - 1) / 2);
+                Log.Warning($"offset is {offset}");
+                m_OffsetPosition = new Vector3(offset, 0, 0);
+                m_TargetPosition = m_MyAircraft.CachedTransform.localPosition + m_OffsetPosition;
             }
         }
 
@@ -52,7 +59,7 @@ namespace StarForce
 
             if (m_MyAircraft.IsMoving)
             {
-                m_TargetPosition = m_MyAircraft.CachedTransform.localPosition + new Vector3(m_MyAircraftWidth, 0, 0);
+                m_TargetPosition = m_MyAircraft.CachedTransform.localPosition + m_OffsetPosition;
             }
 
             Vector3 direction = m_TargetPosition - CachedTransform.localPosition;
