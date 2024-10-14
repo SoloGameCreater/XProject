@@ -15,16 +15,11 @@ namespace StarForce
     /// </summary>
     public class Effect : Entity
     {
-        [SerializeField]
-        private EffectData m_EffectData = null;
+        [SerializeField] private EffectData m_EffectData = null;
 
         private float m_ElapseSeconds = 0f;
 
-#if UNITY_2017_3_OR_NEWER
         protected override void OnShow(object userData)
-#else
-        protected internal override void OnShow(object userData)
-#endif
         {
             base.OnShow(userData);
 
@@ -38,11 +33,7 @@ namespace StarForce
             m_ElapseSeconds = 0f;
         }
 
-#if UNITY_2017_3_OR_NEWER
         protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
-#else
-        protected internal override void OnUpdate(float elapseSeconds, float realElapseSeconds)
-#endif
         {
             base.OnUpdate(elapseSeconds, realElapseSeconds);
 

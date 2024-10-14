@@ -15,15 +15,11 @@ namespace StarForce
     /// </summary>
     public abstract class TargetableObject : Entity
     {
-        [SerializeField]
-        private TargetableObjectData m_TargetableObjectData = null;
+        [SerializeField] private TargetableObjectData m_TargetableObjectData = null;
 
         public bool IsDead
         {
-            get
-            {
-                return m_TargetableObjectData.HP <= 0;
-            }
+            get { return m_TargetableObjectData.HP <= 0; }
         }
 
         public abstract ImpactData GetImpactData();
@@ -44,21 +40,13 @@ namespace StarForce
             }
         }
 
-#if UNITY_2017_3_OR_NEWER
         protected override void OnInit(object userData)
-#else
-        protected internal override void OnInit(object userData)
-#endif
         {
             base.OnInit(userData);
             gameObject.SetLayerRecursively(Constant.Layer.TargetableObjectLayerId);
         }
 
-#if UNITY_2017_3_OR_NEWER
         protected override void OnShow(object userData)
-#else
-        protected internal override void OnShow(object userData)
-#endif
         {
             base.OnShow(userData);
 

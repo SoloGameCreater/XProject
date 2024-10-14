@@ -14,38 +14,27 @@ namespace StarForce
 {
     public class SettingForm : UGuiForm
     {
-        [SerializeField]
-        private Toggle m_MusicMuteToggle = null;
+        [SerializeField] private Toggle m_MusicMuteToggle = null;
 
-        [SerializeField]
-        private Slider m_MusicVolumeSlider = null;
+        [SerializeField] private Slider m_MusicVolumeSlider = null;
 
-        [SerializeField]
-        private Toggle m_SoundMuteToggle = null;
+        [SerializeField] private Toggle m_SoundMuteToggle = null;
 
-        [SerializeField]
-        private Slider m_SoundVolumeSlider = null;
+        [SerializeField] private Slider m_SoundVolumeSlider = null;
 
-        [SerializeField]
-        private Toggle m_UISoundMuteToggle = null;
+        [SerializeField] private Toggle m_UISoundMuteToggle = null;
 
-        [SerializeField]
-        private Slider m_UISoundVolumeSlider = null;
+        [SerializeField] private Slider m_UISoundVolumeSlider = null;
 
-        [SerializeField]
-        private CanvasGroup m_LanguageTipsCanvasGroup = null;
+        [SerializeField] private CanvasGroup m_LanguageTipsCanvasGroup = null;
 
-        [SerializeField]
-        private Toggle m_EnglishToggle = null;
+        [SerializeField] private Toggle m_EnglishToggle = null;
 
-        [SerializeField]
-        private Toggle m_ChineseSimplifiedToggle = null;
+        [SerializeField] private Toggle m_ChineseSimplifiedToggle = null;
 
-        [SerializeField]
-        private Toggle m_ChineseTraditionalToggle = null;
+        [SerializeField] private Toggle m_ChineseTraditionalToggle = null;
 
-        [SerializeField]
-        private Toggle m_KoreanToggle = null;
+        [SerializeField] private Toggle m_KoreanToggle = null;
 
         private Language m_SelectedLanguage = Language.Unspecified;
 
@@ -141,11 +130,7 @@ namespace StarForce
             UnityGameFramework.Runtime.GameEntry.Shutdown(ShutdownType.Restart);
         }
 
-#if UNITY_2017_3_OR_NEWER
         protected override void OnOpen(object userData)
-#else
-        protected internal override void OnOpen(object userData)
-#endif
         {
             base.OnOpen(userData);
 
@@ -182,11 +167,7 @@ namespace StarForce
             }
         }
 
-#if UNITY_2017_3_OR_NEWER
         protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
-#else
-        protected internal override void OnUpdate(float elapseSeconds, float realElapseSeconds)
-#endif
         {
             base.OnUpdate(elapseSeconds, realElapseSeconds);
 

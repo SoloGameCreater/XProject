@@ -6,6 +6,7 @@
 //------------------------------------------------------------
 
 using GameFramework;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityGameFramework.Runtime;
@@ -14,23 +15,17 @@ namespace StarForce
 {
     public class DialogForm : UGuiForm
     {
-        [SerializeField]
-        private Text m_TitleText = null;
+        [SerializeField] private TextMeshProUGUI m_TitleText = null;
 
-        [SerializeField]
-        private Text m_MessageText = null;
+        [SerializeField] private TextMeshProUGUI m_MessageText = null;
 
-        [SerializeField]
-        private GameObject[] m_ModeObjects = null;
+        [SerializeField] private GameObject[] m_ModeObjects = null;
 
-        [SerializeField]
-        private Text[] m_ConfirmTexts = null;
+        [SerializeField] private TextMeshProUGUI[] m_ConfirmTexts = null;
 
-        [SerializeField]
-        private Text[] m_CancelTexts = null;
+        [SerializeField] private TextMeshProUGUI[] m_CancelTexts = null;
 
-        [SerializeField]
-        private Text[] m_OtherTexts = null;
+        [SerializeField] private TextMeshProUGUI[] m_OtherTexts = null;
 
         private int m_DialogMode = 1;
         private bool m_PauseGame = false;
@@ -41,26 +36,17 @@ namespace StarForce
 
         public int DialogMode
         {
-            get
-            {
-                return m_DialogMode;
-            }
+            get { return m_DialogMode; }
         }
 
         public bool PauseGame
         {
-            get
-            {
-                return m_PauseGame;
-            }
+            get { return m_PauseGame; }
         }
 
         public object UserData
         {
-            get
-            {
-                return m_UserData;
-            }
+            get { return m_UserData; }
         }
 
         public void OnConfirmButtonClick()
@@ -93,11 +79,7 @@ namespace StarForce
             }
         }
 
-#if UNITY_2017_3_OR_NEWER
         protected override void OnOpen(object userData)
-#else
-        protected internal override void OnOpen(object userData)
-#endif
         {
             base.OnOpen(userData);
 
@@ -129,11 +111,7 @@ namespace StarForce
             m_OnClickOther = dialogParams.OnClickOther;
         }
 
-#if UNITY_2017_3_OR_NEWER
         protected override void OnClose(bool isShutdown, object userData)
-#else
-        protected internal override void OnClose(bool isShutdown, object userData)
-#endif
         {
             if (m_PauseGame)
             {

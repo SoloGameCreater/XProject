@@ -9,6 +9,7 @@ using GameFramework;
 using GameFramework.Event;
 using GameFramework.Resource;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityGameFramework.Runtime;
 using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedureManager>;
@@ -22,6 +23,7 @@ namespace StarForce
             "Aircraft",
             "Armor",
             "Asteroid",
+            "Buff",
             "Entity",
             "Music",
             "Scene",
@@ -101,7 +103,8 @@ namespace StarForce
             LoadDictionary("Default");
 
             // Preload fonts
-            LoadFont("MainFont");
+            var fontName = CommonUtils.GetFontAssetNameWithLanguage(GameEntry.Localization.Language);
+            LoadFont(fontName);
         }
 
         private void LoadConfig(string configName)
@@ -128,11 +131,11 @@ namespace StarForce
         private void LoadFont(string fontName)
         {
             m_LoadedFlag.Add(Utility.Text.Format("Font.{0}", fontName), false);
-            GameEntry.Resource.LoadAsset(AssetUtility.GetFontAsset(fontName), Constant.AssetPriority.FontAsset, new LoadAssetCallbacks(
+            GameEntry.Resource.LoadAsset(AssetUtility.GetTmpFontAsset(fontName), Constant.AssetPriority.FontAsset, new LoadAssetCallbacks(
                 (assetName, asset, duration, userData) =>
                 {
                     m_LoadedFlag[Utility.Text.Format("Font.{0}", fontName)] = true;
-                    UGuiForm.SetMainFont((Font)asset);
+                    UGuiForm.SetMainFont((TMP_FontAsset)asset);
                     Log.Info("Load font '{0}' OK.", fontName);
                 },
 

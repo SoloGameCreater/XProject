@@ -13,8 +13,7 @@ namespace StarForce
     [Serializable]
     public class MyAircraftData : AircraftData
     {
-        [SerializeField]
-        private string m_Name = null;
+        [SerializeField] private string m_Name = null;
 
         public MyAircraftData(int entityId, int typeId)
             : base(entityId, typeId, CampType.Player)
@@ -26,14 +25,8 @@ namespace StarForce
         /// </summary>
         public string Name
         {
-            get
-            {
-                return m_Name;
-            }
-            set
-            {
-                m_Name = value;
-            }
+            get => m_Name;
+            set => m_Name = value;
         }
     }
 }

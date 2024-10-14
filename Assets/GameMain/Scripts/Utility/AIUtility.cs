@@ -169,6 +169,15 @@ namespace StarForce
                 GameEntry.Entity.HideEntity(bullet);
                 return;
             }
+
+            var buff = other as Buff;
+            if (buff != null)
+            {
+                if (entity is not MyAircraft) return;
+                GameEntry.Event.Fire(buff, BuffOnTriggerEventArgs.Create(buff.BuffDataInfo));
+                GameEntry.Entity.HideEntity(buff);
+                return;
+            }
         }
 
         private static int CalcDamageHP(int attack, int defense)
@@ -200,18 +209,12 @@ namespace StarForce
 
             public CampType First
             {
-                get
-                {
-                    return m_First;
-                }
+                get { return m_First; }
             }
 
             public CampType Second
             {
-                get
-                {
-                    return m_Second;
-                }
+                get { return m_Second; }
             }
         }
     }

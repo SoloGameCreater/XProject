@@ -31,6 +31,10 @@ namespace StarForce
             return Utility.Text.Format("Assets/GameMain/Fonts/{0}.ttf", assetName);
         }
 
+        public static string GetTmpFontAsset(string assetName)
+        {
+            return Utility.Text.Format("Assets/TextMesh Pro/Resources/Fonts & Materials/{0} SDF.asset", assetName);
+        }
         public static string GetSceneAsset(string assetName)
         {
             return Utility.Text.Format("Assets/GameMain/Scenes/{0}.unity", assetName);

@@ -12,26 +12,27 @@ namespace StarForce
 {
     public class MyAircraft : Aircraft
     {
-        [SerializeField]
-        private MyAircraftData m_MyAircraftData = null;
+        [SerializeField] private MyAircraftData m_MyAircraftData = null;
 
         private Rect m_PlayerMoveBoundary = default(Rect);
         private Vector3 m_TargetPosition = Vector3.zero;
-
-#if UNITY_2017_3_OR_NEWER
+        private bool m_IsMoving = false;
+        private int m_FollowAircraftCnt = 0;
+        public bool IsMoving => m_IsMoving;
+        /// <summary>
+        /// 僚机数量。
+        /// </summary>
+        public int FollowAircraftCnt
+        {
+            get => m_FollowAircraftCnt;
+            set => m_FollowAircraftCnt = value;
+        }
         protected override void OnInit(object userData)
-#else
-        protected internal override void OnInit(object userData)
-#endif
         {
             base.OnInit(userData);
         }
 
-#if UNITY_2017_3_OR_NEWER
         protected override void OnShow(object userData)
-#else
-        protected internal override void OnShow(object userData)
-#endif
         {
             base.OnShow(userData);
 
@@ -53,11 +54,7 @@ namespace StarForce
                 sceneBackground.PlayerMoveBoundary.bounds.size.x, sceneBackground.PlayerMoveBoundary.bounds.size.z);
         }
 
-#if UNITY_2017_3_OR_NEWER
         protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
-#else
-        protected internal override void OnUpdate(float elapseSeconds, float realElapseSeconds)
-#endif
         {
             base.OnUpdate(elapseSeconds, realElapseSeconds);
 
@@ -65,19 +62,21 @@ namespace StarForce
             {
                 Vector3 point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 m_TargetPosition = new Vector3(point.x, 0f, point.z);
+            }
 
-                for (int i = 0; i < m_Weapons.Count; i++)
-                {
-                    m_Weapons[i].TryAttack();
-                }
+            for (int i = 0; i < m_Weapons.Count; i++)
+            {
+                m_Weapons[i].TryAttack();
             }
 
             Vector3 direction = m_TargetPosition - CachedTransform.localPosition;
             if (direction.sqrMagnitude <= Vector3.kEpsilon)
             {
+                m_IsMoving = false;
                 return;
             }
 
+            m_IsMoving = true;
             Vector3 speed = Vector3.ClampMagnitude(direction.normalized * m_MyAircraftData.Speed * elapseSeconds, direction.magnitude);
             CachedTransform.localPosition = new Vector3
             (
@@ -85,6 +84,14 @@ namespace StarForce
                 0f,
                 Mathf.Clamp(CachedTransform.localPosition.z + speed.z, m_PlayerMoveBoundary.yMin, m_PlayerMoveBoundary.yMax)
             );
+        }
+
+        /// <summary>
+        /// 获得buff
+        /// </summary>
+        /// <param name="buffData"></param>
+        public void GetBuff(BuffData buffData)
+        {
         }
     }
 }
