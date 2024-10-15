@@ -68,6 +68,7 @@ namespace StarForce
                 return;
             }
 
+            //var speed = Vector3.ClampMagnitude(direction.normalized * m_AircraftData.Speed * elapseSeconds, direction.magnitude);
             var speed = Vector3.ClampMagnitude(direction.normalized * m_AircraftData.Speed * elapseSeconds, direction.magnitude);
             CachedTransform.localPosition = new Vector3
             (
