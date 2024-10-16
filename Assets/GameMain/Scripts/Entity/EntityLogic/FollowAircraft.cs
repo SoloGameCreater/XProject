@@ -8,7 +8,9 @@ namespace StarForce
         [SerializeField] private FollowAircarftData m_AircraftData = null;
 
         private Vector3 m_TargetPosition = Vector3.zero;
+
         private MyAircraft m_MyAircraft = null;
+
         //private float m_MyAircraftWidth = 0;
         private Vector3 m_OffsetPosition = Vector3.zero;
 
@@ -24,8 +26,10 @@ namespace StarForce
                 var sign = m_MyAircraft.FollowAircraftCnt % 2 == 0 ? -1 : 1;
                 // ReSharper disable once PossibleLossOfFraction
                 var offset = sign * (1 + (m_MyAircraft.FollowAircraftCnt - 1) / 2);
+                var offsetX = offset * 0.5f;
+                var offsetZ = -Mathf.Abs(offset) * 0.5f;
                 Log.Warning($"offset is {offset}");
-                m_OffsetPosition = new Vector3(offset, 0, 0);
+                m_OffsetPosition = new Vector3(offsetX, 0, offsetZ);
                 m_TargetPosition = m_MyAircraft.CachedTransform.localPosition + m_OffsetPosition;
             }
         }
@@ -68,12 +72,11 @@ namespace StarForce
                 return;
             }
 
-            //var speed = Vector3.ClampMagnitude(direction.normalized * m_AircraftData.Speed * elapseSeconds, direction.magnitude);
             var speed = Vector3.ClampMagnitude(direction.normalized * m_AircraftData.Speed * elapseSeconds, direction.magnitude);
             CachedTransform.localPosition = new Vector3
             (
                 CachedTransform.localPosition.x + speed.x,
-                0f,
+                -1f,
                 CachedTransform.localPosition.z + speed.z
             );
         }
