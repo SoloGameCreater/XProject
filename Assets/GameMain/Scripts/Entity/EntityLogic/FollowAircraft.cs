@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityGameFramework.Runtime;
+using DG.Tweening;
 
 namespace StarForce
 {
@@ -11,9 +12,13 @@ namespace StarForce
 
         private MyAircraft m_MyAircraft = null;
 
-        //private float m_MyAircraftWidth = 0;
         private Vector3 m_OffsetPosition = Vector3.zero;
 
+        private float m_FollowDelay = 0;
+        private float m_RemindTime = 0;
+
+        private bool m_IsSelfMoving = false;
+        private Tweener m_MoveTweener;
         public MyAircraft MyAircraft
         {
             get => m_MyAircraft;
@@ -31,6 +36,7 @@ namespace StarForce
                 Log.Warning($"offset is {offset}");
                 m_OffsetPosition = new Vector3(offsetX, 0, offsetZ);
                 m_TargetPosition = m_MyAircraft.CachedTransform.localPosition + m_OffsetPosition;
+                m_FollowDelay = 0.1f * m_MyAircraft.FollowAircraftCnt;
             }
         }
 
@@ -60,25 +66,41 @@ namespace StarForce
             {
                 weapon.TryAttack();
             }
-
+            
             if (m_MyAircraft.IsMoving)
             {
                 m_TargetPosition = m_MyAircraft.CachedTransform.localPosition + m_OffsetPosition;
             }
 
-            Vector3 direction = m_TargetPosition - CachedTransform.localPosition;
-            if (direction.sqrMagnitude <= Vector3.kEpsilon)
+            if (!m_IsSelfMoving)
             {
-                return;
+                MoveToTargetWithDelay();
             }
+            // Vector3 direction = m_TargetPosition - CachedTransform.localPosition;
+            // if (direction.sqrMagnitude <= Vector3.kEpsilon)
+            // {
+            //     m_IsSelfMoving = false;
+            //     return;
+            // }
+            //
+            // m_IsSelfMoving = true;
+            // var speed = Vector3.ClampMagnitude(direction.normalized * m_AircraftData.Speed * elapseSeconds, direction.magnitude);
+            // CachedTransform.localPosition = new Vector3
+            // (
+            //     CachedTransform.localPosition.x + speed.x,
+            //     -1f,
+            //     CachedTransform.localPosition.z + speed.z
+            // );
+        }
 
-            var speed = Vector3.ClampMagnitude(direction.normalized * m_AircraftData.Speed * elapseSeconds, direction.magnitude);
-            CachedTransform.localPosition = new Vector3
-            (
-                CachedTransform.localPosition.x + speed.x,
-                -1f,
-                CachedTransform.localPosition.z + speed.z
-            );
+        private void MoveToTargetWithDelay()
+        {
+            // 使用 DOTween 动画到目标位置
+            m_MoveTweener = CachedTransform.DOLocalMove(m_TargetPosition, 0.5f)
+                .SetDelay(m_FollowDelay) // 延迟执行
+                .SetEase(Ease.Linear) // 可以根据需要选择不同的缓动函数
+                .OnStart(() => m_IsSelfMoving = true) // 开始时设置为正在移动
+                .OnComplete(() => m_IsSelfMoving = false); // 完成时重置为不在移动
         }
     }
 }
