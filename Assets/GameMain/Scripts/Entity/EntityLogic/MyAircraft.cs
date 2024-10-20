@@ -5,6 +5,8 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityGameFramework.Runtime;
 
@@ -14,19 +16,18 @@ namespace StarForce
     {
         [SerializeField] private MyAircraftData m_MyAircraftData = null;
 
+        public const int FollowAircraftLimit = 2;
         private Rect m_PlayerMoveBoundary = default(Rect);
         private Vector3 m_TargetPosition = Vector3.zero;
         private bool m_IsMoving = false;
-        private int m_FollowAircraftCnt = 0;
+        private List<FollowAircraft> m_ListFollowAircraft = new();
         public bool IsMoving => m_IsMoving;
+
         /// <summary>
         /// 僚机数量。
         /// </summary>
-        public int FollowAircraftCnt
-        {
-            get => m_FollowAircraftCnt;
-            set => m_FollowAircraftCnt = value;
-        }
+        public int FollowAircraftCnt => m_ListFollowAircraft.Count;
+
         protected override void OnInit(object userData)
         {
             base.OnInit(userData);
@@ -64,12 +65,12 @@ namespace StarForce
                 m_TargetPosition = new Vector3(point.x, 0f, point.z);
             }
 
-            for (int i = 0; i < m_Weapons.Count; i++)
+            foreach (var weapon in m_Weapons)
             {
-                m_Weapons[i].TryAttack();
+                weapon.TryAttack();
             }
 
-            Vector3 direction = m_TargetPosition - CachedTransform.localPosition;
+            var direction = m_TargetPosition - CachedTransform.localPosition;
             if (direction.sqrMagnitude <= Vector3.kEpsilon)
             {
                 m_IsMoving = false;
@@ -92,6 +93,31 @@ namespace StarForce
         /// <param name="buffData"></param>
         public void GetBuff(BuffData buffData)
         {
+        }
+
+        public void AddAircraft(FollowAircraft aircraft)
+        {
+            m_ListFollowAircraft.Add(aircraft);
+        }
+
+        public void UpgradeAircraft()
+        {
+            RemoveAircraft(FollowAircraftLimit);
+            foreach (var weapon in m_Weapons)
+            {
+                weapon.Upgrade();
+            }
+        }
+        public void RemoveAircraft(int num = 1)
+        {
+            if(num <= 0) return;
+            var actualNumToRemove = Math.Min(num, m_ListFollowAircraft.Count);
+            
+            for (int i = m_ListFollowAircraft.Count - 1; i >= m_ListFollowAircraft.Count - actualNumToRemove; i--)
+            {
+                GameEntry.Entity.HideEntity(m_ListFollowAircraft[i]);
+            }
+            m_ListFollowAircraft.RemoveRange(m_ListFollowAircraft.Count - actualNumToRemove, actualNumToRemove);
         }
     }
 }

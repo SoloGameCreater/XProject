@@ -72,6 +72,7 @@ namespace StarForce
             {
                 var aircraft = (FollowAircraft)ne.Entity.Logic;
                 aircraft.MyAircraft = m_MyAircraft;
+                m_MyAircraft.AddAircraft(aircraft);
             }
         }
 
@@ -89,14 +90,19 @@ namespace StarForce
 
             if (ne.UserData.IsAdd)
             {
-                GameEntry.Entity.ShowFollowAircraft(new FollowAircarftData(GameEntry.Entity.GenerateSerialId(), 10001)
-                    { Position = new Vector3(0, 0, -10f) });
-                m_MyAircraft.FollowAircraftCnt++;
+                if (m_MyAircraft.FollowAircraftCnt >= MyAircraft.FollowAircraftLimit)
+                {
+                    m_MyAircraft.UpgradeAircraft();
+                }
+                else
+                {
+                    GameEntry.Entity.ShowFollowAircraft(new FollowAircarftData(GameEntry.Entity.GenerateSerialId(), 10001)
+                        { Position = new Vector3(0, 0, -10f) });
+                }
             }
             else
             {
-                //todo 功能待定
-                //m_MyAircraft.FollowAircraftCnt--;
+                m_MyAircraft.RemoveAircraft();
             }
         }
     }

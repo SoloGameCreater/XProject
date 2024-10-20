@@ -21,6 +21,7 @@ namespace StarForce
         [SerializeField] private WeaponData m_WeaponData = null;
 
         private float m_NextAttackTime = 0f;
+        private float m_AttackInterval = 0f;
 
         protected override void OnInit(object userData)
         {
@@ -38,6 +39,7 @@ namespace StarForce
                 return;
             }
 
+            m_AttackInterval = m_WeaponData.AttackInterval;
             GameEntry.Entity.AttachEntity(Entity, m_WeaponData.OwnerId, AttachPoint);
         }
 
@@ -56,13 +58,20 @@ namespace StarForce
                 return;
             }
 
-            m_NextAttackTime = Time.time + m_WeaponData.AttackInterval;
+            m_NextAttackTime = Time.time + m_AttackInterval;
             GameEntry.Entity.ShowBullet(new BulletData(GameEntry.Entity.GenerateSerialId(), m_WeaponData.BulletId, m_WeaponData.OwnerId, m_WeaponData.OwnerCamp,
                 m_WeaponData.Attack, m_WeaponData.BulletSpeed)
             {
                 Position = CachedTransform.position,
             });
             GameEntry.Sound.PlaySound(m_WeaponData.BulletSoundId);
+        }
+
+        public void Upgrade()
+        {
+            if (m_AttackInterval <= 0.001f) return;
+            
+            m_AttackInterval /= 2;
         }
     }
 }
