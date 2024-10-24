@@ -40,7 +40,7 @@ namespace StarForce
             m_Transform.SetLocalPositionY(m_InitPosition);
 
             // 换个音乐
-            GameEntry.Sound.PlayMusic(3);
+            GameModule.Sound.PlayMusic(3);
         }
 
         protected override void OnClose(bool isShutdown, object userData)
@@ -48,7 +48,7 @@ namespace StarForce
             base.OnClose(isShutdown, userData);
 
             // 还原音乐
-            GameEntry.Sound.PlayMusic(1);
+            GameModule.Sound.PlayMusic(1);
         }
 
         protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)

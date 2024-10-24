@@ -21,7 +21,7 @@ namespace StarForce
         {
             soundComponent.StopMusic();
 
-            IDataTable<DRMusic> dtMusic = GameEntry.DataTable.GetDataTable<DRMusic>();
+            IDataTable<DRMusic> dtMusic = GameModule.DataTable.GetDataTable<DRMusic>();
             DRMusic drMusic = dtMusic.GetDataRow(musicId);
             if (drMusic == null)
             {
@@ -52,7 +52,7 @@ namespace StarForce
 
         public static int? PlaySound(this SoundComponent soundComponent, int soundId, Entity bindingEntity = null, object userData = null)
         {
-            IDataTable<DRSound> dtSound = GameEntry.DataTable.GetDataTable<DRSound>();
+            IDataTable<DRSound> dtSound = GameModule.DataTable.GetDataTable<DRSound>();
             DRSound drSound = dtSound.GetDataRow(soundId);
             if (drSound == null)
             {
@@ -70,7 +70,7 @@ namespace StarForce
 
         public static int? PlayUISound(this SoundComponent soundComponent, int uiSoundId, object userData = null)
         {
-            IDataTable<DRUISound> dtUISound = GameEntry.DataTable.GetDataTable<DRUISound>();
+            IDataTable<DRUISound> dtUISound = GameModule.DataTable.GetDataTable<DRUISound>();
             DRUISound drUISound = dtUISound.GetDataRow(uiSoundId);
             if (drUISound == null)
             {
@@ -121,8 +121,8 @@ namespace StarForce
 
             soundGroup.Mute = mute;
 
-            GameEntry.Setting.SetBool(Utility.Text.Format(Constant.Setting.SoundGroupMuted, soundGroupName), mute);
-            GameEntry.Setting.Save();
+            GameModule.Setting.SetBool(Utility.Text.Format(Constant.Setting.SoundGroupMuted, soundGroupName), mute);
+            GameModule.Setting.Save();
         }
 
         public static float GetVolume(this SoundComponent soundComponent, string soundGroupName)
@@ -160,8 +160,8 @@ namespace StarForce
 
             soundGroup.Volume = volume;
 
-            GameEntry.Setting.SetFloat(Utility.Text.Format(Constant.Setting.SoundGroupVolume, soundGroupName), volume);
-            GameEntry.Setting.Save();
+            GameModule.Setting.SetFloat(Utility.Text.Format(Constant.Setting.SoundGroupVolume, soundGroupName), volume);
+            GameModule.Setting.Save();
         }
     }
 }

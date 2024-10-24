@@ -23,7 +23,7 @@ namespace StarForce
         public ArmorData(int entityId, int typeId, int ownerId, CampType ownerCamp)
             : base(entityId, typeId, ownerId, ownerCamp)
         {
-            IDataTable<DRArmor> dtArmor = GameEntry.DataTable.GetDataTable<DRArmor>();
+            IDataTable<DRArmor> dtArmor = GameModule.DataTable.GetDataTable<DRArmor>();
             DRArmor drArmor = dtArmor.GetDataRow(TypeId);
             if (drArmor == null)
             {

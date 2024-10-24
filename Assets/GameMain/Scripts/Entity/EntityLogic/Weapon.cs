@@ -40,7 +40,7 @@ namespace StarForce
             }
 
             m_AttackInterval = m_WeaponData.AttackInterval;
-            GameEntry.Entity.AttachEntity(Entity, m_WeaponData.OwnerId, AttachPoint);
+            GameModule.Entity.AttachEntity(Entity, m_WeaponData.OwnerId, AttachPoint);
         }
 
         protected override void OnAttachTo(EntityLogic parentEntity, Transform parentTransform, object userData)
@@ -59,12 +59,12 @@ namespace StarForce
             }
 
             m_NextAttackTime = Time.time + m_AttackInterval;
-            GameEntry.Entity.ShowBullet(new BulletData(GameEntry.Entity.GenerateSerialId(), m_WeaponData.BulletId, m_WeaponData.OwnerId, m_WeaponData.OwnerCamp,
+            GameModule.Entity.ShowBullet(new BulletData(GameModule.Entity.GenerateSerialId(), m_WeaponData.BulletId, m_WeaponData.OwnerId, m_WeaponData.OwnerCamp,
                 m_WeaponData.Attack, m_WeaponData.BulletSpeed)
             {
                 Position = CachedTransform.position,
             });
-            GameEntry.Sound.PlaySound(m_WeaponData.BulletSoundId);
+            GameModule.Sound.PlaySound(m_WeaponData.BulletSoundId);
         }
 
         public void Upgrade()

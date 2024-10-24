@@ -50,11 +50,11 @@ namespace StarForce
         {
             base.OnDead(attacker);
 
-            GameEntry.Entity.ShowEffect(new EffectData(GameEntry.Entity.GenerateSerialId(), m_AsteroidData.DeadEffectId)
+            GameModule.Entity.ShowEffect(new EffectData(GameModule.Entity.GenerateSerialId(), m_AsteroidData.DeadEffectId)
             {
                 Position = CachedTransform.localPosition,
             });
-            GameEntry.Sound.PlaySound(m_AsteroidData.DeadSoundId);
+            GameModule.Sound.PlaySound(m_AsteroidData.DeadSoundId);
         }
 
         public override ImpactData GetImpactData()

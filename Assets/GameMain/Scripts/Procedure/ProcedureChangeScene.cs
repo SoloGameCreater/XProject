@@ -34,32 +34,32 @@ namespace StarForce
 
             m_IsChangeSceneComplete = false;
 
-            GameEntry.Event.Subscribe(LoadSceneSuccessEventArgs.EventId, OnLoadSceneSuccess);
-            GameEntry.Event.Subscribe(LoadSceneFailureEventArgs.EventId, OnLoadSceneFailure);
-            GameEntry.Event.Subscribe(LoadSceneUpdateEventArgs.EventId, OnLoadSceneUpdate);
-            GameEntry.Event.Subscribe(LoadSceneDependencyAssetEventArgs.EventId, OnLoadSceneDependencyAsset);
+            GameModule.Event.Subscribe(LoadSceneSuccessEventArgs.EventId, OnLoadSceneSuccess);
+            GameModule.Event.Subscribe(LoadSceneFailureEventArgs.EventId, OnLoadSceneFailure);
+            GameModule.Event.Subscribe(LoadSceneUpdateEventArgs.EventId, OnLoadSceneUpdate);
+            GameModule.Event.Subscribe(LoadSceneDependencyAssetEventArgs.EventId, OnLoadSceneDependencyAsset);
 
             // 停止所有声音
-            GameEntry.Sound.StopAllLoadingSounds();
-            GameEntry.Sound.StopAllLoadedSounds();
+            GameModule.Sound.StopAllLoadingSounds();
+            GameModule.Sound.StopAllLoadedSounds();
 
             // 隐藏所有实体
-            GameEntry.Entity.HideAllLoadingEntities();
-            GameEntry.Entity.HideAllLoadedEntities();
+            GameModule.Entity.HideAllLoadingEntities();
+            GameModule.Entity.HideAllLoadedEntities();
 
             // 卸载所有场景
-            string[] loadedSceneAssetNames = GameEntry.Scene.GetLoadedSceneAssetNames();
+            string[] loadedSceneAssetNames = GameModule.Scene.GetLoadedSceneAssetNames();
             for (int i = 0; i < loadedSceneAssetNames.Length; i++)
             {
-                GameEntry.Scene.UnloadScene(loadedSceneAssetNames[i]);
+                GameModule.Scene.UnloadScene(loadedSceneAssetNames[i]);
             }
 
             // 还原游戏速度
-            GameEntry.Base.ResetNormalGameSpeed();
+            GameModule.Base.ResetNormalGameSpeed();
 
             int sceneId = procedureOwner.GetData<VarInt32>("NextSceneId");
             m_ChangeToMenu = sceneId == MenuSceneId;
-            IDataTable<DRScene> dtScene = GameEntry.DataTable.GetDataTable<DRScene>();
+            IDataTable<DRScene> dtScene = GameModule.DataTable.GetDataTable<DRScene>();
             DRScene drScene = dtScene.GetDataRow(sceneId);
             if (drScene == null)
             {
@@ -67,16 +67,16 @@ namespace StarForce
                 return;
             }
 
-            GameEntry.Scene.LoadScene(AssetUtility.GetSceneAsset(drScene.AssetName), Constant.AssetPriority.SceneAsset, this);
+            GameModule.Scene.LoadScene(AssetUtility.GetSceneAsset(drScene.AssetName), Constant.AssetPriority.SceneAsset, this);
             m_BackgroundMusicId = drScene.BackgroundMusicId;
         }
 
         protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)
         {
-            GameEntry.Event.Unsubscribe(LoadSceneSuccessEventArgs.EventId, OnLoadSceneSuccess);
-            GameEntry.Event.Unsubscribe(LoadSceneFailureEventArgs.EventId, OnLoadSceneFailure);
-            GameEntry.Event.Unsubscribe(LoadSceneUpdateEventArgs.EventId, OnLoadSceneUpdate);
-            GameEntry.Event.Unsubscribe(LoadSceneDependencyAssetEventArgs.EventId, OnLoadSceneDependencyAsset);
+            GameModule.Event.Unsubscribe(LoadSceneSuccessEventArgs.EventId, OnLoadSceneSuccess);
+            GameModule.Event.Unsubscribe(LoadSceneFailureEventArgs.EventId, OnLoadSceneFailure);
+            GameModule.Event.Unsubscribe(LoadSceneUpdateEventArgs.EventId, OnLoadSceneUpdate);
+            GameModule.Event.Unsubscribe(LoadSceneDependencyAssetEventArgs.EventId, OnLoadSceneDependencyAsset);
 
             base.OnLeave(procedureOwner, isShutdown);
         }
@@ -112,7 +112,7 @@ namespace StarForce
 
             if (m_BackgroundMusicId > 0)
             {
-                GameEntry.Sound.PlayMusic(m_BackgroundMusicId);
+                GameModule.Sound.PlayMusic(m_BackgroundMusicId);
             }
 
             m_IsChangeSceneComplete = true;

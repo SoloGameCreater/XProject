@@ -115,7 +115,7 @@ namespace StarForce
             
             for (int i = m_ListFollowAircraft.Count - 1; i >= m_ListFollowAircraft.Count - actualNumToRemove; i--)
             {
-                GameEntry.Entity.HideEntity(m_ListFollowAircraft[i]);
+                GameModule.Entity.HideEntity(m_ListFollowAircraft[i]);
             }
             m_ListFollowAircraft.RemoveRange(m_ListFollowAircraft.Count - actualNumToRemove, actualNumToRemove);
         }

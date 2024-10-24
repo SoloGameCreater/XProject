@@ -40,7 +40,7 @@ namespace StarForce
             m_ElapseSeconds += elapseSeconds;
             if (m_ElapseSeconds >= m_EffectData.KeepTime)
             {
-                GameEntry.Entity.HideEntity(this);
+                GameModule.Entity.HideEntity(this);
             }
         }
     }

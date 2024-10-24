@@ -23,21 +23,21 @@ namespace StarForce
 
         public void OnSettingButtonClick()
         {
-            GameEntry.UI.OpenUIForm(UIFormId.SettingForm);
+            GameModule.UI.OpenUIForm(UIFormId.SettingForm);
         }
 
         public void OnAboutButtonClick()
         {
-            GameEntry.UI.OpenUIForm(UIFormId.AboutForm);
+            GameModule.UI.OpenUIForm(UIFormId.AboutForm);
         }
 
         public void OnQuitButtonClick()
         {
-            GameEntry.UI.OpenDialog(new DialogParams()
+            GameModule.UI.OpenDialog(new DialogParams()
             {
                 Mode = 2,
-                Title = GameEntry.Localization.GetString("AskQuitGame.Title"),
-                Message = GameEntry.Localization.GetString("AskQuitGame.Message"),
+                Title = GameModule.Localization.GetString("AskQuitGame.Title"),
+                Message = GameModule.Localization.GetString("AskQuitGame.Message"),
                 OnClickConfirm = delegate(object userData) { UnityGameFramework.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
             });
         }

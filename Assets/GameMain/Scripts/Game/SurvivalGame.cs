@@ -33,12 +33,12 @@ namespace StarForce
             if (m_ElapseSeconds >= 1f)
             {
                 m_ElapseSeconds = 0f;
-                IDataTable<DRAsteroid> dtAsteroid = GameEntry.DataTable.GetDataTable<DRAsteroid>();
+                IDataTable<DRAsteroid> dtAsteroid = GameModule.DataTable.GetDataTable<DRAsteroid>();
                 float randomPositionX = SceneBackground.EnemySpawnBoundary.bounds.min.x +
                                         SceneBackground.EnemySpawnBoundary.bounds.size.x * (float)Utility.Random.GetRandomDouble();
                 float randomPositionZ = SceneBackground.EnemySpawnBoundary.bounds.min.z +
                                         SceneBackground.EnemySpawnBoundary.bounds.size.z * (float)Utility.Random.GetRandomDouble();
-                GameEntry.Entity.ShowAsteroid(new AsteroidData(GameEntry.Entity.GenerateSerialId(), 60000 + Utility.Random.GetRandom(dtAsteroid.Count))
+                GameModule.Entity.ShowAsteroid(new AsteroidData(GameModule.Entity.GenerateSerialId(), 60000 + Utility.Random.GetRandom(dtAsteroid.Count))
                 {
                     Position = new Vector3(randomPositionX, 0f, randomPositionZ),
                 });
@@ -48,7 +48,7 @@ namespace StarForce
             if (m_LastCreateBuffSeconds >= 5f)
             {
                 m_LastCreateBuffSeconds = 0f;
-                IDataTable<DRBuff> dtBuff = GameEntry.DataTable.GetDataTable<DRBuff>();
+                IDataTable<DRBuff> dtBuff = GameModule.DataTable.GetDataTable<DRBuff>();
                 /* 随机算法说明
                  * 每次都会随机两个buff，其中一个一定是增益buff,避免从两个减益buff中选择
                  * 如果第一次随机出的是减益buff，那么下一次一定是增益buff
@@ -56,7 +56,7 @@ namespace StarForce
                  */
                 var index1 = Utility.Random.GetRandom(dtBuff.Count);
                 var buff1 = dtBuff.GetDataRow(BuffStartId + index1);
-                GameEntry.Entity.ShowBuff(new BuffData(GameEntry.Entity.GenerateSerialId(), BuffStartId, buff1.Id)
+                GameModule.Entity.ShowBuff(new BuffData(GameModule.Entity.GenerateSerialId(), BuffStartId, buff1.Id)
                 {
                     Position = new Vector3(3, 0f, 15f),
                 });
@@ -69,7 +69,7 @@ namespace StarForce
 
                 var buff2 = dtBuff.GetDataRow(BuffStartId + index2);
 
-                GameEntry.Entity.ShowBuff(new BuffData(GameEntry.Entity.GenerateSerialId(), BuffStartId, buff2.Id)
+                GameModule.Entity.ShowBuff(new BuffData(GameModule.Entity.GenerateSerialId(), BuffStartId, buff2.Id)
                 {
                     Position = new Vector3(-3, 0f, 15f),
                 });

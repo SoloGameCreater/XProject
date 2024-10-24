@@ -22,7 +22,7 @@ namespace StarForce
                 Destroy(go);
                 return;
             }
-            GameEntry.Entity.HideEntity(entity);
+            GameModule.Entity.HideEntity(entity);
         }
     }
 }

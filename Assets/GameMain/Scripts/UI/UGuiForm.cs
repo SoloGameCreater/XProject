@@ -42,7 +42,7 @@ namespace StarForce
 
             if (ignoreFade)
             {
-                GameEntry.UI.CloseUIForm(this);
+                GameModule.UI.CloseUIForm(this);
             }
             else
             {
@@ -52,7 +52,7 @@ namespace StarForce
 
         public void PlayUISound(int uiSoundId)
         {
-            GameEntry.Sound.PlayUISound(uiSoundId);
+            GameModule.Sound.PlayUISound(uiSoundId);
         }
 
         public static void SetMainFont(TMP_FontAsset mainFont)
@@ -90,7 +90,7 @@ namespace StarForce
                 texts[i].font = s_MainFont;
                 if (!string.IsNullOrEmpty(texts[i].text))
                 {
-                    texts[i].text = GameEntry.Localization.GetString(texts[i].text);
+                    texts[i].text = GameModule.Localization.GetString(texts[i].text);
                 }
             }
         }
@@ -165,7 +165,7 @@ namespace StarForce
         private IEnumerator CloseCo(float duration)
         {
             yield return m_CanvasGroup.FadeToAlpha(0f, duration);
-            GameEntry.UI.CloseUIForm(this);
+            GameModule.UI.CloseUIForm(this);
         }
     }
 }

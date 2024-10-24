@@ -38,18 +38,18 @@ namespace StarForce
 
             Name = Utility.Text.Format("Aircraft ({0})", Id);
 
-            GameEntry.Entity.ShowThruster(m_AircraftData.GetThrusterData());
+            GameModule.Entity.ShowThruster(m_AircraftData.GetThrusterData());
 
             List<WeaponData> weaponDatas = m_AircraftData.GetAllWeaponDatas();
             for (int i = 0; i < weaponDatas.Count; i++)
             {
-                GameEntry.Entity.ShowWeapon(weaponDatas[i]);
+                GameModule.Entity.ShowWeapon(weaponDatas[i]);
             }
 
             List<ArmorData> armorDatas = m_AircraftData.GetAllArmorDatas();
             for (int i = 0; i < armorDatas.Count; i++)
             {
-                GameEntry.Entity.ShowArmor(armorDatas[i]);
+                GameModule.Entity.ShowArmor(armorDatas[i]);
             }
         }
 
@@ -108,11 +108,11 @@ namespace StarForce
         {
             base.OnDead(attacker);
 
-            GameEntry.Entity.ShowEffect(new EffectData(GameEntry.Entity.GenerateSerialId(), m_AircraftData.DeadEffectId)
+            GameModule.Entity.ShowEffect(new EffectData(GameModule.Entity.GenerateSerialId(), m_AircraftData.DeadEffectId)
             {
                 Position = CachedTransform.localPosition,
             });
-            GameEntry.Sound.PlaySound(m_AircraftData.DeadSoundId);
+            GameModule.Sound.PlaySound(m_AircraftData.DeadSoundId);
         }
 
         public override ImpactData GetImpactData()

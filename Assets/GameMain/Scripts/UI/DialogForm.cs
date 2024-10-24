@@ -115,7 +115,7 @@ namespace StarForce
         {
             if (m_PauseGame)
             {
-                GameEntry.Base.ResumeGame();
+                GameModule.Base.ResumeGame();
             }
 
             m_DialogMode = 1;
@@ -148,7 +148,7 @@ namespace StarForce
         {
             if (m_PauseGame)
             {
-                GameEntry.Base.PauseGame();
+                GameModule.Base.PauseGame();
             }
         }
 
@@ -156,7 +156,7 @@ namespace StarForce
         {
             if (string.IsNullOrEmpty(confirmText))
             {
-                confirmText = GameEntry.Localization.GetString("Dialog.ConfirmButton");
+                confirmText = GameModule.Localization.GetString("Dialog.ConfirmButton");
             }
 
             for (int i = 0; i < m_ConfirmTexts.Length; i++)
@@ -169,7 +169,7 @@ namespace StarForce
         {
             if (string.IsNullOrEmpty(cancelText))
             {
-                cancelText = GameEntry.Localization.GetString("Dialog.CancelButton");
+                cancelText = GameModule.Localization.GetString("Dialog.CancelButton");
             }
 
             for (int i = 0; i < m_CancelTexts.Length; i++)
@@ -182,7 +182,7 @@ namespace StarForce
         {
             if (string.IsNullOrEmpty(otherText))
             {
-                otherText = GameEntry.Localization.GetString("Dialog.OtherButton");
+                otherText = GameModule.Localization.GetString("Dialog.OtherButton");
             }
 
             for (int i = 0; i < m_OtherTexts.Length; i++)

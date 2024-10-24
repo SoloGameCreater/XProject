@@ -166,7 +166,7 @@ namespace StarForce
                 int entityDamageHP = CalcDamageHP(bulletImpactData.Attack, entityImpactData.Defense);
 
                 entity.ApplyDamage(bullet, entityDamageHP);
-                GameEntry.Entity.HideEntity(bullet);
+                GameModule.Entity.HideEntity(bullet);
                 return;
             }
 
@@ -174,8 +174,8 @@ namespace StarForce
             if (buff != null)
             {
                 if (entity is not MyAircraft) return;
-                GameEntry.Event.Fire(buff, BuffOnTriggerEventArgs.Create(buff.BuffDataInfo));
-                GameEntry.Entity.HideEntity(buff);
+                GameModule.Event.Fire(buff, BuffOnTriggerEventArgs.Create(buff.BuffDataInfo));
+                GameModule.Entity.HideEntity(buff);
                 return;
             }
         }

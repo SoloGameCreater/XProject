@@ -51,7 +51,7 @@ namespace StarForce
 
         public static bool HasUIForm(this UIComponent uiComponent, int uiFormId, string uiGroupName = null)
         {
-            IDataTable<DRUIForm> dtUIForm = GameEntry.DataTable.GetDataTable<DRUIForm>();
+            IDataTable<DRUIForm> dtUIForm = GameModule.DataTable.GetDataTable<DRUIForm>();
             DRUIForm drUIForm = dtUIForm.GetDataRow(uiFormId);
             if (drUIForm == null)
             {
@@ -80,7 +80,7 @@ namespace StarForce
 
         public static UGuiForm GetUIForm(this UIComponent uiComponent, int uiFormId, string uiGroupName = null)
         {
-            IDataTable<DRUIForm> dtUIForm = GameEntry.DataTable.GetDataTable<DRUIForm>();
+            IDataTable<DRUIForm> dtUIForm = GameModule.DataTable.GetDataTable<DRUIForm>();
             DRUIForm drUIForm = dtUIForm.GetDataRow(uiFormId);
             if (drUIForm == null)
             {
@@ -127,7 +127,7 @@ namespace StarForce
 
         public static int? OpenUIForm(this UIComponent uiComponent, int uiFormId, object userData = null)
         {
-            IDataTable<DRUIForm> dtUIForm = GameEntry.DataTable.GetDataTable<DRUIForm>();
+            IDataTable<DRUIForm> dtUIForm = GameModule.DataTable.GetDataTable<DRUIForm>();
             DRUIForm drUIForm = dtUIForm.GetDataRow(uiFormId);
             if (drUIForm == null)
             {
@@ -154,7 +154,7 @@ namespace StarForce
 
         public static void OpenDialog(this UIComponent uiComponent, DialogParams dialogParams)
         {
-            if (((ProcedureBase)GameEntry.Procedure.CurrentProcedure).UseNativeDialog)
+            if (((ProcedureBase)GameModule.Procedure.CurrentProcedure).UseNativeDialog)
             {
                 OpenNativeDialog(dialogParams);
             }

@@ -32,7 +32,7 @@ namespace StarForce
         public WeaponData(int entityId, int typeId, int ownerId, CampType ownerCamp)
             : base(entityId, typeId, ownerId, ownerCamp)
         {
-            IDataTable<DRWeapon> dtWeapon = GameEntry.DataTable.GetDataTable<DRWeapon>();
+            IDataTable<DRWeapon> dtWeapon = GameModule.DataTable.GetDataTable<DRWeapon>();
             DRWeapon drWeapon = dtWeapon.GetDataRow(TypeId);
             if (drWeapon == null)
             {

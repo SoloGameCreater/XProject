@@ -31,7 +31,7 @@ namespace StarForce
             float toHPRatio = m_TargetableObjectData.HPRatio;
             if (fromHPRatio > toHPRatio)
             {
-                GameEntry.HPBar.ShowHPBar(this, fromHPRatio, toHPRatio);
+                GameModule.HPBar.ShowHPBar(this, fromHPRatio, toHPRatio);
             }
 
             if (m_TargetableObjectData.HP <= 0)
@@ -60,7 +60,7 @@ namespace StarForce
 
         protected virtual void OnDead(Entity attacker)
         {
-            GameEntry.Entity.HideEntity(this);
+            GameModule.Entity.HideEntity(this);
         }
 
         private void OnTriggerEnter(Collider other)

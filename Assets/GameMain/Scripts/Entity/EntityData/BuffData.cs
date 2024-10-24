@@ -25,7 +25,7 @@ namespace StarForce
         public BuffData(int entityId, int typeId,int buffId)
             : base(entityId, typeId)
         {
-            IDataTable<DRBuff> dtBuff = GameEntry.DataTable.GetDataTable<DRBuff>();
+            IDataTable<DRBuff> dtBuff = GameModule.DataTable.GetDataTable<DRBuff>();
             DRBuff drBuff = dtBuff.GetDataRow(buffId);
             if (drBuff == null)
             {

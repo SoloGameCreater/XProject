@@ -36,7 +36,7 @@ namespace StarForce
                 return;
             }
 
-            GameEntry.Entity.AttachEntity(Entity, m_ArmorData.OwnerId, AttachPoint);
+            GameModule.Entity.AttachEntity(Entity, m_ArmorData.OwnerId, AttachPoint);
         }
 
         protected override void OnAttachTo(EntityLogic parentEntity, Transform parentTransform, object userData)

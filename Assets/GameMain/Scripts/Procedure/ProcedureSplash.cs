@@ -28,13 +28,13 @@ namespace StarForce
             // TODO: 这里可以播放一个 Splash 动画
             // ...
 
-            if (GameEntry.Base.EditorResourceMode)
+            if (GameModule.Base.EditorResourceMode)
             {
                 // 编辑器模式
                 Log.Info("Editor resource mode detected.");
                 ChangeState<ProcedurePreload>(procedureOwner);
             }
-            else if (GameEntry.Resource.ResourceMode == ResourceMode.Package)
+            else if (GameModule.Resource.ResourceMode == ResourceMode.Package)
             {
                 // 单机模式
                 Log.Info("Package resource mode detected.");

@@ -40,35 +40,35 @@ namespace StarForce
 
         public void OnMusicMuteChanged(bool isOn)
         {
-            GameEntry.Sound.Mute("Music", !isOn);
+            GameModule.Sound.Mute("Music", !isOn);
             m_MusicVolumeSlider.gameObject.SetActive(isOn);
         }
 
         public void OnMusicVolumeChanged(float volume)
         {
-            GameEntry.Sound.SetVolume("Music", volume);
+            GameModule.Sound.SetVolume("Music", volume);
         }
 
         public void OnSoundMuteChanged(bool isOn)
         {
-            GameEntry.Sound.Mute("Sound", !isOn);
+            GameModule.Sound.Mute("Sound", !isOn);
             m_SoundVolumeSlider.gameObject.SetActive(isOn);
         }
 
         public void OnSoundVolumeChanged(float volume)
         {
-            GameEntry.Sound.SetVolume("Sound", volume);
+            GameModule.Sound.SetVolume("Sound", volume);
         }
 
         public void OnUISoundMuteChanged(bool isOn)
         {
-            GameEntry.Sound.Mute("UISound", !isOn);
+            GameModule.Sound.Mute("UISound", !isOn);
             m_UISoundVolumeSlider.gameObject.SetActive(isOn);
         }
 
         public void OnUISoundVolumeChanged(float volume)
         {
-            GameEntry.Sound.SetVolume("UISound", volume);
+            GameModule.Sound.SetVolume("UISound", volume);
         }
 
         public void OnEnglishSelected(bool isOn)
@@ -117,16 +117,16 @@ namespace StarForce
 
         public void OnSubmitButtonClick()
         {
-            if (m_SelectedLanguage == GameEntry.Localization.Language)
+            if (m_SelectedLanguage == GameModule.Localization.Language)
             {
                 Close();
                 return;
             }
 
-            GameEntry.Setting.SetString(Constant.Setting.Language, m_SelectedLanguage.ToString());
-            GameEntry.Setting.Save();
+            GameModule.Setting.SetString(Constant.Setting.Language, m_SelectedLanguage.ToString());
+            GameModule.Setting.Save();
 
-            GameEntry.Sound.StopMusic();
+            GameModule.Sound.StopMusic();
             UnityGameFramework.Runtime.GameEntry.Shutdown(ShutdownType.Restart);
         }
 
@@ -134,16 +134,16 @@ namespace StarForce
         {
             base.OnOpen(userData);
 
-            m_MusicMuteToggle.isOn = !GameEntry.Sound.IsMuted("Music");
-            m_MusicVolumeSlider.value = GameEntry.Sound.GetVolume("Music");
+            m_MusicMuteToggle.isOn = !GameModule.Sound.IsMuted("Music");
+            m_MusicVolumeSlider.value = GameModule.Sound.GetVolume("Music");
 
-            m_SoundMuteToggle.isOn = !GameEntry.Sound.IsMuted("Sound");
-            m_SoundVolumeSlider.value = GameEntry.Sound.GetVolume("Sound");
+            m_SoundMuteToggle.isOn = !GameModule.Sound.IsMuted("Sound");
+            m_SoundVolumeSlider.value = GameModule.Sound.GetVolume("Sound");
 
-            m_UISoundMuteToggle.isOn = !GameEntry.Sound.IsMuted("UISound");
-            m_UISoundVolumeSlider.value = GameEntry.Sound.GetVolume("UISound");
+            m_UISoundMuteToggle.isOn = !GameModule.Sound.IsMuted("UISound");
+            m_UISoundVolumeSlider.value = GameModule.Sound.GetVolume("UISound");
 
-            m_SelectedLanguage = GameEntry.Localization.Language;
+            m_SelectedLanguage = GameModule.Localization.Language;
             switch (m_SelectedLanguage)
             {
                 case Language.English:
@@ -179,7 +179,7 @@ namespace StarForce
 
         private void RefreshLanguageTips()
         {
-            m_LanguageTipsCanvasGroup.gameObject.SetActive(m_SelectedLanguage != GameEntry.Localization.Language);
+            m_LanguageTipsCanvasGroup.gameObject.SetActive(m_SelectedLanguage != GameModule.Localization.Language);
         }
     }
 }

@@ -23,9 +23,9 @@ namespace StarForce
 
         public virtual void Initialize()
         {
-            GameEntry.Event.Subscribe(ShowEntitySuccessEventArgs.EventId, OnShowEntitySuccess);
-            GameEntry.Event.Subscribe(ShowEntityFailureEventArgs.EventId, OnShowEntityFailure);
-            GameEntry.Event.Subscribe(BuffOnTriggerEventArgs.EventId, OnMyAircraftAddBuff);
+            GameModule.Event.Subscribe(ShowEntitySuccessEventArgs.EventId, OnShowEntitySuccess);
+            GameModule.Event.Subscribe(ShowEntityFailureEventArgs.EventId, OnShowEntityFailure);
+            GameModule.Event.Subscribe(BuffOnTriggerEventArgs.EventId, OnMyAircraftAddBuff);
 
             SceneBackground = Object.FindObjectOfType<ScrollableBackground>();
             if (SceneBackground == null)
@@ -35,7 +35,7 @@ namespace StarForce
             }
 
             SceneBackground.VisibleBoundary.gameObject.GetOrAddComponent<HideByBoundary>();
-            GameEntry.Entity.ShowMyAircraft(new MyAircraftData(GameEntry.Entity.GenerateSerialId(), 10000)
+            GameModule.Entity.ShowMyAircraft(new MyAircraftData(GameModule.Entity.GenerateSerialId(), 10000)
             {
                 Name = "My Aircraft",
                 Position = Vector3.zero,
@@ -47,9 +47,9 @@ namespace StarForce
 
         public virtual void Shutdown()
         {
-            GameEntry.Event.Unsubscribe(ShowEntitySuccessEventArgs.EventId, OnShowEntitySuccess);
-            GameEntry.Event.Unsubscribe(ShowEntityFailureEventArgs.EventId, OnShowEntityFailure);
-            GameEntry.Event.Unsubscribe(BuffOnTriggerEventArgs.EventId, OnMyAircraftAddBuff);
+            GameModule.Event.Unsubscribe(ShowEntitySuccessEventArgs.EventId, OnShowEntitySuccess);
+            GameModule.Event.Unsubscribe(ShowEntityFailureEventArgs.EventId, OnShowEntityFailure);
+            GameModule.Event.Unsubscribe(BuffOnTriggerEventArgs.EventId, OnMyAircraftAddBuff);
         }
 
         public virtual void Update(float elapseSeconds, float realElapseSeconds)
@@ -96,7 +96,7 @@ namespace StarForce
                 }
                 else
                 {
-                    GameEntry.Entity.ShowFollowAircraft(new FollowAircarftData(GameEntry.Entity.GenerateSerialId(), 10001)
+                    GameModule.Entity.ShowFollowAircraft(new FollowAircarftData(GameModule.Entity.GenerateSerialId(), 10001)
                         { Position = new Vector3(0, 0, -10f) });
                 }
             }

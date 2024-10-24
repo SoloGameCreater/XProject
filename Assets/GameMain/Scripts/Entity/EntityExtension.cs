@@ -7,7 +7,6 @@
 
 using GameFramework.DataTable;
 using System;
-using UnityEngine;
 using UnityGameFramework.Runtime;
 
 namespace StarForce
@@ -33,10 +32,6 @@ namespace StarForce
 
         public static void HideEntity(this EntityComponent entityComponent, Entity entity)
         {
-            if (!entity.Entity.EntityGroup.HasEntity(entity.Entity.Id))
-            {
-                return;
-            }
             entityComponent.HideEntity(entity.Entity);
         }
 
@@ -103,7 +98,7 @@ namespace StarForce
                 return;
             }
 
-            IDataTable<DREntity> dtEntity = GameEntry.DataTable.GetDataTable<DREntity>();
+            IDataTable<DREntity> dtEntity = GameModule.DataTable.GetDataTable<DREntity>();
             DREntity drEntity = dtEntity.GetDataRow(data.TypeId);
             if (drEntity == null)
             {

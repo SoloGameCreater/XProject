@@ -39,23 +39,23 @@ namespace StarForce
         public AircraftData(int entityId, int typeId, CampType camp)
             : base(entityId, typeId, camp)
         {
-            IDataTable<DRAircraft> dtAircraft = GameEntry.DataTable.GetDataTable<DRAircraft>();
+            IDataTable<DRAircraft> dtAircraft = GameModule.DataTable.GetDataTable<DRAircraft>();
             DRAircraft drAircraft = dtAircraft.GetDataRow(TypeId);
             if (drAircraft == null)
             {
                 return;
             }
 
-            m_ThrusterData = new ThrusterData(GameEntry.Entity.GenerateSerialId(), drAircraft.ThrusterId, Id, Camp);
+            m_ThrusterData = new ThrusterData(GameModule.Entity.GenerateSerialId(), drAircraft.ThrusterId, Id, Camp);
 
             for (int index = 0, weaponId = 0; (weaponId = drAircraft.GetWeaponIdAt(index)) > 0; index++)
             {
-                AttachWeaponData(new WeaponData(GameEntry.Entity.GenerateSerialId(), weaponId, Id, Camp));
+                AttachWeaponData(new WeaponData(GameModule.Entity.GenerateSerialId(), weaponId, Id, Camp));
             }
 
             for (int index = 0, armorId = 0; (armorId = drAircraft.GetArmorIdAt(index)) > 0; index++)
             {
-                AttachArmorData(new ArmorData(GameEntry.Entity.GenerateSerialId(), armorId, Id, Camp));
+                AttachArmorData(new ArmorData(GameModule.Entity.GenerateSerialId(), armorId, Id, Camp));
             }
 
             m_DeadEffectId = drAircraft.DeadEffectId;
