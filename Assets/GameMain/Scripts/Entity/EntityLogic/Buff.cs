@@ -47,6 +47,12 @@ namespace StarForce
                 displayStr.Append(signStr);
                 displayStr.Append(m_BuffData.Ratio);
             }
+            //todo 后期需要调整功能
+            #region 临时写法
+            displayStr.Clear();
+            displayStr.Append(m_BuffData.IsAdd ? "+1" : "-1");
+            #endregion
+            
             m_Text.text = displayStr.ToString();
         }
         protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)

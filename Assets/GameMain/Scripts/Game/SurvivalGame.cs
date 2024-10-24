@@ -17,6 +17,8 @@ namespace StarForce
         }
 
         private const int BuffStartId = 80000;
+        private float m_AsteroidSpawnInterval = 0.2f;
+        private int m_AsteroidCount = 0;
 
         public override void Update(float elapseSeconds, float realElapseSeconds)
         {
@@ -24,7 +26,7 @@ namespace StarForce
 
             m_ElapseSeconds += elapseSeconds;
             m_LastCreateBuffSeconds += elapseSeconds;
-            if (m_ElapseSeconds >= 0.02f)
+            if (m_ElapseSeconds >= m_AsteroidSpawnInterval)
             {
                 m_ElapseSeconds = 0f;
                 IDataTable<DRAsteroid> dtAsteroid = GameModule.DataTable.GetDataTable<DRAsteroid>();
@@ -36,6 +38,12 @@ namespace StarForce
                 {
                     Position = new Vector3(randomPositionX, 0f, randomPositionZ),
                 });
+                m_AsteroidCount++;
+                if (m_AsteroidCount >= 100)
+                {
+                    m_AsteroidSpawnInterval /= 2;
+                    m_AsteroidCount = 0;
+                }
             }
 
             /* 每隔5秒创建两个buff */
