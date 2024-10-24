@@ -24,7 +24,7 @@ namespace StarForce
 
             m_ElapseSeconds += elapseSeconds;
             m_LastCreateBuffSeconds += elapseSeconds;
-            if (m_ElapseSeconds >= 1f)
+            if (m_ElapseSeconds >= 0.02f)
             {
                 m_ElapseSeconds = 0f;
                 IDataTable<DRAsteroid> dtAsteroid = GameModule.DataTable.GetDataTable<DRAsteroid>();

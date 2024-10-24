@@ -36,7 +36,7 @@ namespace StarForce
                 Log.Warning($"offset is {offset}");
                 m_OffsetPosition = new Vector3(offsetX, 0, offsetZ);
                 m_TargetPosition = m_MyAircraft.CachedTransform.localPosition + m_OffsetPosition;
-                m_FollowDelay = 0.1f * m_MyAircraft.FollowAircraftCnt;
+                //m_FollowDelay = 0.1f * m_MyAircraft.FollowAircraftCnt;
             }
         }
 
@@ -96,7 +96,7 @@ namespace StarForce
         private void MoveToTargetWithDelay()
         {
             // 使用 DOTween 动画到目标位置
-            m_MoveTweener = CachedTransform.DOLocalMove(m_TargetPosition, 0.5f)
+            m_MoveTweener = CachedTransform.DOLocalMove(m_TargetPosition, 0.2f)
                 .SetDelay(m_FollowDelay) // 延迟执行
                 .SetEase(Ease.Linear) // 可以根据需要选择不同的缓动函数
                 .OnStart(() => m_IsSelfMoving = true) // 开始时设置为正在移动

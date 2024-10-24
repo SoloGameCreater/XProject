@@ -13,7 +13,7 @@ public class EditorHelper : EditorWindow
         //EditorHelper window = (EditorHelper)EditorWindow.GetWindow(typeof(EditorHelper));
         string curScene = EditorSceneManager.GetActiveScene().name;
         //EditorApplication.SaveScene();
-        EditorSceneManager.OpenScene("Assets/Launcher.unity");
+        EditorSceneManager.OpenScene("Assets/Launcher/Launcher.unity");
         EditorApplication.isPlaying = true;
         UnityEngine.Debug.Log(curScene);
     }
