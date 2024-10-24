@@ -10,11 +10,9 @@ namespace StarForce
     public abstract class TargetableObject : Entity
     {
         [SerializeField] private TargetableObjectData m_TargetableObjectData = null;
-
-        public bool IsDead
-        {
-            get { return m_TargetableObjectData.HP <= 0; }
-        }
+        
+        protected bool isAircraft = true;
+        public bool IsDead => m_TargetableObjectData.HP <= 0;
 
         public abstract ImpactData GetImpactData();
 
@@ -68,6 +66,12 @@ namespace StarForce
             if (entity is TargetableObject && entity.Id >= Id)
             {
                 // 碰撞事件由 Id 小的一方处理，避免重复处理
+                return;
+            }
+
+            if (!isAircraft && entity is Asteroid)
+            {
+                //行星不会互相碰撞
                 return;
             }
 

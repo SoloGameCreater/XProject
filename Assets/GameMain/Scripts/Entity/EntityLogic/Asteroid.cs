@@ -16,6 +16,7 @@ namespace StarForce
         protected override void OnInit(object userData)
         {
             base.OnInit(userData);
+            isAircraft = false;
         }
 
         protected override void OnShow(object userData)
