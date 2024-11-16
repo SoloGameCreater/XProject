@@ -50,16 +50,8 @@ namespace Framework
             else if (force || newState != _currentState)
             {
                 var needShowLoading =
-                    _currentState != null && _currentState.Type == FsmStateType.TripleMatch && newState.Type == FsmStateType.ThreeMerge ||
-                    _currentState != null && _currentState.Type == FsmStateType.ThreeMerge && newState.Type == FsmStateType.TripleMatch ||
-                    _currentState != null && _currentState.Type == FsmStateType.ThreeMerge && newState.Type == FsmStateType.ThreeMerge ||
-                    _currentState != null && _currentState.Type == FsmStateType.TripleMatch && newState.Type == FsmStateType.TripleMatch ||
-                    _currentState != null && _currentState.Type == FsmStateType.Makeover && newState.Type == FsmStateType.ThreeMerge ||
-                    _currentState != null && _currentState.Type == FsmStateType.ThreeMerge && newState.Type == FsmStateType.Makeover ||
-                    _currentState != null && _currentState.Type == FsmStateType.Makeover && newState.Type == FsmStateType.Makeover ||
-                    _currentState != null && _currentState.Type == FsmStateType.ASMR && newState.Type == FsmStateType.ThreeMerge ||
-                    _currentState != null && _currentState.Type == FsmStateType.ThreeMerge && newState.Type == FsmStateType.ASMR ||
-                    _currentState != null && _currentState.Type == FsmStateType.ASMR && newState.Type == FsmStateType.ASMR;
+                    _currentState != null && _currentState.Type == FsmStateType.MainGame && newState.Type == FsmStateType.ThreeMerge ||
+                    _currentState != null && _currentState.Type == FsmStateType.ThreeMerge && newState.Type == FsmStateType.MainGame;
 
                 var enterResult = await doChangeToStateAsync(newState, stateParam, onChangeFinised);
                 if (enterResult) EnterFinish();

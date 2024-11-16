@@ -8,14 +8,8 @@ namespace Framework
         Non,
         Launch,      //启动的loading
         Login,       //登录
-        Activity,    //运营活动
+        MainGame,    //主游戏
         ThreeMerge,  //合成
-        CG,          //CG视频
-        Transition,  //过渡场景
-        TripleMatch, //点消
-        Makeover,    //医美小游戏
-        ASMR,
-        Plot,   //小游戏-plot
     }
     public interface IFsmState
     {
