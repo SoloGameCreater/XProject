@@ -1,23 +1,45 @@
 ﻿
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityGameFramework.Runtime;
 
 namespace StarForce
 {
-    public class AboutForm : UGuiForm
+    [AssetAddress("UIForms/AboutForm")]
+    public class AboutForm : UIPopup
     {
-        [SerializeField] private RectTransform m_Transform = null;
-
-        [SerializeField] private float m_ScrollSpeed = 1f;
+        /* 关闭按钮 */
+        [ComponentBinder("BackButton")] private Button _btnClose;
+        [ComponentBinder("Content")] private RectTransform _contentTransform;
+        
+        private float m_ScrollSpeed = 1f;
 
         private float m_InitPosition = 0f;
 
-        protected override void OnInit(object userData)
+        public override void OnViewOpen(UIViewParam param)
         {
-            base.OnInit(userData);
+            base.OnViewOpen(param);
+            OnInit();
+            _btnClose.onClick.AddListener(DoViewClose);
+            
+            TimeTickModel.Instance.Register(OnTick);
+            // 换个音乐
+            GameModule.Sound.PlayMusic(3);
+        }
 
-            CanvasScaler canvasScaler = GetComponentInParent<CanvasScaler>();
+        public override Task OnViewClose()
+        {
+            _btnClose.onClick.RemoveListener(DoViewClose);
+            // 还原音乐
+            GameModule.Sound.PlayMusic(1);
+            
+            TimeTickModel.Instance.Remove(OnTick);
+            return base.OnViewClose();
+        }
+        private void OnInit()
+        {
+            CanvasScaler canvasScaler = transform.GetComponentInParent<CanvasScaler>();
             if (canvasScaler == null)
             {
                 Log.Warning("Can not find CanvasScaler component.");
@@ -25,34 +47,18 @@ namespace StarForce
             }
 
             m_InitPosition = -0.5f * canvasScaler.referenceResolution.x * Screen.height / Screen.width;
+            
+
+            _contentTransform.SetLocalPositionY(m_InitPosition);
         }
+        
 
-        protected override void OnOpen(object userData)
+        private void OnTick()
         {
-            base.OnOpen(userData);
-
-            m_Transform.SetLocalPositionY(m_InitPosition);
-
-            // 换个音乐
-            GameModule.Sound.PlayMusic(3);
-        }
-
-        protected override void OnClose(bool isShutdown, object userData)
-        {
-            base.OnClose(isShutdown, userData);
-
-            // 还原音乐
-            GameModule.Sound.PlayMusic(1);
-        }
-
-        protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
-        {
-            base.OnUpdate(elapseSeconds, realElapseSeconds);
-
-            m_Transform.AddLocalPositionY(m_ScrollSpeed * elapseSeconds);
-            if (m_Transform.localPosition.y > m_Transform.sizeDelta.y - m_InitPosition)
+            _contentTransform.AddLocalPositionY(m_ScrollSpeed * 1000);
+            if (_contentTransform.localPosition.y > _contentTransform.sizeDelta.y - m_InitPosition)
             {
-                m_Transform.SetLocalPositionY(m_InitPosition);
+                _contentTransform.SetLocalPositionY(m_InitPosition);
             }
         }
     }

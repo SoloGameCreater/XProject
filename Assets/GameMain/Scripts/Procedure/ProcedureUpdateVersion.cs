@@ -1,64 +1,98 @@
-﻿
-using GameFramework.Resource;
-using UnityGameFramework.Runtime;
+using System;
+using Cysharp.Threading.Tasks;
+using UnityEngine;
+using YooAsset;
 using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedureManager>;
 
-namespace StarForce
+namespace BaseModule
 {
     public class ProcedureUpdateVersion : ProcedureBase
     {
-        private bool m_UpdateVersionComplete = false;
-        private UpdateVersionListCallbacks m_UpdateVersionListCallbacks = null;
-
-        public override bool UseNativeDialog
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        protected override void OnInit(ProcedureOwner procedureOwner)
-        {
-            base.OnInit(procedureOwner);
-
-            m_UpdateVersionListCallbacks = new UpdateVersionListCallbacks(OnUpdateVersionListSuccess, OnUpdateVersionListFailure);
-        }
+        public override bool UseNativeDialog => true;
 
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
             base.OnEnter(procedureOwner);
 
-            m_UpdateVersionComplete = false;
-
-            GameModule.Resource.UpdateVersionList(procedureOwner.GetData<VarInt32>("VersionListLength"), procedureOwner.GetData<VarInt32>("VersionListHashCode"), procedureOwner.GetData<VarInt32>("VersionListCompressedLength"), procedureOwner.GetData<VarInt32>("VersionListCompressedHashCode"), m_UpdateVersionListCallbacks);
-            procedureOwner.RemoveData("VersionListLength");
-            procedureOwner.RemoveData("VersionListHashCode");
-            procedureOwner.RemoveData("VersionListCompressedLength");
-            procedureOwner.RemoveData("VersionListCompressedHashCode");
+            UpdateVersion(procedureOwner).Forget();
         }
 
-        protected override void OnUpdate(ProcedureOwner procedureOwner, float elapseSeconds, float realElapseSeconds)
+        private async UniTaskVoid UpdateVersion(ProcedureOwner procedureOwner)
         {
-            base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
+            await UniTask.Yield();
 
-            if (!m_UpdateVersionComplete)
+            try
             {
-                return;
+                var package = GameModule.Resource.GetPackage();
+                var updatePackageVersionOperation = package.UpdatePackageVersionAsync();
+                await updatePackageVersionOperation.Task;
+
+                if (updatePackageVersionOperation.Status != EOperationStatus.Succeed)
+                {
+                    Debug.LogError($"ResUpdateVersionState:获取远程package version文件失败!");
+                    // 如果获取远端资源清单失败，说明当前网络无连接。
+                    // 在正常开始游戏之前，需要验证本地清单内容的完整性[注意只需要保证gameplay标签的资源，按需下载的不用]。
+                    string packageVersion = package.GetPackageVersion();
+                    var operation = package.PreDownloadContentAsync(packageVersion);
+                    await operation.Task;
+                    if (operation.Status != EOperationStatus.Succeed)
+                    {
+                        Debug.LogError($"ResUpdateVersionState:验证本地资源不完整!");
+                        // 资源内容本地并不完整，需要提示玩家联网更新。
+                        LauncherNoticePanel.Show(new LauncherNoticePanel.Param()
+                        {
+                            IsShowCloseBtn = false,
+                            IsShowCancelBtn = false,
+                            DescStr = LauncherLocalizationManager.Instance().GetText("UI_Desc_Download_Error"),
+                            ConfirmCallBack = () => { OnUpdateVersionFailed(procedureOwner); }
+                        });
+                        return;
+                    }
+
+                    var downloader = operation.CreateResourceDownloader("BASE_RES",
+                        GameModule.Resource.DownloadingMaxNum, GameModule.Resource.FailedTryAgain);
+                    if (downloader.TotalDownloadCount > 0)
+                    {
+                        // 资源内容本地并不完整，需要提示玩家联网更新。
+                        LauncherNoticePanel.Show(new LauncherNoticePanel.Param()
+                        {
+                            IsShowCloseBtn = false,
+                            IsShowCancelBtn = false,
+                            DescStr = LauncherLocalizationManager.Instance().GetText("UI_Desc_Download_Error"),
+                            ConfirmCallBack = () => { OnUpdateVersionFailed(procedureOwner); }
+                        });
+                        return;
+                    }
+
+                    Debug.Log($"YooAsset UpdatePackageVersionAsync Fail, But Local Res Is Ready!");
+
+                    ChangeState<ProcedureLoadAssembly>(procedureOwner);
+                }
+                else
+                {
+                    GameModule.Resource.PackageVersion = updatePackageVersionOperation.PackageVersion;
+                    
+                    Debug.Log($"YooAsset Updated package Version : to {updatePackageVersionOperation.PackageVersion}");
+
+                    ChangeState<ProcedureUpdateManifest>(procedureOwner);
+                }
             }
-
-            ChangeState<ProcedureVerifyResources>(procedureOwner);
+            catch (Exception e)
+            {
+                OnUpdateVersionFailed(procedureOwner);
+            }
         }
 
-        private void OnUpdateVersionListSuccess(string downloadPath, string downloadUri)
+        private void OnUpdateVersionFailed(ProcedureOwner procedureOwner)
         {
-            m_UpdateVersionComplete = true;
-            Log.Info("Update version list from '{0}' success.", downloadUri);
-        }
-
-        private void OnUpdateVersionListFailure(string downloadUri, string errorMessage)
-        {
-            Log.Warning("Update version list from '{0}' failure, error message is '{1}'.", downloadUri, errorMessage);
+            // 资源内容本地并不完整，需要提示玩家联网更新。
+            LauncherNoticePanel.Show(new LauncherNoticePanel.Param()
+            {
+                IsShowCloseBtn = false,
+                IsShowCancelBtn = false,
+                DescStr = LauncherLocalizationManager.Instance().GetText("UI_Desc_Download_Error"),
+                ConfirmCallBack = () => { UpdateVersion(procedureOwner).Forget(); }
+            });
         }
     }
 }

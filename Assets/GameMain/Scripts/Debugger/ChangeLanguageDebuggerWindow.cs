@@ -32,7 +32,7 @@ namespace StarForce
             if (m_NeedRestart)
             {
                 m_NeedRestart = false;
-                UnityGameFramework.Runtime.GameEntry.Shutdown(ShutdownType.Restart);
+                GameSystem.Shutdown(ShutdownType.Restart);
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿
+using System.Threading.Tasks;
 using GameFramework;
 using TMPro;
 using UnityEngine;
@@ -7,8 +8,13 @@ using UnityGameFramework.Runtime;
 
 namespace StarForce
 {
-    public class DialogForm : UGuiForm
+    [AssetAddress("UIForms/DialogForm")]
+    public class DialogForm : UIPopup
     {
+        public class Param : UIViewParam
+        {
+            public DialogParams DialogParam;
+        }
         [SerializeField] private TextMeshProUGUI m_TitleText = null;
 
         [SerializeField] private TextMeshProUGUI m_MessageText = null;
@@ -20,7 +26,11 @@ namespace StarForce
         [SerializeField] private TextMeshProUGUI[] m_CancelTexts = null;
 
         [SerializeField] private TextMeshProUGUI[] m_OtherTexts = null;
-
+        
+        [ComponentBinder("Confirm")] private Button _btnConfirm;
+        [ComponentBinder("Cancel")] private Button _btnCancel;
+        [ComponentBinder("Other")] private Button _btnOther;
+        
         private int m_DialogMode = 1;
         private bool m_PauseGame = false;
         private object m_UserData = null;
@@ -43,9 +53,9 @@ namespace StarForce
             get { return m_UserData; }
         }
 
-        public void OnConfirmButtonClick()
+        private void OnConfirmButtonClick()
         {
-            Close();
+            OnViewDestroy();
 
             if (m_OnClickConfirm != null)
             {
@@ -53,9 +63,9 @@ namespace StarForce
             }
         }
 
-        public void OnCancelButtonClick()
+        private void OnCancelButtonClick()
         {
-            Close();
+            OnViewDestroy();
 
             if (m_OnClickCancel != null)
             {
@@ -63,27 +73,61 @@ namespace StarForce
             }
         }
 
-        public void OnOtherButtonClick()
+        private void OnOtherButtonClick()
         {
-            Close();
+            OnViewDestroy();
 
             if (m_OnClickOther != null)
             {
                 m_OnClickOther(m_UserData);
             }
         }
-
-        protected override void OnOpen(object userData)
+        public override void OnViewOpen(UIViewParam param)
         {
-            base.OnOpen(userData);
-
-            DialogParams dialogParams = (DialogParams)userData;
-            if (dialogParams == null)
+            base.OnViewOpen(param);
+            var param2 = param as Param;
+            if (param2 == null)
             {
-                Log.Warning("DialogParams is invalid.");
+                Debug.LogError("DialogForm::OnViewOpen param is invalid.");
                 return;
             }
+            Init(param2.DialogParam);
+            
+            _btnConfirm.onClick.AddListener(OnConfirmButtonClick);
+            _btnCancel.onClick.AddListener(OnCancelButtonClick);
+            _btnOther.onClick.AddListener(OnOtherButtonClick);
+        }
 
+        public override Task OnViewClose()
+        {
+            _btnConfirm.onClick.RemoveListener(OnConfirmButtonClick);
+            _btnCancel.onClick.RemoveListener(OnCancelButtonClick);
+            _btnOther.onClick.RemoveListener(OnOtherButtonClick);
+            if (m_PauseGame)
+            {
+                GameModule.Base.ResumeGame();
+            }
+
+            m_DialogMode = 1;
+            m_TitleText.text = string.Empty;
+            m_MessageText.text = string.Empty;
+            m_PauseGame = false;
+            m_UserData = null;
+
+            RefreshConfirmText(string.Empty);
+            m_OnClickConfirm = null;
+
+            RefreshCancelText(string.Empty);
+            m_OnClickCancel = null;
+
+            RefreshOtherText(string.Empty);
+            m_OnClickOther = null;
+            
+            return base.OnViewClose();
+        }
+
+        private void Init(DialogParams dialogParams)
+        {
             m_DialogMode = dialogParams.Mode;
             RefreshDialogMode();
 
@@ -104,32 +148,6 @@ namespace StarForce
             RefreshOtherText(dialogParams.OtherText);
             m_OnClickOther = dialogParams.OnClickOther;
         }
-
-        protected override void OnClose(bool isShutdown, object userData)
-        {
-            if (m_PauseGame)
-            {
-                GameModule.Base.ResumeGame();
-            }
-
-            m_DialogMode = 1;
-            m_TitleText.text = string.Empty;
-            m_MessageText.text = string.Empty;
-            m_PauseGame = false;
-            m_UserData = null;
-
-            RefreshConfirmText(string.Empty);
-            m_OnClickConfirm = null;
-
-            RefreshCancelText(string.Empty);
-            m_OnClickCancel = null;
-
-            RefreshOtherText(string.Empty);
-            m_OnClickOther = null;
-
-            base.OnClose(isShutdown, userData);
-        }
-
         private void RefreshDialogMode()
         {
             for (int i = 1; i <= m_ModeObjects.Length; i++)

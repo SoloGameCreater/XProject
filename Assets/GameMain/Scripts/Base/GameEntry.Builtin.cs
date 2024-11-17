@@ -109,25 +109,25 @@ public partial class GameModule : MonoBehaviour
 
     private static void InitBuiltinComponents()
     {
-        Base = UnityGameFramework.Runtime.GameEntry.GetComponent<BaseComponent>();
-        Config = UnityGameFramework.Runtime.GameEntry.GetComponent<ConfigComponent>();
-        DataNode = UnityGameFramework.Runtime.GameEntry.GetComponent<DataNodeComponent>();
-        DataTable = UnityGameFramework.Runtime.GameEntry.GetComponent<DataTableComponent>();
-        Debugger = UnityGameFramework.Runtime.GameEntry.GetComponent<DebuggerComponent>();
-        Download = UnityGameFramework.Runtime.GameEntry.GetComponent<DownloadComponent>();
-        Entity = UnityGameFramework.Runtime.GameEntry.GetComponent<EntityComponent>();
-        Event = UnityGameFramework.Runtime.GameEntry.GetComponent<EventComponent>();
-        FileSystem = UnityGameFramework.Runtime.GameEntry.GetComponent<FileSystemComponent>();
-        Fsm = UnityGameFramework.Runtime.GameEntry.GetComponent<FsmComponent>();
-        Localization = UnityGameFramework.Runtime.GameEntry.GetComponent<LocalizationComponent>();
-        Network = UnityGameFramework.Runtime.GameEntry.GetComponent<NetworkComponent>();
-        ObjectPool = UnityGameFramework.Runtime.GameEntry.GetComponent<ObjectPoolComponent>();
-        Procedure = UnityGameFramework.Runtime.GameEntry.GetComponent<ProcedureComponent>();
-        Resource = UnityGameFramework.Runtime.GameEntry.GetComponent<ResourceComponent>();
-        Scene = UnityGameFramework.Runtime.GameEntry.GetComponent<SceneComponent>();
-        Setting = UnityGameFramework.Runtime.GameEntry.GetComponent<SettingComponent>();
-        Sound = UnityGameFramework.Runtime.GameEntry.GetComponent<SoundComponent>();
-        UI = UnityGameFramework.Runtime.GameEntry.GetComponent<UIComponent>();
-        WebRequest = UnityGameFramework.Runtime.GameEntry.GetComponent<WebRequestComponent>();
+        Base = GameSystem.GetComponent<BaseComponent>();
+        Config = GameSystem.GetComponent<ConfigComponent>();
+        DataNode = GameSystem.GetComponent<DataNodeComponent>();
+        DataTable = GameSystem.GetComponent<DataTableComponent>();
+        Debugger = GameSystem.GetComponent<DebuggerComponent>();
+        Download = GameSystem.GetComponent<DownloadComponent>();
+        Entity = GameSystem.GetComponent<EntityComponent>();
+        Event = GameSystem.GetComponent<EventComponent>();
+        FileSystem = GameSystem.GetComponent<FileSystemComponent>();
+        Fsm = GameSystem.GetComponent<FsmComponent>();
+        Localization = GameSystem.GetComponent<LocalizationComponent>();
+        Network = GameSystem.GetComponent<NetworkComponent>();
+        ObjectPool = GameSystem.GetComponent<ObjectPoolComponent>();
+        Procedure = GameSystem.GetComponent<ProcedureComponent>();
+        Resource = GameSystem.GetComponent<ResourceComponent>();
+        Scene = GameSystem.GetComponent<SceneComponent>();
+        Setting = GameSystem.GetComponent<SettingComponent>();
+        Sound = GameSystem.GetComponent<SoundComponent>();
+        UI = GameSystem.GetComponent<UIComponent>();
+        WebRequest = GameSystem.GetComponent<WebRequestComponent>();
     }
 }

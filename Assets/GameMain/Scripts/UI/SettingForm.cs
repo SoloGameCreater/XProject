@@ -1,4 +1,6 @@
 ﻿
+using System.Threading.Tasks;
+using DG.Tweening;
 using GameFramework.Localization;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,7 +8,7 @@ using UnityGameFramework.Runtime;
 
 namespace StarForce
 {
-    public class SettingForm : UGuiForm
+    public class SettingForm : UIPopup
     {
         [SerializeField] private Toggle m_MusicMuteToggle = null;
 
@@ -19,8 +21,8 @@ namespace StarForce
         [SerializeField] private Toggle m_UISoundMuteToggle = null;
 
         [SerializeField] private Slider m_UISoundVolumeSlider = null;
-
-        [SerializeField] private CanvasGroup m_LanguageTipsCanvasGroup = null;
+        [ComponentBinder("LanguageTips")]
+        private CanvasGroup m_LanguageTipsCanvasGroup = null;
 
         [SerializeField] private Toggle m_EnglishToggle = null;
 
@@ -29,6 +31,8 @@ namespace StarForce
         [SerializeField] private Toggle m_ChineseTraditionalToggle = null;
 
         [SerializeField] private Toggle m_KoreanToggle = null;
+        [ComponentBinder("Cancel")] private Button _btnClose;
+        [ComponentBinder("Confirm")] private Button _btnComfirm;
 
         private Language m_SelectedLanguage = Language.Unspecified;
 
@@ -109,11 +113,11 @@ namespace StarForce
             RefreshLanguageTips();
         }
 
-        public void OnSubmitButtonClick()
+        private void OnSubmitButtonClick()
         {
             if (m_SelectedLanguage == GameModule.Localization.Language)
             {
-                Close();
+                OnViewDestroy();
                 return;
             }
 
@@ -121,13 +125,48 @@ namespace StarForce
             GameModule.Setting.Save();
 
             GameModule.Sound.StopMusic();
-            UnityGameFramework.Runtime.GameEntry.Shutdown(ShutdownType.Restart);
+            GameSystem.Shutdown(ShutdownType.Restart);
         }
 
-        protected override void OnOpen(object userData)
+        private void CloseOnClick()
         {
-            base.OnOpen(userData);
+            OnViewDestroy();
+        }
+        private void PlayLanguageTips()
+        {
+            m_LanguageTipsCanvasGroup.DOFade(1, 0.1f);
+        }
 
+        private void RefreshLanguageTips()
+        {
+            if (m_SelectedLanguage != GameModule.Localization.Language)
+            {
+                PlayLanguageTips();
+            }
+            else
+            {
+                m_LanguageTipsCanvasGroup.alpha = 0;
+            }
+        }
+        public override void OnViewOpen(UIViewParam param)
+        {
+            base.OnViewOpen(param);
+            
+            Init();
+            _btnClose.onClick.AddListener(CloseOnClick);
+            _btnComfirm.onClick.AddListener(OnSubmitButtonClick);
+        }
+
+        public override Task OnViewClose()
+        {
+            _btnClose.onClick.RemoveListener(CloseOnClick);
+            _btnComfirm.onClick.RemoveListener(OnSubmitButtonClick);
+            
+            return base.OnViewClose();
+        }
+
+        private void Init()
+        {
             m_MusicMuteToggle.isOn = !GameModule.Sound.IsMuted("Music");
             m_MusicVolumeSlider.value = GameModule.Sound.GetVolume("Music");
 
@@ -155,25 +194,10 @@ namespace StarForce
                 case Language.Korean:
                     m_KoreanToggle.isOn = true;
                     break;
-
                 default:
+                    Debug.LogWarning($"Can not find the selected language. {m_SelectedLanguage.ToString()}");
                     break;
             }
-        }
-
-        protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
-        {
-            base.OnUpdate(elapseSeconds, realElapseSeconds);
-
-            if (m_LanguageTipsCanvasGroup.gameObject.activeSelf)
-            {
-                m_LanguageTipsCanvasGroup.alpha = 0.5f + 0.5f * Mathf.Sin(Mathf.PI * Time.time);
-            }
-        }
-
-        private void RefreshLanguageTips()
-        {
-            m_LanguageTipsCanvasGroup.gameObject.SetActive(m_SelectedLanguage != GameModule.Localization.Language);
         }
     }
 }

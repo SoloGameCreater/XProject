@@ -1,60 +1,67 @@
 ﻿
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityGameFramework.Runtime;
 
 namespace StarForce
 {
-    public class MenuForm : UGuiForm
+    [AssetAddress("UIForms/MenuForm")]
+    public class MenuForm : UIPopup
     {
-        [SerializeField] private GameObject m_QuitButton = null;
+        /* 关闭按钮 */
+        [ComponentBinder("About")] private Button _btnAbout;
+        [ComponentBinder("Quit")] private Button _btnQuit;
+        [ComponentBinder("Start")] private Button _btnStart;
+        [ComponentBinder("Setting")] private Button _btnSetting;
 
-        private ProcedureMenu m_ProcedureMenu = null;
-
-        public void OnStartButtonClick()
+        private void OnStartButtonClick()
         {
-            m_ProcedureMenu.StartGame();
+           
         }
 
-        public void OnSettingButtonClick()
+        private void OnSettingButtonClick()
         {
-            GameModule.UI.OpenUIForm(UIFormId.SettingForm);
+            UIViewSystem.Instance.Open<SettingForm>();
         }
 
-        public void OnAboutButtonClick()
+        private void OnAboutButtonClick()
         {
-            GameModule.UI.OpenUIForm(UIFormId.AboutForm);
+            UIViewSystem.Instance.Open<AboutForm>();
         }
 
-        public void OnQuitButtonClick()
+        private void OnQuitButtonClick()
         {
-            GameModule.UI.OpenDialog(new DialogParams()
+            var dialogInfo = new DialogForm.Param()
             {
-                Mode = 2,
-                Title = GameModule.Localization.GetString("AskQuitGame.Title"),
-                Message = GameModule.Localization.GetString("AskQuitGame.Message"),
-                OnClickConfirm = delegate(object userData) { UnityGameFramework.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
-            });
+                DialogParam = new DialogParams()
+                {
+                    Mode = 2,
+                    Title = GameModule.Localization.GetString("AskQuitGame.Title"),
+                    Message = GameModule.Localization.GetString("AskQuitGame.Message"),
+                    OnClickConfirm = delegate(object userData) { GameSystem.Shutdown(ShutdownType.Quit); },
+                }
+            };
+            UIViewSystem.Instance.Open<DialogForm>(dialogInfo);
         }
 
-        protected override void OnOpen(object userData)
+        public override void OnViewOpen(UIViewParam param)
         {
-            base.OnOpen(userData);
-
-            m_ProcedureMenu = (ProcedureMenu)userData;
-            if (m_ProcedureMenu == null)
-            {
-                Log.Warning("ProcedureMenu is invalid when open MenuForm.");
-                return;
-            }
-
-            m_QuitButton.SetActive(Application.platform != RuntimePlatform.IPhonePlayer);
+            base.OnViewOpen(param);
+            _btnAbout.onClick.AddListener(OnAboutButtonClick);
+            _btnStart.onClick.AddListener(OnStartButtonClick);
+            _btnSetting.onClick.AddListener(OnStartButtonClick);
+            _btnQuit.onClick.AddListener(OnQuitButtonClick);
         }
 
-        protected override void OnClose(bool isShutdown, object userData)
+        public override Task OnViewClose()
         {
-            m_ProcedureMenu = null;
-
-            base.OnClose(isShutdown, userData);
+            _btnAbout.onClick.RemoveListener(OnAboutButtonClick);
+            _btnStart.onClick.RemoveListener(OnSettingButtonClick);
+            _btnSetting.onClick.RemoveListener(OnStartButtonClick);
+            _btnQuit.onClick.RemoveListener(OnQuitButtonClick);
+            
+            return base.OnViewClose();
         }
     }
 }

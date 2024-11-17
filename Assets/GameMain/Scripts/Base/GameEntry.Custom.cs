@@ -21,7 +21,7 @@ public partial class GameModule : MonoBehaviour
 
     private static void InitCustomComponents()
     {
-        BuiltinData = UnityGameFramework.Runtime.GameEntry.GetComponent<BuiltinDataComponent>();
-        HPBar = UnityGameFramework.Runtime.GameEntry.GetComponent<HPBarComponent>();
+        BuiltinData = UnityGameFramework.Runtime.GameSystem.GetComponent<BuiltinDataComponent>();
+        HPBar = UnityGameFramework.Runtime.GameSystem.GetComponent<HPBarComponent>();
     }
 }

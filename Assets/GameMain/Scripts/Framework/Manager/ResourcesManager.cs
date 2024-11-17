@@ -21,7 +21,7 @@ namespace Framework
         public T LoadResource<T>(string name, bool forceBundle = false, bool addToCache = true, string assetDeepPath = null) where T : Object
         {
             //todo 这里思考一下
-            //return GameModule.Resource.LoadAsset<T>($"Assets/Export/{name}");
+            return GameModule.Resource.LoadAsset<T>($"Assets/Export/{name}");
             return null;
         }
 
