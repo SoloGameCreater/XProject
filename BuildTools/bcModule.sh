@@ -4,7 +4,7 @@ projectDir="XProject"
 
 modulesAll=(
 	{"Game","1z1VPg9sAJzwtPuCtie74igDLIUnGgLuOg39JvVodqcM"}
-	{"Game2","1enX1DTXx0ICHynotVZRZHb3Ifq4we2QtbksLWw3vuD4"}
+	{"Merge","10AM42zxnHRHg7SIBFSWzrjJqNNIPP894s_4NN7ivsnQ"}
 )
 
 
