@@ -7,22 +7,25 @@ using Object = UnityEngine.Object;
 
 namespace Framework
 {
-    public class ResourcesManager : MonoSingleton<ResourcesManager>
+    public class ResourcesManager : Manager<ResourcesManager>
     {
         private bool m_UseSd;
 
         public bool HasAsset(string name)
         {
             var path = $"Assets/Export/{name}";
-            //return GameModule.Resource.CheckLocationValid(path);
-            return true;
+            return GameModule.Resource.CheckLocationValid(path);
         }
 
         public T LoadResource<T>(string name, bool forceBundle = false, bool addToCache = true, string assetDeepPath = null) where T : Object
         {
-            //todo 这里思考一下
             return GameModule.Resource.LoadAsset<T>($"Assets/Export/{name}");
-            return null;
+        }
+
+        public async UniTaskVoid LoadResourceAsync<T>(string name, Action<T> OnFinished = null, bool isAddCache = true) where T : Object
+        {
+            var obj = await GameModule.Resource.LoadAssetAsync<T>($"Assets/Export/{name}");
+            OnFinished?.Invoke(obj);
         }
 
         public Sprite GetSpriteVariant(string atlasName, string spriteName, bool forceBundle = false, bool ignoreErrorLog = false)
@@ -30,7 +33,7 @@ namespace Framework
             var spriteAtlas = LoadSpriteAtlasVariant(atlasName);
             if (null == spriteAtlas)
             {
-                Debug.LogError($"SpriteAtlas Path Error: {atlasName}, in GetSpriteVariant");
+                DebugUtil.LogError($"SpriteAtlas Path Error: {atlasName}, in GetSpriteVariant");
                 return null;
             }
 
@@ -42,7 +45,7 @@ namespace Framework
             AtlasPathNode atlasPathNode = AtlasConfigController.Instance.GetAtlasPath(atlasName);
             if (atlasPathNode == null)
             {
-                Debug.LogError($"SpriteAtlas Path Error: {atlasName}, in GetAtlasPath");
+                DebugUtil.LogError($"SpriteAtlas Path Error: {atlasName}, in GetAtlasPath");
                 return null;
             }
 
@@ -51,7 +54,7 @@ namespace Framework
             var spriteAtlas = LoadResource<SpriteAtlas>(path);
             if (null == spriteAtlas)
             {
-                Debug.LogError($"SpriteAtlas Path Error: {atlasName}, in LoadResource");
+                DebugUtil.LogError($"SpriteAtlas Path Error: {atlasName}, in LoadResource");
                 return null;
             }
 
@@ -61,6 +64,14 @@ namespace Framework
         public void UseSDAtlas(bool useSd)
         {
             m_UseSd = useSd;
+        }
+
+        public void ReleaseRes(string path, bool free = false)
+        {
+        }
+
+        public void UnloadSpriteAtlasImmediateVariant(string atlasName)
+        {
         }
     }
 }
