@@ -39,29 +39,29 @@ namespace BaseModule
         public LauncherLocalizationManager()
         {
             m_configManager = new LocalizationConfigManager();
-            //m_configManager.Init();
-            //m_Language = MatchLanguage();
+            m_configManager.Init();
+            m_Language = MatchLanguage();
         }
 
         //先找设置的语言，再找系统语言，都没有找到就使用en
-        // private string MatchLanguage()
-        // {
-        //     string languageStr = GameModule.Setting.GetString("LANGUAGE", "");
-        //     if (string.IsNullOrEmpty(languageStr))
-        //     {
-        //         string userLanguage = Locale.GetSystemLanguage();
-        //         languageStr = userLanguage;
-        //     }
-        //     else
-        //     {
-        //         if (!Locale.supportedLocale.Contains(languageStr))
-        //         {
-        //             string userLanguage = Locale.GetSystemLanguage();
-        //             languageStr = userLanguage;
-        //         }
-        //     }
-        //     return languageStr;
-        // }
+        private string MatchLanguage()
+        {
+            string languageStr = GameModule.Setting.GetString("LANGUAGE", "");
+            if (string.IsNullOrEmpty(languageStr))
+            {
+                string userLanguage = Locale.GetSystemLanguage();
+                languageStr = userLanguage;
+            }
+            else
+            {
+                if (!Locale.supportedLocale.Contains(languageStr))
+                {
+                    string userLanguage = Locale.GetSystemLanguage();
+                    languageStr = userLanguage;
+                }
+            }
+            return languageStr;
+        }
 
         public string GetText(string key)
         {

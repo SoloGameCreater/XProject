@@ -21,8 +21,8 @@ MonoBehaviour:
     EnableAddressable: 1
     LocationToLower: 0
     IncludeAssetGUID: 0
+    IgnoreDefaultType: 1
     AutoCollectShaders: 1
-    IgnoreRuleName: NormalIgnoreRule
     Groups:
     - GroupName: Main
       GroupDesc: 
@@ -34,8 +34,8 @@ MonoBehaviour:
       AssetTags: BASE_RES
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/GameMain/Scenes/InitScene.unity
-        CollectorGUID: 9e0542f2073945743a24a0aacb034fd3
+      - CollectPath: Assets/Scenes
+        CollectorGUID: 17371439ac7c8024f8c476e4877c9db3
         CollectorType: 0
         AddressRuleName: AddressDisable
         PackRuleName: PackSeparately
@@ -46,12 +46,4 @@ MonoBehaviour:
       GroupDesc: 
       AssetTags: BASE_RES
       ActiveRuleName: EnableGroup
-      Collectors:
-      - CollectPath: Assets/GameMain/UI/UIForms
-        CollectorGUID: 871a87dc5ec966f4390ac5f4ff8f983a
-        CollectorType: 1
-        AddressRuleName: AddressDisable
-        PackRuleName: PackGroup
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
+      Collectors: []
