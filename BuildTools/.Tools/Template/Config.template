@@ -1,13 +1,11 @@
 /************************************************
- * Config class : {{className}}
- * This file is can not be modify !!!
- * If there is some problem, ask yunhan.zeng@dragonplus.com
+ * Config class is : {{className}}
  ************************************************/
 
 using System;
 using System.Collections.Generic;
 
-namespace DragonPlus.Config.{{nameSpace}}
+namespace My.Config.{{nameSpace}}
 {
     public class {{className}}
     {   {{#each fieldArray}}

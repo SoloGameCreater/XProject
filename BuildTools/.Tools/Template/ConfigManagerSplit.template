@@ -1,19 +1,14 @@
-/************************************************
- * {{this.nameSpace}} Config Manager class : {{this.managerClassName}}
- * This file is can not be modify !!!
- * If there is some problem, ask yunhan.zeng@dragonplus.com
- ************************************************/
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
-using DragonU3DSDK;
-using DragonU3DSDK.Asset;
-{{#each subTypeArray}}using DragonPlus.Config.{{{this.subType}}};
+using Framework;
+
+{{#each subTypeArray}}using My.Config.{{{this.subType}}};
 {{/each}}
-namespace DragonPlus.Config.{{this.nameSpace}}
+namespace My.Config.{{this.nameSpace}}
 {
     public partial class {{{this.managerClassName}}}
     {   

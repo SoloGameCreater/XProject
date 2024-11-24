@@ -4,6 +4,7 @@ projectDir="XProject"
 
 modulesAll=(
 	{"Game","1z1VPg9sAJzwtPuCtie74igDLIUnGgLuOg39JvVodqcM"}
+	{"Game2","1enX1DTXx0ICHynotVZRZHb3Ifq4we2QtbksLWw3vuD4"}
 )
 
 
@@ -98,7 +99,7 @@ for ((i = idxBegin; i < $idxEnd; i++)); do
  	name=${modulesAll[$idx]}
  	nameLower=$(echo $name | tr '[A-Z]' '[a-z]')
 	nameSpace=${name}
-	unityScriptDir="${projectDir}Assets/Scripts/Common/Config/${name}/CodeGen"
+	unityScriptDir="${projectDir}Assets/GameMain/Scripts/Common/Config/${name}/CodeGen"
 	jsonPath="Configs/${name}"
  	spreadsheet_id=${modulesAll[$idx+1]}
 
