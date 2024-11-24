@@ -532,39 +532,39 @@ PrefabInstance:
         type: 2}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_EntranceProcedureTypeName
-      value: StarForce.ProcedureLaunch
+      value: BaseModule.ProcedureLaunch
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_AvailableProcedureTypeNames.Array.size
-      value: 11
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: 'm_AvailableProcedureTypeNames.Array.data[0]'
-      value: StarForce.ProcedureChangeScene
+      value: BaseModule.ProcedureDownload
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: 'm_AvailableProcedureTypeNames.Array.data[1]'
-      value: StarForce.ProcedureCheckResources
+      value: BaseModule.ProcedureInitPackage
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: 'm_AvailableProcedureTypeNames.Array.data[2]'
-      value: StarForce.ProcedureCheckVersion
+      value: BaseModule.ProcedureLaunch
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: 'm_AvailableProcedureTypeNames.Array.data[3]'
-      value: StarForce.ProcedureInitResources
+      value: BaseModule.ProcedureLoadAssembly
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: 'm_AvailableProcedureTypeNames.Array.data[4]'
-      value: StarForce.ProcedureLaunch
+      value: BaseModule.ProcedureStartGame
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: 'm_AvailableProcedureTypeNames.Array.data[5]'
-      value: StarForce.ProcedureMain
+      value: BaseModule.ProcedureUpdateManifest
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: 'm_AvailableProcedureTypeNames.Array.data[6]'
-      value: StarForce.ProcedureMenu
+      value: BaseModule.ProcedureUpdateVersion
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: 'm_AvailableProcedureTypeNames.Array.data[7]'
