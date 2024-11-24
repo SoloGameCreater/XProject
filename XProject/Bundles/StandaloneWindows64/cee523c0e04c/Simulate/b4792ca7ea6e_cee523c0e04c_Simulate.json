@@ -1,0 +1,52 @@
+{
+    "FileVersion": "2.0.0",
+    "EnableAddressable": true,
+    "LocationToLower": false,
+    "IncludeAssetGUID": false,
+    "OutputNameStyle": 0,
+    "BuildPipeline": "BuiltinBuildPipeline",
+    "PackageName": "cee523c0e04c",
+    "PackageVersion": "Simulate",
+    "AssetList": [
+        {
+            "Address": "",
+            "AssetPath": "Assets/Scenes/InitScene.unity",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Scenes/Main.unity",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 1
+        }
+    ],
+    "BundleList": [
+        {
+            "BundleName": "cee523c0e04c_assets_scenes_initscene.bundle",
+            "UnityCRC": 0,
+            "FileHash": "fc0def175e0e851d863295836ff83a05",
+            "FileCRC": "00000000",
+            "FileSize": 22335,
+            "Encrypted": false,
+            "Tags": [],
+            "DependIDs": []
+        },
+        {
+            "BundleName": "cee523c0e04c_assets_scenes_main.bundle",
+            "UnityCRC": 0,
+            "FileHash": "fdbab5aa747e1131b71a9633de262aa5",
+            "FileCRC": "00000000",
+            "FileSize": 20046,
+            "Encrypted": false,
+            "Tags": [],
+            "DependIDs": []
+        }
+    ]
+}
