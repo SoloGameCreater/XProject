@@ -12,7 +12,7 @@ namespace Framework
 
         private void Awake()
         {
-            initDebug();
+            //initDebug();
 
             Application.targetFrameRate = 60;
             QualitySettings.vSyncCount = 0;

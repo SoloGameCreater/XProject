@@ -9,8 +9,8 @@ namespace BaseModule
         public static void RefreshAtlasConfig()
         {
             AtlasConfigController asset = ScriptableObject.CreateInstance<AtlasConfigController>();
-            asset.ParseAtlasPath("/Export/Activity");
-            asset.ParseAtlasPath("/Export/SpriteAtlas");
+            asset.ParseAtlasPath("/ExtraRes/Activity");
+            asset.ParseAtlasPath("/ExtraRes/SpriteAtlas");
 
             AssetDatabase.CreateAsset(asset, "Assets/Resources/Settings/AtlasConfigController.asset");
             AssetDatabase.SaveAssets();

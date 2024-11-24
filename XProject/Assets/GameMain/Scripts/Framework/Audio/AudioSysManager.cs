@@ -128,7 +128,7 @@ public class AudioSysManager : GlobalSystem<AudioSysManager>
     private string GetAudioPath(AudioType type, string audioName)
     {
         if (type == AudioType.PATH)
-            return $"Assets/Export/{audioName}";
+            return $"Assets/ExtraRes/{audioName}";
 
         string prefix = "BGM";
         switch (type)
@@ -141,7 +141,7 @@ public class AudioSysManager : GlobalSystem<AudioSysManager>
                 break;
         }
 
-        var audioPath = $"Assets/Export/Audio/{prefix}/{audioName}";
+        var audioPath = $"Assets/ExtraRes/Audio/{prefix}/{audioName}";
         return audioPath;
     }
 }

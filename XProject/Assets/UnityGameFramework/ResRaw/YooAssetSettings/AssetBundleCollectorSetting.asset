@@ -46,4 +46,12 @@ MonoBehaviour:
       GroupDesc: 
       AssetTags: BASE_RES
       ActiveRuleName: EnableGroup
-      Collectors: []
+      Collectors:
+      - CollectPath: Assets/ExtraRes/Prefabs/UI/UICommon
+        CollectorGUID: 4695ee520acf0c141b38543ecb498299
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 

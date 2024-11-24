@@ -13,18 +13,18 @@ namespace Framework
 
         public bool HasAsset(string name)
         {
-            var path = $"Assets/Export/{name}";
+            var path = $"Assets/ExtraRes/{name}";
             return GameModule.Resource.CheckLocationValid(path);
         }
 
         public T LoadResource<T>(string name, bool forceBundle = false, bool addToCache = true, string assetDeepPath = null) where T : Object
         {
-            return GameModule.Resource.LoadAsset<T>($"Assets/Export/{name}");
+            return GameModule.Resource.LoadAsset<T>($"Assets/ExtraRes/{name}");
         }
 
         public async UniTaskVoid LoadResourceAsync<T>(string name, Action<T> OnFinished = null, bool isAddCache = true) where T : Object
         {
-            var obj = await GameModule.Resource.LoadAssetAsync<T>($"Assets/Export/{name}");
+            var obj = await GameModule.Resource.LoadAssetAsync<T>($"Assets/ExtraRes/{name}");
             OnFinished?.Invoke(obj);
         }
 
