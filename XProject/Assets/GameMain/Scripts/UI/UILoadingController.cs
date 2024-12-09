@@ -4,6 +4,7 @@ using BaseModule;
 using Extension;
 using Framework;
 using Localizetion;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -51,7 +52,8 @@ public class UILoadingController : MonoBehaviour
         _sliderZero = gameObject.GetOrCreateComponent<SliderZero>();
         _sliderZero.Slider = transform.Find("Slider").GetComponent<Slider>();
         _sliderZero.Slider.value = 0f;
-        _sliderZero.ProgressText = transform.Find("Slider/progressinfo").GetComponent<LocalizeTextMeshProUGUI>();
+        var progressTMP = transform.Find("Slider/progressinfo");
+        _sliderZero.ProgressText = progressTMP.GetComponent<TextMeshProUGUI>();
 
         _logo = transform.Find("Logo").GetComponent<Image>();
         _logo.sprite = Resources.Load<Sprite>("Launcher/Textures/ui_loading_logo");
@@ -96,7 +98,7 @@ public class UILoadingController : MonoBehaviour
         {
             var data = _progressUpdater.Invoke();
             var newProgress = Mathf.Max(data.progress, _sliderZero.Slider.value);
-            if (_sliderZero.Slider.value != newProgress)
+            if (!Mathf.Approximately(_sliderZero.Slider.value, newProgress))
             {
                 _sliderZero.Slider.value = newProgress;
                 var displayProgress = (int)(newProgress * 100f);

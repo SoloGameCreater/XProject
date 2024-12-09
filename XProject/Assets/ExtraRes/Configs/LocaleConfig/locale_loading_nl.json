@@ -1,0 +1,146 @@
+[
+    {
+        "key": "UI_tips_text1",
+        "value": "Stuur gratis energie naar je vrienden en vraag ze om iets terug te geven!"
+    },
+    {
+        "key": "UI_tips_text2",
+        "value": "Boosts helpen je om moeilijke uitdagingen te overwinnen!"
+    },
+    {
+        "key": "UI_tips_text3",
+        "value": "Kom terug en claim elke dag je dagelijkse bonus!"
+    },
+    {
+        "key": "UI_tips_text4",
+        "value": "Nodig je Facebook-vrienden uit en speel samen!"
+    },
+    {
+        "key": "UI_tips_text5",
+        "value": "Vind onze Facebook-fanpagina leuk en claim je beloning!"
+    },
+    {
+        "key": "UI_tips_text6",
+        "value": "Observeer de items duidelijk en verzamel ze snel!"
+    },
+    {
+        "key": "UI_tips_text7",
+        "value": "Verkrijg de Gold Hatter, je kunt meer rekwisieten krijgen!"
+    },
+    {
+        "key": "UI_tips_text8",
+        "value": "Voltooi de wekelijkse uitdaging en ontvang veel beloningen!"
+    },
+    {
+        "key": "UI_tips_text9",
+        "value": "Volg het evenement en doe er actief aan mee!"
+    },
+    {
+        "key": "UI_tips_text10",
+        "value": "Er zijn veel cadeaupakketten met een superwaarde in het winkelcentrum!"
+    },
+    {
+        "key": "UI_tips_text11",
+        "value": "Teams zijn een belangrijk sociaal systeem!"
+    },
+    {
+        "key": "UI_tips_text12",
+        "value": "Volg de teaminformatie op elk moment!"
+    },
+    {
+        "key": "UI_loading_progress_text",
+        "value": "Bezig met laden"
+    },
+    {
+        "key": "UI_loading_tip",
+        "value": "Ontgrendel meer niveaus om meer beloningen te krijgen"
+    },
+    {
+        "key": "UI_download_fail_button",
+        "value": "Opnieuw proberen"
+    },
+    {
+        "key": "UI_common_box_tittle",
+        "value": "Kennisgeving"
+    },
+    {
+        "key": "UI_privacy_title_native",
+        "value": "Accepteer het privacybeleid"
+    },
+    {
+        "key": "UI_privacy_message_native",
+        "value": "Als je wilt blijven spelen, moet je bevestigen dat je ons privacybeleid accepteert."
+    },
+    {
+        "key": "UI_privacy_btn_link_title_native",
+        "value": "Privacybeleid"
+    },
+    {
+        "key": "UI_privacy_btn_agree_title_native",
+        "value": "Ik ga akkoord"
+    },
+    {
+        "key": "UI_download_resources_error",
+        "value": "Verbinden met de server mislukt.\nControleer je internetverbinding en probeer het opnieuw."
+    },
+    {
+        "key": "UI_no_internet_tips",
+        "value": "Verbinden met de server mislukt. Controleer je internetverbinding."
+    },
+    {
+        "key": "UI_button_cancel",
+        "value": "Annuleren"
+    },
+    {
+        "key": "UI_button_ok",
+        "value": "OKÉ"
+    },
+    {
+        "key": "UI_button_retry_text",
+        "value": "Probeer opnieuw"
+    },
+    {
+        "key": "UI_button_cancel",
+        "value": "Annuleren"
+    },
+    {
+        "key": "UI_quit_game_tips_text",
+        "value": "Wil je stoppen met het spel?"
+    },
+    {
+        "key": "UI_errmsg_duplicate_login_native",
+        "value": "De game is ook open op een ander apparaat. Sluit deze game als je op andere apparaten wilt spelen. Als je nu verder wilt spelen, klik dan op \"OK\" en we heropenen het spel."
+    },
+    {
+        "key": "UI_choose_progress_title_text",
+        "value": "VOORTGANGSSELECTIE"
+    },
+    {
+        "key": "UI_choose_progress_desc_main_text",
+        "value": "Welke voorgang wil je behouden?"
+    },
+    {
+        "key": "UI_choose_progress_on_server",
+        "value": "Op server:"
+    },
+    {
+        "key": "UI_choose_progress_on_device",
+        "value": "Op je toestel:"
+    },
+    {
+        "key": "UI_choose_progress_button_server",
+        "value": "Server:"
+    },
+    {
+        "key": "UI_choose_progress_button_device",
+        "value": "Jouw toestel"
+    },
+    {
+        "key": "UI_setting_privacy_policy",
+        "value": "Privacybeleid"
+    },
+    {
+        "key": "UI_setting_term_service",
+        "value": "Diensttijd"
+    }
+]

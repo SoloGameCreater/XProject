@@ -33,12 +33,6 @@ public partial class UIRoot : MonoSingleton<UIRoot>
 
     // 缓存UI摄像机的6个裁剪面
     public Plane[] CameraPlanes { private set; get; }
-
-    // 窗帘节点
-    public GameObject mCurtainRoot;
-
-    // cooking相关的特效节点
-    public GameObject CookingEffectRoot;
     public int CanvasOrder => _canvasOrder;
 
     public float RootWidth;
@@ -65,8 +59,6 @@ public partial class UIRoot : MonoSingleton<UIRoot>
 
     private void Start()
     {
-        //ResourcesManager.Instance.AddAtlasPrefix(AtlasPrefix.Cooking);
-
         SpriteAtlasManager.atlasRequested += OnLoadAtlas;
 
         var rootRect = this.mRoot.GetComponent<RectTransform>();

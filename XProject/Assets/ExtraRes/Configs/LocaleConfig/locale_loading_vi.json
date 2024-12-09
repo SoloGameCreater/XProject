@@ -1,0 +1,146 @@
+[
+    {
+        "key": "UI_tips_text1",
+        "value": "Gửi năng lượng miễn phí cho bạn bè và xin họ đáp lễ!"
+    },
+    {
+        "key": "UI_tips_text2",
+        "value": "Các Tăng cường sẽ giúp bạn đánh bại những thử thách khó khăn!"
+    },
+    {
+        "key": "UI_tips_text3",
+        "value": "Hãy quay lại nhận tiền thưởng hàng ngày của bạn mỗi ngày!"
+    },
+    {
+        "key": "UI_tips_text4",
+        "value": "Mời bạn bè trên Facebook cùng chơi!"
+    },
+    {
+        "key": "UI_tips_text5",
+        "value": "Thích Fan Page Facebook của chúng tôi và nhận phần thưởng!"
+    },
+    {
+        "key": "UI_tips_text6",
+        "value": "Quan sát các mục rõ ràng và thu thập chúng một cách nhanh chóng!"
+    },
+    {
+        "key": "UI_tips_text7",
+        "value": "Nhận Gold Hatter, bạn có thể nhận được nhiều đạo cụ hơn!"
+    },
+    {
+        "key": "UI_tips_text8",
+        "value": "Hoàn thành thử thách hàng tuần và nhận được rất nhiều phần thưởng!"
+    },
+    {
+        "key": "UI_tips_text9",
+        "value": "Theo dõi sự kiện và tham gia tích cực vào nó!"
+    },
+    {
+        "key": "UI_tips_text10",
+        "value": "Có rất nhiều gói quà siêu giá trị trong trung tâm mua sắm!"
+    },
+    {
+        "key": "UI_tips_text11",
+        "value": "Đội là một hệ thống xã hội quan trọng!"
+    },
+    {
+        "key": "UI_tips_text12",
+        "value": "Theo dõi thông tin đội bất cứ lúc nào!"
+    },
+    {
+        "key": "UI_loading_progress_text",
+        "value": "Đang tải"
+    },
+    {
+        "key": "UI_loading_tip",
+        "value": "Mở khóa nhiều cấp độ hơn để nhận được nhiều phần thưởng hơn"
+    },
+    {
+        "key": "UI_download_fail_button",
+        "value": "Thử lại"
+    },
+    {
+        "key": "UI_common_box_tittle",
+        "value": "Lưu ý"
+    },
+    {
+        "key": "UI_privacy_title_native",
+        "value": "Chấp thuận Chính sách bảo mật"
+    },
+    {
+        "key": "UI_privacy_message_native",
+        "value": "Để tiếp tục chơi, bạn cần xác nhận rằng bạn đồng ý với Chính sách bảo mật của chúng tôi."
+    },
+    {
+        "key": "UI_privacy_btn_link_title_native",
+        "value": "Chính sách bảo mật"
+    },
+    {
+        "key": "UI_privacy_btn_agree_title_native",
+        "value": "Tôi đồng ý"
+    },
+    {
+        "key": "UI_download_resources_error",
+        "value": "Không kết nối được với máy chủ.  \nVui lòng kiểm tra kết nối Internet \nvà thử lại."
+    },
+    {
+        "key": "UI_no_internet_tips",
+        "value": "Không kết nối được với máy chủ. Vui lòng kiểm tra kết nối Internet."
+    },
+    {
+        "key": "UI_button_cancel",
+        "value": "Hủy bỏ"
+    },
+    {
+        "key": "UI_button_ok",
+        "value": "VÂNG"
+    },
+    {
+        "key": "UI_button_retry_text",
+        "value": "Thử lại"
+    },
+    {
+        "key": "UI_button_cancel",
+        "value": "Hủy bỏ"
+    },
+    {
+        "key": "UI_quit_game_tips_text",
+        "value": "Bạn có muốn thoát khỏi trò chơi?"
+    },
+    {
+        "key": "UI_errmsg_duplicate_login_native",
+        "value": "Trò chơi cũng được mở trên một thiết bị khác. Nếu bạn muốn chơi trên các thiết bị khác, vui lòng đóng trò chơi này. Nếu bạn muốn tiếp tục chơi ngay bây giờ, vui lòng nhấp vào \"OK\" và chúng tôi sẽ mở lại trò chơi."
+    },
+    {
+        "key": "UI_choose_progress_title_text",
+        "value": "LỰA CHỌN TIẾN ĐỘ"
+    },
+    {
+        "key": "UI_choose_progress_desc_main_text",
+        "value": "Bạn muốn giữ tiến độ nào?"
+    },
+    {
+        "key": "UI_choose_progress_on_server",
+        "value": "Trên máy chủ:"
+    },
+    {
+        "key": "UI_choose_progress_on_device",
+        "value": "Trên thiết bị của bạn:"
+    },
+    {
+        "key": "UI_choose_progress_button_server",
+        "value": "Máy chủ"
+    },
+    {
+        "key": "UI_choose_progress_button_device",
+        "value": "Thiết bị của bạn"
+    },
+    {
+        "key": "UI_setting_privacy_policy",
+        "value": "Chính sách bảo mật"
+    },
+    {
+        "key": "UI_setting_term_service",
+        "value": "Hạn của dịch vụ"
+    }
+]

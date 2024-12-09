@@ -1,0 +1,146 @@
+[
+    {
+        "key": "UI_tips_text1",
+        "value": "ส่งพลังงานฟรีให้เพื่อนของคุณและขอให้พวกเขาส่งพลังงานคืนมาด้วย!"
+    },
+    {
+        "key": "UI_tips_text2",
+        "value": "บูสต์จะช่วยคุณเอาชนะด่านที่ยากและท้าทายได้!"
+    },
+    {
+        "key": "UI_tips_text3",
+        "value": "กลับมารับโบนัสประจำวันของคุณทุกวัน!"
+    },
+    {
+        "key": "UI_tips_text4",
+        "value": "เชิญเพื่อนบน Facebook ของคุณและเล่นเกมไปด้วยกัน!"
+    },
+    {
+        "key": "UI_tips_text5",
+        "value": "กดชอบแฟนเพจ Facebook ของเราและรับรางวัลของคุณได้เลย!"
+    },
+    {
+        "key": "UI_tips_text6",
+        "value": "สังเกตสิ่งของให้ชัดเจนแล้วรีบเก็บ!"
+    },
+    {
+        "key": "UI_tips_text7",
+        "value": "รับ Gold Hatter คุณจะได้รับอุปกรณ์เพิ่มเติม!"
+    },
+    {
+        "key": "UI_tips_text8",
+        "value": "ทำภารกิจท้าทายประจำสัปดาห์ให้สำเร็จและรับรางวัลมากมาย!"
+    },
+    {
+        "key": "UI_tips_text9",
+        "value": "ติดตามกิจกรรมและมีส่วนร่วมในกิจกรรม!"
+    },
+    {
+        "key": "UI_tips_text10",
+        "value": "มีชุดของขวัญสุดคุ้มมากมายในห้างสรรพสินค้า!"
+    },
+    {
+        "key": "UI_tips_text11",
+        "value": "ทีมคือระบบสังคมที่สำคัญ!"
+    },
+    {
+        "key": "UI_tips_text12",
+        "value": "ติดตามข้อมูลข่าวสารของทีมได้ตลอดเวลา!"
+    },
+    {
+        "key": "UI_loading_progress_text",
+        "value": "กำลังโหลด"
+    },
+    {
+        "key": "UI_loading_tip",
+        "value": "ปลดล็อกระดับเพิ่มเติมเพื่อรับรางวัลมากขึ้น"
+    },
+    {
+        "key": "UI_download_fail_button",
+        "value": "ลองอีกครั้ง"
+    },
+    {
+        "key": "UI_common_box_tittle",
+        "value": "สังเกต"
+    },
+    {
+        "key": "UI_privacy_title_native",
+        "value": "ยอมรับนโยบายความเป็นส่วนตัว"
+    },
+    {
+        "key": "UI_privacy_message_native",
+        "value": "คุณจำเป็นต้องยอมรับนโยบายความเป็นส่วนตัวของเราเพื่อเล่นเกมต่อ"
+    },
+    {
+        "key": "UI_privacy_btn_link_title_native",
+        "value": "นโยบายความเป็นส่วนตัว"
+    },
+    {
+        "key": "UI_privacy_btn_agree_title_native",
+        "value": "ฉันยอมรับ"
+    },
+    {
+        "key": "UI_download_resources_error",
+        "value": "เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์\n โปรดตรวจสอบการเชื่อมต่ออินเทอร์เน็ตของคุณ\n และลองอีกครั้ง"
+    },
+    {
+        "key": "UI_no_internet_tips",
+        "value": "เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์ โปรดตรวจสอบการเชื่อมต่ออินเทอร์เน็ตของคุณ"
+    },
+    {
+        "key": "UI_button_cancel",
+        "value": "ยกเลิก"
+    },
+    {
+        "key": "UI_button_ok",
+        "value": "แน่นอน"
+    },
+    {
+        "key": "UI_button_retry_text",
+        "value": "ลองใหม่"
+    },
+    {
+        "key": "UI_button_cancel",
+        "value": "ยกเลิก"
+    },
+    {
+        "key": "UI_quit_game_tips_text",
+        "value": "คุณต้องการออกจากเกมหรือไม่?"
+    },
+    {
+        "key": "UI_errmsg_duplicate_login_native",
+        "value": "เกมยังเปิดบนอุปกรณ์อื่น หากคุณต้องการเล่นบนอุปกรณ์อื่น กรุณาปิดเกมนี้ หากคุณต้องการเล่นต่อตอนนี้ โปรดคลิก \"ตกลง\" แล้วเราจะเปิดเกมอีกครั้ง"
+    },
+    {
+        "key": "UI_choose_progress_title_text",
+        "value": "เลือกความก้าวหน้า"
+    },
+    {
+        "key": "UI_choose_progress_desc_main_text",
+        "value": "คุณต้องการเก็บความก้าวหน้าใดไว้"
+    },
+    {
+        "key": "UI_choose_progress_on_server",
+        "value": "บนเซิร์ฟเวอร์:"
+    },
+    {
+        "key": "UI_choose_progress_on_device",
+        "value": "บนอุปกรณ์ของคุณ"
+    },
+    {
+        "key": "UI_choose_progress_button_server",
+        "value": "เซิร์ฟเวอร์"
+    },
+    {
+        "key": "UI_choose_progress_button_device",
+        "value": "อุปกรณ์ของคุณ"
+    },
+    {
+        "key": "UI_setting_privacy_policy",
+        "value": "นโยบายความเป็นส่วนตัว"
+    },
+    {
+        "key": "UI_setting_term_service",
+        "value": "ระยะเวลาการให้บริการ"
+    }
+]

@@ -8,15 +8,15 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Muse Animate Posing
+  - 
   - Water
   - UI
-  - Muse Animate Baking
-  - Muse Animate Handles
-  - MuseTextureLayer
-  - Muse Animate Thumbnail
-  - Targetable Object
-  - Muse Animate Environment
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 
@@ -40,6 +40,18 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: UI
+    uniqueID: 3456915601
+    locked: 0
+  - name: Guide
+    uniqueID: 1921448991
+    locked: 0
+  - name: Effect
+    uniqueID: 157364845
+    locked: 0
+  - name: Top
+    uniqueID: 3539628213
     locked: 0
   m_RenderingLayers:
   - Default

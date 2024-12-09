@@ -1,0 +1,150 @@
+[
+    {
+        "key": "UI_tips_text1",
+        "value": "Envía energía gratis a tus amigos y pídeles que devuelvan el favor."
+    },
+    {
+        "key": "UI_tips_text2",
+        "value": "Los incrementos te ayudan a superar desafíos difíciles."
+    },
+    {
+        "key": "UI_tips_text3",
+        "value": "Regresa y recibe la bonificación diaria todos los días."
+    },
+    {
+        "key": "UI_tips_text4",
+        "value": "Invita a tus amigos de Facebook a jugar."
+    },
+    {
+        "key": "UI_tips_text5",
+        "value": "Danos Me gusta en la página de Facebook y recibe una recompensa."
+    },
+    {
+        "key": "UI_tips_text6",
+        "value": "¡Observe los artículos claramente y recójalos rápidamente!"
+    },
+    {
+        "key": "UI_tips_text7",
+        "value": "Consigue el Gold Hatter, ¡puedes conseguir más accesorios!"
+    },
+    {
+        "key": "UI_tips_text8",
+        "value": "¡Completa el desafío semanal y obtén muchas recompensas!"
+    },
+    {
+        "key": "UI_tips_text9",
+        "value": "¡Sigue el evento y participa activamente en él!"
+    },
+    {
+        "key": "UI_tips_text10",
+        "value": "¡Hay muchos paquetes de regalo de gran valor en el centro comercial!"
+    },
+    {
+        "key": "UI_tips_text11",
+        "value": "¡Los equipos son un sistema social importante!"
+    },
+    {
+        "key": "UI_tips_text12",
+        "value": "Siga la información del equipo en cualquier momento!"
+    },
+    {
+        "key": "UI_loading_progress_text",
+        "value": "Cargando"
+    },
+    {
+        "key": "UI_loading_tip",
+        "value": "Desbloquea más niveles para obtener más recompensas"
+    },
+    {
+        "key": "UI_download_fail_button",
+        "value": "Reintentar"
+    },
+    {
+        "key": "UI_common_box_tittle",
+        "value": "darse cuenta"
+    },
+    {
+        "key": "UI_privacy_title_native",
+        "value": "Aceptar política de privacidad"
+    },
+    {
+        "key": "UI_privacy_message_native",
+        "value": "Debes aceptar la política de privacidad para seguir jugando."
+    },
+    {
+        "key": "UI_privacy_btn_link_title_native",
+        "value": "Política de privacidad"
+    },
+    {
+        "key": "UI_privacy_btn_agree_title_native",
+        "value": "Acepto"
+    },
+    {
+        "key": "UI_download_resources_error",
+        "value": "No se pudo conectar con el servidor.\nComprueba la conexión a internet\ny reinténtalo."
+    },
+    {
+        "key": "UI_no_internet_tips",
+        "value": "No se pudo conectar con el servidor. Comprueba la conexión a internet."
+    },
+    {
+        "key": "UI_button_cancel",
+        "value": "Cancelar"
+    },
+    {
+        "key": "UI_button_ok",
+        "value": "DE ACUERDO"
+    },
+    {
+        "key": "UI_button_retry_text",
+        "value": "Reintentar"
+    },
+    {
+        "key": "UI_button_cancel",
+        "value": "Cancelar"
+    },
+    {
+        "key": "UI_quit_game_tips_text",
+        "value": "¿Quieres salir?"
+    },
+    {
+        "key": "UI_errmsg_duplicate_login_native",
+        "value": "Abriste el juego en otro dispositivo. Cierra esta partida para jugar allí o toca Aceptar para seguir aquí. Se reiniciará la partida."
+    },
+    {
+        "key": "UI_choose_progress_title_text",
+        "value": "SELECCIÓN DE PROGRESO"
+    },
+    {
+        "key": "UI_choose_progress_desc_main_text",
+        "value": "¿Qué progreso quieres conservar?"
+    },
+    {
+        "key": "UI_choose_progress_on_server",
+        "value": "En el servidor:"
+    },
+    {
+        "key": "UI_choose_progress_on_device",
+        "value": "En el dispositivo:"
+    },
+    {
+        "key": "UI_choose_progress_button_server",
+        "value": "Servidor"
+    },
+    {
+        "key": "UI_choose_progress_button_device",
+        "value": "Dispositivo"
+    },
+    {
+        "key": "UI_loading_init",
+        "value": "Inicializando…%s%"
+    },
+    {
+        "key": "UI_setting_privacy_policy",
+        "value": "política de privacidad"
+    },
+    {
+        "key": "UI_setting_term_service",
+        "value": "Términos de servicio"
+    }
+]

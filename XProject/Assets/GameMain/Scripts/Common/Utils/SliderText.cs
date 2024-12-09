@@ -1,12 +1,13 @@
 
 using Localizetion;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SliderZero : MonoBehaviour
 {
     public Slider Slider;
-    public LocalizeTextMeshProUGUI ProgressText;
+    public TextMeshProUGUI ProgressText;
 
     private void OnDisable()
     {

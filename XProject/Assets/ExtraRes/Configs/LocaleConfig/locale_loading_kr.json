@@ -1,0 +1,150 @@
+[
+    {
+        "key": "UI_tips_text1",
+        "value": "친구들에게 무료 에너지를 보내고 친구들에게 도움을 요청하세요!"
+    },
+    {
+        "key": "UI_tips_text2",
+        "value": "부스트는 어려운 과제를 달성할 수 있게 도와줍니다!"
+    },
+    {
+        "key": "UI_tips_text3",
+        "value": "매일 돌아와서 일일 보너스를 받으세요!"
+    },
+    {
+        "key": "UI_tips_text4",
+        "value": "Facebook 친구들을 초대해서 함께 플레이하세요!"
+    },
+    {
+        "key": "UI_tips_text5",
+        "value": "Facebook 팬 페이지에서 좋아요를 누르고 보상을 받으세요!"
+    },
+    {
+        "key": "UI_tips_text6",
+        "value": "아이템을 명확하게 관찰하고 빠르게 수집하세요!"
+    },
+    {
+        "key": "UI_tips_text7",
+        "value": "Gold Hatter를 얻으면 더 많은 소품을 얻을 수 있습니다!"
+    },
+    {
+        "key": "UI_tips_text8",
+        "value": "주간 챌린지를 완료하고 푸짐한 보상을 받으세요!"
+    },
+    {
+        "key": "UI_tips_text9",
+        "value": "이벤트를 팔로우하고 적극적으로 참여해보세요!"
+    },
+    {
+        "key": "UI_tips_text10",
+        "value": "쇼핑몰에는 많은 슈퍼 밸류 선물 팩이 있습니다!"
+    },
+    {
+        "key": "UI_tips_text11",
+        "value": "팀은 중요한 사회 시스템입니다!"
+    },
+    {
+        "key": "UI_tips_text12",
+        "value": "언제든지 팀 정보를 팔로우하세요!"
+    },
+    {
+        "key": "UI_loading_progress_text",
+        "value": "로드 중"
+    },
+    {
+        "key": "UI_loading_tip",
+        "value": "더 많은 레벨을 잠금 해제하여 더 많은 보상을 받으세요"
+    },
+    {
+        "key": "UI_download_fail_button",
+        "value": "재시도"
+    },
+    {
+        "key": "UI_common_box_tittle",
+        "value": "알아채다"
+    },
+    {
+        "key": "UI_privacy_title_native",
+        "value": "개인정보 보호정책 수락"
+    },
+    {
+        "key": "UI_privacy_message_native",
+        "value": "계속 플레이하려면 저희의 개인정보 보호정책에 동의해주셔야 합니다."
+    },
+    {
+        "key": "UI_privacy_btn_link_title_native",
+        "value": "개인정보 보호정책"
+    },
+    {
+        "key": "UI_privacy_btn_agree_title_native",
+        "value": "동의"
+    },
+    {
+        "key": "UI_download_resources_error",
+        "value": "서버 연결 실패.\n인터넷 연결을 확인하고\n다시 시도하세요."
+    },
+    {
+        "key": "UI_no_internet_tips",
+        "value": "서버 연결 실패. 인터넷 연결을 확인해주세요."
+    },
+    {
+        "key": "UI_button_cancel",
+        "value": "취소"
+    },
+    {
+        "key": "UI_button_ok",
+        "value": "확신하는"
+    },
+    {
+        "key": "UI_button_retry_text",
+        "value": "재시도"
+    },
+    {
+        "key": "UI_button_cancel",
+        "value": "취소"
+    },
+    {
+        "key": "UI_quit_game_tips_text",
+        "value": "종료하시겠습니까?"
+    },
+    {
+        "key": "UI_errmsg_duplicate_login_native",
+        "value": "다른 기기에서 게임을 실행했습니다. 다른 기기에서 플레이하려면 이 게임을 종료해야 합니다. 이 기기에서 플레이하려면 '확인'을 탭해서 게임을 다시 시작하면 됩니다."
+    },
+    {
+        "key": "UI_choose_progress_title_text",
+        "value": "진행상황 선택"
+    },
+    {
+        "key": "UI_choose_progress_desc_main_text",
+        "value": "어떤 진행상황을 유지하시겠어요?"
+    },
+    {
+        "key": "UI_choose_progress_on_server",
+        "value": "서버:"
+    },
+    {
+        "key": "UI_choose_progress_on_device",
+        "value": "기기:"
+    },
+    {
+        "key": "UI_choose_progress_button_server",
+        "value": "서버"
+    },
+    {
+        "key": "UI_choose_progress_button_device",
+        "value": "기기"
+    },
+    {
+        "key": "UI_loading_init",
+        "value": "초기화 중…%s%"
+    },
+    {
+        "key": "UI_setting_privacy_policy",
+        "value": "개인 정보 정책"
+    },
+    {
+        "key": "UI_setting_term_service",
+        "value": "서비스 기간"
+    }
+]

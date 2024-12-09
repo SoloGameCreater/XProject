@@ -1,0 +1,150 @@
+[
+    {
+        "key": "UI_tips_text1",
+        "value": "Envoyez de l'énergie gratuite à vos amis et demandez-en en retour !"
+    },
+    {
+        "key": "UI_tips_text2",
+        "value": "Les coups de pouce vous aideront à vaincre les défis les plus difficiles !"
+    },
+    {
+        "key": "UI_tips_text3",
+        "value": "Revenez récupérer votre bonus quotidien chaque jour !"
+    },
+    {
+        "key": "UI_tips_text4",
+        "value": "Invitez vos amis Facebook et jouez ensemble !"
+    },
+    {
+        "key": "UI_tips_text5",
+        "value": "Aimez notre page Facebook et obtenez des récompenses !"
+    },
+    {
+        "key": "UI_tips_text6",
+        "value": "Observez clairement les objets et récupérez-les rapidement !"
+    },
+    {
+        "key": "UI_tips_text7",
+        "value": "Obtenez le chapelier d'or, vous pouvez obtenir plus d'accessoires !"
+    },
+    {
+        "key": "UI_tips_text8",
+        "value": "Relevez le défi hebdomadaire et obtenez de nombreuses récompenses !"
+    },
+    {
+        "key": "UI_tips_text9",
+        "value": "Suivez l'événement et participez-y activement !"
+    },
+    {
+        "key": "UI_tips_text10",
+        "value": "Il existe de nombreux packs cadeaux super valeur dans le centre commercial !"
+    },
+    {
+        "key": "UI_tips_text11",
+        "value": "Les équipes sont un système social important !"
+    },
+    {
+        "key": "UI_tips_text12",
+        "value": "Suivez les informations de l'équipe à tout moment !"
+    },
+    {
+        "key": "UI_loading_progress_text",
+        "value": "Chargement"
+    },
+    {
+        "key": "UI_loading_tip",
+        "value": "Débloquez plus de niveaux pour obtenir plus de récompenses"
+    },
+    {
+        "key": "UI_download_fail_button",
+        "value": "Réessayer"
+    },
+    {
+        "key": "UI_common_box_tittle",
+        "value": "Remarquer"
+    },
+    {
+        "key": "UI_privacy_title_native",
+        "value": "Accepter la charte de confidentialité"
+    },
+    {
+        "key": "UI_privacy_message_native",
+        "value": "Pour continuer de jouer, vous devez accepter notre charte de confidentialité."
+    },
+    {
+        "key": "UI_privacy_btn_link_title_native",
+        "value": "Charte de confidentialité"
+    },
+    {
+        "key": "UI_privacy_btn_agree_title_native",
+        "value": "J'accepte"
+    },
+    {
+        "key": "UI_download_resources_error",
+        "value": "Échec de connexion au serveur.\nVérifiez votre connexion Internet\navant de réessayer."
+    },
+    {
+        "key": "UI_no_internet_tips",
+        "value": "Échec de connexion au serveur. Vérifiez votre connexion Internet.\n\n"
+    },
+    {
+        "key": "UI_button_cancel",
+        "value": "Annuler"
+    },
+    {
+        "key": "UI_button_ok",
+        "value": "D'ACCORD"
+    },
+    {
+        "key": "UI_button_retry_text",
+        "value": "Réessayer"
+    },
+    {
+        "key": "UI_button_cancel",
+        "value": "Annuler"
+    },
+    {
+        "key": "UI_quit_game_tips_text",
+        "value": "Voulez-vous vraiment quitter ?"
+    },
+    {
+        "key": "UI_errmsg_duplicate_login_native",
+        "value": "Vous avez lancé le jeu sur un autre appareil. Pour jouer sur cet appareil, veuillez fermer le jeu sur le premier appareil. Pour continuer sur celui-ci, appuyez juste sur 'OK\" et la partie sera relancée."
+    },
+    {
+        "key": "UI_choose_progress_title_text",
+        "value": "CHOIX PROGRESSION"
+    },
+    {
+        "key": "UI_choose_progress_desc_main_text",
+        "value": "Quelle progression voulez-vous conserver ?"
+    },
+    {
+        "key": "UI_choose_progress_on_server",
+        "value": "Celle du serveur :"
+    },
+    {
+        "key": "UI_choose_progress_on_device",
+        "value": "Celle de l'appareil :"
+    },
+    {
+        "key": "UI_choose_progress_button_server",
+        "value": "Serveur"
+    },
+    {
+        "key": "UI_choose_progress_button_device",
+        "value": "Votre appareil"
+    },
+    {
+        "key": "UI_loading_init",
+        "value": "Initialisation…%s%"
+    },
+    {
+        "key": "UI_setting_privacy_policy",
+        "value": "politique de confidentialité"
+    },
+    {
+        "key": "UI_setting_term_service",
+        "value": "Termes du contrat de service"
+    }
+]

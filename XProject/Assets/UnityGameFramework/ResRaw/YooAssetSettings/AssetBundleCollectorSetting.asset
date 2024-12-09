@@ -28,7 +28,23 @@ MonoBehaviour:
       GroupDesc: 
       AssetTags: BASE_RES
       ActiveRuleName: EnableGroup
-      Collectors: []
+      Collectors:
+      - CollectPath: Assets/ExtraRes/Configs
+        CollectorGUID: 87c026367b16a264f8b4001d5fd8a0cb
+        CollectorType: 0
+        AddressRuleName: AddressDisable
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/ExtraRes/Prefabs/UI
+        CollectorGUID: 52d418b3bbe3595459d3359a6a98e6bc
+        CollectorType: 0
+        AddressRuleName: AddressDisable
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
     - GroupName: Scene
       GroupDesc: 
       AssetTags: BASE_RES
@@ -46,12 +62,4 @@ MonoBehaviour:
       GroupDesc: 
       AssetTags: BASE_RES
       ActiveRuleName: EnableGroup
-      Collectors:
-      - CollectPath: Assets/ExtraRes/Prefabs/UI/UICommon
-        CollectorGUID: 4695ee520acf0c141b38543ecb498299
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
+      Collectors: []
