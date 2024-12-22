@@ -10,7 +10,7 @@
     "AssetList": [
         {
             "Address": "",
-            "AssetPath": "Assets/Scenes/InitScene.unity",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_de.json",
             "AssetGUID": "",
             "AssetTags": [
                 "BASE_RES"
@@ -19,21 +19,338 @@
         },
         {
             "Address": "",
-            "AssetPath": "Assets/Scenes/Main.unity",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_en.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_es.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_fr.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_id.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_it.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_jp.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_kr.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_loading_de.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_loading_en.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_loading_es.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_loading_fr.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_loading_id.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_loading_it.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_loading_jp.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_loading_kr.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_loading_nl.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_loading_pt.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_loading_ru.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_loading_th.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_loading_tr.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_loading_vi.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_loading_zh.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_loading_zht.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_nl.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_pt.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_ru.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_th.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_tr.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_vi.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_zh.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Configs/LocaleConfig/locale_zht.json",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ExtraRes/Prefabs/UI/UICommon/UILoading.prefab",
             "AssetGUID": "",
             "AssetTags": [
                 "BASE_RES"
             ],
             "BundleID": 1
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Scenes/InitScene.unity",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 2
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Scenes/Main.unity",
+            "AssetGUID": "",
+            "AssetTags": [
+                "BASE_RES"
+            ],
+            "BundleID": 3
         }
     ],
     "BundleList": [
+        {
+            "BundleName": "cee523c0e04c_assets_extrares_configs_localeconfig.bundle",
+            "UnityCRC": 0,
+            "FileHash": "66a28904033fe2748e677c359d497853",
+            "FileCRC": "00000000",
+            "FileSize": 6791880,
+            "Encrypted": false,
+            "Tags": [],
+            "DependIDs": []
+        },
+        {
+            "BundleName": "cee523c0e04c_assets_extrares_prefabs_ui_uicommon.bundle",
+            "UnityCRC": 0,
+            "FileHash": "8f272d142d2e41c4c8d654009b71a22d",
+            "FileCRC": "00000000",
+            "FileSize": 40723,
+            "Encrypted": false,
+            "Tags": [],
+            "DependIDs": []
+        },
         {
             "BundleName": "cee523c0e04c_assets_scenes_initscene.bundle",
             "UnityCRC": 0,
             "FileHash": "fc0def175e0e851d863295836ff83a05",
             "FileCRC": "00000000",
-            "FileSize": 22335,
+            "FileSize": 29562,
             "Encrypted": false,
             "Tags": [],
             "DependIDs": []

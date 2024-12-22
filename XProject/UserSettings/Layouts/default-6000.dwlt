@@ -1899,7 +1899,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: d0d8ffffd6f3ffff16f4ffffeefafffff0fafffff4ffffffb4b10000c6b10000cab10000acc00000
+      m_ExpandedIDs: f2faffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1916,7 +1916,7 @@ MonoBehaviour:
         m_OriginalEventType: 11
         m_IsRenamingFilename: 0
         m_TrimLeadingAndTrailingWhitespace: 0
-        m_ClientGUIView: {fileID: 8}
+        m_ClientGUIView: {fileID: 0}
       m_SearchString: 
     m_ExpandedScenes: []
     m_CurrenRootInstanceID: 0
@@ -2462,9 +2462,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: 0, y: 1, z: -10}
+    m_Target: {x: 0, y: -204, z: 0}
     speed: 2
-    m_Value: {x: 0, y: 1, z: -10}
+    m_Value: {x: 0, y: -204, z: 0}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -2514,9 +2514,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: -0, y: 0, z: -0, w: -1}
   m_Size:
-    m_Target: 12.124355
+    m_Target: 476.72266
     speed: 2
-    m_Value: 12.124355
+    m_Value: 476.72266
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -2708,14 +2708,14 @@ MonoBehaviour:
   m_LastFolders:
   - Assets/Scenes
   m_LastFoldersGridSize: 16
-  m_LastProjectPath: D:\MyProject\XProject
+  m_LastProjectPath: D:\MyProject\XProject\XProject
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 89.99994}
-    m_SelectedIDs: c4bd0000
-    m_LastClickedID: 48580
-    m_ExpandedIDs: 00000000bab20000bcb20000beb20000c0b20000c2b20000
+    scrollPos: {x: 0, y: 733.99994}
+    m_SelectedIDs: 1abb0000
+    m_LastClickedID: 47898
+    m_ExpandedIDs: 00000000f4b20000f6b20000f8b20000fab20000fcb20000feb2000000b3000002b3000004b3000006b3000008b300000ab300000cb300000eb30000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -2744,7 +2744,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000bab20000bcb20000beb20000c0b20000c2b20000
+    m_ExpandedIDs: 00000000f4b20000f6b20000f8b20000fab20000fcb20000feb2000000b3000002b3000004b3000006b3000008b300000ab300000cb300000eb30000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -2772,8 +2772,8 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 0
-    m_ExpandedInstanceIDs: c6230000
+    m_HadKeyboardFocusLastEvent: 1
+    m_ExpandedInstanceIDs: c6230000e2bd0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
