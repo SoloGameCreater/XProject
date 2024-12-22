@@ -1,0 +1,150 @@
+[
+    {
+        "key": "UI_tips_text1",
+        "value": "Mande energia de graça para seus amigos e peça para eles retornarem o favor!"
+    },
+    {
+        "key": "UI_tips_text2",
+        "value": "Os impulsos ajudarão a superar os desafios mais difíceis!"
+    },
+    {
+        "key": "UI_tips_text3",
+        "value": "Volte todos os dias e resgate seu bônus diário!"
+    },
+    {
+        "key": "UI_tips_text4",
+        "value": "Convide seus amigos do Facebook para jogar com você!"
+    },
+    {
+        "key": "UI_tips_text5",
+        "value": "Curta nossa página do Facebook e resgate sua recompensa!"
+    },
+    {
+        "key": "UI_tips_text6",
+        "value": "Observe os itens com clareza e colete-os rapidamente!"
+    },
+    {
+        "key": "UI_tips_text7",
+        "value": "Obtenha o Chapeleiro Dourado, você pode obter mais adereços!"
+    },
+    {
+        "key": "UI_tips_text8",
+        "value": "Complete o desafio semanal e ganhe muitas recompensas!"
+    },
+    {
+        "key": "UI_tips_text9",
+        "value": "Acompanhe o evento e participe ativamente!"
+    },
+    {
+        "key": "UI_tips_text10",
+        "value": "Existem muitos pacotes de presentes super valiosos no shopping!"
+    },
+    {
+        "key": "UI_tips_text11",
+        "value": "As equipes são um importante sistema social!"
+    },
+    {
+        "key": "UI_tips_text12",
+        "value": "Siga as informações da equipe a qualquer momento!"
+    },
+    {
+        "key": "UI_loading_progress_text",
+        "value": "Carregando"
+    },
+    {
+        "key": "UI_loading_tip",
+        "value": "Desbloqueie mais níveis para obter mais recompensas"
+    },
+    {
+        "key": "UI_download_fail_button",
+        "value": "Tentar novamente"
+    },
+    {
+        "key": "UI_common_box_tittle",
+        "value": "Perceber"
+    },
+    {
+        "key": "UI_privacy_title_native",
+        "value": "Aceitar a política de privacidade"
+    },
+    {
+        "key": "UI_privacy_message_native",
+        "value": "Para continuar jogando, você precisa confirmar e aceitar a nossa política de privacidade."
+    },
+    {
+        "key": "UI_privacy_btn_link_title_native",
+        "value": "Política de privacidade"
+    },
+    {
+        "key": "UI_privacy_btn_agree_title_native",
+        "value": "Eu aceito"
+    },
+    {
+        "key": "UI_download_resources_error",
+        "value": "Falha ao conectar-se ao servidor. \nVerifique a conexão com a internet \ne tente novamente."
+    },
+    {
+        "key": "UI_no_internet_tips",
+        "value": "Falha ao conectar-se ao servidor. Verifique a conexão com a internet."
+    },
+    {
+        "key": "UI_button_cancel",
+        "value": "Cancelar"
+    },
+    {
+        "key": "UI_button_ok",
+        "value": "OK"
+    },
+    {
+        "key": "UI_button_retry_text",
+        "value": "Tentar novamente"
+    },
+    {
+        "key": "UI_button_cancel",
+        "value": "Cancelar"
+    },
+    {
+        "key": "UI_quit_game_tips_text",
+        "value": "Gostaria de sair?"
+    },
+    {
+        "key": "UI_errmsg_duplicate_login_native",
+        "value": "O jogo foi aberto em outro dispositivo. Para jogar em outro dispositivo, feche esse jogo. Para continuar jogando aqui, clique em ‘OK’ e o jogo será reiniciado."
+    },
+    {
+        "key": "UI_choose_progress_title_text",
+        "value": "SELEÇÃO DE PROGRESSO"
+    },
+    {
+        "key": "UI_choose_progress_desc_main_text",
+        "value": "Qual progresso gostaria de manter?"
+    },
+    {
+        "key": "UI_choose_progress_on_server",
+        "value": "No servidor:"
+    },
+    {
+        "key": "UI_choose_progress_on_device",
+        "value": "No seu dispositivo:"
+    },
+    {
+        "key": "UI_choose_progress_button_server",
+        "value": "Servidor"
+    },
+    {
+        "key": "UI_choose_progress_button_device",
+        "value": "Seu dispositivo"
+    },
+    {
+        "key": "UI_loading_init",
+        "value": "Inicializando…%s%"
+    },
+    {
+        "key": "UI_setting_privacy_policy",
+        "value": "política de Privacidade"
+    },
+    {
+        "key": "UI_setting_term_service",
+        "value": "Termos de serviço"
+    }
+]

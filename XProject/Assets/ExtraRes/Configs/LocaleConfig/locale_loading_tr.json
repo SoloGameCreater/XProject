@@ -1,0 +1,146 @@
+[
+    {
+        "key": "UI_tips_text1",
+        "value": "Arkadaşlarına ücretsiz enerji gönder ve aynı şekilde karşılık vermelerini bekle!"
+    },
+    {
+        "key": "UI_tips_text2",
+        "value": "Takviyeler, zorlu mücadeleleri kazanmana yardımcı olur!"
+    },
+    {
+        "key": "UI_tips_text3",
+        "value": "Her gün tekrar gel ve günlük bonusunu al!"
+    },
+    {
+        "key": "UI_tips_text4",
+        "value": "Facebook arkadaşlarını davet et ve birlikte oynayın!"
+    },
+    {
+        "key": "UI_tips_text5",
+        "value": "Facebook Hayran Sayfamızı beğen ve ödülünü al!"
+    },
+    {
+        "key": "UI_tips_text6",
+        "value": "Öğeleri net bir şekilde gözlemleyin ve hızlı bir şekilde toplayın!"
+    },
+    {
+        "key": "UI_tips_text7",
+        "value": "Altın Şapkacı'yı alın, daha fazla aksesuar alabilirsiniz!"
+    },
+    {
+        "key": "UI_tips_text8",
+        "value": "Haftalık mücadeleyi tamamlayın ve birçok ödül kazanın!"
+    },
+    {
+        "key": "UI_tips_text9",
+        "value": "Etkinliği takip edin ve etkin bir rol alın!"
+    },
+    {
+        "key": "UI_tips_text10",
+        "value": "Alışveriş merkezinde birçok süper değerli hediye paketi var!"
+    },
+    {
+        "key": "UI_tips_text11",
+        "value": "Takımlar önemli bir sosyal sistemdir!"
+    },
+    {
+        "key": "UI_tips_text12",
+        "value": "Ekip bilgilerini istediğiniz zaman takip edin!"
+    },
+    {
+        "key": "UI_loading_progress_text",
+        "value": "Yükleniyor"
+    },
+    {
+        "key": "UI_loading_tip",
+        "value": "Daha fazla ödül almak için daha fazla seviyenin kilidini açın"
+    },
+    {
+        "key": "UI_download_fail_button",
+        "value": "yeniden dene"
+    },
+    {
+        "key": "UI_common_box_tittle",
+        "value": "Fark etme"
+    },
+    {
+        "key": "UI_privacy_title_native",
+        "value": "Gizlilik Politikasını Kabul Et"
+    },
+    {
+        "key": "UI_privacy_message_native",
+        "value": "Oynamaya devam etmek için, Gizlilik Politikamızı kabul etmen gerek."
+    },
+    {
+        "key": "UI_privacy_btn_link_title_native",
+        "value": "Gizlilik Politikası"
+    },
+    {
+        "key": "UI_privacy_btn_agree_title_native",
+        "value": "Kabul Ediyorum"
+    },
+    {
+        "key": "UI_download_resources_error",
+        "value": "Sunucuya bağlanılamadı. \nLütfen İnternet bağlantını kontrol edip tekrar dene."
+    },
+    {
+        "key": "UI_no_internet_tips",
+        "value": "Sunucuya bağlanılamadı. Lütfen İnternet bağlantını kontrol et."
+    },
+    {
+        "key": "UI_button_cancel",
+        "value": "İptal etmek"
+    },
+    {
+        "key": "UI_button_ok",
+        "value": "Tamam"
+    },
+    {
+        "key": "UI_button_retry_text",
+        "value": "Yeniden Dene"
+    },
+    {
+        "key": "UI_button_cancel",
+        "value": "İptal etmek"
+    },
+    {
+        "key": "UI_quit_game_tips_text",
+        "value": "Oyundan çıkmak istiyor musun?"
+    },
+    {
+        "key": "UI_errmsg_duplicate_login_native",
+        "value": "Oyun başka bir cihazda da açık. Başka cihazlarda oynamak istiyorsanız, lütfen bu oyunu kapatın. Şimdi oynamaya devam etmek istiyorsanız, lütfen \"Tamam\"a tıklayın ve oyunu yeniden açalım."
+    },
+    {
+        "key": "UI_choose_progress_title_text",
+        "value": "İLERLEME SEÇİMİ"
+    },
+    {
+        "key": "UI_choose_progress_desc_main_text",
+        "value": "Hangi ilerlemeyi saklamak istiyorsun?"
+    },
+    {
+        "key": "UI_choose_progress_on_server",
+        "value": "Sunucuda:"
+    },
+    {
+        "key": "UI_choose_progress_on_device",
+        "value": "Cihazında:"
+    },
+    {
+        "key": "UI_choose_progress_button_server",
+        "value": "Sunucu"
+    },
+    {
+        "key": "UI_choose_progress_button_device",
+        "value": "Cihazın"
+    },
+    {
+        "key": "UI_setting_privacy_policy",
+        "value": "Gizlilik Politikası"
+    },
+    {
+        "key": "UI_setting_term_service",
+        "value": "Hizmet süresi"
+    }
+]

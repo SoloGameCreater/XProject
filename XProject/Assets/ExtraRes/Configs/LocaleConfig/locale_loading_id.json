@@ -1,0 +1,146 @@
+[
+    {
+        "key": "UI_tips_text1",
+        "value": "Kirim energi gratis ke temanmu dan minta mereka balas budi!"
+    },
+    {
+        "key": "UI_tips_text2",
+        "value": "Peningkat akan membantumu menaklukkan tantangan berat!"
+    },
+    {
+        "key": "UI_tips_text3",
+        "value": "Kembalilah dan klaim bonus harianmu tiap hari!"
+    },
+    {
+        "key": "UI_tips_text4",
+        "value": "Ajak teman-teman Facebook kamu untuk main bareng!"
+    },
+    {
+        "key": "UI_tips_text5",
+        "value": "Sukai Facebook Fan Page kami dan klaim imbalanmu!"
+    },
+    {
+        "key": "UI_tips_text6",
+        "value": "Amati item dengan jelas dan kumpulkan dengan cepat!"
+    },
+    {
+        "key": "UI_tips_text7",
+        "value": "Dapatkan Gold Hatter, Anda bisa mendapatkan lebih banyak alat peraga!"
+    },
+    {
+        "key": "UI_tips_text8",
+        "value": "Selesaikan tantangan mingguan dan dapatkan banyak hadiah!"
+    },
+    {
+        "key": "UI_tips_text9",
+        "value": "Ikuti acaranya dan ambil bagian aktif di dalamnya!"
+    },
+    {
+        "key": "UI_tips_text10",
+        "value": "Ada banyak paket hadiah bernilai super di mal!"
+    },
+    {
+        "key": "UI_tips_text11",
+        "value": "Tim adalah sistem sosial yang penting!"
+    },
+    {
+        "key": "UI_tips_text12",
+        "value": "Ikuti informasi tim kapan saja!"
+    },
+    {
+        "key": "UI_loading_progress_text",
+        "value": "Memuat"
+    },
+    {
+        "key": "UI_loading_tip",
+        "value": "Buka lebih banyak level untuk mendapatkan lebih banyak hadiah"
+    },
+    {
+        "key": "UI_download_fail_button",
+        "value": "Mencoba kembali"
+    },
+    {
+        "key": "UI_common_box_tittle",
+        "value": "Memperhatikan"
+    },
+    {
+        "key": "UI_privacy_title_native",
+        "value": "Terima Kebijakan Privasi"
+    },
+    {
+        "key": "UI_privacy_message_native",
+        "value": "Untuk melanjutkan bermain, kamu harus mengkonfirmasi persetujuanmu terhadap Kebijakan Privasi kami."
+    },
+    {
+        "key": "UI_privacy_btn_link_title_native",
+        "value": "Kebijakan Privasi"
+    },
+    {
+        "key": "UI_privacy_btn_agree_title_native",
+        "value": "Setuju"
+    },
+    {
+        "key": "UI_download_resources_error",
+        "value": "Gagal terhubung ke server. Periksa koneksi internetmu dan coba lagi."
+    },
+    {
+        "key": "UI_no_internet_tips",
+        "value": "Gagal terhubung ke server. Periksa koneksi internetmu."
+    },
+    {
+        "key": "UI_button_cancel",
+        "value": "Membatalkan"
+    },
+    {
+        "key": "UI_button_ok",
+        "value": "Tentu"
+    },
+    {
+        "key": "UI_button_retry_text",
+        "value": "Coba Lagi"
+    },
+    {
+        "key": "UI_button_cancel",
+        "value": "Membatalkan"
+    },
+    {
+        "key": "UI_quit_game_tips_text",
+        "value": "Apakah Anda ingin keluar dari permainan?"
+    },
+    {
+        "key": "UI_errmsg_duplicate_login_native",
+        "value": "Gim ini juga terbuka di perangkat lain. Jika Anda ingin bermain di perangkat lain, harap tutup game ini. Jika Anda ingin melanjutkan permainan sekarang, silakan klik \"OK\" dan kami akan membuka kembali permainan."
+    },
+    {
+        "key": "UI_choose_progress_title_text",
+        "value": "PILIH PROGRES"
+    },
+    {
+        "key": "UI_choose_progress_desc_main_text",
+        "value": "Mana kemajuan yang mau disimpan?"
+    },
+    {
+        "key": "UI_choose_progress_on_server",
+        "value": "Di server:"
+    },
+    {
+        "key": "UI_choose_progress_on_device",
+        "value": "Di perangkatmu:"
+    },
+    {
+        "key": "UI_choose_progress_button_server",
+        "value": "Server"
+    },
+    {
+        "key": "UI_choose_progress_button_device",
+        "value": "Perangkatmu:"
+    },
+    {
+        "key": "UI_setting_privacy_policy",
+        "value": "Politique de Confidentialit"
+    },
+    {
+        "key": "UI_setting_term_service",
+        "value": "Termes du contrat de service"
+    }
+]

@@ -1,0 +1,56 @@
+/************************************************
+ * {{this.nameSpace}} Config Manager class : {{this.managerClassName}}
+ * This file is can not be modify !!!
+ * If there is some problem, ask bin.guo.
+ ************************************************/
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Newtonsoft.Json;
+using DragonU3DSDK;
+using DragonU3DSDK.Asset;
+using DragonPlus.Config.BP;
+
+namespace DragonPlus.Config.{{this.nameSpace}}
+{
+    public class {{{this.managerClassName}}} : Manager<{{{this.managerClassName}}}>
+    {   
+        public bool ConfigFromRemote;
+        public BPConfigManager BPConfig;
+        {{#each fieldArray}}public List<{{{this.configClassName}}}> {{{this.configClassName}}}List;
+        {{/each}}
+        private bool CheckTable(Hashtable table)
+        {
+            {{#each fieldArray}}if (!table.ContainsKey("{{{this.lowersheetname}}}")) return false;
+            {{/each}}
+            return true;
+        }
+
+        public void InitConfig(String configJson = null)
+        {
+            ConfigFromRemote = true;
+            Hashtable table = null;
+            if (!string.IsNullOrEmpty(configJson))
+                table = JsonConvert.DeserializeObject<Hashtable>(configJson);
+
+            if (table == null || !CheckTable(table))
+            {
+                var ta = ResourcesManager.Instance.LoadResource<TextAsset>("{{{this.jsonPath}}}");
+                if (string.IsNullOrEmpty(ta.text))
+                {
+                    DebugUtil.LogError("Load {{{this.jsonPath}}} error!");
+                    return;
+                }
+                table = JsonConvert.DeserializeObject<Hashtable>(ta.text);
+                ConfigFromRemote = false;
+            }
+            BPConfig = new BPConfigManager();
+            BPConfig.InitConfig(configJson);
+
+            {{#each fieldArray}}{{{this.configClassName}}}List = JsonConvert.DeserializeObject<List<{{{this.configClassName}}}>>(JsonConvert.SerializeObject(table["{{{this.lowersheetname}}}"]));
+            {{/each}}
+        }
+    }
+}

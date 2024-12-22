@@ -1,0 +1,20 @@
+/************************************************
+ * Config class : {{className}}
+ * This file is can not be modify !!!
+ * If there is some problem, ask yunhan.zeng@dragonplus.com
+ ************************************************/
+
+using System;
+using System.Collections.Generic;
+
+namespace DragonPlus.Config.{{nameSpace}}
+{
+    public class {{className}}
+    {   {{#each fieldArray}}
+        /// <summary>
+        /// {{{this.desc}}}
+        /// </summary>
+        public {{{this.realType}}} {{this.getterName}} { get; set; }
+        {{/each}}
+    }
+}

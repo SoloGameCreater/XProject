@@ -1,0 +1,150 @@
+[
+    {
+        "key": "UI_tips_text1",
+        "value": "給你的朋友送體力，並請他們回贈給你！"
+    },
+    {
+        "key": "UI_tips_text2",
+        "value": "使用道具幫助你完成挑戰"
+    },
+    {
+        "key": "UI_tips_text3",
+        "value": "不要忘記每天回來領取你的每日獎勵"
+    },
+    {
+        "key": "UI_tips_text4",
+        "value": "邀請你的Facebook朋友來玩這個遊戲，請他們送你免費的體力"
+    },
+    {
+        "key": "UI_tips_text5",
+        "value": "不要忘了喜歡我們的Facebook粉絲專頁"
+    },
+    {
+        "key": "UI_tips_text6",
+        "value": "觀察清楚物品，然後快速收集！"
+    },
+    {
+        "key": "UI_tips_text7",
+        "value": "獲得金帽匠，可以獲得更多道具！"
+    },
+    {
+        "key": "UI_tips_text8",
+        "value": "完成周挑戰，可以獲得超多獎勵！"
+    },
+    {
+        "key": "UI_tips_text9",
+        "value": "關注活動，並積極參與活動！"
+    },
+    {
+        "key": "UI_tips_text10",
+        "value": "商城中有很多超值禮包！"
+    },
+    {
+        "key": "UI_tips_text11",
+        "value": "隊伍是重要的社交系統！"
+    },
+    {
+        "key": "UI_tips_text12",
+        "value": "隨時關注隊伍信息！"
+    },
+    {
+        "key": "UI_loading_progress_text",
+        "value": "加載中"
+    },
+    {
+        "key": "UI_loading_tip",
+        "value": "解鎖更多的關卡，以獲得更多獎勵"
+    },
+    {
+        "key": "UI_download_fail_button",
+        "value": "重試"
+    },
+    {
+        "key": "UI_common_box_tittle",
+        "value": "通知"
+    },
+    {
+        "key": "UI_privacy_title_native",
+        "value": "隱私協議"
+    },
+    {
+        "key": "UI_privacy_message_native",
+        "value": "繼續遊戲前，您需要同意我們的隱私協議"
+    },
+    {
+        "key": "UI_privacy_btn_link_title_native",
+        "value": "詳情鏈接"
+    },
+    {
+        "key": "UI_privacy_btn_agree_title_native",
+        "value": "同意"
+    },
+    {
+        "key": "UI_download_resources_error",
+        "value": "沒有互聯網連接，請檢查網絡連接並重試。"
+    },
+    {
+        "key": "UI_no_internet_tips",
+        "value": "沒有互聯網連接，請連接到互聯網再試。"
+    },
+    {
+        "key": "UI_button_cancel",
+        "value": "取消"
+    },
+    {
+        "key": "UI_button_ok",
+        "value": "確定"
+    },
+    {
+        "key": "UI_button_retry_text",
+        "value": "重試"
+    },
+    {
+        "key": "UI_button_cancel",
+        "value": "取消"
+    },
+    {
+        "key": "UI_quit_game_tips_text",
+        "value": "你想要退出遊戲嗎？"
+    },
+    {
+        "key": "UI_errmsg_duplicate_login_native",
+        "value": "另一台設備上也打開了該遊戲。如果你想在其他設備上玩，請關閉這個遊戲。如果你現在想繼續玩，請點擊“確定”，我們會重新打開該遊戲。"
+    },
+    {
+        "key": "UI_choose_progress_title_text",
+        "value": "存檔選擇"
+    },
+    {
+        "key": "UI_choose_progress_desc_main_text",
+        "value": "你要保留哪一個存檔？"
+    },
+    {
+        "key": "UI_choose_progress_on_server",
+        "value": "服務器上的"
+    },
+    {
+        "key": "UI_choose_progress_on_device",
+        "value": "你的設備上的"
+    },
+    {
+        "key": "UI_choose_progress_button_server",
+        "value": "服務器"
+    },
+    {
+        "key": "UI_choose_progress_button_device",
+        "value": "你的設備"
+    },
+    {
+        "key": "UI_loading_init",
+        "value": "初始化中…%s%"
+    },
+    {
+        "key": "UI_setting_privacy_policy",
+        "value": "隱私政策"
+    },
+    {
+        "key": "UI_setting_term_service",
+        "value": "服務協議"
+    }
+]

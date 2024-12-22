@@ -1,0 +1,162 @@
+[
+    {
+        "key": "UI_tips_text1",
+        "value": "Отправляйте бесплатную энергию друзьям и просите их ответить вам тем же!"
+    },
+    {
+        "key": "UI_tips_text2",
+        "value": "Усиления помогут вам справиться с трудными испытаниями!"
+    },
+    {
+        "key": "UI_tips_text3",
+        "value": "Заходите в игру каждый день и получайте ежедневные подарки!"
+    },
+    {
+        "key": "UI_tips_text4",
+        "value": "Приглашайте своих друзей из Facebook и играйте вместе!"
+    },
+    {
+        "key": "UI_tips_text5",
+        "value": "Оцените нашу страничку в Facebook и получите награду!"
+    },
+    {
+        "key": "UI_tips_text6",
+        "value": "Четко наблюдайте за предметами и быстро собирайте их!"
+    },
+    {
+        "key": "UI_tips_text7",
+        "value": "Получите Золотого Шляпника, вы можете получить больше реквизита!"
+    },
+    {
+        "key": "UI_tips_text8",
+        "value": "Выполняйте еженедельные задания и получайте множество наград!"
+    },
+    {
+        "key": "UI_tips_text9",
+        "value": "Следите за событием и принимайте в нем активное участие!"
+    },
+    {
+        "key": "UI_tips_text10",
+        "value": "В торговом центре есть много суперценных подарочных наборов!"
+    },
+    {
+        "key": "UI_tips_text11",
+        "value": "Команды – важная социальная система!"
+    },
+    {
+        "key": "UI_tips_text12",
+        "value": "Следите за информацией о команде в любое время!"
+    },
+    {
+        "key": "UI_loading_progress_text",
+        "value": "Загрузка"
+    },
+    {
+        "key": "UI_loading_tip",
+        "value": "Разблокируйте больше уровней, чтобы получить больше наград"
+    },
+    {
+        "key": "UI_download_fail_button",
+        "value": "Повторение"
+    },
+    {
+        "key": "UI_common_box_tittle",
+        "value": "Уведомление"
+    },
+    {
+        "key": "UI_privacy_title_native",
+        "value": "Принять политику конфиденциальности"
+    },
+    {
+        "key": "UI_privacy_message_native",
+        "value": "Чтобы продолжить играть, вам необходимо подтвердить, что вы принимаете нашу политику конфиденциальности."
+    },
+    {
+        "key": "UI_privacy_btn_link_title_native",
+        "value": "Политика конфиденциальности"
+    },
+    {
+        "key": "UI_privacy_btn_agree_title_native",
+        "value": "Подтверждаю"
+    },
+    {
+        "key": "UI_download_resources_error",
+        "value": "Не удалось подключиться к серверу.\nПроверьте подключение к Интернету\nи попробуйте еще раз."
+    },
+    {
+        "key": "UI_no_internet_tips",
+        "value": "Не удалось подключиться к серверу. Проверьте подключение к Интернету."
+    },
+    {
+        "key": "UI_button_cancel",
+        "value": "Отмена"
+    },
+    {
+        "key": "UI_button_ok",
+        "value": "уровень"
+    },
+    {
+        "key": "UI_button_retry_text",
+        "value": "Еще раз"
+    },
+    {
+        "key": "UI_button_cancel",
+        "value": "Отмена"
+    },
+    {
+        "key": "UI_quit_game_tips_text",
+        "value": "Хотите выйти из игры?"
+    },
+    {
+        "key": "UI_errmsg_duplicate_login_native",
+        "value": "Вы открыли игру на другом устройстве. Чтобы играть на другом устройстве, пожалуйста, закройте эту игру. Чтобы продолжить играть, просто нажмите «ОК», и игра перезапустится."
+    },
+    {
+        "key": "UI_choose_progress_title_text",
+        "value": "ВЫБОР ПРОГРЕССА"
+    },
+    {
+        "key": "UI_choose_progress_desc_main_text",
+        "value": "Какой прогресс вы хотите сохранить?"
+    },
+    {
+        "key": "UI_choose_progress_on_server",
+        "value": "На сервере:"
+    },
+    {
+        "key": "UI_choose_progress_on_device",
+        "value": "На вашем устройстве:"
+    },
+    {
+        "key": "UI_choose_progress_button_server",
+        "value": "Сервер"
+    },
+    {
+        "key": "UI_choose_progress_button_device",
+        "value": "Ваше устройство"
+    },
+    {
+        "key": "UI_loading_init",
+        "value": "Инициализация ...%s%"
+    },
+    {
+        "key": "UI_loading_upgrade",
+        "value": "Обновление ...%s%"
+    },
+    {
+        "key": "UI_loading_load",
+        "value": "Загрузка ...%s%"
+    },
+    {
+        "key": "UI_loading_count",
+        "value": "Расчет"
+    },
+    {
+        "key": "UI_setting_privacy_policy",
+        "value": "политика конфиденциальности"
+    },
+    {
+        "key": "UI_setting_term_service",
+        "value": "Срок службы"
+    }
+]

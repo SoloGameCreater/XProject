@@ -1,0 +1,48 @@
+﻿
+using System.IO;
+using UnityGameFramework.Runtime;
+
+namespace StarForce.Editor.DataTableTools
+{
+    public sealed partial class DataTableProcessor
+    {
+        private sealed class UInt64Processor : GenericDataProcessor<ulong>
+        {
+            public override bool IsSystem
+            {
+                get
+                {
+                    return true;
+                }
+            }
+
+            public override string LanguageKeyword
+            {
+                get
+                {
+                    return "ulong";
+                }
+            }
+
+            public override string[] GetTypeStrings()
+            {
+                return new string[]
+                {
+                    "ulong",
+                    "uint64",
+                    "system.uint64"
+                };
+            }
+
+            public override ulong Parse(string value)
+            {
+                return ulong.Parse(value);
+            }
+
+            public override void WriteToStream(DataTableProcessor dataTableProcessor, BinaryWriter binaryWriter, string value)
+            {
+                binaryWriter.Write7BitEncodedUInt64(Parse(value));
+            }
+        }
+    }
+}

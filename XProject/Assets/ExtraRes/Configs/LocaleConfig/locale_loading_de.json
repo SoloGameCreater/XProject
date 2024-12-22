@@ -1,0 +1,150 @@
+[
+    {
+        "key": "UI_tips_text1",
+        "value": "Schenke Freunden Energie, und lass dich selbst beschenken!"
+    },
+    {
+        "key": "UI_tips_text2",
+        "value": "Booster helfen bei kniffligen Herausforderungen!"
+    },
+    {
+        "key": "UI_tips_text3",
+        "value": "Komm täglich wieder und hol dir den Tagesbonus!"
+    },
+    {
+        "key": "UI_tips_text4",
+        "value": "Lade Facebook-Freunde ein und spiele mit ihnen!"
+    },
+    {
+        "key": "UI_tips_text5",
+        "value": "Like unsere Facebook-Fanseite und werde belohnt!"
+    },
+    {
+        "key": "UI_tips_text6",
+        "value": "Beobachten Sie die Gegenstände genau und sammeln Sie sie schnell ein!"
+    },
+    {
+        "key": "UI_tips_text7",
+        "value": "Holen Sie sich den Gold Hatter, Sie können mehr Requisiten bekommen!"
+    },
+    {
+        "key": "UI_tips_text8",
+        "value": "Schließe die wöchentliche Herausforderung ab und erhalte viele Belohnungen!"
+    },
+    {
+        "key": "UI_tips_text9",
+        "value": "Verfolgen Sie die Veranstaltung und nehmen Sie aktiv daran teil!"
+    },
+    {
+        "key": "UI_tips_text10",
+        "value": "Es gibt viele tolle Geschenkpakete im Einkaufszentrum!"
+    },
+    {
+        "key": "UI_tips_text11",
+        "value": "Teams sind ein wichtiges soziales System!"
+    },
+    {
+        "key": "UI_tips_text12",
+        "value": "Verfolgen Sie jederzeit die Teaminformationen!"
+    },
+    {
+        "key": "UI_loading_progress_text",
+        "value": "Wird geladen"
+    },
+    {
+        "key": "UI_loading_tip",
+        "value": "Schalte mehr Level frei, um mehr Belohnungen zu erhalten"
+    },
+    {
+        "key": "UI_download_fail_button",
+        "value": "Nochmal"
+    },
+    {
+        "key": "UI_common_box_tittle",
+        "value": "Notiz"
+    },
+    {
+        "key": "UI_privacy_title_native",
+        "value": "Datenschutzrichtlinie annehmen"
+    },
+    {
+        "key": "UI_privacy_message_native",
+        "value": "Um weiterzuspielen, müssen Sie unsere Datenschutzrichtlinien akzeptieren."
+    },
+    {
+        "key": "UI_privacy_btn_link_title_native",
+        "value": "Datenschutzrichtlinie"
+    },
+    {
+        "key": "UI_privacy_btn_agree_title_native",
+        "value": "Annehmen"
+    },
+    {
+        "key": "UI_download_resources_error",
+        "value": "Serververbindung gescheitert.\nBitte die Internetverbindung prüfen\nund noch mal versuchen."
+    },
+    {
+        "key": "UI_no_internet_tips",
+        "value": "Serververbindung gescheitert. Bitte die Internetverbindung prüfen."
+    },
+    {
+        "key": "UI_button_cancel",
+        "value": "Stornieren"
+    },
+    {
+        "key": "UI_button_ok",
+        "value": "OK"
+    },
+    {
+        "key": "UI_button_retry_text",
+        "value": "Nochmal"
+    },
+    {
+        "key": "UI_button_cancel",
+        "value": "Stornieren"
+    },
+    {
+        "key": "UI_quit_game_tips_text",
+        "value": "Das Spiel beenden?"
+    },
+    {
+        "key": "UI_errmsg_duplicate_login_native",
+        "value": "Das Spiel ist auf einem anderen Gerät geöffnet. Um dort weiterzuspielen, schließe dieses Spiel. Um hier weiterzuspielen, tippe auf OK. Das Spiel startet dann neu."
+    },
+    {
+        "key": "UI_choose_progress_title_text",
+        "value": "FORTSCHRITTSAUSWAHL"
+    },
+    {
+        "key": "UI_choose_progress_desc_main_text",
+        "value": "Welchen Fortschritt willst du behalten?"
+    },
+    {
+        "key": "UI_choose_progress_on_server",
+        "value": "Auf Server:"
+    },
+    {
+        "key": "UI_choose_progress_on_device",
+        "value": "Auf Gerät:"
+    },
+    {
+        "key": "UI_choose_progress_button_server",
+        "value": "Server"
+    },
+    {
+        "key": "UI_choose_progress_button_device",
+        "value": "Gerät"
+    },
+    {
+        "key": "UI_loading_init",
+        "value": "Initialisieren…%s%"
+    },
+    {
+        "key": "UI_setting_privacy_policy",
+        "value": "Datenschutz-Bestimmungen"
+    },
+    {
+        "key": "UI_setting_term_service",
+        "value": "Länge der Dienstzeit"
+    }
+]
