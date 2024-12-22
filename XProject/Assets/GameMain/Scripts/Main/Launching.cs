@@ -85,7 +85,9 @@ public class Launching
         ToProgress += 10;
         ToProgress += 10;
         ToProgress += 10;
-        
+
+        //强行把进度条填满
+        ToProgress = 100;
         MyMain.myGame.InitManagers();
     }
 

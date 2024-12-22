@@ -24,7 +24,14 @@ public class StateThreeMerge : IFsmState
 
     public void EnterFinish()
     {
-        throw new System.NotImplementedException();
+        if (UIViewSystem.Instance.Get<LobbyMainUI>() != null)
+        {
+            UIViewSystem.Instance.Get<LobbyMainUI>().Show();
+        }
+        else
+        {
+            UIViewSystem.Instance.Open<LobbyMainUI>();
+        }
     }
 
     public void Update(float deltaTime)
