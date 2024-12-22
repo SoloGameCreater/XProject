@@ -1,5 +1,4 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using BaseModule;
 using Framework;
@@ -19,7 +18,7 @@ namespace Localizetion
             new Dictionary<string, Dictionary<string, string>>();
 
         private bool loadedFromApp = false;
-        
+
         private HashSet<string> uniqueKeys = new HashSet<string>()
         {
             "UI_common_time_d",
@@ -29,19 +28,18 @@ namespace Localizetion
             "UI_lava_finished",
         };
 
-        private Dictionary<string, string> hotKeys = new Dictionary<string, string>();        
+        private Dictionary<string, string> hotKeys = new Dictionary<string, string>();
         private Dictionary<string, string> hotValues = new Dictionary<string, string>();
-        
+
         public void InitConfigs()
         {
             ClearHotKeys();
-            
+
             foreach (string locale in Locale.supportedLocale)
             {
                 if (localeConfigs.ContainsKey(locale))
                     continue;
 
-                //DebugUtil.Log("Prepare to init config for locale " + locale);
                 var configPath = "Configs/LocaleConfig/locale_" + locale;
                 var ta = ResourcesManager.Instance.LoadResource<TextAsset>(configPath, addToCache: false);
                 var content = ta.text;
@@ -52,24 +50,20 @@ namespace Localizetion
                 //DebugUtil.Log("localeConfigs count : " + localeConfig.Count);
                 if (localeConfig != null && localeConfig.Count > 0)
                 {
+                    int cntTemp = 0;
                     Dictionary<string, string> configs = new Dictionary<string, string>();
                     foreach (LocaleItemConfig c in localeConfig)
                     {
+#if UNITY_EDITOR
+                        cntTemp++;
+#endif
                         if (string.IsNullOrEmpty(c.Key))
                         {
-                            DebugUtil.LogError("key is " + c.Key + "  value is " + c.Value);
+                            DebugUtil.LogError($"language is {locale} key is {c.Key} value is {c.Value} index is {cntTemp}");
                             continue;
                         }
 
-                        //DebugUtil.Log("key : "+c.Key);
-                        if (configs.ContainsKey(c.Key))
-                        {
-                            configs[c.Key] = c.Value;
-                        }
-                        else
-                        {
-                            configs.Add(c.Key, c.Value);
-                        }
+                        configs[c.Key] = c.Value;
                     }
 
                     localeConfigs[locale] = configs;
@@ -84,12 +78,12 @@ namespace Localizetion
 
         // 对嵌套的key进行处理
         string ReplaceKeyVlaue(Dictionary<string, Dictionary<string, string>> tempLocaleConfigs, string locale,
-            string key, bool dec = false)
+                               string key, bool dec = false)
         {
             string value = tempLocaleConfigs[locale][key];
             if (string.IsNullOrEmpty(value))
                 return "";
-            
+
 #if ENCRY_IOS && !UNITY_EDITOR
             if (dec)
             {
@@ -119,7 +113,7 @@ namespace Localizetion
         {
             var replaceLocalConfig = ReplaceLocalConfigManager.Instance.GetLocaleConfigs();
             if (replaceLocalConfig.ContainsKey(locale)
-                && replaceLocalConfig[locale].ContainsKey(key)) //是否有热更的内容
+             && replaceLocalConfig[locale].ContainsKey(key)) //是否有热更的内容
             {
                 return ReplaceKeyVlaue(replaceLocalConfig, locale, key);
             }
