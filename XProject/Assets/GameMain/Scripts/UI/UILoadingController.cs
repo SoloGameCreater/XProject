@@ -52,25 +52,8 @@ public class UILoadingController : MonoBehaviour
         _sliderZero = gameObject.GetOrCreateComponent<SliderZero>();
         _sliderZero.Slider = transform.Find("Slider").GetComponent<Slider>();
         _sliderZero.Slider.value = 0f;
-        var progressTMP = transform.Find("Slider/progressinfo");
+        var progressTMP = transform.Find("Slider/ProgressInfo");
         _sliderZero.ProgressText = progressTMP.GetComponent<TextMeshProUGUI>();
-
-        _logo = transform.Find("Logo").GetComponent<Image>();
-        _logo.sprite = Resources.Load<Sprite>("Launcher/Textures/ui_loading_logo");
-        
-        _bgImage = transform.Find("Image").GetComponent<RawImage>();
-        if (LoadingPanel.UseOldLoadingImage())
-        {
-            _bgImage.texture = Resources.Load<Texture>("Launcher/Textures/ui_landing_bg_old");
-        }
-        else
-        {
-            _bgImage.texture = Resources.Load<Texture>("Launcher/Textures/ui_landing_bg");
-            _logo.gameObject.SetActive(false);
-        }
-
-        _userIdText = transform.Find("UIDGroup/UIDText").GetComponent<LocalizeTextMeshProUGUI>();
-
         
         Debug.Log("Loading View Open!");
     }
