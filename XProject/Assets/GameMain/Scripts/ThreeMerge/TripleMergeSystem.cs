@@ -5,7 +5,8 @@ namespace TripleMerge
     public class TripleMergeSystem : GlobalSystem<TripleMergeSystem>, IUpdatable, ILateUpdatable
     {
         public TripleMergeGameplay Gameplay { get; private set; }
-        //public TripleMergeModel Model { get; } = new();
+        
+        public TripleMergeModel Model { get; } = new();
         
         public void OnEnterTripleMerge()
         {
