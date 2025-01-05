@@ -10,5 +10,11 @@ namespace TripleMerge
         {
             SaveFileTripleMerge.Clear();
         }
+
+        public void AddRegionId(int regionId)
+        {
+            if(!SaveFileTripleMerge.OpenRegionIds.Contains(regionId))
+                SaveFileTripleMerge.OpenRegionIds.Add(regionId);
+        }
     }
 }
