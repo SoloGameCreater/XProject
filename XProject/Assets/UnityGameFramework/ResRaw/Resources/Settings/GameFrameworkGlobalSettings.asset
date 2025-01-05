@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_FrameworkGlobalSettings:
     m_ResourcesArea:
-      m_ServerType: 1
-      m_InnerResourceSourceUrl: https://res.dragonplus.vip/triplematch2
-      m_ExtraResourceSourceUrl: https://res.wejoyplay.com/matchfrenzy
+      m_ServerType: 0
+      m_InnerResourceSourceUrl: 
+      m_ExtraResourceSourceUrl: 
       m_AndroidVersion: v1_0_0
-      m_IOSVersion: v100002
+      m_IOSVersion: v1001

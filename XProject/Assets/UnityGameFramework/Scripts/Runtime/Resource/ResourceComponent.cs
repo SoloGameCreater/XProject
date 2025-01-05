@@ -65,10 +65,7 @@ namespace UnityGameFramework.Runtime
                 //编辑器模式使用。
                 return (EPlayMode)UnityEditor.EditorPrefs.GetInt("EditorPlayMode");
 #else
-                if (playMode == EPlayMode.EditorSimulateMode)
-                {
-                    playMode = EPlayMode.OfflinePlayMode;
-                }
+                playMode = EPlayMode.OfflinePlayMode;
                 //运行时使用。
                 return playMode;
 #endif
