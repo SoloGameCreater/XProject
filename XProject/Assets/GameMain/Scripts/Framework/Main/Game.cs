@@ -50,9 +50,9 @@ namespace Framework
             _subSystemManager.Release();
         }
 
-        public bool IsThreeMerge()
+        public bool IsTripleMerge()
         {
-            return _fsm.CurrentState is StateThreeMerge;
+            return _fsm.CurrentState is StateTripleMerge;
         }
         
         /// <summary>
@@ -61,7 +61,7 @@ namespace Framework
         /// <returns></returns>
         public bool IsJustWinInTMatch()
         {
-            return MyMain.myGame.IsThreeMerge()
+            return MyMain.myGame.IsTripleMerge()
                    && MyMain.myGame.Fsm.PreviousState.Type == FsmStateType.MainGame;
         }
     }

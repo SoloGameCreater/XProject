@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ThreeMerge
+namespace TripleMerge
 {
     [AssetAddress("UILobby/LobbyUI")]
     public class LobbyMainUI : UIView

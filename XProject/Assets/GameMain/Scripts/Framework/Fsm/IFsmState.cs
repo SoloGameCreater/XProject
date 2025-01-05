@@ -7,7 +7,7 @@ namespace Framework
     {
         Non,
         Launch,      //启动的loading
-        ThreeMerge,  //合成/兼大厅
+        TripleMerge,  //合成/兼大厅
         MainGame,    //主游戏
     }
     public interface IFsmState

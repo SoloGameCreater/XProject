@@ -1,29 +1,26 @@
 using System.Threading.Tasks;
 using Framework;
-using ThreeMerge;
+using TripleMerge;
 
 public class FsmParamTMerge : FsmParam
 {
     public int level;
 }
-public class StateThreeMerge : IFsmState
+public class StateTripleMerge : IFsmState
 {
-    FsmStateType IFsmState.Type => FsmStateType.ThreeMerge;
+    FsmStateType IFsmState.Type => FsmStateType.TripleMerge;
     private FsmParamTMerge fsmParamTMatch;
     
-    private ThreeMergeSystem tMergeSystem;
     public async Task<bool> PreEnterAsync(FsmParam param)
     {
         //UIViewSystem.Instance.Open<UITMatchMainController>();
-
-        fsmParamTMatch = param as FsmParamTMerge;
-        tMergeSystem = new ThreeMergeSystem();
-        tMergeSystem.Enter(fsmParamTMatch);
+        TripleMergeSystem.Instance.OnEnterTripleMerge();
         return true;
     }
 
     public void EnterFinish()
     {
+        UILoadingController.Hide(false);
         if (UIViewSystem.Instance.Get<LobbyMainUI>() != null)
         {
             UIViewSystem.Instance.Get<LobbyMainUI>().Show();
@@ -36,17 +33,16 @@ public class StateThreeMerge : IFsmState
 
     public void Update(float deltaTime)
     {
-        tMergeSystem.Update(deltaTime);
+        
     }
 
     public void LateUpdate(float deltaTime)
     {
-        tMergeSystem.LateUpdate(deltaTime);
+        
     }
 
     public void Exit(FsmStateType toStateType)
     {
-        tMergeSystem.Exit();
-        tMergeSystem = null;
+        TripleMergeSystem.Instance.Exit();
     }
 }

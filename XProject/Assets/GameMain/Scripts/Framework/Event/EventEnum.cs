@@ -311,5 +311,5 @@
     public const string SuperStarRefresh = "SuperStarRefresh";
     
     // 三合图鉴解锁
-    public const string UnlockThreeMergeIllustrationItem = "UnlockThreeMergeIllustrationItem";
+    public const string UnlockTripleMergeIllustrationItem = "UnlockTripleMergeIllustrationItem";
 }

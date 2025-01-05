@@ -131,7 +131,7 @@ public class UILoadingController : MonoBehaviour
     {
         if (s_loadingController != null)
         {
-            Resources.UnloadAsset(s_loadingController._bgImage.texture);
+            //Resources.UnloadAsset(s_loadingController._bgImage.texture);
             GameObject.Destroy(s_loadingController.gameObject);
             s_loadingController = null;
         }

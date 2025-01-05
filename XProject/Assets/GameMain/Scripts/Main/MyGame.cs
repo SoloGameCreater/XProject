@@ -1,6 +1,7 @@
 
 using Framework;
 using Gameplay.SubSystems;
+using TripleMerge;
 using Game = Framework.Game;
 
 public class MyGame : Game
@@ -58,8 +59,9 @@ public class MyGame : Game
             _subSystemManager.AddSubSystem<AudioSysManager>();
             _subSystemManager.AddSubSystem<GameSettingSubSystem>();
             _subSystemManager.AddSubSystem<GamePauseManager>();
-            //todo 待定
-            //_subSystemManager.AddSubSystem<LittleGameManager>();
+            
+            //三合
+            _subSystemManager.AddSubSystem<TripleMergeSystem>();
 
             //Model
             //_subSystemManager.AddSubSystem<StorageSubSystem>();
@@ -73,8 +75,6 @@ public class MyGame : Game
     private void initFsm()
     {
         _fsm.RigsterState(FsmStateType.Launch,      new StateLaunch());
-        _fsm.RigsterState(FsmStateType.ThreeMerge,  new StateThreeMerge());
-        //TODO 还没想好
-        //_fsm.RigsterState(FsmStateType.MainGame,       new StateLogin());
+        _fsm.RigsterState(FsmStateType.TripleMerge,  new StateTripleMerge());
     }
 }
