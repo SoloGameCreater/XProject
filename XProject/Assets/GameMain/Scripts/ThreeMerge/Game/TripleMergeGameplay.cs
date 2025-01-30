@@ -6,14 +6,11 @@ namespace TripleMerge
     public class TripleMergeGameplay
     {
         public TripleMergeMapManager MapManager { get; } = new();
-
         public TripleMergeCameraManager CameraManager { get; } = new();
 
         private List<ITripleMergeComponent> _components = new();
         
         public Transform MapRoot { private set; get; }
-        // map root prefab name
-        const string MapRootPrefabAssetName = "MergeMaoRoot";
         
         public void Init()
         {
@@ -21,6 +18,8 @@ namespace TripleMerge
             _components.Clear();
             _components.Add(MapManager);
             _components.Add(CameraManager);
+            
+            _components.ForEach(c => c.OnInitialize());
         }
 
         public void OnUpdate(float deltaTime)

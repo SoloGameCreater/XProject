@@ -63,3 +63,16 @@ MonoBehaviour:
       AssetTags: BASE_RES
       ActiveRuleName: EnableGroup
       Collectors: []
+    - GroupName: TripleMatch
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/ExtraRes/TripleMerge
+        CollectorGUID: 904c60f91cc378946ba8a2d7812d2975
+        CollectorType: 0
+        AddressRuleName: AddressDisable
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
