@@ -2,6 +2,8 @@
   "dependencies": {
     "com.tuyoogame.yooasset": "2.1.2",
     "com.unity.2d.sprite": "1.0.0",
+    "com.unity.2d.tilemap": "1.0.0",
+    "com.unity.2d.tilemap.extras": "4.1.0",
     "com.unity.ide.rider": "3.0.31",
     "com.unity.multiplayer.center": "1.0.0",
     "com.unity.muse.sprite": "1.1.1",
