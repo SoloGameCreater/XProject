@@ -20,7 +20,7 @@ public class EditorHelper : EditorWindow
     [MenuItem("Helper/Open C# Project")]
     static void OpenCSharpProject()
     {
-        string path = "Assets/GameMain/Scripts/Base/GameEntry.cs";
+        string path = "Assets/GameMain/Scripts/Main/Launching.cs";
         UnityEngine.Object obj = AssetDatabase.LoadAssetAtPath(path, typeof(MonoScript));
         AssetDatabase.OpenAsset(obj, 0);
     }
