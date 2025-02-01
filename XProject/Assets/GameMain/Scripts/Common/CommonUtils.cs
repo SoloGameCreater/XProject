@@ -2,6 +2,7 @@ using System;
 using GameFramework.Localization;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public static class CommonUtils
@@ -89,5 +90,21 @@ public static class CommonUtils
         float minR = Mathf.Min(Screen.width, Screen.height);
         var ratio = (maxR / minR) <= 1.605f;
         return ratio;
+    }
+    // 判断宽屏设备
+    public static bool IsWideScreenDevice()
+    {
+        return ((float) Screen.width / Screen.height <= 1.5f);
+    }
+    public static bool IsTouchUGUI()
+    {
+#if (UNITY_ANDROID || UNITY_IPHONE) && !UNITY_EDITOR
+        if (Input.touchCount > 0 ? EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId) : EventSystem.current.IsPointerOverGameObject())
+#else
+        if (EventSystem.current.IsPointerOverGameObject())
+#endif
+            return true;
+        else
+            return false;
     }
 }

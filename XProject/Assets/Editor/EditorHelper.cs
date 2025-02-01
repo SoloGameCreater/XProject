@@ -13,9 +13,8 @@ public class EditorHelper : EditorWindow
         //EditorHelper window = (EditorHelper)EditorWindow.GetWindow(typeof(EditorHelper));
         string curScene = EditorSceneManager.GetActiveScene().name;
         //EditorApplication.SaveScene();
-        EditorSceneManager.OpenScene("Assets/Launcher/Launcher.unity");
+        EditorSceneManager.OpenScene("Assets/Scenes/Main.unity");
         EditorApplication.isPlaying = true;
-        UnityEngine.Debug.Log(curScene);
     }
     [MenuItem("Helper/Open C# Project")]
     static void OpenCSharpProject()

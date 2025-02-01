@@ -523,7 +523,7 @@ Transform:
   m_GameObject: {fileID: 1134728711}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 1000, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -830,6 +830,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1559060063}
+  - component: {fileID: 1559060064}
   m_Layer: 0
   m_Name: SceneRoot
   m_TagString: Untagged
@@ -854,6 +855,19 @@ Transform:
   - {fileID: 454192257}
   m_Father: {fileID: 1747312362}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1559060064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1559060062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e253242773bfa84e821df9041939eaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mSceneCamera: {fileID: 1492650202}
 --- !u!1 &1586719695
 GameObject:
   m_ObjectHideFlags: 0

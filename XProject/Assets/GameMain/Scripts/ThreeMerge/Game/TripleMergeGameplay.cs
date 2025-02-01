@@ -10,8 +10,6 @@ namespace TripleMerge
 
         private List<ITripleMergeComponent> _components = new();
         
-        public Transform MapRoot { private set; get; }
-        
         public void Init()
         {
             TripleMergeSystem.Instance.Model.ClearData();
