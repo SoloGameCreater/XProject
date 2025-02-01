@@ -7,7 +7,7 @@ namespace TripleMerge
     {
         // map root prefab name
         const string MapRootPrefabAssetName = "MergeMapRoot";
-        
+        public bool IsMerging { get; set; }
         public GameObject MapRoot { get;private set; }
 
         protected override void OnInitialize()

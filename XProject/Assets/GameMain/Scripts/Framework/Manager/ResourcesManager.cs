@@ -21,7 +21,10 @@ namespace Framework
         {
             return GameModule.Resource.LoadAsset<T>($"Assets/ExtraRes/{name}");
         }
-
+        public T LoadResourceByKey<T>(string key, bool forceBundle = false, bool addToCache = true, string assetDeepPath = null) where T : Object
+        {
+            return GameModule.Resource.LoadAsset<T>(key);
+        }
         public async UniTaskVoid LoadResourceAsync<T>(string name, Action<T> OnFinished = null, bool isAddCache = true) where T : Object
         {
             var obj = await GameModule.Resource.LoadAssetAsync<T>($"Assets/ExtraRes/{name}");
