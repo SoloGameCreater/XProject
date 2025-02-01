@@ -16,10 +16,9 @@ namespace TripleMerge
         private float _minCameraSize;
         private float _maxCameraSize;
         public float _minCameraScale = 0.3f;
-        public float _maxCameraScale = 5f;
+        public float _maxCameraScale = 1f;
         public float _extraMinCameraScale = 0.3f;
-        public float _extraMaxCameraScale = 5f;
-        public float _reboundSpeed = 3.0f;
+        public float _extraMaxCameraScale = 1f;
 
         private Vector2 _minCameraPosition;
         private Vector2 _maxCameraPosition;
@@ -31,7 +30,6 @@ namespace TripleMerge
 
         private Vector2 _prevMousePos;
         private Vector2 _moveSpeed;
-        private Vector2 _autoTargetPos;
         private float _autoScale;
         private bool _autoMoveFlag = false;
         private bool _autoMoveScaleFlag = false;
@@ -67,7 +65,8 @@ namespace TripleMerge
 
             _minCameraPosition = MinPosition.position;
             _maxCameraPosition = MaxPosition.position;
-
+            
+            _sceneCamera.transform.position = InitPosition.position;
             var uiRootTransform = UIRoot.Instance.mRoot.transform as RectTransform;
             var uiCamera = UIRoot.Instance.mUICamera;
             RectTransformUtility.ScreenPointToWorldPointInRectangle(uiRootTransform, new Vector2(0, 0), uiCamera, out _screenMinPosition);
@@ -101,9 +100,9 @@ namespace TripleMerge
                 {
                     var percent = _focusEscapeTime / _focusTime;
                     var value = _curve.Evaluate(percent);
-                    camera.orthographicSize = _originCameraSize * calculateValue(_originScale, _targetScale, value);
-                    camera.transform.position = new Vector3(calculateValue(_originPosition.x, _targetPosition.x, value),
-                        calculateValue(_originPosition.y, _targetPosition.y, value), _targetPosition.z);
+                    camera.orthographicSize = _originCameraSize * CalculateValue(_originScale, _targetScale, value);
+                    camera.transform.position = new Vector3(CalculateValue(_originPosition.x, _targetPosition.x, value),
+                        CalculateValue(_originPosition.y, _targetPosition.y, value), _targetPosition.z);
                 }
 
                 return;
@@ -111,7 +110,9 @@ namespace TripleMerge
 
             if (CommonUtils.IsTouchUGUI()) return;
 
-            if (Application.isEditor)
+
+            
+#if UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX
             {
                 var scrollWheelInput = Input.GetAxis("Mouse ScrollWheel");
 
@@ -128,7 +129,7 @@ namespace TripleMerge
                     var worldOffset = _sceneCamera.ScreenToWorldPoint(currentMousePos) - _sceneCamera.ScreenToWorldPoint(_prevMousePos);
                     _moveSpeed = worldOffset / Time.deltaTime;
 
-                    move(_moveSpeed);
+                    Move(_moveSpeed);
 
                     _prevMousePos = currentMousePos;
                 }
@@ -140,7 +141,7 @@ namespace TripleMerge
                         _moveSpeed = Vector3.zero;
                     }
 
-                    move(_moveSpeed);
+                    Move(_moveSpeed);
                 }
 
                 if (Mathf.Abs(scrollWheelInput) > float.Epsilon)
@@ -149,10 +150,10 @@ namespace TripleMerge
 
                     var curSize = _sceneCamera.orthographicSize;
                     curSize /= 1 + scrollWheelInput;
-                    touchScale(curSize);
+                    TouchScale(curSize);
                 }
             }
-            else
+#elif UNITY_ANDROID || UNITY_IOS
             {
                 if (Input.touchCount == 2)
                 {
@@ -171,7 +172,7 @@ namespace TripleMerge
 
                         var curSize = _sceneCamera.orthographicSize;
                         curSize /= currentDist / prevDist;
-                        touchScale(curSize);
+                        TouchScale(curSize);
                     }
                 }
                 else if (Input.touchCount == 1)
@@ -185,7 +186,7 @@ namespace TripleMerge
                         var prePos = _startTouch_1.position - _startTouch_1.deltaPosition;
                         var worldOffset = _sceneCamera.ScreenToWorldPoint(currentMousePos) - _sceneCamera.ScreenToWorldPoint(prePos);
                         _moveSpeed = worldOffset / Time.deltaTime;
-                        move(_moveSpeed);
+                        Move(_moveSpeed);
                     }
                 }
                 else
@@ -196,12 +197,14 @@ namespace TripleMerge
                         _moveSpeed = Vector3.zero;
                     }
 
-                    move(_moveSpeed);
+                    Move(_moveSpeed);
                 }
             }
+            
+#endif
         }
 
-        private void move(Vector3 speed)
+        private void Move(Vector3 speed)
         {
             if (speed == Vector3.zero) return;
 
@@ -226,9 +229,9 @@ namespace TripleMerge
             _sceneCamera.transform.position = nextPos;
         }
 
-        private void touchScale(float curSize)
+        private void TouchScale(float curSize)
         {
-            if (_sceneCamera.orthographicSize == curSize) return;
+            if (Mathf.Approximately(_sceneCamera.orthographicSize, curSize)) return;
 
             curSize = Mathf.Clamp(curSize, _minCameraSize, _maxCameraSize);
             _sceneCamera.orthographicSize = curSize;
@@ -236,25 +239,8 @@ namespace TripleMerge
             BoundLimit();
         }
 
-        private void CheckScaleRebound()
-        {
-            var minSize = _originCameraSize * _minCameraScale;
-            var maxSize = _originCameraSize * _maxCameraScale;
-            var curSize = _sceneCamera.orthographicSize;
-            if (curSize < minSize)
-            {
-                curSize = Mathf.Lerp(curSize, minSize, _reboundSpeed * Time.deltaTime);
-                _sceneCamera.orthographicSize = curSize;
-            }
-            else if (curSize > maxSize)
-            {
-                curSize = Mathf.Lerp(curSize, maxSize, _reboundSpeed * Time.deltaTime);
-                _sceneCamera.orthographicSize = curSize;
-            }
-        }
-
         // 通过公式计算出差值
-        private float calculateValue(float origin, float target, float percent)
+        private float CalculateValue(float origin, float target, float percent)
         {
             var diff = target - origin;
             return origin + diff * percent;
@@ -315,7 +301,7 @@ namespace TripleMerge
             cb?.Invoke();
         }
 
-        public void FocusTargetPosition(Vector3 position, float scale = 1.0f, bool check_boundary = false)
+        public void FocusTargetPosition(Vector3 position, float scale = 1.0f, bool checkBoundary = false)
         {
             var camera = _sceneCamera;
             scale = Mathf.Clamp(scale, _minCameraScale, _maxCameraScale);
@@ -324,7 +310,7 @@ namespace TripleMerge
             position.z = camera.transform.position.z;
             camera.transform.position = position;
 
-            if (check_boundary)
+            if (checkBoundary)
                 BoundLimit();
         }
 
@@ -332,7 +318,6 @@ namespace TripleMerge
         {
             _prevMousePos = Vector2.zero;
             _moveSpeed = Vector2.zero;
-            _autoTargetPos = Vector2.zero;
             _autoScale = 0;
             _autoMoveFlag = false;
             _autoMoveScaleFlag = false;
