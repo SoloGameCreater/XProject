@@ -11,9 +11,9 @@ namespace Editor.DataTableTools
 {
     public sealed class DataTableGenerator
     {
-        private const string DataTablePath = "Assets/GameMain/DataTables";
-        private const string CSharpCodePath = "Assets/GameMain/Scripts/DataTable";
-        private const string CSharpCodeTemplateFileName = "Assets/GameMain/Configs/DataTableCodeTemplate.txt";
+        private const string DataTablePath = "Assets/ExtraRes/Configs";
+        private const string CSharpCodePath = "Assets/GameMain/Scripts/Common/Config";
+        private const string CSharpCodeTemplateFileName = "Assets/ExtraRes/Configs/DataTableCodeTemplate.txt";
         private static readonly Regex EndWithNumberRegex = new Regex(@"\d+$");
         private static readonly Regex NameRegex = new Regex(@"^[A-Z][A-Za-z0-9_]*$");
 
@@ -56,7 +56,7 @@ namespace Editor.DataTableTools
             dataTableProcessor.SetCodeTemplate(CSharpCodeTemplateFileName, Encoding.UTF8);
             dataTableProcessor.SetCodeGenerator(DataTableCodeGenerator);
 
-            string csharpCodeFileName = Utility.Path.GetRegularPath(Path.Combine(CSharpCodePath, "DR" + dataTableName + ".cs"));
+            string csharpCodeFileName = Utility.Path.GetRegularPath(Path.Combine(CSharpCodePath, dataTableName + "Cfg.cs"));
             if (!dataTableProcessor.GenerateCodeFile(csharpCodeFileName, Encoding.UTF8, dataTableName) && File.Exists(csharpCodeFileName))
             {
                 File.Delete(csharpCodeFileName);
@@ -68,7 +68,7 @@ namespace Editor.DataTableTools
             string dataTableName = (string)userData;
 
             codeContent.Replace("__DATA_TABLE_CREATE_TIME__", DateTime.UtcNow.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss.fff"));
-            codeContent.Replace("__DATA_TABLE_NAME_SPACE__", "StarForce");
+            codeContent.Replace("__DATA_TABLE_NAME_SPACE__", $"{dataTableName}");
             codeContent.Replace("__DATA_TABLE_CLASS_NAME__", "DR" + dataTableName);
             codeContent.Replace("__DATA_TABLE_COMMENT__", dataTableProcessor.GetValue(0, 1) + "。");
             codeContent.Replace("__DATA_TABLE_ID_COMMENT__", "获取" + dataTableProcessor.GetComment(dataTableProcessor.IdColumn) + "。");
