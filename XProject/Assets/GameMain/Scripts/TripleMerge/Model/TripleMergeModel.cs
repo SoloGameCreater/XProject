@@ -19,9 +19,9 @@ namespace TripleMerge
                 SaveFileTripleMerge.OpenRegionIds.Add(regionId);
         }
 
-        public List<MergeableItemCfg> GetMergeableItem(int id)
+        public MergeableItemCfg GetMergeableItem(int id)
         {
-            return TripleMergeConfigManager.Instance.MergeableItemCfgList.FindAll(x => x.Id == id);
+            return TripleMergeConfigManager.Instance.MergeableItemCfgList.Find(x => x.Id == id);
         }
     }
 }
