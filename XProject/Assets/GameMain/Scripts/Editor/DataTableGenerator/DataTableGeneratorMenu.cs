@@ -1,13 +1,12 @@
-﻿
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Linq;
-using System.Text;
+using Newtonsoft.Json;
 using GameFramework;
-using Excel;
 using UnityEditor;
 using UnityEngine;
+using ExcelDataReader;
 
 namespace Editor.DataTableTools
 {
@@ -15,16 +14,14 @@ namespace Editor.DataTableTools
     {
         private const string DataTablePath = "Assets/ExtraRes/Configs";
         private const string DataTableExcelPath = "Assets/ExtraRes/Configs/Excel";
-        
+
         [MenuItem("Config/Generate DataTables")]
         private static void GenerateDataTables()
         {
             var dataTableName = "MergeableItem";
+            ConvertExcelToJson(DataTableExcelPath + "/" + dataTableName + ".xlsx", DataTablePath + "/" + dataTableName + ".json");
             //foreach (string dataTableName in ProcedurePreload.DataTableNames)
             {
-                ConvertDataTableToText(dataTableName);
-                AssetDatabase.Refresh();
-                return;
                 DataTableProcessor dataTableProcessor = DataTableGenerator.CreateDataTableProcessor(dataTableName);
                 if (!DataTableGenerator.CheckRawData(dataTableProcessor, dataTableName))
                 {
@@ -32,7 +29,7 @@ namespace Editor.DataTableTools
                     //break;
                     return;
                 }
-            
+
                 DataTableGenerator.GenerateDataFile(dataTableProcessor, dataTableName);
                 DataTableGenerator.GenerateCodeFile(dataTableProcessor, dataTableName);
             }
@@ -40,65 +37,50 @@ namespace Editor.DataTableTools
             AssetDatabase.Refresh();
         }
 
-        private static void ConvertDataTableToText(string dataTableName)
+        private static void ConvertExcelToJson(string excelFilePath, string jsonOutputPath)
         {
-            try
+            // 打开Excel文件
+            FileStream stream = File.Open(excelFilePath, FileMode.Open, FileAccess.Read);
+            IExcelDataReader excelReader = ExcelReaderFactory.CreateReader(stream);
+
+            // 读取Excel文件
+            DataSet result = excelReader.AsDataSet();
+
+            // 获取第一个工作表
+            DataTable table = result.Tables[0];
+
+            // 创建一个用于存储行的列表
+            List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
+
+            // 获取列名
+            string[] columnNames = new string[table.Columns.Count];
+            for (int i = 0; i < table.Columns.Count; i++)
             {
-                // 获取 Excel 文件夹中的 .xlsx 文件
-                string[] files = Directory.GetFiles(DataTableExcelPath, "*.xlsx")
-                                          .Select(f => f.Replace('\\', '/'))
-                                          .ToArray();
-
-                if (!files.Contains(dataTableName)) return;
-
-                foreach (string file in files)
-                {
-                    ProcessExcelFile(file);
-                }
-
-                Debug.Log("转换完成: " + dataTableName);
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError("转换失败: " + ex.Message);
-            }
-        }
-
-        // 处理单个 Excel 文件
-        private static void ProcessExcelFile(string filePath)
-        {
-            using FileStream fs = File.Open(filePath, FileMode.Open, FileAccess.Read);
-            using var excelDataReader = ExcelReaderFactory.CreateOpenXmlReader(fs);
-    
-            DataTable table = excelDataReader.AsDataSet().Tables[0];
-            SaveTableToTxt(filePath, table);
-        }
-
-        // 将 DataTable 保存为 TXT 文件
-        private static void SaveTableToTxt(string filePath, DataTable table)
-        {
-            string fileName = Path.GetFileNameWithoutExtension(filePath);
-            string outputPath = Path.Combine(DataTablePath, fileName + ".txt");
-
-            if (File.Exists(outputPath))
-            {
-                File.Delete(outputPath);
+                columnNames[i] = table.Columns[i].ColumnName;
             }
 
-            using FileStream fs = new FileStream(outputPath, FileMode.Create);
-            using StreamWriter sw = new StreamWriter(fs);
-            StringBuilder sb = new StringBuilder();
-
+            // 遍历行并添加到列表
             foreach (DataRow row in table.Rows)
             {
-                sb.Clear();
-                foreach (var item in row.ItemArray)
+                Dictionary<string, object> rowDict = new Dictionary<string, object>();
+                for (int i = 0; i < columnNames.Length; i++)
                 {
-                    sb.Append(item).Append("\t");
+                    rowDict[columnNames[i]] = row[i];
                 }
-                sw.WriteLine(sb.ToString().TrimEnd()); // 移除末尾的 Tab
-            }
-        }
 
+                rows.Add(rowDict);
+            }
+
+            // 将列表转换为JSON格式
+            string json = JsonConvert.SerializeObject(rows, Formatting.Indented);
+
+            // 输出到文件
+            File.WriteAllText(jsonOutputPath, json);
+
+            // 关闭读取器
+            excelReader.Close();
+
+            Debug.Log("Excel转换为JSON成功！");
+        }
     }
 }
