@@ -106,6 +106,10 @@ namespace Editor.DataTableTools
                             else
                                 rowDict[name] = Convert.ToInt32(row[i]);
                         }
+                        else if(typeName == "arraynumber")
+                        {
+                            rowDict[name] = ParseStringToIntArray(row[i].ToString());
+                        }
                         else
                         {
                             rowDict[nameRow[i].ToString()] = row[i];
@@ -133,6 +137,23 @@ namespace Editor.DataTableTools
             }
 
             Debug.Log("Excel转换为JSON成功！");
+        }
+        
+        // 将逗号分隔的字符串转换为整数数组
+        static int[] ParseStringToIntArray(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return new int[0]; // 如果为空，返回空数组
+
+            string[] parts = input.Split(','); // 按逗号分割字符串
+            int[] result = new int[parts.Length];
+
+            for (int i = 0; i < parts.Length; i++)
+            {
+                result[i] = int.Parse(parts[i].Trim()); // 转换为整数并去除空格
+            }
+
+            return result;
         }
     }
 }

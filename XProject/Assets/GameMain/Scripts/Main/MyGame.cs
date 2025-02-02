@@ -2,11 +2,12 @@
 using Framework;
 using Gameplay.SubSystems;
 using TripleMerge;
+using Config.TripleMerge;
 using Game = Framework.Game;
 
 public class MyGame : Game
 {
-    private const float UPDATE_INTERVAL = 1.0f / 30.0f; // 逻辑帧率(1秒30帧)
+    private const float UPDATE_INTERVAL = 1.0f / 60.0f; // 逻辑帧率(1秒30帧)
     private float _elapsed;
 
     protected override void OnInit()
@@ -67,7 +68,7 @@ public class MyGame : Game
             //_subSystemManager.AddSubSystem<StorageSubSystem>();
 
             //配置
-            //_subSystemManager.AddSubSystem<My.Config.Game.GameConfigManager>();
+            _subSystemManager.AddSubSystem<TripleMergeConfigManager>();
             
         }
     }

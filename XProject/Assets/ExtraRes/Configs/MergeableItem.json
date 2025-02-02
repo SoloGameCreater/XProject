@@ -1,0 +1,24 @@
+[
+  {
+    "id": 399999,
+    "name": "101",
+    "desc": "101",
+    "quality": 1,
+    "itemType": 11,
+    "isInitUnlock": false,
+    "cellSize": [
+      1,
+      1
+    ],
+    "prefab": "ThreeMergeBox",
+    "icon": "test_three_merge_box",
+    "level": 1,
+    "salePrice": 0,
+    "purchasePrice": 0,
+    "balloonPrice": 0,
+    "canMergeWithOmnipotentCard": false,
+    "useWay": 1,
+    "flyTo": 2,
+    "isDisplayLightVfx": false
+  }
+]
