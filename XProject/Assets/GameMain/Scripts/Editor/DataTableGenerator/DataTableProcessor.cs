@@ -8,7 +8,7 @@ using System.Text;
 using UnityEngine;
 using UnityGameFramework.Runtime;
 
-namespace StarForce.Editor.DataTableTools
+namespace Editor.DataTableTools
 {
     public sealed partial class DataTableProcessor
     {

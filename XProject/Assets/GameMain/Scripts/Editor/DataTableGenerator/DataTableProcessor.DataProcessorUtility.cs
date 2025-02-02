@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace StarForce.Editor.DataTableTools
+namespace Editor.DataTableTools
 {
     public sealed partial class DataTableProcessor
     {

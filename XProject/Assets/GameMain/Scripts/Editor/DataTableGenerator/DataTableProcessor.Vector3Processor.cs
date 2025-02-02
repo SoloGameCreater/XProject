@@ -2,7 +2,7 @@
 using System.IO;
 using UnityEngine;
 
-namespace StarForce.Editor.DataTableTools
+namespace Editor.DataTableTools
 {
     public sealed partial class DataTableProcessor
     {
