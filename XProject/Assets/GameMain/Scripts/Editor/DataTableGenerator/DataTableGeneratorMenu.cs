@@ -87,27 +87,30 @@ namespace Editor.DataTableTools
                         if (typeName == "note") continue;
                         if (DBNull.Value.Equals(row[i])) continue;
                         
+                        // 首字母确保小写
+                        var temp = nameRow[i].ToString();
+                        var name = char.ToLower(temp[0]) + temp.Substring(1);
+                        
                         if(typeName == "string")
-                            rowDict[nameRow[i].ToString()] = row[i].ToString();
+                            rowDict[name] = row[i].ToString();
                         else if(typeName == "int")
-                            rowDict[nameRow[i].ToString()] = Convert.ToInt32(row[i]);
+                            rowDict[name] = Convert.ToInt32(row[i]);
                         else if(typeName == "float")
-                            rowDict[nameRow[i].ToString()] = Convert.ToSingle(row[i]);
+                            rowDict[name] = Convert.ToSingle(row[i]);
                         else if(typeName == "bool")
-                            rowDict[nameRow[i].ToString()] = row[i].ToString() == "1";
+                            rowDict[name] = row[i].ToString() == "1";
                         else if (typeName == "number")
                         {
                             if (row[i].ToString().Contains('.'))
-                                rowDict[nameRow[i].ToString()] = Convert.ToSingle(row[i]);
+                                rowDict[name] = Convert.ToSingle(row[i]);
                             else
-                                rowDict[nameRow[i].ToString()] = Convert.ToInt32(row[i]);
+                                rowDict[name] = Convert.ToInt32(row[i]);
                         }
                         else
                         {
                             rowDict[nameRow[i].ToString()] = row[i];
                             Debug.LogWarning($"没有处理的类型 {typeName}");
                         }
-                        //rowDict[columnNames[i]] = row[i];
                     }
 
                     rows.Add(rowDict);
