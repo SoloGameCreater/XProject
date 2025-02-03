@@ -19,6 +19,13 @@ namespace TripleMerge
             
             Gameplay = new TripleMergeGameplay();
             Gameplay.Init();
+
+            // 生成一个宝箱
+            var cfg = Model.GetMergeableItem(99999);
+            if (cfg != null)
+            {
+                
+            }
         }
 
         public void Update(float deltaTime)
