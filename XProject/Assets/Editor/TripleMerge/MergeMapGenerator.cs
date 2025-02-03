@@ -71,14 +71,14 @@ namespace Editor.TripleMerge
                         Vector3 worldPos = _tilemap.GetCellCenterWorld(cellPosition);
                         
                         // 在对应位置创建cell
-                        CreateText(worldPos, $"{x},{y}");
+                        CreateCell(worldPos, $"{x},{y}");
                     }
                 }
             }
 
             return true;
         }
-        void CreateText(Vector3 position, string text)
+        void CreateCell(Vector3 position, string text)
         {
             GameObject cellObj = Instantiate(_mergeCellPrefab, position, Quaternion.identity, _regionObj.transform);
             cellObj.name = $"Cell_[{text}]";

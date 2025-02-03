@@ -71,7 +71,7 @@ MonoBehaviour:
       AssetTags: BASE_RES
       ActiveRuleName: EnableGroup
       Collectors: []
-    - GroupName: TripleMatch
+    - GroupName: TripleMerge
       GroupDesc: 
       AssetTags: 
       ActiveRuleName: EnableGroup
