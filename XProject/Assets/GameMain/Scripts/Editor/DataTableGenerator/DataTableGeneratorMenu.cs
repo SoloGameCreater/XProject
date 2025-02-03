@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using Newtonsoft.Json;
-using GameFramework;
 using UnityEditor;
 using UnityEngine;
 using ExcelDataReader;
@@ -16,24 +15,24 @@ namespace Editor.DataTableTools
         private const string DataTableExcelPath = "Assets/ExtraRes/Configs/Excel";
 
         [MenuItem("Config/Generate DataTables")]
-        private static void GenerateDataTables()
+        public static void GenerateDataTables()
         {
             var dataTableName = "MergeableItem";
             ConvertExcelToJson(DataTableExcelPath + "/" + dataTableName + ".xlsx", DataTablePath + "/" + dataTableName + ".json");
             return;
             //foreach (string dataTableName in ProcedurePreload.DataTableNames)
-            {
-                DataTableProcessor dataTableProcessor = DataTableGenerator.CreateDataTableProcessor(dataTableName);
-                if (!DataTableGenerator.CheckRawData(dataTableProcessor, dataTableName))
-                {
-                    Debug.LogError(Utility.Text.Format("Check raw data failure. DataTableName='{0}'", dataTableName));
-                    //break;
-                    return;
-                }
-
-                DataTableGenerator.GenerateDataFile(dataTableProcessor, dataTableName);
-                DataTableGenerator.GenerateCodeFile(dataTableProcessor, dataTableName);
-            }
+            // {
+            //     DataTableProcessor dataTableProcessor = DataTableGenerator.CreateDataTableProcessor(dataTableName);
+            //     if (!DataTableGenerator.CheckRawData(dataTableProcessor, dataTableName))
+            //     {
+            //         Debug.LogError(Utility.Text.Format("Check raw data failure. DataTableName='{0}'", dataTableName));
+            //         //break;
+            //         return;
+            //     }
+            //
+            //     DataTableGenerator.GenerateDataFile(dataTableProcessor, dataTableName);
+            //     DataTableGenerator.GenerateCodeFile(dataTableProcessor, dataTableName);
+            // }
 
             AssetDatabase.Refresh();
         }

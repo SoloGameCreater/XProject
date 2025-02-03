@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using UnityEditor.SceneManagement;
 using UnityEditor;
 using UnityEngine;
+using Editor.DataTableTools;
 
 public class EditorHelper : EditorWindow
 {
     [MenuItem("Helper/RunGame %#&p")]
     static void Init()
     {
-        // Get existing open window or if none, make a new one:
-        //EditorHelper window = (EditorHelper)EditorWindow.GetWindow(typeof(EditorHelper));
-        string curScene = EditorSceneManager.GetActiveScene().name;
-        //EditorApplication.SaveScene();
+        // 自动拆分一次配置表
+        DataTableGeneratorMenu.GenerateDataTables();
         EditorSceneManager.OpenScene("Assets/Scenes/Main.unity");
         EditorApplication.isPlaying = true;
     }

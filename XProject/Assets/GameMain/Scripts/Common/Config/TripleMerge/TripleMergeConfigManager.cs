@@ -23,7 +23,7 @@ namespace Config.TripleMerge
                 
                 default: throw new ArgumentOutOfRangeException(nameof(subModule), subModule, null);
             }
-            var path = $"Configs/{subModule}";
+            var path = $"Configs/DataJson/{subModule}";
             var ta = ResourcesManager.Instance.LoadResource<TextAsset>(path);
             if (string.IsNullOrEmpty(ta.text))
             {
