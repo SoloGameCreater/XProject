@@ -29,8 +29,8 @@ MonoBehaviour:
       AssetTags: BASE_RES
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/ExtraRes/Configs
-        CollectorGUID: 87c026367b16a264f8b4001d5fd8a0cb
+      - CollectPath: Assets/ExtraRes/Configs/LocaleConfig
+        CollectorGUID: d5bc26ece36dc4c41b01d646e595741e
         CollectorType: 0
         AddressRuleName: AddressDisable
         PackRuleName: PackDirectory
@@ -41,6 +41,14 @@ MonoBehaviour:
         CollectorGUID: 52d418b3bbe3595459d3359a6a98e6bc
         CollectorType: 0
         AddressRuleName: AddressDisable
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/ExtraRes/Configs/DataJson
+        CollectorGUID: e65435d69e228c24e94b9402437224f0
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory
         FilterRuleName: CollectAll
         AssetTags: 

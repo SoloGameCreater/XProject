@@ -12,7 +12,7 @@ namespace Editor.DataTableTools
 {
     public sealed class DataTableGeneratorMenu
     {
-        private const string DataTablePath = "Assets/ExtraRes/Configs";
+        private const string DataTablePath = "Assets/ExtraRes/Configs/DataJson";
         private const string DataTableExcelPath = "Assets/ExtraRes/Configs/Excel";
 
         [MenuItem("Config/Generate DataTables")]
