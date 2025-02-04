@@ -7,7 +7,7 @@ namespace TripleMerge
     {
         public TripleMergeMapManager MapManager { get; } = new();
 
-        private List<ITripleMergeComponent> _components = new();
+        private readonly List<ITripleMergeComponent> _components = new();
         // 三合功能根节点
         public Transform MergeRoot { private set; get; }
         

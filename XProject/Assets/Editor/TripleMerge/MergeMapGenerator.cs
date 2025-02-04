@@ -12,7 +12,6 @@ namespace Editor.TripleMerge
     {
         private GameObject _mapRoot;
         private Transform _cellRoot;
-        private Transform _terrainGrid;
         private Tilemap _tilemap;
 
         private GameObject _regionObj;
@@ -22,10 +21,9 @@ namespace Editor.TripleMerge
 
         public override void OnToolGUI(EditorWindow window)
         {
-            _mapRoot = GameObject.Find("MergeMapRoot");
-            _cellRoot = _mapRoot?.transform.Find("CellNode");
-            _terrainGrid = _mapRoot?.transform.Find("Terrain");
-            _tilemap = _terrainGrid?.Find("Grass").GetComponent<Tilemap>();
+            _mapRoot = GameObject.Find("AreaRootEditor");
+            _cellRoot = _mapRoot?.transform.Find("LogicNode/MergeableRegion");
+            _tilemap = _mapRoot?.transform.Find("Terrain/Grass").GetComponent<Tilemap>();
             _mergeCellPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(CellPrefabPath);
             Handles.BeginGUI();
 
@@ -46,7 +44,6 @@ namespace Editor.TripleMerge
         private bool GenerateMap()
         {
             if (_mapRoot == null) return false;
-            if (_terrainGrid == null) return false;
             if (_cellRoot == null) return false;
             if (_tilemap == null) return false;
             if (_mergeCellPrefab == null) return false;
