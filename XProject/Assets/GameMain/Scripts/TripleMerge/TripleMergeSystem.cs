@@ -8,15 +8,8 @@ namespace TripleMerge
         public TripleMergeGameplay Gameplay { get; private set; }
         public TripleMergeModel Model { get; } = new();
         
-        public GameObject Root;
-        public GameObject ItemRoot;
-        
         public void OnEnterTripleMerge()
         {
-            Root = new GameObject("TripleMergeRoot");
-            ItemRoot = new GameObject("Item");
-            ItemRoot.transform.parent = Root.transform;
-            
             Gameplay = new TripleMergeGameplay();
             Gameplay.Init();
 

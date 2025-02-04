@@ -6,16 +6,23 @@ namespace TripleMerge
     public class TripleMergeGameplay
     {
         public TripleMergeMapManager MapManager { get; } = new();
-        public TripleMergeCameraManager CameraManager { get; } = new();
 
         private List<ITripleMergeComponent> _components = new();
+        // 三合功能根节点
+        public Transform MergeRoot { private set; get; }
         
+        // load map root
+        const string MapRootPrefabAssetName = "TripleMerge/Prefabs/MergeRoot";
         public void Init()
         {
             TripleMergeSystem.Instance.Model.ClearData();
             _components.Clear();
             _components.Add(MapManager);
-            _components.Add(CameraManager);
+
+            var mainCamera = Camera.main;
+            var cameraTrans = mainCamera.transform;
+
+            MergeRoot = Utils.InstantiateWorldGameObject(MapRootPrefabAssetName, cameraTrans.parent).transform;
             
             _components.ForEach(c => c.OnInitialize());
         }

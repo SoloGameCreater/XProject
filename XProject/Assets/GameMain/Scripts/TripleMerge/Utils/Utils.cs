@@ -12,7 +12,7 @@ namespace TripleMerge
 
         public static GameObject InstantiateWorldGameObject(string prefabName, Transform parent)
         {
-            var obj = ResourcesManager.Instance.LoadResourceByKey<GameObject>(prefabName);
+            var obj = ResourcesManager.Instance.LoadResource<GameObject>(prefabName);
             return Object.Instantiate(obj, parent);
         }
     }

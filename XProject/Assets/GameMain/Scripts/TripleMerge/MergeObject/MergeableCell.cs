@@ -121,11 +121,40 @@ namespace TripleMerge
         }
 
         /// <summary>
-        /// 初始化地块
+        /// 地块状态初始化
         /// </summary>
         /// <param name="isNeverStorageBefore"></param>
         private void InitCellStatus(bool isNeverStorageBefore)
         {
+            // 如果从存档数据中读取的状态是未设置，则代表是初始状态
+            // if (isNeverStorageBefore)
+            // {
+            //     if (HostRegion.HostArea.AreaRegionDictionary.TryGetValue(HostRegionId, out var belongToAreaRegion) && !belongToAreaRegion.IsUnlock())
+            //     {
+            //         CellStatus = ECellStatus.Locked;
+            //     }
+            //     else
+            //     {
+            //         //读取初始配置信息，如果初始配置时，该地块需要一定数量的净化值，则代表其初始状态是未净化状态
+            //         CellStatus = RequiredPurifiedNum > 0 ? ECellStatus.UnPurified : ECellStatus.Mergeable;
+            //     }
+            //
+            //     ThreeMergeSystem.Instance.Model.SetCellState(_storageData, (int) CellStatus);
+            // }
+            // else
+            // {
+            //     //首先从存档数据中读取状态
+            //     CellStatus = (ECellStatus) _storageData.State;
+            //
+            //     if (CellStatus == ECellStatus.Locked) //如果时锁定的地块，从新检查路段解锁状态，防止某些情况路段解锁了之后地块信息没正常更新
+            //     {
+            //         if (HostRegion.HostArea.AreaRegionDictionary.TryGetValue(HostRegionId, out var belongToAreaRegion) && belongToAreaRegion.IsUnlock())
+            //         {
+            //             //读取初始配置信息，如果初始配置时，该地块需要一定数量的净化值，则代表其初始状态是未净化状态
+            //             CellStatus = RequiredPurifiedNum > 0 ? ECellStatus.UnPurified : ECellStatus.Mergeable;
+            //         }
+            //     }
+            // }
         }
 
         private void InitPlacedItem(bool isNeverStorageBefore)
