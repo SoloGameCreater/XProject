@@ -18,7 +18,7 @@ namespace TripleMerge
             GameObject mapPrefab = ResourcesManager.Instance.LoadResource<GameObject>($"TripleMerge/Prefabs/{MapRootPrefabAssetName}");
             GameObject regionPrefab = ResourcesManager.Instance.LoadResource<GameObject>($"TripleMerge/Prefabs/Region/{RegionPrefabAssetName}");
             MapRoot = GameObject.Instantiate(mapPrefab, TripleMergeSystem.Instance.Root.transform);
-            CellNode = GameObject.Instantiate(regionPrefab, MapRoot.transform.Find("ItemNode"));
+            CellNode = GameObject.Instantiate(regionPrefab, MapRoot.transform.Find("CellNode"));
 
             LoadMap();
         }

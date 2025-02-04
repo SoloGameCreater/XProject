@@ -1,3 +1,4 @@
+using TripleMerge;
 using UnityEditor;
 using UnityEditor.EditorTools;
 using UnityEngine;
@@ -21,7 +22,7 @@ namespace Editor.TripleMerge
         public override void OnToolGUI(EditorWindow window)
         {
             _mapRoot = GameObject.Find("MergeMaoRoot");
-            _cellRoot = _mapRoot?.transform.Find("ItemNode");
+            _cellRoot = _mapRoot?.transform.Find("CellNode");
             _terrainGrid = _mapRoot?.transform.Find("Terrain");
             _tilemap = _terrainGrid?.Find("Grass").GetComponent<Tilemap>();
             _mergeCellPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(CellPrefabPath);
@@ -81,6 +82,7 @@ namespace Editor.TripleMerge
         void CreateCell(Vector3 position, string text)
         {
             GameObject cellObj = Instantiate(_mergeCellPrefab, position, Quaternion.identity, _regionObj.transform);
+            cellObj.AddComponent<MergeableCell>();
             cellObj.name = $"Cell_[{text}]";
         }
     }
