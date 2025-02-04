@@ -19,6 +19,15 @@ namespace TripleMerge
                 SaveFileTripleMerge.OpenRegionIds.Add(regionId);
         }
 
+        public SaveFileTripleMergeCellData GetOrCreateCellData(string cellKey)
+        {
+            if (SaveFileTripleMerge.Cells.TryGetValue(cellKey, out var cellData)) return cellData;
+
+            cellData = new SaveFileTripleMergeCellData();
+            SaveFileTripleMerge.Cells.Add(cellKey, cellData);
+            return cellData;
+        }
+
         /// <summary>
         /// 通过ID获取合成物
         /// </summary>
@@ -38,8 +47,8 @@ namespace TripleMerge
         {
             foreach (var itemCfg in TripleMergeConfigManager.Instance.MergeableItemCfgList)
             {
-                if(itemCfg.ChainId != mergeChainId) continue;
-                if(itemCfg.Level == 1) return itemCfg;
+                if (itemCfg.ChainId != mergeChainId) continue;
+                if (itemCfg.Level == 1) return itemCfg;
             }
 
             return null;

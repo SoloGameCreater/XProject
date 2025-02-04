@@ -21,5 +21,14 @@ namespace SaveFile.TripleMerge
                 }
             }
         }
+
+        // 地图上的地块字典
+        [JsonProperty] SaveFileDictionary<string, SaveFileTripleMergeCellData> cells = new SaveFileDictionary<string, SaveFileTripleMergeCellData>();
+
+        [JsonIgnore]
+        public SaveFileDictionary<string, SaveFileTripleMergeCellData> Cells
+        {
+            get { return cells; }
+        }
     }
 }

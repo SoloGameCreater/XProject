@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using DG.Tweening;
+using SaveFile.TripleMerge;
 using TripleMerge;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -18,10 +19,10 @@ namespace TripleMerge
     {
         public enum ECellStatus
         {
-            Unset,//未设置
-            Mergeable,//可合成
-            UnPurified,//未净化
-            Locked,//未解锁
+            Unset, //未设置
+            Mergeable, //可合成
+            UnPurified, //未净化
+            Locked, //未解锁
         }
 
         public enum EVertexType
@@ -31,13 +32,17 @@ namespace TripleMerge
             RightBottom,
             RightTop,
         }
+
         //地块状态
         public ECellStatus CellStatus;
+
+        //地块坐标
+        public Vector2Int MapCoordinate;
 
         /// <summary>
         /// 所属三合区域
         /// </summary>
-        //public MergeableRegion HostRegion { private set; get; }
+        public MergeableRegion HostRegion { private set; get; }
 
         private OnCellObject _placeableItem;
 
@@ -80,20 +85,24 @@ namespace TripleMerge
         /// Collider
         /// </summary>
         private PolygonCollider2D _cellCollider;
-        
+
         public Transform PlaceItemRoot { private set; get; }
 
         private bool _isMouseDown;
 
         private bool _isInitialized;
-        
-        public void Initialize(/*MergeableRegion hostRegion*/)
+
+        // 存档数据
+        private SaveFileTripleMergeCellData _saveData;
+        private string SaveKey => $"{MapCoordinate.x}_{MapCoordinate.y}";
+
+        public void Initialize(MergeableRegion hostRegion)
         {
-            //HostRegion = hostRegion;
+            HostRegion = hostRegion;
 
             _cellCollider = transform.GetComponent<PolygonCollider2D>();
 
-            InteractiveTrigger = transform.Find("Trigger").GetComponent<BoxCollider2D>();
+            InteractiveTrigger = transform.Find("Center").GetComponent<BoxCollider2D>();
 
             PlaceItemRoot = new GameObject("PlaceItemRoot").transform;
             PlaceItemRoot.SetParent(transform);
@@ -103,9 +112,8 @@ namespace TripleMerge
         public void LoadData()
         {
             _isInitialized = false;
-            
-            //var isNeverStorageBefore = _storageData.State == (int)ECellStatus.Unset;
-            var isNeverStorageBefore = true;
+            _saveData = TripleMergeSystem.Instance.Model.GetOrCreateCellData(SaveKey);
+            var isNeverStorageBefore = _saveData.State == (int)ECellStatus.Unset;
             InitCellStatus(isNeverStorageBefore);
             InitPlacedItem(isNeverStorageBefore);
 
@@ -118,7 +126,6 @@ namespace TripleMerge
         /// <param name="isNeverStorageBefore"></param>
         private void InitCellStatus(bool isNeverStorageBefore)
         {
-            
         }
 
         private void InitPlacedItem(bool isNeverStorageBefore)
@@ -138,17 +145,16 @@ namespace TripleMerge
             }
 
             // todo 并且先清除其原本的地块信息
-            
+
 
             // todo 首先将合成物放到自身地块的位置中心
-            
         }
 
         private void SetPlacedItem(OnCellObject item, bool isInvokeByElf, bool showMovement)
         {
             var tobeReplaceItems = ListPool<OnCellObject>.Get();
         }
-        
+
 
         public bool TryToMerge(OnCellObject item = null, bool isInvokeByElf = false, bool skipMergeProgress = false, Action<int> onFinish = null)
         {
@@ -168,7 +174,7 @@ namespace TripleMerge
             {
                 return false;
             }
-            
+
 
             var continuousCell = GetContinuousSameItems(OnCellObject);
             var continuousCnt = continuousCell.Count;
@@ -178,17 +184,14 @@ namespace TripleMerge
 
                 Debug.Log($"三合开始");
                 // 能够进行合成的情况，先进行合成计算，合成完毕后，再对合成完毕后的合成物进行新的位置分配
-                DoMerge(ref continuousCell, isInvokeByElf, (finalMergeItemId, mergeResult) =>
-                {
-                    Debug.Log($"三合完成");
-                }, skipMergeProgress);
+                DoMerge(ref continuousCell, isInvokeByElf, (finalMergeItemId, mergeResult) => { Debug.Log($"三合完成"); }, skipMergeProgress);
 
                 return true;
             }
 
             return false;
         }
-        
+
         private void DoMerge(ref IReadOnlyList<MergeableObject> continuousItems, bool isInvokeByElf, Action<int, Dictionary<int, int>> onMergeCompleted = null,
                              bool skipMergeProgress = false)
         {
@@ -238,7 +241,7 @@ namespace TripleMerge
         {
             return null;
         }
-        
+
         #region input listener
 
         public void OnMouseDown()

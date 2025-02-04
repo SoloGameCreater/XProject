@@ -1,3 +1,4 @@
+using CommonExtensions;
 using TripleMerge;
 using UnityEditor;
 using UnityEditor.EditorTools;
@@ -18,10 +19,10 @@ namespace Editor.TripleMerge
 
         private const string CellPrefabPath = "Assets/ExtraRes/TripleMerge/Prefabs/MergeCell/MergeableCell.prefab";
         private GameObject _mergeCellPrefab;
-        
+
         public override void OnToolGUI(EditorWindow window)
         {
-            _mapRoot = GameObject.Find("MergeMaoRoot");
+            _mapRoot = GameObject.Find("MergeMapRoot");
             _cellRoot = _mapRoot?.transform.Find("CellNode");
             _terrainGrid = _mapRoot?.transform.Find("Terrain");
             _tilemap = _terrainGrid?.Find("Grass").GetComponent<Tilemap>();
@@ -32,31 +33,34 @@ namespace Editor.TripleMerge
             {
                 if (GUILayout.Button("Merge Map"))
                 {
-                    if(GenerateMap())
+                    if (GenerateMap())
                         Debug.Log("Merge Map");
                     else
                         Debug.LogWarning("Generate map failed");
                 }
             }
-            
+
             Handles.EndGUI();
         }
 
         private bool GenerateMap()
         {
-            if(_mapRoot == null) return false;
-            if(_terrainGrid == null) return false;
-            if(_cellRoot == null) return false;
+            if (_mapRoot == null) return false;
+            if (_terrainGrid == null) return false;
+            if (_cellRoot == null) return false;
             if (_tilemap == null) return false;
             if (_mergeCellPrefab == null) return false;
             if (_regionObj != null)
             {
                 DestroyImmediate(_regionObj);
             }
+
             _regionObj = new GameObject("Region");
             _regionObj.transform.SetParent(_cellRoot);
             _regionObj.transform.Reset();
-            
+            // 合成地块管理
+            _regionObj.AddComponent<MergeableRegion>();
+
             // 获取地图grid信息
             BoundsInt bounds = _tilemap.cellBounds;
 
@@ -70,7 +74,7 @@ namespace Editor.TripleMerge
                     if (tile != null)
                     {
                         Vector3 worldPos = _tilemap.GetCellCenterWorld(cellPosition);
-                        
+
                         // 在对应位置创建cell
                         CreateCell(worldPos, $"{x},{y}");
                     }
@@ -79,6 +83,7 @@ namespace Editor.TripleMerge
 
             return true;
         }
+
         void CreateCell(Vector3 position, string text)
         {
             GameObject cellObj = Instantiate(_mergeCellPrefab, position, Quaternion.identity, _regionObj.transform);
