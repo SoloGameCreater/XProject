@@ -7,6 +7,8 @@ namespace TripleMerge
     public class MapAreaComponent : MonoBehaviour
     {
         public Dictionary<Vector2Int, MergeableCell> MergeableCellsDictionary { private set; get; } = new();
+        // todo 
+        //public Dictionary<int, MapAreaRegion> AreaRegionDictionary { private set; get; } = new();
         public void Initialize()
         {
             InitRegions();
@@ -26,7 +28,7 @@ namespace TripleMerge
             if (mergeableRegion == null) return;
 
             // 初始化所有区域状态
-            var mergeableCells = mergeableRegion.Initialize();
+            var mergeableCells = mergeableRegion.Initialize(this);
             foreach (var mergeableCell in mergeableCells)
             {
                 MergeableCellsDictionary[mergeableCell.MapCoordinate] = mergeableCell;

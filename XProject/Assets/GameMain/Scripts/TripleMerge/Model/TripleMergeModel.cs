@@ -27,7 +27,11 @@ namespace TripleMerge
             SaveFileTripleMerge.Cells.Add(cellKey, cellData);
             return cellData;
         }
-
+        // 修改地块状态
+        public void SetCellState(SaveFileTripleMergeCellData cellData, int statusValue)
+        {
+            cellData.State = statusValue;
+        }
         /// <summary>
         /// 通过ID获取合成物
         /// </summary>

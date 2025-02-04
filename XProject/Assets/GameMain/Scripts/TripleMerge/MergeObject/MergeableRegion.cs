@@ -6,8 +6,11 @@ namespace TripleMerge
 {
     public class MergeableRegion : MonoBehaviour
     {
-        public List<MergeableCell> Initialize()
+        public MapAreaComponent BelongArea { private set; get; }
+        public List<MergeableCell> Initialize(MapAreaComponent mapArea)
         {
+            BelongArea = mapArea;
+            
             var ret = ListPool<MergeableCell>.Get();
 
             var cellsArray = transform.GetComponentsInChildren<MergeableCell>();
