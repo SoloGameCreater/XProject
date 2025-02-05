@@ -7,7 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using ExcelDataReader;
 
-namespace Editor.DataTableTools
+namespace DataTableTools
 {
     public sealed class DataTableGeneratorMenu
     {

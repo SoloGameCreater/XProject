@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-namespace Editor.DataTableTools
+namespace DataTableTools
 {
     public sealed class DataTableGenerator
     {

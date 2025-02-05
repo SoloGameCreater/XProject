@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Editor.DataTableTools
+namespace DataTableTools
 {
     public sealed partial class DataTableProcessor
     {

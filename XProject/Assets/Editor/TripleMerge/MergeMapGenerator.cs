@@ -5,7 +5,7 @@ using UnityEditor.EditorTools;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-namespace Editor.TripleMerge
+namespace TripleMerge.Editor
 {
     [EditorTool("Map Generator")]
     public class MergeMapGenerator : EditorTool

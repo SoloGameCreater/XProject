@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 
-namespace Editor.DataTableTools
+namespace DataTableTools
 {
     public sealed partial class DataTableProcessor
     {

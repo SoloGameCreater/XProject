@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.SceneManagement;
 using UnityEditor;
 using UnityEngine;
-using Editor.DataTableTools;
+using DataTableTools;
 
 public class EditorHelper : EditorWindow
 {

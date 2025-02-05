@@ -2,7 +2,7 @@
 using System.IO;
 using UnityGameFramework.Runtime;
 
-namespace Editor.DataTableTools
+namespace DataTableTools
 {
     public sealed partial class DataTableProcessor
     {

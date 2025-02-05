@@ -8,7 +8,7 @@ using System.Text;
 using UnityEngine;
 using UnityGameFramework.Runtime;
 
-namespace Editor.DataTableTools
+namespace DataTableTools
 {
     public sealed partial class DataTableProcessor
     {
