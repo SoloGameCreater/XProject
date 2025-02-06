@@ -1,14 +1,12 @@
+#if UNITY_EDITOR
+using Sirenix.OdinInspector;
+#endif
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using DG.Tweening;
 using SaveFile.TripleMerge;
-using TripleMerge;
 using UnityEngine;
 using UnityEngine.Pool;
-using Random = UnityEngine.Random;
 
 namespace TripleMerge
 {
@@ -19,10 +17,22 @@ namespace TripleMerge
     {
         public enum ECellStatus
         {
-            Unset, //未设置
-            Mergeable, //可合成
-            UnPurified, //未净化
-            Locked, //未解锁
+#if UNITY_EDITOR
+            [LabelText("未设置")]
+#endif
+            Unset,
+#if UNITY_EDITOR
+            [LabelText("可合成")]
+#endif
+            Mergeable,
+#if UNITY_EDITOR
+            [LabelText("未净化")]
+#endif
+            UnPurified,
+#if UNITY_EDITOR
+            [LabelText("未解锁")]
+#endif
+            Locked,
         }
 
         public enum EVertexType
@@ -32,23 +42,44 @@ namespace TripleMerge
             RightBottom,
             RightTop,
         }
-
-        //地块状态
+#if UNITY_EDITOR
+        [LabelText("初始默认放置合成物品")]// [ValueDropdown(nameof(GetMergeableItemConfigList))]
+#endif
+        public int InitialPlacedItemId;
+        
+#if UNITY_EDITOR
+        [LabelText("所需净化值")]
+#endif
+        public int RequiredPurifiedNum;
+        // 当前净化值
+        public int CurrentPurificationNum { private set; get; }
+#if UNITY_EDITOR
+        [LabelText("净化优先级")]
+#endif
+        public int PurifiedPriority;
+        
+#if UNITY_EDITOR
+        [LabelText("地块状态")]
+#endif
         public ECellStatus CellStatus;
 
-        //地块坐标
+#if UNITY_EDITOR
+        [LabelText("地块坐标")]
+#endif
         public Vector2Int MapCoordinate;
 
         /// <summary>
         /// 所属三合区域
         /// </summary>
         public MergeableRegion BelongRegion { private set; get; }
-
-        private OnCellObject _placeableItem;
-
         /// <summary>
         /// 当前地块上放置的三合物品
         /// </summary>
+#if UNITY_EDITOR
+        //[ShowInInspector]
+#endif
+        private OnCellObject _placeableItem;
+
         public OnCellObject PlacedItem => _placeableItem;
 
         /// <summary>

@@ -16,12 +16,18 @@ namespace TripleMerge.Editor
 
         private GameObject _regionObj;
 
+        private const string EditorRootPrefabPath = "Assets/ExtraRes/TripleMerge/Prefabs/Area/AreaRootEditor.prefab";
         private const string CellPrefabPath = "Assets/ExtraRes/TripleMerge/Prefabs/MergeCell/MergeableCell.prefab";
         private GameObject _mergeCellPrefab;
 
         public override void OnToolGUI(EditorWindow window)
         {
             _mapRoot = GameObject.Find("AreaRootEditor");
+            if(_mapRoot == null)
+            {
+                _mapRoot = Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(EditorRootPrefabPath));
+                _mapRoot.name = "AreaRootEditor";
+            }
             _cellRoot = _mapRoot?.transform.Find("LogicNode/MergeableRegion");
             _tilemap = _mapRoot?.transform.Find("Terrain/Grass").GetComponent<Tilemap>();
             _mergeCellPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(CellPrefabPath);
