@@ -4,6 +4,7 @@ using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Config.TripleMerge;
 using Newtonsoft.Json;
 using SaveFile.TripleMerge;
 using UnityEditor;
@@ -198,26 +199,87 @@ namespace TripleMerge
         private void InitPlacedItem(bool isNeverStorageBefore)
         {
             var placedItemId = 0;
+            
+            // 如果从存档数据中读取的状态是未设置，则代表是初始状态
+            if (isNeverStorageBefore)
+            {
+                // 则读取初始配置信息，如果初始配置时，该地块是否会默认初始放置任何合成物
+                placedItemId = InitialPlacedItemId;
+                if (placedItemId != 0)
+                {
+                    TripleMergeSystem.Instance.Model.SetCellPlaceItem(_saveData, placedItemId);
+                }
+            }
+            else
+            {
+                // 首先从存档数据中读取当前地块上放置的合成物品
+                placedItemId = _saveData.PlacedItem.ItemId;
+            }
+
+            if (placedItemId != 0 && TripleMergeConfigManager.Instance.TryGetItemConfig(placedItemId, out var placedItemCfg))
+            {
+                OnCellObject placedItem = OnCellObjectPool.GetItem(placedItemCfg);
+
+                placedItem.SetCfgData(placedItemCfg);
+
+                if (placedItem is MergeableObject mergeableObject)
+                {
+                    mergeableObject.IsGray = CellStatus >= ECellStatus.UnPurified;
+                }
+
+                PlaceItem(placedItem);
+            }
         }
 
-        public void PlaceItem(OnCellObject item, bool invokeByElf, bool showMovement = true, float movementTimeLength = 0.15f, Action onPlacedAction = null,
-                              bool skipMergeProgress = false, Action onMergedAction = null)
+        public void PlaceItem(OnCellObject item, Action onPlacedAction = null, Action onMergedAction = null)
         {
             if (item == null)
             {
-                SetPlacedItem(null, invokeByElf, false);
-                // todo 数据先行
-                //TripleMergeSystem.Instance.Model.SetCellPlaceItem(_storageData, 0);
+                SetPlacedItem(null);
+                TripleMergeSystem.Instance.Model.SetCellPlaceItem(_saveData, 0);
                 return;
             }
 
-            // todo 并且先清除其原本的地块信息
+            // 先清除其原本的地块信息
+            if (item.BelongCell != null)
+            {
+                if (item.BelongCell.PlacedItem != null && item.BelongCell.PlacedItem == item)
+                {
+                    item.BelongCell.PlaceItem(null);
+                }
 
+                item.BelongCell = null;
+            }
+            // 绑定地块和Item的关系
+            if (_isInitialized)
+            {
+                if (item.ItemSaveData != null)
+                {
+                    item.BindItemSaveData(TripleMergeSystem.Instance.Model.SetCellPlaceItem(_saveData, item.ItemSaveData));
+                }
+                else
+                {
+                    item.BindItemSaveData(TripleMergeSystem.Instance.Model.SetCellPlaceItem(_saveData, item.CfgData.Id));
+                }
+            }
+            else
+            {
+                item.BindItemSaveData(TripleMergeSystem.Instance.Model.GetCellPlacedItem(_saveData));
+            }
+            // todo 放置合成物品
+            var itemTrans = item.transform;
+            itemTrans.SetParent(PlaceItemRoot);
+            // todo 后期会区分是否播放位移动画，现在直接放置到对应位置
+            itemTrans.localPosition = Vector3.zero;
+            OnItemPlaced();
 
-            // todo 首先将合成物放到自身地块的位置中心
+            void OnItemPlaced()
+            {
+                onPlacedAction?.Invoke();
+            }
         }
 
-        private void SetPlacedItem(OnCellObject item, bool isInvokeByElf, bool showMovement)
+        private void SetPlacedItem(OnCellObject item)
         {
             var tobeReplaceItems = ListPool<OnCellObject>.Get();
         }

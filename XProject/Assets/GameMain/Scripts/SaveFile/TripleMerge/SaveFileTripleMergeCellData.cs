@@ -36,5 +36,16 @@ namespace SaveFile.TripleMerge
                 }
             }
         }
+        // 地块当前放置的三合物品
+        [JsonProperty]
+        SaveFileTripleMergeItemData placedItem = new SaveFileTripleMergeItemData();
+        [JsonIgnore]
+        public SaveFileTripleMergeItemData PlacedItem
+        {
+            get
+            {
+                return placedItem;
+            }
+        }
     }
 }
