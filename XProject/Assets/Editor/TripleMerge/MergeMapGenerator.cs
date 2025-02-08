@@ -104,6 +104,7 @@ namespace TripleMerge.Editor
             cellObj.name = $"Cell_[{x},{y}]";
             cellObj.GetComponent<SpriteRenderer>().sprite = isCellA ? _cellA : _cellB;
             var cell = cellObj.AddComponent<MergeableCell>();
+            cell.CellStatus = MergeableCell.ECellStatus.Locked;
             cell.MapCoordinate = new Vector2Int(x, y);
         }
     }
