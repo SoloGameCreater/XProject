@@ -68,8 +68,8 @@ namespace TripleMerge.Editor
             {
                 DestroyImmediate(_regionObj);
             }
-            _cellA = Instantiate(AssetDatabase.LoadAssetAtPath<Sprite>(CellAPath));
-            _cellB = Instantiate(AssetDatabase.LoadAssetAtPath<Sprite>(CellBPath));
+            _cellA = AssetDatabase.LoadAssetAtPath<Sprite>(CellAPath);
+            _cellB = AssetDatabase.LoadAssetAtPath<Sprite>(CellBPath);
             _regionObj = new GameObject("Region");
             _regionObj.transform.SetParent(_cellRoot);
             _regionObj.transform.Reset();
