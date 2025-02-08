@@ -1,14 +1,16 @@
+using System;
+using System.Collections.Generic;
 using Config.TripleMerge;
 using SaveFile.TripleMerge;
 using Sirenix.OdinInspector;
 using TripleMerge;
+using UnityEngine;
 
 namespace TripleMerge
 {
-    public abstract class OnCellObject : ItemBase
+    public abstract partial class OnCellObject : ItemBase
     {
         private MergeableCell _belongCell;
-
         /// <summary>
         /// 当前所属的地块
         /// </summary>
@@ -32,19 +34,52 @@ namespace TripleMerge
         /// 存储model
         /// </summary>
         public SaveFileTripleMergeItemData ItemSaveData { private set; get; }
+        /// <summary>
+        /// 触发器
+        /// </summary>
+        protected PolygonCollider2D TargetCollider;
+        protected Transform TriggerPivot;
+        /// <summary>
+        /// 是否处于选中状态
+        /// </summary>
+        public bool IsSelecting { get; set; }
+        
+        [ShowInInspector] protected MergeableCell TouchedCell;
+        [ShowInInspector] private readonly Dictionary<Collider2D, MergeableCell> _triggeredCells = new();
+
+        #region Abstract Function
+        protected abstract void OnInitialize();
+        protected abstract void OnRecycle();
+        protected abstract void OnSelect();
+        protected abstract void OnDeselect();
+        protected abstract void OnCfgDataUpdated();
+        protected abstract void OnClicked();
+        protected abstract void OnDragBegin();
+        protected abstract void OnDragEnd();
+        protected abstract void OnLongPressTrigger();
+        #endregion
+        protected virtual void OnBelongCellUpdated()
+        {
+            
+        }
         public void Active()
         {
-            throw new System.NotImplementedException();
+            _currentInputStage = EInputStage.None;
         }
 
         public void Initialize()
         {
-            throw new System.NotImplementedException();
+            TargetCollider = transform.Find("Trigger").GetComponent<PolygonCollider2D>();
+            var localPos = TargetCollider.transform.localPosition;
+            localPos.z = -50f;
+            TargetCollider.transform.localPosition = localPos;
+            TriggerPivot = transform.Find("Trigger/Pivot").transform;
+            
+            OnInitialize();
         }
-
         public void Recycle()
         {
-            throw new System.NotImplementedException();
+            OnRecycle();
         }
 
         public void BindItemSaveData(SaveFileTripleMergeItemData setCellPlaceItem)
@@ -58,6 +93,37 @@ namespace TripleMerge
             OnCfgDataUpdated();
         }
 
-        protected abstract void OnCfgDataUpdated();
+        protected void Select()
+        {
+            if (IsSelecting)
+            {
+                return;
+            }
+            if(TripleMergeSystem.Instance.Gameplay.MapManager.SelectedCellItem != null)
+                TripleMergeSystem.Instance.Gameplay.MapManager.SelectedCellItem.Deselect();
+
+            OnSelect();
+
+            TripleMergeSystem.Instance.Gameplay.MapManager.SelectCellItemChanged(this);
+
+            IsSelecting = true;
+        }
+
+        private void Deselect()
+        {
+            if (!IsSelecting)
+            {
+                return;
+            }
+
+            //TryCloseLongPressedPopup();
+
+            OnDeselect();
+            TripleMergeSystem.Instance.Gameplay.MapManager.SelectCellItemChanged(null);
+
+            //IsLongPressedTriggered = false;
+
+            IsSelecting = false;
+        }
     }
 }

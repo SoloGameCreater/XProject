@@ -14,6 +14,8 @@ namespace TripleMerge
         public bool IsMerging { get; set; }
         public GameObject MapRoot { get; private set; }
         public TripleMergeCameraComponent CameraController { get; private set; }
+        
+        public OnCellObject SelectedCellItem { private set; get; }
 
         protected override void OnInitialize()
         {
@@ -37,6 +39,11 @@ namespace TripleMerge
             GameObject areaPrefab = ResourcesManager.Instance.LoadResource<GameObject>($"TripleMerge/Prefabs/Area/{AreaPrefabAssetName}");
             var areaNode = GameObject.Instantiate(areaPrefab, MapRoot.transform.Find("Area")).AddComponent<MapAreaComponent>();
             areaNode.Initialize();
+        }
+
+        public void SelectCellItemChanged(OnCellObject cellObject)
+        {
+            SelectedCellItem = cellObject;
         }
     }
 }

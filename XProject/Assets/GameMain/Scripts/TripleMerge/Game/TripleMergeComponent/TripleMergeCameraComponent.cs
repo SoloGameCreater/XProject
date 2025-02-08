@@ -112,7 +112,7 @@ namespace TripleMerge
 
 
             
-#if UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX
+#if UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_EDITOR
             {
                 var scrollWheelInput = Input.GetAxis("Mouse ScrollWheel");
 
