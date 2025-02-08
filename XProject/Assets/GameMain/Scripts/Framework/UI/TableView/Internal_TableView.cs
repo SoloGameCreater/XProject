@@ -1,10 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Cosmos;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 using static SomeWhere.TableView;
 
 namespace SomeWhere

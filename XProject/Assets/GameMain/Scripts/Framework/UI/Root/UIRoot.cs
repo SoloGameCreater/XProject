@@ -4,9 +4,8 @@ using System;
 using UnityEngine.U2D;
 using UnityEngine.UI;
 using Framework;
-using Cosmos;
 
-public partial class UIRoot : MonoSingleton<UIRoot>
+public partial class UIRoot : Manager<UIRoot>
 {
     // 记录当前界面最高 到了多少层
     private int _canvasOrder = 10;
