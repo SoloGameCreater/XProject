@@ -3,6 +3,7 @@ using TripleMerge;
 using UnityEditor;
 using UnityEditor.EditorTools;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 namespace TripleMerge.Editor
@@ -53,7 +54,10 @@ namespace TripleMerge.Editor
 
             Handles.EndGUI();
         }
-
+        public override bool IsAvailable()
+        {
+            return SceneManager.GetActiveScene().name.Equals("MergeScene");
+        }
         private bool GenerateMap()
         {
             if (_mapRoot == null) return false;
