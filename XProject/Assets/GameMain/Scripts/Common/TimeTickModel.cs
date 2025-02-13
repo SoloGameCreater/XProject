@@ -1,8 +1,3 @@
-/* TimeTickModel 
- * gaomin
- * 2023.8.18
- * 计时器：每秒执行一次 _tick_func
- */
 
 using System;
 using Framework;
