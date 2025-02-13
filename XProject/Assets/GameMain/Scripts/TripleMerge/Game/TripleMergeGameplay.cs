@@ -6,6 +6,7 @@ namespace TripleMerge
     public class TripleMergeGameplay
     {
         public TripleMergeMapManager MapManager { get; } = new();
+        public TripleMergeTreasureComponent TreasureManager { get; } = new();
 
         private readonly List<ITripleMergeComponent> _components = new();
         // 三合功能根节点
@@ -18,6 +19,7 @@ namespace TripleMerge
             TripleMergeSystem.Instance.Model.ClearData();
             _components.Clear();
             _components.Add(MapManager);
+            _components.Add(TreasureManager);
 
             var mainCamera = Camera.main;
             var cameraTrans = mainCamera.transform;

@@ -24,6 +24,8 @@ namespace TripleMerge
         private void OnStartClick()
         {
             Debug.LogWarning("Starrrrrrrt");
+            var generationViewportPos = UIRoot.Instance.mUICamera.ScreenToViewportPoint(((RectTransform) transform).anchoredPosition);
+            TripleMergeSystem.Instance.Gameplay.TreasureManager.GenerateTreasure(generationViewportPos);
         }
 
         public void Show()
