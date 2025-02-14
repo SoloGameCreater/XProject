@@ -32,15 +32,9 @@ namespace SaveFile
             }
 
             // 更新配置文件版本并保存
-            UpdateProfileVersionAndSave();
+            SaveFileManager.Instance.SaveToLocal();
         }
-
-        private void UpdateProfileVersionAndSave()
-        {
-            // todo 强制保持到硬盘
-            //this.Profile.Instance.ForceSaveToDisk();
-        }
-
+        
         public int GetValue()
         {
             return (int)Math.Round(4f * _encryptAmount + _decryptAmount);

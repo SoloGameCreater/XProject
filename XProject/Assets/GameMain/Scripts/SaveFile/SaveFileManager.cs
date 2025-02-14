@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using Framework;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Rijndael;
 using SaveFile.TripleMerge;
 using UnityEngine;
 
@@ -8,7 +10,8 @@ namespace SaveFile
 {
     public class SaveFileManager : Manager<SaveFileManager>
     {
-        const string SaveFileKey = "StorageData";
+        const string SaveFileKey = "SaveFile";
+        const string LocalVersionKey = "SSaveFileVersion";
         
         Dictionary<string, SaveFileBase> storageMap;
         
@@ -52,7 +55,7 @@ namespace SaveFile
             }
             else
             {
-                Debug.Assert(false, "Error Init Storage !!!");
+                Debug.Assert(false, "init save file error!!!");
             }
         }
         public string ToJson()
@@ -68,18 +71,67 @@ namespace SaveFile
             }
             JsonSerializerSettings setting = new JsonSerializerSettings();
             setting.NullValueHandling = NullValueHandling.Ignore;
-            // todo 暂时不需要数据加密
-            //string jsonData = JsonConvert.SerializeObject(storageMap,setting);
-            // byte[] encryptData = RijndaelManager.Instance.EncryptStringToBytes(jsonData);
-            // PlayerPrefs.SetString(storageKey, System.Convert.ToBase64String(encryptData));
-            // PlayerPrefs.SetString(localVersionKey, System.Convert.ToBase64String(RijndaelManager.Instance.EncryptStringToBytes(LocalVersion.ToString())));
-            // PlayerPrefs.SetString(remoteVersionAckKey, System.Convert.ToBase64String(RijndaelManager.Instance.EncryptStringToBytes(RemoteVersionACK.ToString())));
-            // PlayerPrefs.SetString(remoteVersionLocalKey, System.Convert.ToBase64String(RijndaelManager.Instance.EncryptStringToBytes(RemoteVersionSYN.ToString())));
+            
+            string jsonData = JsonConvert.SerializeObject(storageMap,setting);
+            byte[] encryptJsonData = RijndaelEncryptionManager.Instance.Encrypt(jsonData);
+            PlayerPrefs.SetString(SaveFileKey, System.Convert.ToBase64String(encryptJsonData));
+            PlayerPrefs.SetString(LocalVersionKey, System.Convert.ToBase64String(RijndaelEncryptionManager.Instance.Encrypt(LocalVersion.ToString())));
         }
         private void ReadFromLocal()
         {
-            // 读取本地存档
-            string jsonData = "{}";
+            // 读取存档
+            if (PlayerPrefs.HasKey(SaveFileKey))
+            {
+                byte[] encryptData = System.Convert.FromBase64String(PlayerPrefs.GetString(SaveFileKey));
+                var jsonData = RijndaelEncryptionManager.Instance.Decrypt(encryptData);
+#if UNITY_EDITOR
+                DebugUtil.LogWarning(" read storage json from local : " + jsonData);
+#endif
+                FromJson(jsonData);
+            }
+            else
+            {
+#if UNITY_EDITOR
+                DebugUtil.LogWarning("No local storage data can read! ");
+#endif
+            }
+
+            // 读取本地存档版本
+            if (PlayerPrefs.HasKey(LocalVersionKey))
+            {
+                string strVersion = RijndaelEncryptionManager.Instance.Decrypt(System.Convert.FromBase64String(PlayerPrefs.GetString(LocalVersionKey)));
+                LocalVersion = ulong.Parse(strVersion);
+#if UNITY_EDITOR
+                DebugUtil.LogWarning(" read local version : " + LocalVersion);
+#endif
+            }
+            else
+            {
+                LocalVersion = 0;
+#if UNITY_EDITOR
+                DebugUtil.LogWarning("No local storage version can read! ");
+#endif
+            }
+            _localVersion = LocalVersion;
+        }
+        
+        private void FromJson(string jsonData)
+        {
+            var jObj = JObject.Parse(jsonData);
+            foreach (var type in storageMap.Keys)
+            {
+                var token = jObj[type];
+                if (token == null)
+                {
+                    continue;
+                }
+
+                var str = token.ToString();
+                JsonSerializerSettings setting = new JsonSerializerSettings();
+
+                setting.NullValueHandling = NullValueHandling.Ignore;
+                JsonConvert.PopulateObject(str, storageMap[type], setting);
+            }
         }
     }
 }

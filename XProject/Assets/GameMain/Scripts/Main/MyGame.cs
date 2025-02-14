@@ -65,7 +65,7 @@ public class MyGame : Game
             _subSystemManager.AddSubSystem<TripleMergeSystem>();
 
             //Model
-            //_subSystemManager.AddSubSystem<StorageSubSystem>();
+            _subSystemManager.AddSubSystem<SaveFileSystem>();
 
             //配置
             _subSystemManager.AddSubSystem<TripleMergeConfigManager>();
