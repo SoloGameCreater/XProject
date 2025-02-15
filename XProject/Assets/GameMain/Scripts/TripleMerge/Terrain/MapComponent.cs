@@ -23,7 +23,7 @@ namespace TripleMerge
         {
             MergeableCellsDictionary.Clear();
 
-            var mergeableRegion = transform.Find("LogicNode/MergeableRegion").GetComponent<MergeableRegion>();
+            var mergeableRegion = transform.Find("LogicNode/MergeableRegion/Region").GetComponent<MergeableRegion>();
             if (mergeableRegion == null) return;
 
             // 初始化所有区域状态

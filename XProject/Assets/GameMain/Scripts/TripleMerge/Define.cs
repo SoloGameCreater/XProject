@@ -3,8 +3,16 @@ namespace TripleMerge
     public enum TripleMergeItemType
     {
         /// <summary>
-        /// 人物
+        /// 宝箱
         /// </summary>
-        Landscape = 1,
+        TreasureChest = 1,
+        /// <summary>
+        /// 一般合成物
+        /// </summary>
+        MergeableNormal = 2,
+        /// <summary>
+        /// 万能卡
+        /// </summary>
+        UniversalCard = 3,
     }
 }

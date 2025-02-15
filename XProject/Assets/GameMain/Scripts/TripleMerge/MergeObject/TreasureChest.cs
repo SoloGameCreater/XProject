@@ -5,9 +5,10 @@ namespace TripleMerge
     public class TreasureChest : OnCellObject
     {
         public const int TreasureChestID = 99999; 
+        protected SpriteRenderer IconSp { get; set; }
         protected override void OnInitialize()
         {
-            throw new System.NotImplementedException();
+            IconSp = transform.Find("Icon").GetComponent<SpriteRenderer>();
         }
 
         protected override void OnRecycle()
@@ -25,10 +26,7 @@ namespace TripleMerge
             throw new System.NotImplementedException();
         }
 
-        protected override void OnCfgDataUpdated()
-        {
-            throw new System.NotImplementedException();
-        }
+        protected override void OnCfgDataUpdated() { }
 
         protected override void OnClicked()
         {
@@ -37,14 +35,22 @@ namespace TripleMerge
 
         protected override void OnDragBegin()
         {
-            throw new System.NotImplementedException();
+            IconSp.sortingOrder = 10;
         }
 
         protected override void OnDragEnd()
         {
             throw new System.NotImplementedException();
         }
+        protected override void OnBelongCellUpdated()
+        {
+            base.OnBelongCellUpdated();
 
+            if (BelongCell != null)
+            {
+                IconSp.sortingOrder = -BelongCell.MapCoordinate.y;
+            }
+        }
         protected override void OnLongPressTrigger()
         {
             throw new System.NotImplementedException();
@@ -53,6 +59,15 @@ namespace TripleMerge
         public void OpenChest()
         {
             Debug.Log("OpenChest!!");
+        }
+        public void OnFlyBegin()
+        {
+            IconSp.sortingLayerName = "Top";
+        }
+
+        public void OnFlyEnd()
+        {
+            IconSp.sortingLayerName = "TripleMergeItem";
         }
     }
 }

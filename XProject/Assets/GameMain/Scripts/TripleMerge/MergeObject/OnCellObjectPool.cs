@@ -21,8 +21,11 @@ namespace TripleMerge
             var type = (TripleMergeItemType)itemCfg.ItemType;
             switch (type)
             {
-                case TripleMergeItemType.Landscape:
-                    item = Get<MergeableObject>(itemCfg.Prefab, parent);
+                case TripleMergeItemType.MergeableNormal:
+                    item = Get<MergeableObject>($"TripleMerge/Prefabs/MergeableItem/{itemCfg.Prefab}", parent);
+                    break;
+                case TripleMergeItemType.TreasureChest:
+                    item = Get<TreasureChest>($"TripleMerge/Prefabs/MergeableItem/{itemCfg.Prefab}", parent);
                     break;
             }
 
