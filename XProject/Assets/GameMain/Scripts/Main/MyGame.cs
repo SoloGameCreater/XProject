@@ -66,6 +66,7 @@ public class MyGame : Game
 
             //Model
             _subSystemManager.AddSubSystem<SaveFileSystem>();
+            _subSystemManager.AddSubSystem<CurrencyModel>();
 
             //配置
             _subSystemManager.AddSubSystem<TripleMergeConfigManager>();
