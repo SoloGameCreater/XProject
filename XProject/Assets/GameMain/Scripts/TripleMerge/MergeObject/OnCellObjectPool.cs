@@ -22,10 +22,10 @@ namespace TripleMerge
             switch (type)
             {
                 case TripleMergeItemType.MergeableNormal:
-                    item = Get<MergeableObject>($"TripleMerge/Prefabs/MergeableItem/{itemCfg.Prefab}", parent);
+                    item = Get<MergeableObject>(itemCfg.Prefab, parent);
                     break;
                 case TripleMergeItemType.TreasureChest:
-                    item = Get<TreasureChest>($"TripleMerge/Prefabs/MergeableItem/{itemCfg.Prefab}", parent);
+                    item = Get<TreasureChest>(itemCfg.Prefab, parent);
                     break;
             }
 
@@ -57,8 +57,8 @@ namespace TripleMerge
                 item.Active();
                 return item as T;
             }
-
-            var itemObject = Utils.InstantiateWorldGameObject(prefabKey, parent == null ? _instance._poolRoot : parent);
+            
+            var itemObject = Utils.InstantiateWorldGameObject($"TripleMerge/Prefabs/MergeableItem/{prefabKey}", parent == null ? _instance._poolRoot : parent);
             item = itemObject.GetOrAddComponent<T>();
             item.name = prefabKey;
             item.Initialize();
