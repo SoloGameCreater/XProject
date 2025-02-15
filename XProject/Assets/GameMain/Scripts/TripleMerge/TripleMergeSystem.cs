@@ -17,7 +17,8 @@ namespace TripleMerge
             var cfg = Model.GetMergeableItem(99999);
             if (cfg != null)
             {
-                
+                //todo 测试阶段，进入游戏自动设置为10个宝箱
+                CurrencyModel.Instance.SetCurrency(CurrencyType.TreasureChest, 10);
             }
         }
 

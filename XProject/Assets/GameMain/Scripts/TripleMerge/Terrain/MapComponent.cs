@@ -7,7 +7,6 @@ namespace TripleMerge
     public class MapAreaComponent : MonoBehaviour
     {
         public Dictionary<Vector2Int, MergeableCell> MergeableCellsDictionary { private set; get; } = new();
-        // todo 
         //public Dictionary<int, MapAreaRegion> AreaRegionDictionary { private set; get; } = new();
         public void Initialize()
         {
