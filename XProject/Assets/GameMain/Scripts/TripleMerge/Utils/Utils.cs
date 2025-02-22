@@ -5,7 +5,7 @@ namespace TripleMerge
 {
     public class Utils
     {
-        public static TripleMergeItemType ParseThreeMergeItemType(int itemType)
+        public static TripleMergeItemType ParseTripleMergeItemType(int itemType)
         {
             return (TripleMergeItemType)itemType;
         }

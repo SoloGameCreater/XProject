@@ -20,8 +20,7 @@ namespace TripleMerge
             set
             {
                 _belongCell = value;
-                // todo 
-                //OnBelongCellUpdated();
+                OnBelongCellUpdated();
             }
 
             get => _belongCell;
@@ -43,6 +42,10 @@ namespace TripleMerge
         /// 是否处于选中状态
         /// </summary>
         public bool IsSelecting { get; set; }
+        /// <summary>
+        /// 是否是万能卡
+        /// </summary>
+        public virtual bool IsUniversalCard => false;
         
         [ShowInInspector] protected MergeableCell TouchedCell;
         [ShowInInspector] private readonly Dictionary<Collider2D, MergeableCell> _triggeredCells = new();

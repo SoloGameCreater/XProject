@@ -1,4 +1,5 @@
 
+using Config.TripleMerge;
 using UnityEngine;
 
 namespace TripleMerge
@@ -14,6 +15,21 @@ namespace TripleMerge
         public bool IsMerging { get; set; }
 
         public bool IsGray { get; set; }
+        public override bool IsUniversalCard
+        {
+            get
+            {
+                if (CfgData != null)
+                {
+                    if (Utils.ParseTripleMergeItemType(CfgData.ItemType) == TripleMergeItemType.UniversalCard)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        }
         protected override void OnSelect()
         {
             _draggingTips.SetActive(true);

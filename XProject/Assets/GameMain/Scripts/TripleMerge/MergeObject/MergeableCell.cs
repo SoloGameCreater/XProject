@@ -3,11 +3,10 @@ using Sirenix.OdinInspector;
 #endif
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Config.TripleMerge;
-using Newtonsoft.Json;
 using SaveFile.TripleMerge;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -22,7 +21,7 @@ namespace TripleMerge
         [LabelText("所属地段ID")] [ValueDropdown(nameof(GetValidRegions))]
 #endif
         public int BelongRegionId;
-        
+
         public enum ECellStatus
         {
 #if UNITY_EDITOR
@@ -54,18 +53,19 @@ namespace TripleMerge
         [LabelText("初始默认放置合成物品")] [ValueDropdown(nameof(GetMergeableItemConfigList))]
 #endif
         public int InitialPlacedItemId;
-        
+
 #if UNITY_EDITOR
         [LabelText("所需净化值")]
 #endif
         public int RequiredPurifiedNum;
+
         // 当前净化值
         public int CurrentPurificationNum { private set; get; }
 #if UNITY_EDITOR
         [LabelText("净化优先级")]
 #endif
         public int PurifiedPriority;
-        
+
 #if UNITY_EDITOR
         [LabelText("地块状态")]
 #endif
@@ -80,6 +80,7 @@ namespace TripleMerge
         /// 所属三合区域
         /// </summary>
         public MergeableRegion BelongRegion { private set; get; }
+
         /// <summary>
         /// 当前地块上放置的三合物品
         /// </summary>
@@ -126,6 +127,11 @@ namespace TripleMerge
         private PolygonCollider2D _cellCollider;
 
         public Transform PlaceItemRoot { private set; get; }
+
+        /// <summary>
+        /// 可合成地块检查
+        /// </summary>
+        private readonly List<MergeableObject> _continuousCellsQueryResult = new();
 
         private bool _isMouseDown;
 
@@ -175,16 +181,16 @@ namespace TripleMerge
                 // else
                 {
                     //读取初始配置信息，如果初始配置时，该地块需要一定数量的净化值，则代表其初始状态是未净化状态
-                    CellStatus =  ECellStatus.Mergeable;
+                    CellStatus = ECellStatus.Mergeable;
                 }
-            
-                TripleMergeSystem.Instance.Model.SetCellState(_saveData, (int) CellStatus);
+
+                TripleMergeSystem.Instance.Model.SetCellState(_saveData, (int)CellStatus);
             }
             else
             {
                 //首先从存档数据中读取状态
-                CellStatus = (ECellStatus) _saveData.State;
-            
+                CellStatus = (ECellStatus)_saveData.State;
+
                 if (CellStatus == ECellStatus.Locked) //如果时锁定的地块，从新检查路段解锁状态，防止某些情况路段解锁了之后地块信息没正常更新
                 {
                     // if (BelongRegion.BelongArea.AreaRegionDictionary.TryGetValue(HostRegionId, out var belongToAreaRegion) && belongToAreaRegion.IsUnlock())
@@ -199,7 +205,7 @@ namespace TripleMerge
         private void InitPlacedItem(bool isNeverStorageBefore)
         {
             var placedItemId = 0;
-            
+
             // 如果从存档数据中读取的状态是未设置，则代表是初始状态
             if (isNeverStorageBefore)
             {
@@ -250,6 +256,7 @@ namespace TripleMerge
 
                 item.BelongCell = null;
             }
+
             // 绑定地块和Item的关系
             if (_isInitialized)
             {
@@ -266,6 +273,7 @@ namespace TripleMerge
             {
                 item.BindItemSaveData(TripleMergeSystem.Instance.Model.GetCellPlacedItem(_saveData));
             }
+
             // todo 放置合成物品
             var itemTrans = item.transform;
             itemTrans.SetParent(PlaceItemRoot);
@@ -276,16 +284,203 @@ namespace TripleMerge
             void OnItemPlaced()
             {
                 onPlacedAction?.Invoke();
+
+                // 如果这个地块之前没有放置任何物品
+                if (PlacedItem == null)
+                {
+                    // 先置空当前Item的地块
+                    if (item.BelongCell != null)
+                        item.BelongCell.PlaceItem(null);
+
+                    SetPlacedItem(item);
+                    PlacedItem.BelongCell = this;
+
+                    onMergedAction?.Invoke();
+                    return;
+                }
+
+                if (item != PlacedItem)
+                {
+                    // 如果交换的对象是同一类合成物或者是万能牌则尝试进行合成
+                    if (item.CfgData.Id == PlacedItem.CfgData.Id || item.IsUniversalCard)
+                    {
+                        int callerItemId = PlacedItem.CfgData.Id;
+                        if (TryToMerge(item, (finalItemId) => { Debug.Log($"[MERGE END] caller:{callerItemId} . final: {finalItemId}"); }))
+                        {
+                            onMergedAction?.Invoke();
+                            return;
+                        }
+                    }
+
+                    SetPlacedItem(item);
+
+                    onMergedAction?.Invoke();
+                }
             }
         }
 
         private void SetPlacedItem(OnCellObject item)
         {
             var tobeReplaceItems = ListPool<OnCellObject>.Get();
+
+            if (_placeableItem != null)
+            {
+                if (item != null)
+                    tobeReplaceItems.Add(item);
+
+                ClearItemReference();
+            }
+
+            _placeableItem = item;
+            if (_placeableItem != null)
+                _placeableItem.BelongCell = this;
+
+            HandleItemPlacement(tobeReplaceItems);
         }
 
+        // 清除item引用地块
+        private void ClearItemReference()
+        {
+            var takeOffItem = _placeableItem;
+            if (takeOffItem != null)
+            {
+                // 因为老的物品是从该地块被挤出去的，所以这时其实原本的地块已经有了新的物品了，就应该先清除老物品的地块信息，以免地块物品信息被错误清除
+                takeOffItem.BelongCell = null;
+            }
+        }
 
-        public bool TryToMerge(OnCellObject item = null, bool isInvokeByElf = false, bool skipMergeProgress = false, Action<int> onFinish = null)
+        private void HandleItemPlacement(List<OnCellObject> displacedItems)
+        {
+            // 如果有被挤出的物品，尝试重新放置它们
+            if (displacedItems.Count > 0)
+            {
+                var nearestEmptyCells = ListPool<MergeableCell>.Get();
+
+                foreach (var displacedItem in displacedItems)
+                {
+                    FindNearestEmptyCells(1, ref nearestEmptyCells,
+                        Utils.ParseTripleMergeItemType(displacedItem.CfgData.ItemType) == TripleMergeItemType.TreasureChest);
+
+                    if (nearestEmptyCells.Count > 0)
+                    {
+                        nearestEmptyCells[0].PlaceItem(displacedItem);
+                    }
+                    else
+                    {
+                        // todo 如果找不到空格子，将物品放入存储气泡
+                        // var storageBubble = ThreeMergeSystem.Instance.Gameplay.MapManager.MergeableItemsBubble;
+                        // storageBubble.AddItem(displacedItem.CfgData.Id, displacedItem.transform.position);
+                        // storageBubble.Save();
+
+                        OnCellObjectPool.Recycle(displacedItem);
+                    }
+                }
+
+                ListPool<MergeableCell>.Release(nearestEmptyCells);
+            }
+
+            ListPool<OnCellObject>.Release(displacedItems);
+
+            // 更新碰撞体状态
+            _cellCollider.enabled = CellStatus == ECellStatus.Locked || _placeableItem == null;
+        }
+
+        /// <summary>
+        /// 找到最近的空地块
+        /// </summary>
+        /// <param name="targetCellNum"></param>
+        /// <param name="result"></param>
+        /// <param name="allowQueryFromAllAreas">如果是宝箱则搜索全部区域</param>
+        private void FindNearestEmptyCells(int targetCellNum, ref List<MergeableCell> result, bool allowQueryFromAllAreas = false)
+        {
+            result.Clear();
+
+            var tempList = ListPool<MergeableCell>.Get();
+            try
+            {
+                // 提前计算容量并只添加有效的格子
+                if (!allowQueryFromAllAreas)
+                {
+                    tempList.Capacity = BelongRegion.BelongArea.MergeableCellsDictionary.Count;
+                    foreach (var cell in BelongRegion.BelongArea.MergeableCellsDictionary.Values)
+                    {
+                        if (IsCellEmpty(cell))
+                        {
+                            tempList.Add(cell);
+                        }
+                    }
+                }
+                else
+                {
+                    var totalCells = TripleMergeSystem.Instance.Gameplay.MapManager.MapArea.MergeableCellsDictionary;
+                    tempList.Capacity = totalCells.Count;
+                    var area = TripleMergeSystem.Instance.Gameplay.MapManager.MapArea;
+                    foreach (var cell in area.MergeableCellsDictionary.Values)
+                    {
+                        if (IsCellEmpty(cell))
+                        {
+                            tempList.Add(cell);
+                        }
+                    }
+                }
+
+                if (tempList.Count < targetCellNum)
+                {
+                    result.AddRange(tempList);
+                    return;
+                }
+
+                QuickSelectByDistance(tempList, 0, tempList.Count - 1, targetCellNum);
+                result.AddRange(tempList.Take(targetCellNum));
+            }
+            finally
+            {
+                ListPool<MergeableCell>.Release(tempList);
+            }
+        }
+
+        private bool IsCellEmpty(MergeableCell cell)
+        {
+            return cell.PlacedItem == null &&
+                   cell.CellStatus == ECellStatus.Mergeable;
+        }
+
+        // 优化5：使用快速选择算法，只排序需要的部分
+        private void QuickSelectByDistance(List<MergeableCell> cells, int left, int right, int k)
+        {
+            if (left >= right) return;
+
+            int pivot = Partition(cells, left, right);
+
+            if (pivot == k - 1)
+                return;
+            if (pivot > k - 1)
+                QuickSelectByDistance(cells, left, pivot - 1, k);
+            else
+                QuickSelectByDistance(cells, pivot + 1, right, k);
+        }
+
+        private int Partition(List<MergeableCell> cells, int left, int right)
+        {
+            var pivot = cells[right];
+            var pivotDistance = Vector2.Distance(pivot.transform.position, transform.position);
+            var i = left - 1;
+
+            for (int j = left; j < right; j++)
+            {
+                var distance = Vector2.Distance(cells[j].transform.position, transform.position);
+                if (distance < pivotDistance)
+                {
+                    i++;
+                    (cells[i], cells[j]) = (cells[j], cells[i]);
+                }
+            }
+
+            (cells[i + 1], cells[right]) = (cells[right], cells[i + 1]);
+            return i + 1;
+        }
+
+        public bool TryToMerge(OnCellObject item = null, Action<int> onFinish = null)
         {
             var isCombo = false;
             if (item == null)
@@ -313,7 +508,7 @@ namespace TripleMerge
 
                 Debug.Log($"三合开始");
                 // 能够进行合成的情况，先进行合成计算，合成完毕后，再对合成完毕后的合成物进行新的位置分配
-                DoMerge(ref continuousCell, isInvokeByElf, (finalMergeItemId, mergeResult) => { Debug.Log($"三合完成"); }, skipMergeProgress);
+                DoMerge(ref continuousCell, (finalMergeItemId, mergeResult) => { Debug.Log($"三合完成"); });
 
                 return true;
             }
@@ -321,7 +516,7 @@ namespace TripleMerge
             return false;
         }
 
-        private void DoMerge(ref IReadOnlyList<MergeableObject> continuousItems, bool isInvokeByElf, Action<int, Dictionary<int, int>> onMergeCompleted = null,
+        private void DoMerge(ref IReadOnlyList<MergeableObject> continuousItems, Action<int, Dictionary<int, int>> onMergeCompleted = null,
                              bool skipMergeProgress = false)
         {
             try
@@ -368,7 +563,110 @@ namespace TripleMerge
         /// </summary>
         public IReadOnlyList<MergeableObject> GetContinuousSameItems(MergeableObject referenceItem)
         {
-            return null;
+            _continuousCellsQueryResult.Clear();
+            var queriedCells = HashSetPool<MergeableCell>.Get();
+            try
+            {
+                // 添加初始参考物品
+                _continuousCellsQueryResult.Add(referenceItem);
+
+                // 检查当前格子的物品
+                CheckCurrentCellItem(referenceItem, ref queriedCells);
+
+                // 如果当前检查未返回，继续递归检查相邻格子
+                if (_continuousCellsQueryResult.Count > 0)
+                {
+                    QueryConnectedCells(this, ref queriedCells);
+                }
+
+                return _continuousCellsQueryResult;
+            }
+            finally
+            {
+                HashSetPool<MergeableCell>.Release(queriedCells);
+            }
+        }
+
+        private void CheckCurrentCellItem(MergeableObject referenceItem, ref HashSet<MergeableCell> queriedCells)
+        {
+            // 如果格子为空或其他无效情况，直接返回
+            if (!IsCurrentCellValid(referenceItem)) return;
+
+            var currentItem = PlacedItem as MergeableObject;
+
+            if (referenceItem.IsUniversalCard)
+            {
+                HandleUniversalMerge(ref referenceItem, currentItem, ref queriedCells);
+            }
+            else
+            {
+                HandleNormalMerge(referenceItem, currentItem);
+            }
+        }
+
+        private bool IsCurrentCellValid(MergeableObject referenceItem)
+        {
+            return PlacedItem != null
+                && PlacedItem != referenceItem
+                && PlacedItem is MergeableObject;
+        }
+
+        private void HandleUniversalMerge(ref MergeableObject referenceItem, MergeableObject currentItem, ref HashSet<MergeableCell> queriedCells)
+        {
+            // 检查是否满足万能卡合成的限制条件
+            if (currentItem.IsUniversalCard)
+            {
+                _continuousCellsQueryResult.Clear();
+                return;
+            }
+
+            // 检查目标物品是否可以被万能卡合成
+            if (Utils.ParseTripleMergeItemType(currentItem.CfgData.ItemType) == TripleMergeItemType.MergeableNormal)
+            {
+                queriedCells.Add(referenceItem.BelongCell);
+                referenceItem = currentItem;
+                _continuousCellsQueryResult.Add(currentItem);
+            }
+        }
+
+        private void HandleNormalMerge(MergeableObject referenceItem, MergeableObject currentItem)
+        {
+            if (PlacedItem.CfgData.Id == referenceItem.CfgData.Id)
+            {
+                _continuousCellsQueryResult.Add(currentItem);
+            }
+        }
+
+        private void QueryConnectedCells(MergeableCell cell, ref HashSet<MergeableCell> queriedCells)
+        {
+            if (queriedCells.Contains(cell)) return;
+
+            queriedCells.Add(cell);
+
+            // 检查四个方向的相邻格子
+            CheckNeighborCell(cell.Left, ref queriedCells);
+            CheckNeighborCell(cell.Right, ref queriedCells);
+            CheckNeighborCell(cell.Above, ref queriedCells);
+            CheckNeighborCell(cell.Below, ref queriedCells);
+        }
+
+        private void CheckNeighborCell(MergeableCell neighborCell, ref HashSet<MergeableCell> queriedCells)
+        {
+            if (neighborCell == null || !IsCellMergeable(neighborCell)) return;
+
+            var neighborItem = neighborCell._placeableItem as MergeableObject;
+            if (neighborItem != null && !_continuousCellsQueryResult.Contains(neighborItem))
+            {
+                _continuousCellsQueryResult.Add(neighborItem);
+                QueryConnectedCells(neighborCell, ref queriedCells);
+            }
+        }
+
+        private bool IsCellMergeable(MergeableCell cell)
+        {
+            return cell.CellStatus == ECellStatus.Mergeable
+                && cell._placeableItem != null
+                && !cell._placeableItem.IsDragging;
         }
 
         #region input listener
