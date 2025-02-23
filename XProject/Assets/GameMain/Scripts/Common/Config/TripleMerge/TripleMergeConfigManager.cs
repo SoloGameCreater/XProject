@@ -29,11 +29,12 @@ namespace Config.TripleMerge
         public bool TryGetRewardBoxReward(int index, out MergeTreasureChestRewards config)
         {
             //config = ThreeMergeRewardBoxRewardsList.Find(c => c.Index == index);
-            //return config != null;
-            //todo 新增配置
-            DebugUtil.LogWarning("现在缺少配置，一直都是false");
-            config = null;
-            return false;
+
+            //todo 生成临时配置,默认生成5个最基础的元素
+            config = new MergeTreasureChestRewards();
+            config.Index = index;
+            config.Rewards = new List<int>() { 300028, 300028, 300028, 300028, 300028 };
+            return config != null;
         }
     }
 }

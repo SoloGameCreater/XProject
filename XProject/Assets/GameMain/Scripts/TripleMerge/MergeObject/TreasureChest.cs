@@ -18,17 +18,19 @@ namespace TripleMerge
 
         protected override void OnRecycle()
         {
-            throw new System.NotImplementedException();
+            DebugUtil.Log(" 宝箱回收 ");
         }
 
         protected override void OnSelect()
         {
-            throw new System.NotImplementedException();
+            //_draggingTips.SetActive(true);
+            DebugUtil.Log(" 宝箱选择 ");
         }
 
         protected override void OnDeselect()
         {
-            throw new System.NotImplementedException();
+            //_draggingTips.SetActive(false);
+            DebugUtil.Log(" 取消选择 ");
         }
 
         protected override void OnCfgDataUpdated() { }
@@ -45,8 +47,14 @@ namespace TripleMerge
 
         protected override void OnDragEnd()
         {
-            throw new System.NotImplementedException();
+            OnBelongCellUpdated();
         }
+
+        protected override void OnLongPressTrigger()
+        {
+            
+        }
+
         protected override void OnBelongCellUpdated()
         {
             base.OnBelongCellUpdated();
@@ -56,11 +64,6 @@ namespace TripleMerge
                 IconSp.sortingOrder = -BelongCell.MapCoordinate.y;
             }
         }
-        protected override void OnLongPressTrigger()
-        {
-            throw new System.NotImplementedException();
-        }
-
 
         private const int GenerateItemNum = 10;
         public void OpenChest()
