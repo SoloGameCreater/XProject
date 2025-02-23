@@ -30,5 +30,31 @@ namespace SaveFile.TripleMerge
         {
             get { return cells; }
         }
+        // 当前打开宝箱次数
+        [JsonProperty] int openChestTimes;
+
+        [JsonIgnore]
+        public int OpenChestTimes
+        {
+            get { return openChestTimes; }
+            set
+            {
+                if (openChestTimes != value)
+                {
+                    openChestTimes = value;
+                }
+            }
+        }
+        // 已经解锁的三合合成物品
+        [JsonProperty]
+        SaveFileDictionary<int,int> unlockedMergeableItems = new SaveFileDictionary<int,int>();
+        [JsonIgnore]
+        public SaveFileDictionary<int,int> UnlockedMergeableItems
+        {
+            get
+            {
+                return unlockedMergeableItems;
+            }
+        }
     }
 }

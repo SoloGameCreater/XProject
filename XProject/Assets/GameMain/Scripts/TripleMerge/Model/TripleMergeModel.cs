@@ -7,7 +7,8 @@ namespace TripleMerge
     public class TripleMergeModel
     {
         public SaveFileTripleMerge SaveFileTripleMerge { get; } = new();
-
+        private readonly List<int> _unlockedMergeableItems = new();
+        public IReadOnlyList<int> UnlockedMergeableItems => _unlockedMergeableItems;
         public void ClearData()
         {
             SaveFileTripleMerge.Clear();
@@ -95,13 +96,67 @@ namespace TripleMerge
 
             return copyModel;
         }
+
+        public void AddTreasureChestOpenTimes()
+        {
+            SaveFileTripleMerge.OpenChestTimes++;
+        }
+
+        public int GetTreasureChestOpenTimes()
+        {
+            return SaveFileTripleMerge.OpenChestTimes;
+        }
+        public void LoadUnlockMergeableItems()
+        {
+            _unlockedMergeableItems.Clear();
+
+            foreach (var (_, v) in SaveFileTripleMerge.UnlockedMergeableItems)
+            {
+                _unlockedMergeableItems.Add(v);
+            }
+
+            foreach (var threeMergeableItem in TripleMergeConfigManager.Instance.MergeableItemCfgList)
+            {
+                if (!threeMergeableItem.IsInitUnlock)
+                {
+                    continue;
+                }
+
+                if (_unlockedMergeableItems.Contains(threeMergeableItem.Id))
+                {
+                    continue;
+                }
+
+                _unlockedMergeableItems.Add(threeMergeableItem.Id);
+
+                SetUnlockMergeableItemAndNotify(threeMergeableItem.Id);
+            }
+        }
+
+        public void AddUnlockMergeableItems(params int[] items)
+        {
+            foreach (var itemId in items)
+            {
+                if (!_unlockedMergeableItems.Contains(itemId))
+                {
+                    SetUnlockMergeableItemAndNotify(itemId);
+
+                    _unlockedMergeableItems.Add(itemId);
+                }
+            }
+        }
+
         private void TryUnlockMergeableItemAndNotify(int itemId)
         {
-            // if (TripleMergeConfigManager.Instance.GetItemConfig(itemId) != null 
-            //     && !_unlockedMergeableItems.Contains(itemId))
-            // {
-            //     AddUnlockMergeableItems(itemId);
-            // }
+            if (TripleMergeConfigManager.Instance.GetItemConfig(itemId) != null 
+                && !_unlockedMergeableItems.Contains(itemId))
+            {
+                AddUnlockMergeableItems(itemId);
+            }
+        }
+        private void SetUnlockMergeableItemAndNotify(int itemId)
+        {
+            SaveFileTripleMerge.UnlockedMergeableItems[SaveFileTripleMerge.UnlockedMergeableItems.Count] = itemId;
         }
     }
 }

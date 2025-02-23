@@ -7,7 +7,7 @@ namespace TripleMerge
     {
         protected override void OnInitialize()
         {
-            
+            TripleMergeSystem.Instance.Model.LoadUnlockMergeableItems();
         }
 
         protected override void OnDispose()
@@ -58,12 +58,12 @@ namespace TripleMerge
                 () =>
                 {
                     chestInstance.OnFlyEnd();
-                    Debug.Log("Generate Treasure");
+                    Debug.Log("Treasure on placed");
                 },
                 () =>
                 {
                     //EventDispatcher.Instance.DispatchEventImmediately(EventEnum.ThreeMergeOnMapContentChanged);
-                    Debug.Log("Generate Treasure");
+                    Debug.Log("Treasure on merged");
                 });
         }
     }

@@ -5,6 +5,7 @@ using SaveFile.TripleMerge;
 using Sirenix.OdinInspector;
 using TripleMerge;
 using UnityEngine;
+using UnityEngine.Pool;
 
 namespace TripleMerge
 {
@@ -112,7 +113,7 @@ namespace TripleMerge
             IsSelecting = true;
         }
 
-        private void Deselect()
+        protected void Deselect()
         {
             if (!IsSelecting)
             {
@@ -127,6 +128,43 @@ namespace TripleMerge
             //IsLongPressedTriggered = false;
 
             IsSelecting = false;
+        }
+        
+        public static List<MergeableCell> GetMergeableEmptyCellsByDistance(int requiredNum, Vector3 cellPosition)
+        {
+            var mergeableCells = ListPool<MergeableCell>.Get();
+            foreach (var mergeableCell in TripleMergeSystem.Instance.Gameplay.MapManager.MapArea.MergeableCellsDictionary.Values)
+            {
+                if (mergeableCell.CellStatus != MergeableCell.ECellStatus.Mergeable || mergeableCell.PlacedItem != null)
+                {
+                    continue;
+                }
+
+                mergeableCells.Add(mergeableCell);
+            }
+
+            mergeableCells.Sort((left, right) =>
+            {
+                var leftPointDistance = Vector2.Distance(cellPosition, left.transform.position);
+                var rightPointDistance = Vector2.Distance(cellPosition, right.transform.position);
+
+                if (leftPointDistance < rightPointDistance)
+                {
+                    return -1;
+                }
+
+                return leftPointDistance > rightPointDistance ? 1 : 0;
+            });
+
+            if (mergeableCells.Count > requiredNum)
+            {
+                for (var i = mergeableCells.Count - 1; i >= requiredNum; i--)
+                {
+                    mergeableCells.Remove(mergeableCells[i]);
+                }
+            }
+
+            return mergeableCells;
         }
     }
 }

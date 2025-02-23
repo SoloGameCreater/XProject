@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Framework;
 
 namespace Config.TripleMerge
 {
@@ -24,6 +25,15 @@ namespace Config.TripleMerge
 
             _itemCfgDict[itemId] = config;
             return true;
+        }
+        public bool TryGetRewardBoxReward(int index, out MergeTreasureChestRewards config)
+        {
+            //config = ThreeMergeRewardBoxRewardsList.Find(c => c.Index == index);
+            //return config != null;
+            //todo 新增配置
+            DebugUtil.LogWarning("现在缺少配置，一直都是false");
+            config = null;
+            return false;
         }
     }
 }

@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using GameFramework.Localization;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public static class CommonUtils
 {
@@ -106,5 +108,32 @@ public static class CommonUtils
             return true;
         else
             return false;
+    }
+    
+    // 随机奖励，总权重值为累加结果
+    // 没有奖励时返回权重配置长度
+    public static int GetRandomWeightIndex(List<int> weight)
+    {
+        if (weight == null || weight.Count == 0)
+        {
+            Debug.LogError("weight is null !!!");
+            return 0;
+        }
+
+        int totalWeight = 0;
+        foreach (var v in weight)
+        {
+            totalWeight += v;
+        }
+
+        var randomInt = Random.Range(0, totalWeight);
+        int curWeight = 0;
+        for (int i = 0; i < weight.Count; i++)
+        {
+            curWeight += weight[i];
+            if (randomInt < curWeight) return i;
+        }
+
+        return 0;
     }
 }
