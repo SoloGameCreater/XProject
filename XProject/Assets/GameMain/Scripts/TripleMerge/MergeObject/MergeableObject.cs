@@ -91,6 +91,13 @@ namespace TripleMerge
             var itemPosition = ItemRenderer.transform.position;
             itemPosition.z -= 0.1f;
             GrayItemRenderer.transform.position = itemPosition;
+            
+            _draggingTips = transform.Find("DraggingTips").gameObject;
+            if (_draggingTips != null)
+            {
+                _draggingTips.SetActive(false);
+            }
+
         }
 
         protected override void OnLongPressTrigger()
