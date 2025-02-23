@@ -6,6 +6,15 @@ namespace TripleMerge
 {
     public partial class OnCellObject
     {
+        protected enum EInputOrderStage
+        {
+            None,
+            MouseDown,
+            LongPressListen,
+            LongPressed,
+            Dragging,
+        }
+        
         private const float LongPressListenTriggerTime = 0.2f;
         private const float LongPressListenEnterTime = 0.5f;
         public bool IsDragging { private set; get; }

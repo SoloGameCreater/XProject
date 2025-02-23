@@ -4,8 +4,16 @@ using System;
 
 namespace TripleMerge
 {
+    
     public class TripleMergeCameraComponent : MonoBehaviour
     {
+        private enum ECameraInputBehaviour
+        {
+            None,
+            Prepare,
+            CameraMove,
+            CameraScale,
+        }
         private Camera _sceneCamera;
         
         public Transform MinPosition;
@@ -31,10 +39,6 @@ namespace TripleMerge
         private Vector2 _prevMousePos;
         private Vector2 _moveSpeed;
         private float _autoScale;
-        private bool _autoMoveFlag = false;
-        private bool _autoMoveScaleFlag = false;
-        private bool _autoScaleFlag = false;
-        private bool _autoScalePositionFlag = false;
         private Action _completeCallback = null;
 
         private Vector3 _targetPosition;
@@ -45,14 +49,17 @@ namespace TripleMerge
         public float _focusTime = 1.0f;
         private float _focusEscapeTime = 0.0f;
 
+        private ECameraInputBehaviour _cameraInputBehaviour;
         public float CurrentCameraScale
         {
             get { return _sceneCamera.orthographicSize / _originCameraSize; }
         }
+        public bool IsInCameraOperation => _cameraInputBehaviour != ECameraInputBehaviour.None;
         
         private void Awake()
         {
             _sceneCamera = SceneRoot.Instance.mSceneCamera;
+            _cameraInputBehaviour = ECameraInputBehaviour.None;
             
             MinPosition = transform.Find("MinPosition");
             MaxPosition = transform.Find("MaxPosition");
@@ -84,6 +91,7 @@ namespace TripleMerge
         private AnimationCurve _curve = AnimationCurve.EaseInOut(0, 0, 1, 1);
         void FixedUpdate()
         {
+            #region 直接定位到目标位置
             if (_focusEnable)
             {
                 _focusEscapeTime += Time.deltaTime;
@@ -107,103 +115,108 @@ namespace TripleMerge
 
                 return;
             }
-
+            #endregion
+            
             if (CommonUtils.IsTouchUGUI()) return;
-
-
             
 #if UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_EDITOR
-            {
-                var scrollWheelInput = Input.GetAxis("Mouse ScrollWheel");
-
-                if (Input.GetMouseButtonDown(0))
-                {
-                    _prevMousePos = Input.mousePosition;
-                }
-
-                if (Input.GetMouseButton(0))
-                {
-                    ClearFlags();
-                    var currentMousePos = Input.mousePosition;
-
-                    var worldOffset = _sceneCamera.ScreenToWorldPoint(currentMousePos) - _sceneCamera.ScreenToWorldPoint(_prevMousePos);
-                    _moveSpeed = worldOffset / Time.deltaTime;
-
-                    Move(_moveSpeed);
-
-                    _prevMousePos = currentMousePos;
-                }
-                else
-                {
-                    _moveSpeed *= Mathf.Pow(0.01f, Time.deltaTime);
-                    if (Mathf.Abs(Vector3.Magnitude(_moveSpeed)) < 1)
-                    {
-                        _moveSpeed = Vector3.zero;
-                    }
-
-                    Move(_moveSpeed);
-                }
-
-                if (Mathf.Abs(scrollWheelInput) > float.Epsilon)
-                {
-                    ClearFlags();
-
-                    var curSize = _sceneCamera.orthographicSize;
-                    curSize /= 1 + scrollWheelInput;
-                    TouchScale(curSize);
-                }
-            }
+            PCInputListener();
 #elif UNITY_ANDROID || UNITY_IOS
-            {
-                if (Input.touchCount == 2)
-                {
-                    ClearFlags();
-                    var touch0 = Input.GetTouch(0);
-                    var touch1 = Input.GetTouch(1);
-                    if (touch0.phase == TouchPhase.Began || touch1.phase == TouchPhase.Began)
-                    {
-                        _startTouch_1 = touch0;
-                        _startTouch_2 = touch1;
-                    }
-                    else if (touch0.phase == TouchPhase.Moved || touch1.phase == TouchPhase.Moved)
-                    {
-                        var currentDist = Vector2.Distance(touch0.position, touch1.position);
-                        var prevDist = Vector2.Distance(touch0.position - touch0.deltaPosition, touch1.position - touch1.deltaPosition);
-
-                        var curSize = _sceneCamera.orthographicSize;
-                        curSize /= currentDist / prevDist;
-                        TouchScale(curSize);
-                    }
-                }
-                else if (Input.touchCount == 1)
-                {
-                    ClearFlags();
-
-                    _startTouch_1 = Input.GetTouch(0);
-                    if (_startTouch_1.phase == TouchPhase.Moved)
-                    {
-                        var currentMousePos = _startTouch_1.position;
-                        var prePos = _startTouch_1.position - _startTouch_1.deltaPosition;
-                        var worldOffset = _sceneCamera.ScreenToWorldPoint(currentMousePos) - _sceneCamera.ScreenToWorldPoint(prePos);
-                        _moveSpeed = worldOffset / Time.deltaTime;
-                        Move(_moveSpeed);
-                    }
-                }
-                else
-                {
-                    _moveSpeed *= Mathf.Pow(0.0005f, Time.deltaTime);
-                    if (Mathf.Abs(Vector3.Magnitude(_moveSpeed)) < 1)
-                    {
-                        _moveSpeed = Vector3.zero;
-                    }
-
-                    Move(_moveSpeed);
-                }
-            }
-            
+            CellPhoneInputListener();
 #endif
         }
 
+        private void PCInputListener()
+        {
+            var scrollWheelInput = Input.GetAxis("Mouse ScrollWheel");
+
+            // 鼠标抬起，状态置空
+            if (Input.GetMouseButtonUp(0))
+            {
+                _cameraInputBehaviour = ECameraInputBehaviour.None;
+            }
+            if (Input.GetMouseButtonDown(0))
+            {
+                _prevMousePos = Input.mousePosition;
+                _cameraInputBehaviour = ECameraInputBehaviour.Prepare;
+            }
+
+            if (_cameraInputBehaviour == ECameraInputBehaviour.Prepare && Input.GetMouseButton(0))
+            {
+                var currentMousePos = Input.mousePosition;
+
+                var worldOffset = _sceneCamera.ScreenToWorldPoint(currentMousePos) - _sceneCamera.ScreenToWorldPoint(_prevMousePos);
+                _moveSpeed = worldOffset / Time.deltaTime;
+
+                Move(_moveSpeed);
+                
+                _cameraInputBehaviour = ECameraInputBehaviour.CameraMove;
+                _prevMousePos = currentMousePos;
+            }
+            // 惯性
+            else
+            {
+                _moveSpeed *= Mathf.Pow(0.01f, Time.deltaTime);
+                if (Mathf.Abs(Vector3.Magnitude(_moveSpeed)) < 1)
+                {
+                    _moveSpeed = Vector3.zero;
+                }
+                Move(_moveSpeed);
+                _cameraInputBehaviour = ECameraInputBehaviour.None;
+            }
+
+            if (Mathf.Abs(scrollWheelInput) > float.Epsilon)
+            {
+                var curSize = _sceneCamera.orthographicSize;
+                curSize /= 1 + scrollWheelInput;
+                TouchScale(curSize);
+            }
+        }
+
+        private void CellPhoneInputListener()
+        {
+            if (Input.touchCount == 2)
+            {
+                var touch0 = Input.GetTouch(0);
+                var touch1 = Input.GetTouch(1);
+                if (touch0.phase == TouchPhase.Began || touch1.phase == TouchPhase.Began)
+                {
+                    _startTouch_1 = touch0;
+                    _startTouch_2 = touch1;
+                }
+                else if (touch0.phase == TouchPhase.Moved || touch1.phase == TouchPhase.Moved)
+                {
+                    var currentDist = Vector2.Distance(touch0.position, touch1.position);
+                    var prevDist = Vector2.Distance(touch0.position - touch0.deltaPosition, touch1.position - touch1.deltaPosition);
+
+                    var curSize = _sceneCamera.orthographicSize;
+                    curSize /= currentDist / prevDist;
+                    TouchScale(curSize);
+                }
+            }
+            else if (Input.touchCount == 1)
+            {
+                _startTouch_1 = Input.GetTouch(0);
+                if (_startTouch_1.phase == TouchPhase.Moved)
+                {
+                    var currentMousePos = _startTouch_1.position;
+                    var prePos = _startTouch_1.position - _startTouch_1.deltaPosition;
+                    var worldOffset = _sceneCamera.ScreenToWorldPoint(currentMousePos) - _sceneCamera.ScreenToWorldPoint(prePos);
+                    _moveSpeed = worldOffset / Time.deltaTime;
+                    Move(_moveSpeed);
+                }
+            }
+            else
+            {
+                _moveSpeed *= Mathf.Pow(0.0005f, Time.deltaTime);
+                if (Mathf.Abs(Vector3.Magnitude(_moveSpeed)) < 1)
+                {
+                    _moveSpeed = Vector3.zero;
+                }
+
+                Move(_moveSpeed);
+            }
+        }
         private void Move(Vector3 speed)
         {
             if (speed == Vector3.zero) return;
@@ -237,6 +250,8 @@ namespace TripleMerge
             _sceneCamera.orthographicSize = curSize;
 
             BoundLimit();
+            
+            _cameraInputBehaviour = ECameraInputBehaviour.CameraScale;
         }
 
         // 通过公式计算出差值
@@ -245,15 +260,7 @@ namespace TripleMerge
             var diff = target - origin;
             return origin + diff * percent;
         }
-
-        private void ClearFlags()
-        {
-            _autoMoveFlag = false;
-            _autoMoveScaleFlag = false;
-            _autoScaleFlag = false;
-            _autoScalePositionFlag = false;
-        }
-
+        
         private void BoundLimit()
         {
             var curScale = _sceneCamera.orthographicSize / _originCameraSize;
@@ -318,11 +325,6 @@ namespace TripleMerge
         {
             _prevMousePos = Vector2.zero;
             _moveSpeed = Vector2.zero;
-            _autoScale = 0;
-            _autoMoveFlag = false;
-            _autoMoveScaleFlag = false;
-            _autoScaleFlag = false;
-            _autoScalePositionFlag = false;
             _targetPosition = Vector3.zero;
             _targetScale = 0f;
             _originPosition = Vector3.zero;

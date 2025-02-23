@@ -42,7 +42,7 @@ namespace TripleMerge
 
         protected override void OnRecycle()
         {
-            throw new System.NotImplementedException();
+            transform.localScale = Vector3.one;
         }
 
         protected override void OnCfgDataUpdated()
