@@ -95,38 +95,31 @@ namespace TripleMerge
             var categoryWeightRandomList = ListPool<(MergeableItemCfg, int)>.Get();
             foreach (var threeMergeableItemId in unlockedItems)
             {
-                if (TripleMergeConfigManager.Instance.TryGetItemConfig(threeMergeableItemId, out var threeMergeableItem))
+                if (!TripleMergeConfigManager.Instance.TryGetItemConfig(threeMergeableItemId, out var threeMergeableItem))continue;
+                
+                if (threeMergeableItem.Level != 1)
+                    continue;
+
+                if (Utils.ParseTripleMergeItemType(threeMergeableItem.ItemType) != TripleMergeItemType.MergeableNormal)
+                    continue;
+
+                if (threeMergeableItem.ProduceWeight <= 0)
+                    continue;
+
+                // 如果该合成链的最高级别物品已经通过合成解锁过
+                var chain = TripleMergeConfigManager.Instance.GetChainConfig(threeMergeableItem.ChainId);
+                var finalItemOfChain = chain.Chain[^1];
+                if (model.SaveFileTripleMerge.UnlockedMergeableItems.ContainsKey(finalItemOfChain))
                 {
-                    if (threeMergeableItem.Level != 1)
-                    {
-                        continue;
-                    }
-
-                    if (Utils.ParseTripleMergeItemType(threeMergeableItem.ItemType) != TripleMergeItemType.MergeableNormal)
-                    {
-                        continue;
-                    }
-
-                    if (threeMergeableItem.ProduceWeight <= 0)
-                    {
-                        continue;
-                    }
-
-                    // todo 如果该合成链的最高级别物品已经通过合成解锁过
-                    // var chain = TripleMergeConfigManager.Instance.GetChainConfig(threeMergeableItem.ChainId);
-                    // var finalItemOfChain = chain.Chain[^1];
-                    // if (model.SaveFileTripleMerge.UnlockedMergeableItems.ContainsKey(finalItemOfChain))
-                    // {
-                    //     Debug.Log($"物品[{threeMergeableItem.Id}]所处的合成链中，最高级别的物品[{finalItemOfChain}]已经通过合成得到过，不再开出该物品!");
-                    //     skipNum++;
-                    //     continue;
-                    // }
-
-                    categoryWeightRandomList.Add((threeMergeableItem, threeMergeableItem.ProduceWeight));
+                    Debug.Log($"物品[{threeMergeableItem.Id}]所处的合成链中，最高级别的物品[{finalItemOfChain}]已经通过合成得到过，不再开出该物品!");
+                    skipNum++;
+                    continue;
                 }
+
+                categoryWeightRandomList.Add((threeMergeableItem, threeMergeableItem.ProduceWeight));
             }
 
-            if (categoryWeightRandomList.Count >= 3)
+            if (categoryWeightRandomList.Count >= 3 || skipNum <= 0)
             {
                 var itemCategoryNum = Mathf.Min(3, categoryWeightRandomList.Count);
                 for (int i = 0; i < itemCategoryNum; i++)
@@ -139,7 +132,23 @@ namespace TripleMerge
             // todo 如果经过过滤已合成最高级别物品之后，宝箱可以开出的1级景观种类已经不足3种了
             else
             {
-                
+                foreach (var item in categoryWeightRandomList)
+                {
+                    resultCfg.Add(item.Item1);
+                }
+
+                var lackOfNum = 3 - categoryWeightRandomList.Count;
+                var gotCnt = 0;
+                // foreach (var chain in TripleMergeConfigManager.Instance.MergeChainList)
+                // {
+                //     if (gotCnt >= lackOfNum) break;
+                //
+                //     var item = TripleMergeConfigManager.Instance.GetItemConfig(chain.Chain[0]);
+                //     if (item is not {ItemType: (int) TripleMergeItemType.MergeableNormal}) continue;
+                //
+                //     resultCfg.Add(item);
+                //     gotCnt++;
+                // }
             }
 
             ListPool<(MergeableItemCfg, int)>.Release(categoryWeightRandomList);
@@ -156,10 +165,13 @@ namespace TripleMerge
                 //var num = itemType == ThreeMergeItemType.Charactor ? 1 : i < result.Count - 1 ? Random.Range(1, remainItemNum - (result.Count - i)) : remainItemNum;
                 int num;
                 // 如果物品不是角色类型
-                if (i < resultCfg.Count - 1) {
+                if (i < resultCfg.Count - 1) 
+                {
                     // 如果当前索引 i 小于结果列表的倒数第二个索引，生成随机数量
                     num = Random.Range(1, remainItemNum - (resultCfg.Count - i));
-                } else {
+                } 
+                else 
+                {
                     // 如果当前索引 i 是结果列表的最后一个物品，num 设置为剩余物品数量
                     num = remainItemNum;
                 }

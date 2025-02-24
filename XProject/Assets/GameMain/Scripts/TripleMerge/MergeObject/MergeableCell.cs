@@ -295,7 +295,7 @@ namespace TripleMerge
                 }
 
                 if (item == PlacedItem) return;
-                
+
                 // 如果交换的对象是同一类合成物或者是万能牌则尝试进行合成
                 if (item.CfgData.Id == PlacedItem.CfgData.Id || item.IsUniversalCard)
                 {
@@ -393,10 +393,10 @@ namespace TripleMerge
             try
             {
                 // 提前计算容量并只添加有效的格子
-                
+
                 // 获取目标单元格字典并预分配容量
-                var targetCells = allowQueryFromAllAreas 
-                    ? TripleMergeSystem.Instance.Gameplay.MapManager.MapArea.MergeableCellsDictionary 
+                var targetCells = allowQueryFromAllAreas
+                    ? TripleMergeSystem.Instance.Gameplay.MapManager.MapArea.MergeableCellsDictionary
                     : BelongRegion.BelongArea.MergeableCellsDictionary;
 
                 // 健壮性检查
@@ -404,7 +404,7 @@ namespace TripleMerge
                 {
                     throw new InvalidOperationException("Target cells dictionary is null.");
                 }
-                
+
                 // 预分配容量并填充空单元格
                 tempList.Capacity = targetCells.Count;
                 AddEmptyCells(targetCells.Values, tempList);
@@ -567,7 +567,79 @@ namespace TripleMerge
 
                 void CalculateMerge()
                 {
-                    // todo 开始计算合成
+                    // 获取合并链和基础物品
+                    MergeChain targetChain = null;
+                    MergeableItemCfg mergeBaseItem = null;
+
+                    // 遍历待合并物品，找到非万能卡的基础物品
+                    foreach (var tobeMergeItem in tobeMergeItems.Where(tobeMergeItem => !tobeMergeItem.IsUniversalCard))
+                    {
+                        targetChain = TripleMergeConfigManager.Instance.GetChainConfig(tobeMergeItem.CfgData.ChainId);
+                        mergeBaseItem = tobeMergeItem.CfgData;
+                        break;
+                    }
+
+                    // 验证合并链是否存在
+                    if (targetChain == null)
+                    {
+                        Debug.LogError($"三合合成物ID[{tobeMergeItems[0].CfgData.Id}]找不到对应的合成链配置数据");
+                        return;
+                    }
+
+                    // 验证是否已是最高级别
+                    if (targetChain.Chain.IndexOf(tobeMergeItems[0].CfgData.Id) == targetChain.Chain.Count - 1)
+                    {
+                        Debug.LogError($"三合合成物ID[{tobeMergeItems[0].CfgData.Id}]已经是最高级别物品了");
+                        return;
+                    }
+
+                    while (tobeMergeItems.Count >= 3)
+                    {
+                        var itemId = mergeBaseItem.Id;
+                        var nextLevelItemNumAfterMerge = tobeMergeItems.Count / 3;
+                        
+                        // 计算剩余物品
+                        var remainCurrentLevelNum = tobeMergeItems.Count % 3;
+                        if (remainCurrentLevelNum > 0) 
+                        {
+                            mergeResults[itemId] = remainCurrentLevelNum;
+                        }
+
+                        // 处理待销毁物品
+                        for (var i = tobeMergeItems.Count - 1; i >= remainCurrentLevelNum; i--)
+                        {
+                            var tobeDestroyItem = tobeMergeItems[i];
+                            tobeDestroyItem.IsMerging = false;
+                            tobeMergeItems.Remove(tobeDestroyItem);
+                            OnCellObjectPool.Recycle(tobeDestroyItem);
+                        }
+                        // 清空待合并列表
+                        tobeMergeItems.Clear();
+
+                        // 生成下一级物品
+                        var nextLevelItemCfg = TripleMergeConfigManager.Instance.GetItemConfig(targetChain.Chain[targetChain.Chain.IndexOf(itemId) + 1]);
+                        for (int i = 0; i < nextLevelItemNumAfterMerge; i++)
+                        {
+                            unlockNewItems.Add(nextLevelItemCfg.Id);
+                            var nextLevelItem = OnCellObjectPool.GetItem(nextLevelItemCfg) as MergeableObject;
+                            nextLevelItem.SetCfgData(nextLevelItemCfg);
+                            nextLevelItem.transform.position = new Vector3(transform.position.x, transform.position.y, nextLevelItem.transform.position.z);
+                            tobeMergeItems.Add(nextLevelItem);
+                        }
+
+                        finalMergeItemId = nextLevelItemCfg.Id;
+                        // 检查是否继续合并
+                        if (tobeMergeItems.Count < 3)
+                        {
+                            afterMergeItems.AddRange(tobeMergeItems);
+                            mergeResults[finalMergeItemId] = tobeMergeItems.Count;
+                            tobeMergeItems.Clear();
+                        }
+                        else
+                        {
+                            mergeBaseItem = tobeMergeItems[0].CfgData;
+                        }
+                    }
                 }
             }
             catch (Exception e)
