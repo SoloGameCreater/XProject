@@ -260,14 +260,9 @@ namespace TripleMerge
             // 绑定地块和Item的关系
             if (_isInitialized)
             {
-                if (item.ItemSaveData != null)
-                {
-                    item.BindItemSaveData(TripleMergeSystem.Instance.Model.SetCellPlaceItem(_saveData, item.ItemSaveData));
-                }
-                else
-                {
-                    item.BindItemSaveData(TripleMergeSystem.Instance.Model.SetCellPlaceItem(_saveData, item.CfgData.Id));
-                }
+                item.BindItemSaveData(item.ItemSaveData != null
+                    ? TripleMergeSystem.Instance.Model.SetCellPlaceItem(_saveData, item.ItemSaveData)
+                    : TripleMergeSystem.Instance.Model.SetCellPlaceItem(_saveData, item.CfgData.Id));
             }
             else
             {
@@ -299,23 +294,22 @@ namespace TripleMerge
                     return;
                 }
 
-                if (item != PlacedItem)
+                if (item == PlacedItem) return;
+                
+                // 如果交换的对象是同一类合成物或者是万能牌则尝试进行合成
+                if (item.CfgData.Id == PlacedItem.CfgData.Id || item.IsUniversalCard)
                 {
-                    // 如果交换的对象是同一类合成物或者是万能牌则尝试进行合成
-                    if (item.CfgData.Id == PlacedItem.CfgData.Id || item.IsUniversalCard)
+                    int callerItemId = PlacedItem.CfgData.Id;
+                    if (TryToMerge(item, (finalItemId) => { Debug.Log($"[MERGE END] caller:{callerItemId} . final: {finalItemId}"); }))
                     {
-                        int callerItemId = PlacedItem.CfgData.Id;
-                        if (TryToMerge(item, (finalItemId) => { Debug.Log($"[MERGE END] caller:{callerItemId} . final: {finalItemId}"); }))
-                        {
-                            onMergedAction?.Invoke();
-                            return;
-                        }
+                        onMergedAction?.Invoke();
+                        return;
                     }
-
-                    SetPlacedItem(item);
-
-                    onMergedAction?.Invoke();
                 }
+
+                SetPlacedItem(item);
+
+                onMergedAction?.Invoke();
             }
         }
 
@@ -399,30 +393,49 @@ namespace TripleMerge
             try
             {
                 // 提前计算容量并只添加有效的格子
-                if (!allowQueryFromAllAreas)
+                
+                // 获取目标单元格字典并预分配容量
+                var targetCells = allowQueryFromAllAreas 
+                    ? TripleMergeSystem.Instance.Gameplay.MapManager.MapArea.MergeableCellsDictionary 
+                    : BelongRegion.BelongArea.MergeableCellsDictionary;
+
+                // 健壮性检查
+                if (targetCells == null)
                 {
-                    tempList.Capacity = BelongRegion.BelongArea.MergeableCellsDictionary.Count;
-                    foreach (var cell in BelongRegion.BelongArea.MergeableCellsDictionary.Values)
-                    {
-                        if (IsCellEmpty(cell))
-                        {
-                            tempList.Add(cell);
-                        }
-                    }
+                    throw new InvalidOperationException("Target cells dictionary is null.");
                 }
-                else
+                
+                // 预分配容量并填充空单元格
+                tempList.Capacity = targetCells.Count;
+                AddEmptyCells(targetCells.Values, tempList);
+
+                // 添加空单元格
+                void AddEmptyCells(IEnumerable<MergeableCell> cells, List<MergeableCell> targetList)
                 {
-                    var totalCells = TripleMergeSystem.Instance.Gameplay.MapManager.MapArea.MergeableCellsDictionary;
-                    tempList.Capacity = totalCells.Count;
-                    var area = TripleMergeSystem.Instance.Gameplay.MapManager.MapArea;
-                    foreach (var cell in area.MergeableCellsDictionary.Values)
-                    {
-                        if (IsCellEmpty(cell))
-                        {
-                            tempList.Add(cell);
-                        }
-                    }
+                    targetList.AddRange(cells.Where(IsCellEmpty));
                 }
+                // if (!allowQueryFromAllAreas)
+                // {
+                //     tempList.Capacity = BelongRegion.BelongArea.MergeableCellsDictionary.Count;
+                //     foreach (var cell in BelongRegion.BelongArea.MergeableCellsDictionary.Values)
+                //     {
+                //         if (!IsCellEmpty(cell))continue;
+                //         
+                //         tempList.Add(cell);
+                //     }
+                // }
+                // else
+                // {
+                //     var totalCells = TripleMergeSystem.Instance.Gameplay.MapManager.MapArea.MergeableCellsDictionary;
+                //     tempList.Capacity = totalCells.Count;
+                //     var area = TripleMergeSystem.Instance.Gameplay.MapManager.MapArea;
+                //     foreach (var cell in area.MergeableCellsDictionary.Values)
+                //     {
+                //         if (!IsCellEmpty(cell)) continue;
+                //         
+                //         tempList.Add(cell);
+                //     }
+                // }
 
                 if (tempList.Count < targetCellNum)
                 {
@@ -448,16 +461,22 @@ namespace TripleMerge
         // 优化5：使用快速选择算法，只排序需要的部分
         private void QuickSelectByDistance(List<MergeableCell> cells, int left, int right, int k)
         {
-            if (left >= right) return;
+            while (true)
+            {
+                if (left >= right) return;
 
-            int pivot = Partition(cells, left, right);
+                int pivot = Partition(cells, left, right);
 
-            if (pivot == k - 1)
-                return;
-            if (pivot > k - 1)
-                QuickSelectByDistance(cells, left, pivot - 1, k);
-            else
-                QuickSelectByDistance(cells, pivot + 1, right, k);
+                if (pivot == k - 1) return;
+                if (pivot > k - 1)
+                {
+                    right = pivot - 1;
+                }
+                else
+                {
+                    left = pivot + 1;
+                }
+            }
         }
 
         private int Partition(List<MergeableCell> cells, int left, int right)
