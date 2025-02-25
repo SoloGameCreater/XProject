@@ -130,53 +130,77 @@ namespace TripleMerge
 #endif
         }
 
+        private bool _isMouseInputting;
         private void PCInputListener()
         {
-            var scrollWheelInput = Input.GetAxis("Mouse ScrollWheel");
+            // 摄像机缩放
+            HandlePCCameraZoom();
 
-            // 鼠标抬起，状态置空
-            if (Input.GetMouseButtonUp(0))
+            if (!Input.GetMouseButton(0) && !Input.GetMouseButtonDown(0))
             {
-                _cameraInputBehaviour = ECameraInputBehaviour.None;
-            }
-            if (Input.GetMouseButtonDown(0))
-            {
-                _prevMousePos = Input.mousePosition;
-                _cameraInputBehaviour = ECameraInputBehaviour.Prepare;
+                return;
             }
 
-            if (_cameraInputBehaviour == ECameraInputBehaviour.Prepare && Input.GetMouseButton(0))
+            // Handle initial mouse click when in None state
+            if (_cameraInputBehaviour == ECameraInputBehaviour.None)
             {
-                var currentMousePos = Input.mousePosition;
-
-                var worldOffset = _sceneCamera.ScreenToWorldPoint(currentMousePos) - _sceneCamera.ScreenToWorldPoint(_prevMousePos);
-                _moveSpeed = worldOffset / Time.deltaTime;
-
-                Move(_moveSpeed);
-                
-                _cameraInputBehaviour = ECameraInputBehaviour.CameraMove;
-                _prevMousePos = currentMousePos;
-            }
-            // 惯性
-            else
-            {
-                _moveSpeed *= Mathf.Pow(0.01f, Time.deltaTime);
-                if (Mathf.Abs(Vector3.Magnitude(_moveSpeed)) < 1)
+                if (!Input.GetMouseButtonDown(0))
                 {
-                    _moveSpeed = Vector3.zero;
+                    return;
                 }
-                Move(_moveSpeed);
-                _cameraInputBehaviour = ECameraInputBehaviour.None;
-            }
 
-            if (Mathf.Abs(scrollWheelInput) > float.Epsilon)
+                if (CommonUtils.IsTouchUGUI())
+                {
+                    return;
+                }
+
+                _isMouseInputting = true;
+                _prevMousePos = Input.mousePosition;
+                _cameraInputBehaviour = ECameraInputBehaviour.CameraMove;
+                return;
+            }
+            
+            switch (_cameraInputBehaviour)
             {
-                var curSize = _sceneCamera.orthographicSize;
-                curSize /= 1 + scrollWheelInput;
-                TouchScale(curSize);
+                case ECameraInputBehaviour.CameraMove:
+                    HandlePCCameraMove();
+                    break;
             }
         }
 
+        private void HandlePCCameraMove()
+        {
+            if (!Input.GetMouseButton(0))
+            {
+                _isMouseInputting = false;
+                _cameraInputBehaviour = ECameraInputBehaviour.None;
+                //SaveCamera();
+                return;
+            }
+            var currentMousePos = Input.mousePosition;
+
+            var worldOffset = _sceneCamera.ScreenToWorldPoint(currentMousePos) - _sceneCamera.ScreenToWorldPoint(_prevMousePos);
+            _moveSpeed = worldOffset / Time.deltaTime;
+
+            Move(_moveSpeed);
+                
+            _cameraInputBehaviour = ECameraInputBehaviour.CameraMove;
+            _prevMousePos = currentMousePos;
+        }
+
+        private void HandlePCCameraZoom()
+        {
+            var scrollWheelDelta = Input.GetAxis("Mouse ScrollWheel");
+            if (Mathf.Approximately(scrollWheelDelta, 0f))
+            {
+                return;
+            }
+
+            var curSize = _sceneCamera.orthographicSize;
+            curSize /= 1 + scrollWheelDelta;
+            TouchScale(curSize);
+            //SaveCamera();
+        }
         private void CellPhoneInputListener()
         {
             // Early return if no touches
