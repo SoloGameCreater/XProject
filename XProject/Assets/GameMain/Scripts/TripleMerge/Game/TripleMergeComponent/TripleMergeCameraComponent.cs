@@ -1,6 +1,7 @@
 
 using UnityEngine;
 using System;
+using Framework;
 
 namespace TripleMerge
 {
@@ -50,6 +51,9 @@ namespace TripleMerge
         private float _focusEscapeTime = 0.0f;
 
         private ECameraInputBehaviour _cameraInputBehaviour;
+        //private Vector3 _lastMoveControlTouch;
+        private Vector3 _lastScaleTouch1, _lastScaleTouch2;
+        public Transform DraggingItem;
         public float CurrentCameraScale
         {
             get { return _sceneCamera.orthographicSize / _originCameraSize; }
@@ -175,46 +179,103 @@ namespace TripleMerge
 
         private void CellPhoneInputListener()
         {
-            if (Input.touchCount == 2)
+            // Early return if no touches
+            if (Input.touches.Length == 0)
             {
-                var touch0 = Input.GetTouch(0);
-                var touch1 = Input.GetTouch(1);
-                if (touch0.phase == TouchPhase.Began || touch1.phase == TouchPhase.Began)
-                {
-                    _startTouch_1 = touch0;
-                    _startTouch_2 = touch1;
-                }
-                else if (touch0.phase == TouchPhase.Moved || touch1.phase == TouchPhase.Moved)
-                {
-                    var currentDist = Vector2.Distance(touch0.position, touch1.position);
-                    var prevDist = Vector2.Distance(touch0.position - touch0.deltaPosition, touch1.position - touch1.deltaPosition);
-
-                    var curSize = _sceneCamera.orthographicSize;
-                    curSize /= currentDist / prevDist;
-                    TouchScale(curSize);
-                }
+                return;
             }
-            else if (Input.touchCount == 1)
+            if (_cameraInputBehaviour == ECameraInputBehaviour.None)
             {
-                _startTouch_1 = Input.GetTouch(0);
-                if (_startTouch_1.phase == TouchPhase.Moved)
+                var touch = Input.GetTouch(0);
+                if (touch.phase != TouchPhase.Began)
                 {
-                    var currentMousePos = _startTouch_1.position;
-                    var prePos = _startTouch_1.position - _startTouch_1.deltaPosition;
-                    var worldOffset = _sceneCamera.ScreenToWorldPoint(currentMousePos) - _sceneCamera.ScreenToWorldPoint(prePos);
-                    _moveSpeed = worldOffset / Time.deltaTime;
-                    Move(_moveSpeed);
-                }
-            }
-            else
-            {
-                _moveSpeed *= Mathf.Pow(0.0005f, Time.deltaTime);
-                if (Mathf.Abs(Vector3.Magnitude(_moveSpeed)) < 1)
-                {
-                    _moveSpeed = Vector3.zero;
+                    return;
                 }
 
+                if (CommonUtils.IsTouchUGUI())
+                {
+                    Debug.Log($"click on ui when stage none");
+                    return;
+                }
+                _startTouch_1 = touch;
+                _lastScaleTouch1 = touch.position;
+                _cameraInputBehaviour = ECameraInputBehaviour.Prepare;
+                Debug.Log($"enter prepare stage");
+                return; 
+            }
+
+            switch (_cameraInputBehaviour)
+            {
+                case ECameraInputBehaviour.Prepare:
+                    HandlePrepareStage();
+                    break;
+                case ECameraInputBehaviour.CameraMove:
+                    HandleCameraMove();
+                    break;
+                case ECameraInputBehaviour.CameraScale:
+                    HandleCameraScale();
+                    break;
+            }
+        }
+
+        private void HandlePrepareStage()
+        {
+            if (Input.touches.Length == 1)
+            {
+                var touch = Input.GetTouch(0);
+                if (touch is { phase: TouchPhase.Moved, deltaPosition: { magnitude: >= 1.5f } })
+                {
+                    _startTouch_1 = touch;
+                    _cameraInputBehaviour = ECameraInputBehaviour.CameraMove;
+                    Debug.Log($"enter move stage");
+                }
+            }
+            else if (Input.touches.Length >= 2)
+            {
+                var touch1 = Input.GetTouch(0);
+                var touch2 = Input.GetTouch(1);
+
+                if (touch2.phase == TouchPhase.Began)
+                {
+                    Debug.Log($"enter camera scale stage");
+                    _cameraInputBehaviour = ECameraInputBehaviour.CameraScale;
+                    _startTouch_1 = touch1;
+                    _startTouch_2 = touch2;
+                    DraggingItem = null;
+                }
+            }
+        }
+        private void HandleCameraMove()
+        {
+            if (Input.touches.Length == 1)
+            {
+                var touch = Input.GetTouch(0);
+                if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
+                {
+                    _cameraInputBehaviour = ECameraInputBehaviour.None;
+                    Debug.Log($"enter none stage from move");
+                    //SaveCamera();
+                    Debug.Log("将最新的相机信息写入存档!");
+                    return;
+                }
+
+                var currentMousePos = _startTouch_1.position;
+                var prePos = _startTouch_1.position - _startTouch_1.deltaPosition;
+                var worldOffset = _sceneCamera.ScreenToWorldPoint(currentMousePos) - _sceneCamera.ScreenToWorldPoint(prePos);
+                _moveSpeed = worldOffset / Time.deltaTime;
+                
                 Move(_moveSpeed);
+                _startTouch_1 = touch;
+            }
+            else if (Input.touches.Length >= 2)
+            {
+                var touch1 = Input.GetTouch(0);
+                var touch2 = Input.GetTouch(1);
+
+                _startTouch_1 = touch1;
+                _startTouch_2 = touch2;
+                _cameraInputBehaviour = ECameraInputBehaviour.CameraScale;
+                Debug.Log($"enter scale stage from move stage");
             }
         }
         private void Move(Vector3 speed)
@@ -239,9 +300,46 @@ namespace TripleMerge
             if (nextPos.y < yMin) nextPos.y = yMin;
             if (nextPos.y > yMax) nextPos.y = yMax;
 
+            DebugUtil.Log($"move to {nextPos}");
             _sceneCamera.transform.position = nextPos;
         }
+        private void HandleCameraScale()
+        {
+            if (Input.touches.Length >= 2)
+            {
+                var touch0 = Input.GetTouch(0);
+                var touch1 = Input.GetTouch(1);
+                if (touch0.phase == TouchPhase.Began || touch1.phase == TouchPhase.Began)
+                {
+                    _startTouch_1 = touch0;
+                    _startTouch_2 = touch1;
+                }
+                else if (touch0.phase == TouchPhase.Moved || touch1.phase == TouchPhase.Moved)
+                {
+                    var currentDist = Vector2.Distance(touch0.position, touch1.position);
+                    var prevDist = Vector2.Distance(touch0.position - touch0.deltaPosition,
+                        touch1.position - touch1.deltaPosition);
 
+                    var curSize = CameraManager.MainCamera.orthographicSize;
+                    curSize /= currentDist / prevDist;
+                    TouchScale(curSize);
+                }
+            }
+            else if (Input.touches.Length == 1)
+            {
+                var touch = Input.GetTouch(0);
+                if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
+                {
+                    _cameraInputBehaviour = ECameraInputBehaviour.None;
+                    Debug.Log($"enter none stage from scale stage");
+                    return;
+                }
+
+                _startTouch_1 = touch;
+                _cameraInputBehaviour = ECameraInputBehaviour.CameraMove;
+                Debug.Log($"enter move stage from scale stage");
+            }
+        }
         private void TouchScale(float curSize)
         {
             if (Mathf.Approximately(_sceneCamera.orthographicSize, curSize)) return;
@@ -250,8 +348,6 @@ namespace TripleMerge
             _sceneCamera.orthographicSize = curSize;
 
             BoundLimit();
-            
-            _cameraInputBehaviour = ECameraInputBehaviour.CameraScale;
         }
 
         // 通过公式计算出差值
