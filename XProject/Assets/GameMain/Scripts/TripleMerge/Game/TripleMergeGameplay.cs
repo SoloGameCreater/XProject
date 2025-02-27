@@ -6,6 +6,7 @@ namespace TripleMerge
     public class TripleMergeGameplay
     {
         public TripleMergeMapManager MapManager { get; } = new();
+        public TripleMergeCameraComponent CameraInputManager { get; } = new();
         public TripleMergeTreasureComponent TreasureManager { get; } = new();
 
         private readonly List<ITripleMergeComponent> _components = new();
@@ -19,6 +20,7 @@ namespace TripleMerge
             TripleMergeSystem.Instance.Model.ClearData();
             _components.Clear();
             _components.Add(MapManager);
+            _components.Add(CameraInputManager);
             _components.Add(TreasureManager);
 
             var mainCamera = Camera.main;

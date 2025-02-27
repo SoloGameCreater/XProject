@@ -15,7 +15,7 @@ namespace TripleMerge
 
         public bool IsMerging { get; set; }
         public GameObject MapRoot { get; private set; }
-        public TripleMergeCameraComponent CameraController { get; private set; }
+        //public TripleMergeCameraComponent CameraController { get; private set; }
         public MapAreaComponent MapArea { get; private set; }
         public OnCellObject SelectedCellItem { get; private set;  }
         
@@ -24,7 +24,6 @@ namespace TripleMerge
         {
             GameObject mapPrefab = ResourcesManager.Instance.LoadResource<GameObject>($"TripleMerge/Prefabs/{MapRootPrefabAssetName}");
             MapRoot = GameObject.Instantiate(mapPrefab, TripleMergeSystem.Instance.Gameplay.MergeRoot);
-            CameraController = MapRoot.transform.Find("CameraControl").gameObject.GetOrCreateComponent<TripleMergeCameraComponent>();
             MapCamera = Camera.main;
             LoadMap();
         }
@@ -43,6 +42,8 @@ namespace TripleMerge
             GameObject areaPrefab = ResourcesManager.Instance.LoadResource<GameObject>($"TripleMerge/Prefabs/Area/{AreaPrefabAssetName}");
             var areaNode = GameObject.Instantiate(areaPrefab, MapRoot.transform.Find("Area")).AddComponent<MapAreaComponent>();
             areaNode.Initialize();
+            var cameraNode = MapRoot.transform.Find("CameraControl");
+            areaNode.InitMapCamera(cameraNode);
             MapArea = areaNode;
         }
 

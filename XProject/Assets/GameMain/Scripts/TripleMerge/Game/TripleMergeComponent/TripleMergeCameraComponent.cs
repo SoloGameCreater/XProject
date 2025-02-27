@@ -5,7 +5,7 @@ using Framework;
 namespace TripleMerge
 {
     
-    public class TripleMergeCameraComponent : MonoBehaviour
+    public class TripleMergeCameraComponent : TripleMergeComponent
     {
         private enum ECameraInputBehaviour
         {
@@ -19,14 +19,11 @@ namespace TripleMerge
         public Transform MinPosition;
         public Transform MaxPosition;
         public Transform InitPosition;
-        public Transform FinishPosition;
         private float _originCameraSize;
         private float _minCameraSize;
         private float _maxCameraSize;
         public float _minCameraScale = 0.3f;
         public float _maxCameraScale = 1f;
-        public float _extraMinCameraScale = 0.3f;
-        public float _extraMaxCameraScale = 1f;
 
         private Vector2 _minCameraPosition;
         private Vector2 _maxCameraPosition;
@@ -58,20 +55,21 @@ namespace TripleMerge
             get { return _sceneCamera.orthographicSize / _originCameraSize; }
         }
         public bool IsInCameraOperation => _cameraInputBehaviour != ECameraInputBehaviour.None;
-        
-        private void Awake()
+        public TripleMergeGameplay GamePlayComponent { get; private set; }
+        protected override void OnInitialize()
         {
+            GamePlayComponent = TripleMergeSystem.Instance.Gameplay;
             _sceneCamera = SceneRoot.Instance.mSceneCamera;
             _cameraInputBehaviour = ECameraInputBehaviour.None;
             
-            MinPosition = transform.Find("MinPosition");
-            MaxPosition = transform.Find("MaxPosition");
-            InitPosition = transform.Find("InitPosition");
-            FinishPosition = transform.Find("FinishPosition");
+            MinPosition = GamePlayComponent.MapManager.MapArea.CameraMinPoint;
+            MaxPosition = GamePlayComponent.MapManager.MapArea.CameraMaxPoint;
+            InitPosition = GamePlayComponent.MapManager.MapArea.CameraInitPoint;
 
-            _originCameraSize = 9;
-            _minCameraSize = _originCameraSize * _extraMinCameraScale;
-            _maxCameraSize = _originCameraSize * _extraMaxCameraScale;
+            _originCameraSize = GamePlayComponent.MapManager.MapArea.CameraMaxScaler;
+            
+            _minCameraSize = GamePlayComponent.MapManager.MapArea.CameraMinScaler;
+            _maxCameraSize = GamePlayComponent.MapManager.MapArea.CameraMaxScaler;
 
             _minCameraPosition = MinPosition.position;
             _maxCameraPosition = MaxPosition.position;
@@ -85,41 +83,15 @@ namespace TripleMerge
             if (CommonUtils.IsWideScreenDevice())
             {
                 _minCameraScale /= 0.8f;
-                _extraMinCameraScale /= 0.8f;
 
                 _maxCameraScale *= 0.91f;
-                _extraMaxCameraScale *= 0.91f;
             }
         }
         private AnimationCurve _curve = AnimationCurve.EaseInOut(0, 0, 1, 1);
-        void FixedUpdate()
+        protected override void OnUpdate()
         {
-            #region 直接定位到目标位置
-            if (_focusEnable)
-            {
-                _focusEscapeTime += Time.deltaTime;
-                var camera = _sceneCamera;
-                if (_focusEscapeTime >= _focusTime)
-                {
-                    camera.orthographicSize = _originCameraSize * _targetScale;
-                    camera.transform.position = _targetPosition;
-
-                    _focusEnable = false;
-                    InvokeCompleteCallback();
-                }
-                else
-                {
-                    var percent = _focusEscapeTime / _focusTime;
-                    var value = _curve.Evaluate(percent);
-                    camera.orthographicSize = _originCameraSize * CalculateValue(_originScale, _targetScale, value);
-                    camera.transform.position = new Vector3(CalculateValue(_originPosition.x, _targetPosition.x, value),
-                        CalculateValue(_originPosition.y, _targetPosition.y, value), _targetPosition.z);
-                }
-
-                return;
-            }
-            #endregion
             
+    
             if (CommonUtils.IsTouchUGUI()) return;
             
 #if UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_EDITOR
@@ -217,7 +189,6 @@ namespace TripleMerge
                     return;
                 }
                 _startTouch_1 = touch;
-                _lastScaleTouch1 = touch.position;
                 _cameraInputBehaviour = ECameraInputBehaviour.Prepare;
                 return; 
             }
@@ -255,7 +226,6 @@ namespace TripleMerge
 
                 if (touch2.phase == TouchPhase.Began)
                 {
-                    Debug.Log($"enter camera scale stage");
                     _cameraInputBehaviour = ECameraInputBehaviour.CameraScale;
                     _startTouch_1 = touch1;
                     _startTouch_2 = touch2;
@@ -362,13 +332,6 @@ namespace TripleMerge
 
             BoundLimit();
         }
-
-        // 通过公式计算出差值
-        private float CalculateValue(float origin, float target, float percent)
-        {
-            var diff = target - origin;
-            return origin + diff * percent;
-        }
         
         private void BoundLimit()
         {
@@ -381,56 +344,8 @@ namespace TripleMerge
             position.y = Mathf.Clamp(position.y, _minCameraPosition.y + halfScreenSize.y, _maxCameraPosition.y - halfScreenSize.y);
             _sceneCamera.transform.position = position;
         }
-
-        private Vector3 BoundaryPosition(Vector3 originPosition, float scale)
-        {
-            var halfScreenSize = (_screenMaxPosition - _screenMinPosition) / 2 * scale;
-            var position = new Vector3(originPosition.x, originPosition.y, originPosition.z);
-
-            position.x = Mathf.Clamp(position.x, _minCameraPosition.x + halfScreenSize.x, _maxCameraPosition.x - halfScreenSize.x);
-            position.y = Mathf.Clamp(position.y, _minCameraPosition.y + halfScreenSize.y, _maxCameraPosition.y - halfScreenSize.y);
-
-            return position;
-        }
-
-        public void FocusPosition(Vector2 position, float scale, float focusTime = 1f, Action onFinish = null)
-        {
-            var camera = _sceneCamera;
-            _originPosition = camera.transform.position;
-
-            _originScale = this.CurrentCameraScale;
-            _focusTime = focusTime;
-
-            _targetScale = Mathf.Clamp(scale, _minCameraScale, _maxCameraScale);
-            _targetPosition = BoundaryPosition(new Vector3(position.x, position.y, camera.transform.position.z), _targetScale);
-
-            _focusEnable = true;
-            _completeCallback = onFinish;
-            _focusEscapeTime = 0;
-        }
-
-        private void InvokeCompleteCallback()
-        {
-            var cb = _completeCallback;
-            _completeCallback = null;
-
-            cb?.Invoke();
-        }
-
-        public void FocusTargetPosition(Vector3 position, float scale = 1.0f, bool checkBoundary = false)
-        {
-            var camera = _sceneCamera;
-            scale = Mathf.Clamp(scale, _minCameraScale, _maxCameraScale);
-            camera.orthographicSize = _originCameraSize * scale;
-
-            position.z = camera.transform.position.z;
-            camera.transform.position = position;
-
-            if (checkBoundary)
-                BoundLimit();
-        }
-
-        public void Reset()
+        
+        private void Reset()
         {
             _prevMousePos = Vector2.zero;
             _moveSpeed = Vector2.zero;
@@ -444,6 +359,11 @@ namespace TripleMerge
 
             _sceneCamera.transform.position = Vector3.zero;
             _sceneCamera.orthographicSize = _originCameraSize;
+        }
+
+        protected override void OnDispose()
+        {
+            Reset();
         }
     }
 }

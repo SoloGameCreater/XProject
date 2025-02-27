@@ -47,7 +47,7 @@ namespace TripleMerge
 
         protected override void OnCfgDataUpdated()
         {
-            Debug.LogWarning("配置更新");
+            
         }
 
         protected override void OnClicked()
