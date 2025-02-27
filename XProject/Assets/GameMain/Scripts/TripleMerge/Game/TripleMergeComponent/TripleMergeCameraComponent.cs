@@ -32,23 +32,9 @@ namespace TripleMerge
 
         private Touch _startTouch_1;
         private Touch _startTouch_2;
-
         private Vector2 _prevMousePos;
         private Vector2 _moveSpeed;
-        private float _autoScale;
-        private Action _completeCallback = null;
-
-        private Vector3 _targetPosition;
-        private float _targetScale;
-        private Vector3 _originPosition;
-        private float _originScale;
-        private bool _focusEnable;
-        public float _focusTime = 1.0f;
-        private float _focusEscapeTime = 0.0f;
-
         private ECameraInputBehaviour _cameraInputBehaviour;
-        //private Vector3 _lastMoveControlTouch;
-        private Vector3 _lastScaleTouch1, _lastScaleTouch2;
         public Transform DraggingItem;
         public float CurrentCameraScale
         {
@@ -349,13 +335,6 @@ namespace TripleMerge
         {
             _prevMousePos = Vector2.zero;
             _moveSpeed = Vector2.zero;
-            _targetPosition = Vector3.zero;
-            _targetScale = 0f;
-            _originPosition = Vector3.zero;
-            _originScale = 0f;
-            _focusEnable = false;
-            _focusTime = 1.0f;
-            _focusEscapeTime = 0.0f;
 
             _sceneCamera.transform.position = Vector3.zero;
             _sceneCamera.orthographicSize = _originCameraSize;
