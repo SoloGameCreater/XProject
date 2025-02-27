@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using System;
 using Framework;
@@ -136,55 +135,52 @@ namespace TripleMerge
             // 摄像机缩放
             HandlePCCameraZoom();
 
-            if (!Input.GetMouseButton(0) && !Input.GetMouseButtonDown(0))
+            // 当松开鼠标时，重置状态
+            if (!Input.GetMouseButton(0))
             {
+                _isMouseInputting = false;
+                _cameraInputBehaviour = ECameraInputBehaviour.None;
+                _prevMousePos = Vector2.zero;
                 return;
             }
 
-            // Handle initial mouse click when in None state
-            if (_cameraInputBehaviour == ECameraInputBehaviour.None)
+            // 处理鼠标按下的初始状态
+            if (Input.GetMouseButtonDown(0))
             {
-                if (!Input.GetMouseButtonDown(0))
+                if (!CommonUtils.IsTouchUGUI() && _cameraInputBehaviour == ECameraInputBehaviour.None)
                 {
-                    return;
+                    _isMouseInputting = true;
+                    _prevMousePos = Input.mousePosition;
+                    _cameraInputBehaviour = ECameraInputBehaviour.Prepare;
                 }
-
-                if (CommonUtils.IsTouchUGUI())
-                {
-                    return;
-                }
-
-                _isMouseInputting = true;
-                _prevMousePos = Input.mousePosition;
-                _cameraInputBehaviour = ECameraInputBehaviour.CameraMove;
                 return;
             }
-            
-            switch (_cameraInputBehaviour)
+
+            // 只在已经开始输入的情况下检测移动
+            if (_isMouseInputting && _cameraInputBehaviour == ECameraInputBehaviour.Prepare)
             {
-                case ECameraInputBehaviour.CameraMove:
-                    HandlePCCameraMove();
-                    break;
+                Vector2 mouseDelta = (Vector2)Input.mousePosition - _prevMousePos;
+                if (mouseDelta.magnitude >= 1.5f)
+                {
+                    _cameraInputBehaviour = ECameraInputBehaviour.CameraMove;
+                }
+            }
+
+            // 处理相机移动
+            if (_cameraInputBehaviour == ECameraInputBehaviour.CameraMove)
+            {
+                HandlePCCameraMove();
             }
         }
 
         private void HandlePCCameraMove()
         {
-            if (!Input.GetMouseButton(0))
-            {
-                _isMouseInputting = false;
-                _cameraInputBehaviour = ECameraInputBehaviour.None;
-                //SaveCamera();
-                return;
-            }
             var currentMousePos = Input.mousePosition;
-
             var worldOffset = _sceneCamera.ScreenToWorldPoint(currentMousePos) - _sceneCamera.ScreenToWorldPoint(_prevMousePos);
             _moveSpeed = worldOffset / Time.deltaTime;
 
             Move(_moveSpeed);
-                
-            _cameraInputBehaviour = ECameraInputBehaviour.CameraMove;
+            
             _prevMousePos = currentMousePos;
         }
 
@@ -218,13 +214,11 @@ namespace TripleMerge
 
                 if (CommonUtils.IsTouchUGUI())
                 {
-                    Debug.Log($"click on ui when stage none");
                     return;
                 }
                 _startTouch_1 = touch;
                 _lastScaleTouch1 = touch.position;
                 _cameraInputBehaviour = ECameraInputBehaviour.Prepare;
-                Debug.Log($"enter prepare stage");
                 return; 
             }
 
@@ -277,7 +271,6 @@ namespace TripleMerge
                 if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
                 {
                     _cameraInputBehaviour = ECameraInputBehaviour.None;
-                    Debug.Log($"enter none stage from move");
                     //SaveCamera();
                     Debug.Log("将最新的相机信息写入存档!");
                     return;
@@ -299,7 +292,6 @@ namespace TripleMerge
                 _startTouch_1 = touch1;
                 _startTouch_2 = touch2;
                 _cameraInputBehaviour = ECameraInputBehaviour.CameraScale;
-                Debug.Log($"enter scale stage from move stage");
             }
         }
         private void Move(Vector3 speed)
@@ -324,7 +316,6 @@ namespace TripleMerge
             if (nextPos.y < yMin) nextPos.y = yMin;
             if (nextPos.y > yMax) nextPos.y = yMax;
 
-            DebugUtil.Log($"move to {nextPos}");
             _sceneCamera.transform.position = nextPos;
         }
         private void HandleCameraScale()
@@ -355,13 +346,11 @@ namespace TripleMerge
                 if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
                 {
                     _cameraInputBehaviour = ECameraInputBehaviour.None;
-                    Debug.Log($"enter none stage from scale stage");
                     return;
                 }
 
                 _startTouch_1 = touch;
                 _cameraInputBehaviour = ECameraInputBehaviour.CameraMove;
-                Debug.Log($"enter move stage from scale stage");
             }
         }
         private void TouchScale(float curSize)
