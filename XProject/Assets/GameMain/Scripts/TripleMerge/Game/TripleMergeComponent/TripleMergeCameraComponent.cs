@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using Framework;
+using System.Collections.Generic;
 
 namespace TripleMerge
 {
@@ -22,8 +23,6 @@ namespace TripleMerge
         private float _originCameraSize;
         private float _minCameraSize;
         private float _maxCameraSize;
-        public float _minCameraScale = 0.3f;
-        public float _maxCameraScale = 1f;
 
         private Vector2 _minCameraPosition;
         private Vector2 _maxCameraPosition;
@@ -41,7 +40,30 @@ namespace TripleMerge
             get { return _sceneCamera.orthographicSize / _originCameraSize; }
         }
         public bool IsInCameraOperation => _cameraInputBehaviour != ECameraInputBehaviour.None;
+        private int _inputListenDisableTimes;
+
+        public bool IsInputDisabled
+        {
+            set
+            {
+                var isDisableBefore = _inputListenDisableTimes > 0;
+                _inputListenDisableTimes += value ? 1 : -1;
+                if (_inputListenDisableTimes > 0)
+                {
+                    _cameraInputBehaviour = ECameraInputBehaviour.None;
+                    _prevMousePos = Vector3.zero;
+                    if (!isDisableBefore)
+                    {
+                        EventDispatcher.Instance.DispatchEventImmediately(EventEnum.TripleMergeOnMapInputDisable);
+                    }
+                }
+            }
+            get => _inputListenDisableTimes > 0;
+        }
         public TripleMergeGameplay GamePlayComponent { get; private set; }
+        private bool _isUpdateError;
+        private Dictionary<int, ItemBase> _mouseEventHandlers = new Dictionary<int, ItemBase>();
+
         protected override void OnInitialize()
         {
             GamePlayComponent = TripleMergeSystem.Instance.Gameplay;
@@ -65,19 +87,21 @@ namespace TripleMerge
             var uiCamera = UIRoot.Instance.mUICamera;
             RectTransformUtility.ScreenPointToWorldPointInRectangle(uiRootTransform, new Vector2(0, 0), uiCamera, out _screenMinPosition);
             RectTransformUtility.ScreenPointToWorldPointInRectangle(uiRootTransform, new Vector2(Screen.width, Screen.height), uiCamera, out _screenMaxPosition);
-
-            if (CommonUtils.IsWideScreenDevice())
-            {
-                _minCameraScale /= 0.8f;
-
-                _maxCameraScale *= 0.91f;
-            }
         }
-        private AnimationCurve _curve = AnimationCurve.EaseInOut(0, 0, 1, 1);
         protected override void OnUpdate()
         {
+            if(_isUpdateError) return;
+            _isUpdateError = true;
+            MapItemInputListener();
+
+            CameraInputListener();
+
+            _isUpdateError = false;
+        }
+        private void CameraInputListener()
+        {
+            if (IsInputDisabled) return;
             
-    
             if (CommonUtils.IsTouchUGUI()) return;
             
 #if UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_EDITOR
@@ -86,7 +110,6 @@ namespace TripleMerge
             CellPhoneInputListener();
 #endif
         }
-
         private bool _isMouseInputting;
         private void PCInputListener()
         {
@@ -343,6 +366,61 @@ namespace TripleMerge
         protected override void OnDispose()
         {
             Reset();
+        }
+        private void MapItemInputListener()
+        {
+            if (CommonUtils.IsTouchUGUI()) return;
+#if UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_EDITOR
+            ListenMapItemInputPC();
+#elif UNITY_ANDROID || UNITY_IOS
+            ListenMapItemInput();
+#endif
+        }
+        private void ListenMapItemInputPC()
+        {
+            // 处理鼠标按下事件
+            if (Input.GetMouseButtonDown(0))
+            {
+                var ray = GamePlayComponent.MapManager.MapCamera.ScreenPointToRay(Input.mousePosition);
+                var hit = Physics2D.Raycast(ray.origin, ray.direction, 1500);
+
+                if (hit.transform != null)
+                {
+                    var mapItemPointerEventHandler = hit.transform.GetComponentInParent<ItemBase>();
+                    if (mapItemPointerEventHandler != null)
+                    {
+                        _mouseEventHandlers.TryAdd(0, mapItemPointerEventHandler); // 使用0作为鼠标的索引
+                        mapItemPointerEventHandler.OnPointerDown(0);
+                    }
+                }
+            }
+            // 处理鼠标抬起事件
+            else if (Input.GetMouseButtonUp(0))
+            {
+                var ray = GamePlayComponent.MapManager.MapCamera.ScreenPointToRay(Input.mousePosition);
+                var hit = Physics2D.Raycast(ray.origin, ray.direction, 1500);
+
+                if (hit.transform != null)
+                {
+                    var mapItemPointerEventHandler = hit.transform.GetComponentInParent<ItemBase>();
+                    if (_mouseEventHandlers.TryGetValue(0, out var handler))
+                    {
+                        if (handler == mapItemPointerEventHandler)
+                        {
+                            // 只有在没有相机操作时才触发点击事件
+                            if (_cameraInputBehaviour != ECameraInputBehaviour.CameraMove && 
+                                _cameraInputBehaviour != ECameraInputBehaviour.CameraScale)
+                            {
+                                handler.OnPointerClick();
+                            }
+                        }
+
+                        handler.OnPointerUp();
+                    }
+
+                    _mouseEventHandlers.Remove(0);
+                }
+            }
         }
     }
 }

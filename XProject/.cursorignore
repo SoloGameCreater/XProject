@@ -1,0 +1,26 @@
+# Add directories or file patterns to ignore during indexing (e.g. foo/ or *.csv)
+Library/
+Temp/
+obj/
+Logs/
+
+bin/
+Debug/
+Release/
+
+.git/
+.svn/
+
+*.meta
+*.log
+*.tmp
+*.bak
+
+*.meta.meta
+*.log.meta
+*.tmp.meta
+*.bak.meta
+
+*.meta.log
+*.meta.tmp
+
