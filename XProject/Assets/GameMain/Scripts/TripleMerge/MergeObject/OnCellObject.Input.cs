@@ -329,7 +329,7 @@ namespace TripleMerge
                 }
             
                 TouchedCell.PlaceItem(this, null, () => { 
-                    EventDispatcher.Instance.DispatchEventImmediately(EventEnum.TripleMergeOnMapInputDisable); 
+                    EventDispatcher.Instance.DispatchEventImmediately(EventEnum.TripleMergeOnMapContentChanged); 
                 });
             }
 

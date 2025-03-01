@@ -15,6 +15,21 @@ namespace TripleMerge
             CameraMove,
             CameraScale,
         }
+        private const float CameraMoveSpeed =
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_EDITOR
+            0.55f;
+#else
+            0.9f;
+#endif
+
+        // 相机缩放速度
+        private const float CameraZoomSpeed =
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_EDITOR
+            2f;
+#else
+            0.025f;
+
+#endif
         private Camera _sceneCamera;
         
         public Transform MinPosition;
@@ -109,7 +124,7 @@ namespace TripleMerge
             {
                 var targetPos = DraggingItem.position;
                 targetPos.z = _sceneCamera.transform.position.z;
-                _sceneCamera.transform.position = Vector3.Lerp(_sceneCamera.transform.position, targetPos, Time.deltaTime * 5f);
+                _sceneCamera.transform.position = Vector3.Lerp(_sceneCamera.transform.position, targetPos, Time.deltaTime * CameraMoveSpeed);
                 BoundLimit(); // Ensure camera stays within bounds
                 return;
             }
@@ -184,7 +199,7 @@ namespace TripleMerge
             }
 
             var curSize = _sceneCamera.orthographicSize;
-            curSize /= 1 + scrollWheelDelta;
+            curSize /= 1 + scrollWheelDelta * CameraZoomSpeed;
             TouchScale(curSize);
             //SaveCamera();
         }

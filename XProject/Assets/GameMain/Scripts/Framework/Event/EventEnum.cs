@@ -6,4 +6,5 @@
     public const string OnApplicationPause = "OnApplicationPause";
     
     public const string TripleMergeOnMapInputDisable  = "TripleMergeOnMapInputDisable";
+    public const string TripleMergeOnMapContentChanged = "TripleMergeOnMapContentChanged";
 }
