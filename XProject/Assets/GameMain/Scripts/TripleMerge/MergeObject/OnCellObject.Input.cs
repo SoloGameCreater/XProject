@@ -47,7 +47,7 @@ namespace TripleMerge
                 CheckTouchCount();
                 HandleInputStages();
             }
-            catch (ArgumentException e)
+            catch
             {
                 Debug.Log($"touch override");
                 OnPointerUp();
@@ -306,7 +306,6 @@ namespace TripleMerge
 
             TripleMergeSystem.Instance.Gameplay.CameraInputManager.DraggingItem = null;
             
-            
             if (TouchedCell == null || TouchedCell == BelongCell || !TouchedCell.CanPlaceTargetSizeItem())
             {
                 transform.SetParent(BelongCell.PlaceItemRoot);
@@ -327,9 +326,9 @@ namespace TripleMerge
                         return;
                     }
                 }
-            
+                
                 TouchedCell.PlaceItem(this, null, () => { 
-                    EventDispatcher.Instance.DispatchEventImmediately(EventEnum.TripleMergeOnMapContentChanged); 
+                    EventDispatcher.Instance.DispatchEvent(EventEnum.TripleMergeOnMapContentChanged); 
                 });
             }
 

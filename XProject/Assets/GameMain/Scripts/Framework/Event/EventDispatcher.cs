@@ -5,7 +5,7 @@ using System;
 using System.Threading;
 using Framework;
 
-public class EventDispatcher : GlobalSystem<EventDispatcher>, IEventDispatcher{
+public class EventDispatcher : Manager<EventDispatcher>, IEventDispatcher{
 
     private ReaderWriterLockSlim eventLock = new ReaderWriterLockSlim();
 

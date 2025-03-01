@@ -245,16 +245,15 @@ namespace TripleMerge
                 TripleMergeSystem.Instance.Model.SetCellPlaceItem(_saveData, 0);
                 return;
             }
-
             // 先清除其原本的地块信息
             if (item.BelongCell != null)
             {
-                if (item.BelongCell.PlacedItem != null && item.BelongCell.PlacedItem == item)
+                var oldCell = item.BelongCell;
+                item.BelongCell = null;  // 先断开引用防止循环
+                if (oldCell.PlacedItem == item)
                 {
-                    item.BelongCell.PlaceItem(null);
+                    oldCell.SetPlacedItem(null);
                 }
-
-                item.BelongCell = null;
             }
 
             // 绑定地块和Item的关系
@@ -269,48 +268,40 @@ namespace TripleMerge
                 item.BindItemSaveData(TripleMergeSystem.Instance.Model.GetCellPlacedItem(_saveData));
             }
 
-            // todo 放置合成物品
+            // 放置合成物品
             var itemTrans = item.transform;
             itemTrans.SetParent(PlaceItemRoot);
             // todo 后期会区分是否播放位移动画，现在直接放置到对应位置
             itemTrans.localPosition = Vector3.zero;
-            OnItemPlaced();
+            
+            // 5. 处理放置逻辑
+            onPlacedAction?.Invoke();
 
-            void OnItemPlaced()
+            if (PlacedItem == null)
             {
-                onPlacedAction?.Invoke();
+                SetPlacedItem(item);
+                onMergedAction?.Invoke();
+                return;
+            }
 
-                // 如果这个地块之前没有放置任何物品
-                if (PlacedItem == null)
+            if (item == PlacedItem) return;
+
+            // 6. 处理合成逻辑
+            if (item.CfgData.Id == PlacedItem.CfgData.Id || item.IsUniversalCard)
+            {
+                int callerItemId = PlacedItem.CfgData.Id;
+                if (TryToMerge(item, (finalItemId) =>
                 {
-                    // 先置空当前Item的地块
-                    if (item.BelongCell != null)
-                        item.BelongCell.PlaceItem(null);
-
-                    SetPlacedItem(item);
-                    PlacedItem.BelongCell = this;
-
+                    Debug.Log($"[MERGE END] caller:{callerItemId} . final: {finalItemId}");
+                }))
+                {
                     onMergedAction?.Invoke();
                     return;
                 }
-
-                if (item == PlacedItem) return;
-
-                // 如果交换的对象是同一类合成物或者是万能牌则尝试进行合成
-                if (item.CfgData.Id == PlacedItem.CfgData.Id || item.IsUniversalCard)
-                {
-                    int callerItemId = PlacedItem.CfgData.Id;
-                    if (TryToMerge(item, (finalItemId) => { Debug.Log($"[MERGE END] caller:{callerItemId} . final: {finalItemId}"); }))
-                    {
-                        onMergedAction?.Invoke();
-                        return;
-                    }
-                }
-
-                SetPlacedItem(item);
-
-                onMergedAction?.Invoke();
             }
+
+            SetPlacedItem(item);
+            onMergedAction?.Invoke();
         }
 
         private void SetPlacedItem(OnCellObject item)
@@ -414,28 +405,28 @@ namespace TripleMerge
                 {
                     targetList.AddRange(cells.Where(IsCellEmpty));
                 }
-                // if (!allowQueryFromAllAreas)
-                // {
-                //     tempList.Capacity = BelongRegion.BelongArea.MergeableCellsDictionary.Count;
-                //     foreach (var cell in BelongRegion.BelongArea.MergeableCellsDictionary.Values)
-                //     {
-                //         if (!IsCellEmpty(cell))continue;
-                //         
-                //         tempList.Add(cell);
-                //     }
-                // }
-                // else
-                // {
-                //     var totalCells = TripleMergeSystem.Instance.Gameplay.MapManager.MapArea.MergeableCellsDictionary;
-                //     tempList.Capacity = totalCells.Count;
-                //     var area = TripleMergeSystem.Instance.Gameplay.MapManager.MapArea;
-                //     foreach (var cell in area.MergeableCellsDictionary.Values)
-                //     {
-                //         if (!IsCellEmpty(cell)) continue;
-                //         
-                //         tempList.Add(cell);
-                //     }
-                // }
+                if (!allowQueryFromAllAreas)
+                {
+                    tempList.Capacity = BelongRegion.BelongArea.MergeableCellsDictionary.Count;
+                    foreach (var cell in BelongRegion.BelongArea.MergeableCellsDictionary.Values)
+                    {
+                        if (!IsCellEmpty(cell))continue;
+                        
+                        tempList.Add(cell);
+                    }
+                }
+                else
+                {
+                    var totalCells = TripleMergeSystem.Instance.Gameplay.MapManager.MapArea.MergeableCellsDictionary;
+                    tempList.Capacity = totalCells.Count;
+                    var area = TripleMergeSystem.Instance.Gameplay.MapManager.MapArea;
+                    foreach (var cell in area.MergeableCellsDictionary.Values)
+                    {
+                        if (!IsCellEmpty(cell)) continue;
+                        
+                        tempList.Add(cell);
+                    }
+                }
 
                 if (tempList.Count < targetCellNum)
                 {
