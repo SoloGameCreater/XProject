@@ -103,6 +103,16 @@ namespace TripleMerge
             if (IsInputDisabled) return;
             
             if (CommonUtils.IsTouchUGUI()) return;
+
+            // Add DraggingItem following logic
+            if (DraggingItem != null)
+            {
+                var targetPos = DraggingItem.position;
+                targetPos.z = _sceneCamera.transform.position.z;
+                _sceneCamera.transform.position = Vector3.Lerp(_sceneCamera.transform.position, targetPos, Time.deltaTime * 5f);
+                BoundLimit(); // Ensure camera stays within bounds
+                return;
+            }
             
 #if UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_EDITOR
             PCInputListener();

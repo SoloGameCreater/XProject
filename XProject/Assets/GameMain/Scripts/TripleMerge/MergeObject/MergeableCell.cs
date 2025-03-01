@@ -499,6 +499,10 @@ namespace TripleMerge
             return i + 1;
         }
 
+        public bool CanPlaceTargetSizeItem()
+        {
+            return CellStatus == ECellStatus.Mergeable;
+        }
         public bool TryToMerge(OnCellObject item = null, Action<int> onFinish = null)
         {
             var isCombo = false;

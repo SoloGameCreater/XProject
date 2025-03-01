@@ -302,65 +302,36 @@ namespace TripleMerge
 
             OnDragEnd();
 
-            // todo 拖动结束逻辑
-
             #region 拖动结束逻辑
 
-            // ThreeMergeSystem.Instance.Gameplay.InputListener.DraggingItem = null;
-            //
-            // if (BelongCell != null && BelongCell.ActiveGuidanceTask != null)
-            // {
-            //     var hostCell = BelongCell;
-            //     if (!BelongCell.ActiveGuidanceTask.TargetCell.Contains(TouchedCell))
-            //     {
-            //         transform.SetParent(BelongCell.PlaceItemRoot);
-            //         transform.localPosition = Vector3.zero;
-            //     }
-            //     else
-            //     {
-            //         // 万能卡
-            //         if (TouchedCell.PlacedItem != null && TouchedCell.PlacedItem != this && IsOmnipotentMergeable && this is MergeableObject mergeableObject)
-            //         {
-            //             var continuousItems = TouchedCell.GetContinuousSameItems(mergeableObject);
-            //             if (continuousItems.Count >= 3)
-            //             {
-            //                 TouchedCell.PlacedItem.transform.DOKill();
-            //                 TouchedCell.PlacedItem.transform.localPosition = Vector3.zero;
-            //                 GuideSubSystem.Instance.FinishCurrent(GuideTargetType.ThreeMergeMergeItems);
-            //                 ThreeMergeSystem.Instance.Gameplay.GameplayBridge.OpenOmnipotentCardMergePopUp(this, continuousItems);
-            //                 BelongCell.OnActiveGuidanceCompleted();
-            //                 return;
-            //             }
-            //         }
-            //
-            //         TouchedCell.PlaceItem(this, false, true, 0.05f, () => { hostCell.OnActiveGuidanceCompleted(); }, false, () => { EventDispatcher.Instance.DispatchEventImmediately(EventEnum.ThreeMergeOnMapContentChanged); });
-            //     }
-            //
-            //     return;
-            // }
-            //
-            // if (TouchedCell == null || TouchedCell == BelongCell || !TouchedCell.CanPlaceTargetSizeItem(CfgData.CellSizeObj, true))
-            // {
-            //     transform.SetParent(BelongCell.PlaceItemRoot);
-            //     transform.localPosition = Vector3.zero;
-            // }
-            // else
-            // {
-            //     // 万能卡
-            //     if (TouchedCell.PlacedItem != null && TouchedCell.PlacedItem != this && IsOmnipotentMergeable && this is MergeableObject mergeableObject)
-            //     {
-            //         var continuousItems = TouchedCell.GetContinuousSameItems(mergeableObject);
-            //         if (continuousItems.Count >= 3)
-            //         {
-            //             TouchedCell.PlacedItem.transform.DOKill();
-            //             TouchedCell.PlacedItem.transform.localPosition = Vector3.zero;
-            //             ThreeMergeSystem.Instance.Gameplay.GameplayBridge.OpenOmnipotentCardMergePopUp(this, continuousItems);
-            //             return;
-            //         }
-            //     }
-            //
-            //     TouchedCell.PlaceItem(this, false, true, 0.05f, null, false, () => { EventDispatcher.Instance.DispatchEventImmediately(EventEnum.ThreeMergeOnMapContentChanged); });
-            // }
+            TripleMergeSystem.Instance.Gameplay.CameraInputManager.DraggingItem = null;
+            
+            
+            if (TouchedCell == null || TouchedCell == BelongCell || !TouchedCell.CanPlaceTargetSizeItem())
+            {
+                transform.SetParent(BelongCell.PlaceItemRoot);
+                transform.localPosition = Vector3.zero;
+            }
+            else
+            {
+                // 万能卡
+                if (TouchedCell.PlacedItem != null && TouchedCell.PlacedItem != this && IsUniversalCard && this is MergeableObject mergeableObject)
+                {
+                    var continuousItems = TouchedCell.GetContinuousSameItems(mergeableObject);
+                    if (continuousItems.Count >= 3)
+                    {
+                        TouchedCell.PlacedItem.transform.DOKill();
+                        TouchedCell.PlacedItem.transform.localPosition = Vector3.zero;
+                        // todo 弹出万能卡合成界面
+                        //TripleMergeSystem.Instance.Gameplay.GameplayBridge.OpenOmnipotentCardMergePopUp(this, continuousItems);
+                        return;
+                    }
+                }
+            
+                TouchedCell.PlaceItem(this, null, () => { 
+                    EventDispatcher.Instance.DispatchEventImmediately(EventEnum.TripleMergeOnMapInputDisable); 
+                });
+            }
 
             #endregion
         }
@@ -397,8 +368,7 @@ namespace TripleMerge
 
         private void BeginDragging()
         {
-            //ThreeMergeSystem.Instance.Gameplay.InputListener.DraggingItem = transform;
-            //ThreeMergeSystem.Instance.Gameplay.InputListener.TryClearGuidingItems();
+            TripleMergeSystem.Instance.Gameplay.CameraInputManager.DraggingItem = transform;
 
             IsDragging = true;
 
@@ -426,10 +396,10 @@ namespace TripleMerge
                     return;
                 }
 
-                // if (!triggeredCell.CanPlaceTargetSizeItem(CfgData.CellSizeObj, true))
-                // {
-                //     return;
-                // }
+                if (!triggeredCell.CanPlaceTargetSizeItem())
+                {
+                    return;
+                }
 
                 _triggeredCells.TryAdd(other, triggeredCell);
             }
@@ -464,11 +434,11 @@ namespace TripleMerge
 
             //if (BelongCell.ActiveGuidanceTask == null)
             {
-                // if (ThreeMergeSystem.Instance.Gameplay.InputListener.IsInputDisabled)
-                // {
-                //     Debug.Log($"{name} : InputDisabled,cant click");
-                //     return;
-                // }
+                if (TripleMergeSystem.Instance.Gameplay.CameraInputManager.IsInputDisabled)
+                {
+                    Debug.Log($"{name} : InputDisabled,cant click");
+                    return;
+                }
 
                 if (BelongCell == null)
                 {
