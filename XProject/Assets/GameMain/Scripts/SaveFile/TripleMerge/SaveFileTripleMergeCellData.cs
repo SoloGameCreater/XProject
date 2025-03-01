@@ -47,5 +47,23 @@ namespace SaveFile.TripleMerge
                 return placedItem;
             }
         }
+        // 地块当前的净化值
+        [JsonProperty]
+        int purificationValue;
+        [JsonIgnore]
+        public int PurificationValue
+        {
+            get
+            {
+                return purificationValue;
+            }
+            set
+            {
+                if(purificationValue != value)
+                {
+                    purificationValue = value;
+                }
+            }
+        }
     }
 }

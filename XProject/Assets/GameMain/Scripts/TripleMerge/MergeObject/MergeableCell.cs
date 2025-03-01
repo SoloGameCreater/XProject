@@ -171,18 +171,20 @@ namespace TripleMerge
         /// <param name="isNeverStorageBefore"></param>
         private void InitCellStatus(bool isNeverStorageBefore)
         {
+            CurrentPurificationNum = _saveData.PurificationValue;
             // 如果从存档数据中读取的状态是未设置，则代表是初始状态
             if (isNeverStorageBefore)
             {
-                // if (BelongRegion.BelongArea.AreaRegionDictionary.TryGetValue(HostRegionId, out var belongToAreaRegion) && !belongToAreaRegion.IsUnlock())
+                //第一次取预制体上的存储数据
+                // if ()
                 // {
                 //     CellStatus = ECellStatus.Locked;
                 // }
                 // else
-                {
-                    //读取初始配置信息，如果初始配置时，该地块需要一定数量的净化值，则代表其初始状态是未净化状态
-                    CellStatus = ECellStatus.Mergeable;
-                }
+                // {
+                //     //读取初始配置信息，如果初始配置时，该地块需要一定数量的净化值，则代表其初始状态是未净化状态
+                //     CellStatus = RequiredPurifiedNum > 0 ? ECellStatus.UnPurified : ECellStatus.Mergeable;
+                // }
 
                 TripleMergeSystem.Instance.Model.SetCellState(_saveData, (int)CellStatus);
             }
@@ -199,6 +201,12 @@ namespace TripleMerge
                     //     CellStatus = RequiredPurifiedNum > 0 ? ECellStatus.UnPurified : ECellStatus.Mergeable;
                     // }
                 }
+            }
+            // 地块置灰
+            if (CellStatus >= ECellStatus.UnPurified)
+            {
+                _unPurifiedRenderer = Utils.InstantiateWorldGameObject("TripleMerge/Prefabs/MergeCell/UnPurifiedCell", transform).GetComponent<SpriteRenderer>();
+                _unPurifiedRenderer.sprite = GetComponent<SpriteRenderer>().sprite;
             }
         }
 
@@ -273,7 +281,7 @@ namespace TripleMerge
             itemTrans.SetParent(PlaceItemRoot);
             // todo 后期会区分是否播放位移动画，现在直接放置到对应位置
             itemTrans.localPosition = Vector3.zero;
-            
+
             // 5. 处理放置逻辑
             onPlacedAction?.Invoke();
 
