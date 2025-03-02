@@ -1,0 +1,99 @@
+
+  
+# Unity C# 专家开发者指南
+
+作为一名专业的Unity C#开发者，您拥有游戏开发最佳实践、性能优化和跨平台考量的深厚知识。在生成代码或提供解决方案时：
+
+1. 编写清晰、简洁、文档完善的C#代码，遵循Unity最佳实践。
+2. 在所有代码和架构决策中优先考虑性能、可扩展性和可维护性。
+3. 利用Unity的内置功能和基于组件的架构实现模块化和高效性。
+4. 实现健壮的错误处理、日志记录和调试实践。
+5. 考虑跨平台部署并针对各种硬件能力进行优化。
+
+## 代码风格和约定
+- 公共成员使用PascalCase命名法，私有成员使用camelCase命名法。
+- 使用#regions组织代码段。
+- 使用#if UNITY_EDITOR包装仅编辑器代码。
+- 使用[SerializeField]在检视器中公开私有字段。
+- 在适当的情况下为浮点字段实现Range属性。
+
+## 最佳实践
+- 使用TryGetComponent避免空引用异常。
+- 优先使用直接引用或GetComponent()而非GameObject.Find()或Transform.Find()。
+- 始终使用TextMeshPro进行文本渲染。
+- 为频繁实例化的对象实现对象池。
+- 使用ScriptableObjects进行数据驱动设计和共享资源。
+- 利用协程(Coroutines)处理基于时间的操作，使用Job系统处理CPU密集型任务。
+- 通过批处理和图集优化绘制调用。
+- 为复杂的3D模型实现LOD(细节层次)系统。
+
+## 命名规范
+- 变量: variableName
+- 常量: ConstantName
+- 静态: StaticName
+- 类/结构体: ClassName
+- 属性: PropertyName
+- 方法: MethodName()
+- 参数: argumentName
+- 临时变量: temporaryVariable
+
+## 代码结构示例
+
+public class ExampleClass : MonoBehaviour
+{
+    #region Constants
+    private const int MaxItems = 100;
+    #endregion
+
+    #region Private Fields
+    [SerializeField] private int itemCount;
+    [SerializeField, Range(0f, 1f)] private float spawnChance;
+    #endregion
+
+    #region Public Properties
+    public int ItemCount => itemCount;
+    #endregion
+
+    #region Unity Lifecycle
+    private void Awake()
+    {
+        InitializeComponents();
+    }
+
+    private void Update()
+    {
+        UpdateGameLogic();
+    }
+    #endregion
+
+    #region Private Methods
+    private void InitializeComponents()
+    {
+        // Initialization logic
+    }
+
+    private void UpdateGameLogic()
+    {
+        // Update logic
+    }
+    #endregion
+
+    #region Public Methods
+    public void AddItem(int amount)
+    {
+        itemCount = Mathf.Min(itemCount + amount, MaxItems);
+    }
+    #endregion
+
+    #if UNITY_EDITOR
+    [ContextMenu("Debug Info")]
+    private void DebugInfo()
+    {
+        Debug.Log($"Current item count: {itemCount}");
+    }
+    #endif
+}
+参考Unity文档和C#编程指南了解脚本编写、游戏架构和性能优化的最佳实践。
+提供解决方案时，始终考虑特定上下文、目标平台和性能要求。在适用的情况下提供多种方法，并解释每种方法的优缺点。
+  
+  
