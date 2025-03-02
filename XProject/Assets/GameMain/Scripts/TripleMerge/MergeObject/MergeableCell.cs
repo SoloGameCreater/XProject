@@ -504,11 +504,9 @@ namespace TripleMerge
         }
         public bool TryToMerge(OnCellObject item = null, Action<int> onFinish = null)
         {
-            var isCombo = false;
             if (item == null)
             {
                 item = PlacedItem;
-                isCombo = true;
             }
 
             if (item is not MergeableObject OnCellObject)
@@ -526,11 +524,9 @@ namespace TripleMerge
             var continuousCnt = continuousCell.Count;
             if (continuousCnt >= 3)
             {
-                var callerItemId = PlacedItem.CfgData?.Id ?? 0;
-
                 Debug.Log($"三合开始");
                 // 能够进行合成的情况，先进行合成计算，合成完毕后，再对合成完毕后的合成物进行新的位置分配
-                DoMerge(ref continuousCell, (finalMergeItemId, mergeResult) => { Debug.Log($"三合完成"); });
+                DoMerge(ref continuousCell, (finalItemId, mergeResult) => { Debug.Log($"三合完成"); });
 
                 return true;
             }
@@ -538,117 +534,231 @@ namespace TripleMerge
             return false;
         }
 
-        private void DoMerge(ref IReadOnlyList<MergeableObject> continuousItems, Action<int, Dictionary<int, int>> onMergeCompleted = null,
-                             bool skipMergeProgress = false)
+        /// <summary>
+        /// 执行三合一合并操作
+        /// </summary>
+        /// <param name="continuousItems">连续的相同物品列表</param>
+        /// <param name="onMergeCompleted">合并完成后的回调</param>
+        private void DoMerge(ref IReadOnlyList<MergeableObject> continuousItems, Action<int, Dictionary<int, int>> onMergeCompleted = null)
         {
+            // 资源池初始化
+            var afterMergeItems = ListPool<MergeableObject>.Get();
+            var tobeMergeItems = ListPool<MergeableObject>.Get();
+            var unlockNewItems = HashSetPool<int>.Get();
+            var mergeResults = DictionaryPool<int, int>.Get();
+            
             try
             {
+                // 设置合并状态标记
                 TripleMergeSystem.Instance.Gameplay.MapManager.IsMerging = true;
-                Debug.Log($"set mark is merging true");
-                var finalMergeItemId = 0;
-                var afterMergeItems = ListPool<MergeableObject>.Get();
-                var tobeMergeItems = ListPool<MergeableObject>.Get();
-                var unlockNewItems = HashSetPool<int>.Get();
-                var mergeResults = DictionaryPool<int, int>.Get();
-
-                var cellPosition = transform.position;
-
-                const float beforeMergePerformDuration = 0.15f;
-                const float afterMergePerformDuration = 0.15f;
-                // 因为合成后会重新分配合成物的位置，所以预先将这些格子本身的放置物信息清除.并且将合成物提取到参与合成计算的mergeableObjects列表中
-                for (var i = 0; i < continuousItems.Count; i++)
-                {
-                    var item = continuousItems[i];
-                    item.IsMerging = true;
-                    tobeMergeItems.Add(item);
-                }
-
-                if (skipMergeProgress)
-                {
-                    CalculateMerge();
-                }
-
-                void CalculateMerge()
-                {
-                    // 获取合并链和基础物品
-                    MergeChain targetChain = null;
-                    MergeableItemCfg mergeBaseItem = null;
-
-                    // 遍历待合并物品，找到非万能卡的基础物品
-                    foreach (var tobeMergeItem in tobeMergeItems.Where(tobeMergeItem => !tobeMergeItem.IsUniversalCard))
-                    {
-                        targetChain = TripleMergeConfigManager.Instance.GetChainConfig(tobeMergeItem.CfgData.ChainId);
-                        mergeBaseItem = tobeMergeItem.CfgData;
-                        break;
-                    }
-
-                    // 验证合并链是否存在
-                    if (targetChain == null)
-                    {
-                        Debug.LogError($"三合合成物ID[{tobeMergeItems[0].CfgData.Id}]找不到对应的合成链配置数据");
-                        return;
-                    }
-
-                    // 验证是否已是最高级别
-                    if (targetChain.Chain.IndexOf(tobeMergeItems[0].CfgData.Id) == targetChain.Chain.Count - 1)
-                    {
-                        Debug.LogError($"三合合成物ID[{tobeMergeItems[0].CfgData.Id}]已经是最高级别物品了");
-                        return;
-                    }
-
-                    while (tobeMergeItems.Count >= 3)
-                    {
-                        var itemId = mergeBaseItem.Id;
-                        var nextLevelItemNumAfterMerge = tobeMergeItems.Count / 3;
-                        
-                        // 计算剩余物品
-                        var remainCurrentLevelNum = tobeMergeItems.Count % 3;
-                        if (remainCurrentLevelNum > 0) 
-                        {
-                            mergeResults[itemId] = remainCurrentLevelNum;
-                        }
-
-                        // 处理待销毁物品
-                        for (var i = tobeMergeItems.Count - 1; i >= remainCurrentLevelNum; i--)
-                        {
-                            var tobeDestroyItem = tobeMergeItems[i];
-                            tobeDestroyItem.IsMerging = false;
-                            tobeMergeItems.Remove(tobeDestroyItem);
-                            OnCellObjectPool.Recycle(tobeDestroyItem);
-                        }
-                        // 清空待合并列表
-                        tobeMergeItems.Clear();
-
-                        // 生成下一级物品
-                        var nextLevelItemCfg = TripleMergeConfigManager.Instance.GetItemConfig(targetChain.Chain[targetChain.Chain.IndexOf(itemId) + 1]);
-                        for (int i = 0; i < nextLevelItemNumAfterMerge; i++)
-                        {
-                            unlockNewItems.Add(nextLevelItemCfg.Id);
-                            var nextLevelItem = OnCellObjectPool.GetItem(nextLevelItemCfg) as MergeableObject;
-                            nextLevelItem.SetCfgData(nextLevelItemCfg);
-                            nextLevelItem.transform.position = new Vector3(transform.position.x, transform.position.y, nextLevelItem.transform.position.z);
-                            tobeMergeItems.Add(nextLevelItem);
-                        }
-
-                        finalMergeItemId = nextLevelItemCfg.Id;
-                        // 检查是否继续合并
-                        if (tobeMergeItems.Count < 3)
-                        {
-                            afterMergeItems.AddRange(tobeMergeItems);
-                            mergeResults[finalMergeItemId] = tobeMergeItems.Count;
-                            tobeMergeItems.Clear();
-                        }
-                        else
-                        {
-                            mergeBaseItem = tobeMergeItems[0].CfgData;
-                        }
-                    }
-                }
+                Debug.Log($"设置合并状态为true");
+                
+                // 准备合并物品
+                PrepareItemsForMerge(continuousItems, tobeMergeItems);
+                
+                // 执行合并计算
+                int finalMergeItemId = PerformMergeCalculation(tobeMergeItems, afterMergeItems, mergeResults, unlockNewItems);
+                
+                // 放置合并后的物品
+                PlaceMergedItems(afterMergeItems);
+                
+                // 调用合并完成回调
+                onMergeCompleted?.Invoke(finalMergeItemId, mergeResults);
             }
             catch (Exception e)
             {
                 Debug.LogError($"三合合成时发生异常:{e}");
-                TripleMergeSystem.Instance.Gameplay.MapManager.IsMerging = false;
+            }
+            finally
+            {
+                // 释放资源
+                ListPool<MergeableObject>.Release(afterMergeItems);
+                ListPool<MergeableObject>.Release(tobeMergeItems);
+                HashSetPool<int>.Release(unlockNewItems);
+                DictionaryPool<int, int>.Release(mergeResults);
+                
+                // 注意：这里不重置IsMerging状态，应该在连锁合并完成后重置
+            }
+        }
+
+        /// <summary>
+        /// 准备要合并的物品
+        /// </summary>
+        private void PrepareItemsForMerge(IReadOnlyList<MergeableObject> continuousItems, List<MergeableObject> tobeMergeItems)
+        {
+            // 将连续物品添加到待合并列表
+            for (var i = 0; i < continuousItems.Count; i++)
+            {
+                var item = continuousItems[i];
+                item.IsMerging = true;
+                tobeMergeItems.Add(item);
+            }
+        }
+
+        /// <summary>
+        /// 执行合并计算逻辑
+        /// </summary>
+        /// <returns>最终合并出的物品ID</returns>
+        private int PerformMergeCalculation(List<MergeableObject> tobeMergeItems, List<MergeableObject> afterMergeItems, 
+            Dictionary<int, int> mergeResults, HashSet<int> unlockNewItems)
+        {
+            // 获取合并链和基础物品
+            var (targetChain, mergeBaseItem) = GetMergeChainAndBaseItem(tobeMergeItems);
+            if (targetChain == null || IsMaxLevelItem(targetChain, tobeMergeItems[0].CfgData.Id))
+            {
+                return 0;
+            }
+            
+            int finalMergeItemId = 0;
+            
+            // 执行合并循环
+            while (tobeMergeItems.Count >= 3)
+            {
+                finalMergeItemId = MergeItemsBatch(tobeMergeItems, targetChain, mergeBaseItem, 
+                    mergeResults, unlockNewItems, afterMergeItems);
+                
+                // 更新基础物品为新生成的物品
+                if (tobeMergeItems.Count >= 3)
+                {
+                    mergeBaseItem = tobeMergeItems[0].CfgData;
+                }
+            }
+            
+            return finalMergeItemId;
+        }
+
+        /// <summary>
+        /// 获取合并链和基础物品
+        /// </summary>
+        private (MergeChain chain, MergeableItemCfg baseItem) GetMergeChainAndBaseItem(List<MergeableObject> items)
+        {
+            foreach (var item in items.Where(item => !item.IsUniversalCard))
+            {
+                var chain = TripleMergeConfigManager.Instance.GetChainConfig(item.CfgData.ChainId);
+                return (chain, item.CfgData);
+            }
+            
+            // 如果全是万能卡，返回空
+            return (null, null);
+        }
+
+        /// <summary>
+        /// 检查物品是否已是最高级别
+        /// </summary>
+        private bool IsMaxLevelItem(MergeChain chain, int itemId)
+        {
+            if (chain.Chain.IndexOf(itemId) == chain.Chain.Count - 1)
+            {
+                Debug.LogError($"三合合成物ID[{itemId}]已经是最高级别物品了");
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 合并一批物品（每3个合成1个高级物品）
+        /// </summary>
+        /// <returns>合并出的物品ID</returns>
+        private int MergeItemsBatch(List<MergeableObject> tobeMergeItems, MergeChain targetChain, 
+            MergeableItemCfg mergeBaseItem, Dictionary<int, int> mergeResults, 
+            HashSet<int> unlockNewItems, List<MergeableObject> afterMergeItems)
+        {
+            var itemId = mergeBaseItem.Id;
+            
+            // 计算合并结果
+            var nextLevelItemNumAfterMerge = tobeMergeItems.Count / 3;
+            var remainCurrentLevelNum = tobeMergeItems.Count % 3;
+            
+            // 记录剩余物品
+            if (remainCurrentLevelNum > 0)
+            {
+                mergeResults[itemId] = remainCurrentLevelNum;
+            }
+            
+            // 回收要销毁的物品
+            RecycleItemsToDestroy(tobeMergeItems, remainCurrentLevelNum);
+            
+            // 生成下一级物品
+            var nextLevelItemId = GenerateNextLevelItems(targetChain, itemId, nextLevelItemNumAfterMerge, 
+                tobeMergeItems, unlockNewItems);
+            
+            // 处理剩余物品
+            if (tobeMergeItems.Count < 3)
+            {
+                afterMergeItems.AddRange(tobeMergeItems);
+                mergeResults[nextLevelItemId] = tobeMergeItems.Count;
+                tobeMergeItems.Clear();
+            }
+            
+            return nextLevelItemId;
+        }
+
+        /// <summary>
+        /// 回收要销毁的物品
+        /// </summary>
+        private void RecycleItemsToDestroy(List<MergeableObject> tobeMergeItems, int remainCount)
+        {
+            for (var i = tobeMergeItems.Count - 1; i >= remainCount; i--)
+            {
+                var tobeDestroyItem = tobeMergeItems[i];
+                tobeDestroyItem.IsMerging = false;
+                tobeMergeItems.Remove(tobeDestroyItem);
+                OnCellObjectPool.Recycle(tobeDestroyItem);
+            }
+            
+            // 清空待合并列表，保留剩余物品
+            var remainItems = tobeMergeItems.Take(remainCount).ToList();
+            tobeMergeItems.Clear();
+            tobeMergeItems.AddRange(remainItems);
+        }
+
+        /// <summary>
+        /// 生成下一级物品
+        /// </summary>
+        /// <returns>生成的物品ID</returns>
+        private int GenerateNextLevelItems(MergeChain targetChain, int currentItemId, int count, 
+            List<MergeableObject> targetList, HashSet<int> unlockNewItems)
+        {
+            // 获取下一级物品配置
+            int currentIndex = targetChain.Chain.IndexOf(currentItemId);
+            var nextLevelItemCfg = TripleMergeConfigManager.Instance.GetItemConfig(targetChain.Chain[currentIndex + 1]);
+            
+            // 生成物品
+            for (int i = 0; i < count; i++)
+            {
+                unlockNewItems.Add(nextLevelItemCfg.Id);
+                var nextLevelItem = OnCellObjectPool.GetItem(nextLevelItemCfg) as MergeableObject;
+                nextLevelItem.SetCfgData(nextLevelItemCfg);
+                nextLevelItem.transform.position = new Vector3(transform.position.x, transform.position.y, nextLevelItem.transform.position.z);
+                targetList.Add(nextLevelItem);
+            }
+            
+            return nextLevelItemCfg.Id;
+        }
+
+        /// <summary>
+        /// 放置合并后的物品
+        /// </summary>
+        private void PlaceMergedItems(List<MergeableObject> afterMergeItems)
+        {
+            foreach (var item in afterMergeItems)
+            {
+                // 查找最近的空单元格
+                var nearestEmptyCells = ListPool<MergeableCell>.Get();
+                FindNearestEmptyCells(1, ref nearestEmptyCells, false);
+                
+                if (nearestEmptyCells.Count > 0)
+                {
+                    // 放置物品
+                    nearestEmptyCells[0].PlaceItem(item);
+                }
+                else
+                {
+                    // 没有空单元格，回收物品
+                    OnCellObjectPool.Recycle(item);
+                }
+                
+                ListPool<MergeableCell>.Release(nearestEmptyCells);
             }
         }
 
