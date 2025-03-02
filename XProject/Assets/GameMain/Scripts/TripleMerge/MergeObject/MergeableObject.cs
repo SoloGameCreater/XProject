@@ -106,5 +106,10 @@ namespace TripleMerge
             // var popUp = ThreeMergeSystem.Instance.Gameplay.MapManager.CellLongPressedPopup;
             // popUp.ShowWithTargetCell(HostCell);
         }
+        // 到达合成链最高等级播放动画
+        public override void PlayMaxTipAnim()
+        {
+            Debug.Log("已达到最高等级");
+        }
     }
 }

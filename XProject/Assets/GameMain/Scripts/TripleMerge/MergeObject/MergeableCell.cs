@@ -2,6 +2,7 @@
 using Sirenix.OdinInspector;
 #endif
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -525,8 +526,56 @@ namespace TripleMerge
             if (continuousCnt >= 3)
             {
                 Debug.Log($"三合开始");
+                void OnMergeCompleted(int finalMergeItemId, Dictionary<int,int> mergeResult)
+                {
+                    Debug.Log($"三合完成");
+                    
+                    // 处理合成后的逻辑
+                    StartCoroutine(DelayedKeepMerge(finalMergeItemId));
+                }
+                
+                // 延迟处理合成后的逻辑
+                IEnumerator DelayedKeepMerge(int finalMergeItemId)
+                {
+                    yield return new WaitForSeconds(0.035f);
+                    ProcessAfterMerge(finalMergeItemId);
+                }
+                // 处理合成后的逻辑
+                void ProcessAfterMerge(int finalMergeItemId)
+                {
+                    TripleMergeSystem.Instance.Gameplay.MapManager.IsMerging = false;
+                    Debug.Log($"set mark is merging false");
+                    
+                    // 如果合出的是万能卡，不允许combo合成
+                    if (_placeableItem != null && _placeableItem.IsUniversalCard)
+                    {
+                        var chainCfg = TripleMergeConfigManager.Instance.GetChainConfig(_placeableItem.CfgData.ChainId);
+                        if (chainCfg.Chain[^1] == _placeableItem.CfgData.Id)
+                        {
+                            _placeableItem.PlayMaxTipAnim();
+                        }
+                        return;
+                    }
+                    
+                    // 尝试继续合成，如果不能继续合成则执行后续操作
+                    if (!TryToMerge(null, onFinish))
+                    {
+                        onFinish?.Invoke(finalMergeItemId);
+
+                        if (_placeableItem != null)
+                        {
+                            // 检查是否是最高级物品
+                            var chainCfg = TripleMergeConfigManager.Instance.GetChainConfig(_placeableItem.CfgData.ChainId);
+                            if (chainCfg.Chain[^1] == _placeableItem.CfgData.Id)
+                            {
+                                _placeableItem.PlayMaxTipAnim();
+                            }
+                        }
+                    }
+                }
+                
                 // 能够进行合成的情况，先进行合成计算，合成完毕后，再对合成完毕后的合成物进行新的位置分配
-                DoMerge(ref continuousCell, (finalItemId, mergeResult) => { Debug.Log($"三合完成"); });
+                DoMerge(ref continuousCell, OnMergeCompleted);
 
                 return true;
             }

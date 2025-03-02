@@ -66,6 +66,11 @@ namespace TripleMerge
         {
             
         }
+
+        public virtual void PlayMaxTipAnim()
+        {
+        }
+
         public void Active()
         {
             _currentInputStage = EInputStage.None;
