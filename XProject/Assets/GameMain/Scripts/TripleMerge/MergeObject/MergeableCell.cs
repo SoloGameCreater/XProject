@@ -972,7 +972,7 @@ namespace TripleMerge
             if (_isMouseDown)
             {
                 _isMouseDown = false;
-                // todo 点击事件
+                //todo 应该弹出状态信息
                 DebugUtil.Log($"点击item {gameObject.name}");
             }
         }

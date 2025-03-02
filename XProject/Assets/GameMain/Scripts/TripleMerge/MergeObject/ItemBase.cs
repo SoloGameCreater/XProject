@@ -8,7 +8,6 @@ namespace TripleMerge
         
         public virtual void OnPointerDown(int touchIndex = 0)
         {
-            Debug.Log($"{name} on pointer down, touchIndex is {touchIndex}");
             TouchIndex = touchIndex;
         }
 
