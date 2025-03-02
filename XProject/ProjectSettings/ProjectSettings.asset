@@ -165,9 +165,9 @@ PlayerSettings:
   applicationIdentifier:
     Android: com.blushbyte.hmerge
     Standalone: com.blushbyte.hmerge
-    VisionOS: com.gameframework.starforce
+    VisionOS: com.blushbyte.hmerge
     iPhone: com.blushbyte.hmerge
-    tvOS: com.gameframework.starforce
+    tvOS: com.blushbyte.hmerge
   buildNumber:
     Standalone: 0
     VisionOS: 0
@@ -900,14 +900,14 @@ PlayerSettings:
   editorAssembliesCompatibilityLevel: 1
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: Star Force
+  metroPackageName: H Merge
   metroPackageVersion: 
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: Star Force
+  metroApplicationDescription: H Merge
   wsaImages: {}
   metroTileShortName: 
   metroTileShowName: 0
