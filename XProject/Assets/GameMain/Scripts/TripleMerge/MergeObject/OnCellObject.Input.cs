@@ -408,7 +408,7 @@ namespace TripleMerge
 
         public void OnMouseDown()
         {
-#if UNITY_EDITOR
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_EDITOR
             OnPointerDown();
 #endif
         }
@@ -474,7 +474,7 @@ namespace TripleMerge
 
             _mouseDownTime = Time.time;
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_EDITOR
             _mouseDownPosition = Input.mousePosition;
 #else
             _mouseDownPosition = Input.GetTouch(TouchIndex).position;
@@ -484,7 +484,7 @@ namespace TripleMerge
 
         private void OnMouseUp()
         {
-#if UNITY_EDITOR
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_EDITOR
             OnPointerUp();
 #endif
         }
@@ -509,7 +509,7 @@ namespace TripleMerge
 
         private void OnMouseUpAsButton()
         {
-#if UNITY_EDITOR
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_EDITOR
             OnPointerClick();
 #endif
         }
