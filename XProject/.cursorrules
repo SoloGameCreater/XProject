@@ -16,7 +16,7 @@
 - 使用#if UNITY_EDITOR包装仅编辑器代码。
 - 使用[SerializeField]在检视器中公开私有字段。
 - 在适当的情况下为浮点字段实现Range属性。
-- 使用DebugUtil.Log()代替Debug.Log()。
+- 使用DebugUtil.Log()代替Debug.Log()。并且检查是否引用了Framework命名空间。
 
 ## 最佳实践
 - 使用TryGetComponent避免空引用异常。

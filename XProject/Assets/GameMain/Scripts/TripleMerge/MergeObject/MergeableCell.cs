@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Config.TripleMerge;
+using Framework;
 using SaveFile.TripleMerge;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -304,7 +305,7 @@ namespace TripleMerge
                 int callerItemId = PlacedItem.CfgData.Id;
                 if (TryToMerge(item, (finalItemId) =>
                 {
-                    Debug.Log($"[MERGE END] caller:{callerItemId} . final: {finalItemId}");
+                    DebugUtil.Log($"[MERGE END] caller:{callerItemId} . final: {finalItemId}");
                 }))
                 {
                     onMergedAction?.Invoke();
@@ -404,7 +405,7 @@ namespace TripleMerge
                 // 健壮性检查
                 if (targetCells == null || targetCells.Count == 0)
                 {
-                    Debug.LogWarning("目标单元格字典为空");
+                    DebugUtil.LogWarning("目标单元格字典为空");
                     return;
                 }
                 
@@ -438,7 +439,7 @@ namespace TripleMerge
             }
             catch (Exception e)
             {
-                Debug.LogError($"查找最近空地块时发生异常: {e}");
+                DebugUtil.LogError($"查找最近空地块时发生异常: {e}");
             }
             finally
             {
@@ -514,10 +515,10 @@ namespace TripleMerge
             var continuousCnt = continuousCell.Count;
             if (continuousCnt >= 3)
             {
-                Debug.Log($"三合开始");
+                DebugUtil.Log($"三合开始");
                 void OnMergeCompleted(int finalMergeItemId, Dictionary<int,int> mergeResult)
                 {
-                    Debug.Log($"三合完成");
+                    DebugUtil.Log($"三合完成");
                     
                     // 处理合成后的逻辑
                     StartCoroutine(DelayedKeepMerge(finalMergeItemId));
@@ -533,7 +534,7 @@ namespace TripleMerge
                 void ProcessAfterMerge(int finalMergeItemId)
                 {
                     TripleMergeSystem.Instance.Gameplay.MapManager.IsMerging = false;
-                    Debug.Log($"set mark is merging false");
+                    DebugUtil.Log($"set mark is merging false");
                     
                     // 如果合出的是万能卡，不允许combo合成
                     if (_placeableItem != null && _placeableItem.IsUniversalCard)
@@ -589,7 +590,7 @@ namespace TripleMerge
             {
                 // 设置合并状态标记
                 TripleMergeSystem.Instance.Gameplay.MapManager.IsMerging = true;
-                Debug.Log($"设置合并状态为true");
+                DebugUtil.Log($"设置合并状态为true");
                 
                 // 准备合并物品
                 PrepareItemsForMerge(continuousItems, tobeMergeItems);
@@ -605,7 +606,7 @@ namespace TripleMerge
             }
             catch (Exception e)
             {
-                Debug.LogError($"三合合成时发生异常:{e}");
+                DebugUtil.LogError($"三合合成时发生异常:{e}");
                 // 发生异常时重置合并状态
                 TripleMergeSystem.Instance.Gameplay.MapManager.IsMerging = false;
             }
@@ -689,7 +690,7 @@ namespace TripleMerge
         {
             if (chain.Chain.IndexOf(itemId) == chain.Chain.Count - 1)
             {
-                Debug.LogError($"三合合成物ID[{itemId}]已经是最高级别物品了");
+                DebugUtil.LogError($"三合合成物ID[{itemId}]已经是最高级别物品了");
                 return true;
             }
             return false;
@@ -847,8 +848,9 @@ namespace TripleMerge
                 while (cellsToCheck.Count > 0)
                 {
                     // 取出并移除列表中最后一个元素（模拟栈操作，提高性能）
-                    var currentCell = cellsToCheck[cellsToCheck.Count - 1];
-                    cellsToCheck.RemoveAt(cellsToCheck.Count - 1);
+                    int lastIndex = cellsToCheck.Count - 1;
+                    var currentCell = cellsToCheck[lastIndex];
+                    cellsToCheck.RemoveAt(lastIndex);
                     
                     // 如果已经检查过，跳过
                     if (queriedCells.Contains(currentCell))
@@ -971,7 +973,7 @@ namespace TripleMerge
             {
                 _isMouseDown = false;
                 // todo 点击事件
-                Debug.Log($"点击item {gameObject.name}");
+                DebugUtil.Log($"点击item {gameObject.name}");
             }
         }
 

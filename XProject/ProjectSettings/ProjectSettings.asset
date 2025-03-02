@@ -163,10 +163,10 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   androidMinAspectRatio: 1
   applicationIdentifier:
-    Android: com.gameframework.starforce
-    Standalone: unity.Game Framework.Star Force
+    Android: com.blushbyte.hmerge
+    Standalone: com.blushbyte.hmerge
     VisionOS: com.gameframework.starforce
-    iPhone: com.gameframework.starforce
+    iPhone: com.blushbyte.hmerge
     tvOS: com.gameframework.starforce
   buildNumber:
     Standalone: 0
@@ -571,7 +571,13 @@ PlayerSettings:
   m_BuildTargetGroupLightmapSettings: []
   m_BuildTargetGroupLoadStoreDebugModeSettings: []
   m_BuildTargetNormalMapEncoding: []
-  m_BuildTargetDefaultTextureCompressionFormat: []
+  m_BuildTargetDefaultTextureCompressionFormat:
+  - serializedVersion: 3
+    m_BuildTarget: Android
+    m_Formats: 01000000
+  - serializedVersion: 3
+    m_BuildTarget: iOS
+    m_Formats: 03000000
   playModeTestRunnerEnabled: 0
   runPlayModeTestAsEditModeTest: 0
   actionOnDotNetUnhandledException: 1
