@@ -142,6 +142,9 @@ namespace TripleMerge
         private SaveFileTripleMergeCellData _saveData;
         private string SaveKey => $"{MapCoordinate.x}_{MapCoordinate.y}";
 
+        // 使用可配置的延迟值
+        private const float MERGE_DELAY = 0.035f;
+
         public void Initialize(MergeableRegion hostRegion)
         {
             BelongRegion = hostRegion;
@@ -382,80 +385,66 @@ namespace TripleMerge
         /// <summary>
         /// 找到最近的空地块
         /// </summary>
-        /// <param name="targetCellNum"></param>
-        /// <param name="result"></param>
-        /// <param name="allowQueryFromAllAreas">如果是宝箱则搜索全部区域</param>
+        /// <param name="targetCellNum">需要查找的空地块数量</param>
+        /// <param name="result">结果列表</param>
+        /// <param name="allowQueryFromAllAreas">是否允许从所有区域查询（宝箱专用）</param>
         private void FindNearestEmptyCells(int targetCellNum, ref List<MergeableCell> result, bool allowQueryFromAllAreas = false)
         {
             result.Clear();
-
+            
+            // 获取临时列表
             var tempList = ListPool<MergeableCell>.Get();
             try
             {
-                // 提前计算容量并只添加有效的格子
-
-                // 获取目标单元格字典并预分配容量
-                var targetCells = allowQueryFromAllAreas
+                // 确定查询范围
+                Dictionary<Vector2Int, MergeableCell> targetCells = allowQueryFromAllAreas
                     ? TripleMergeSystem.Instance.Gameplay.MapManager.MapArea.MergeableCellsDictionary
                     : BelongRegion.BelongArea.MergeableCellsDictionary;
-
+                
                 // 健壮性检查
-                if (targetCells == null)
+                if (targetCells == null || targetCells.Count == 0)
                 {
-                    throw new InvalidOperationException("Target cells dictionary is null.");
+                    Debug.LogWarning("目标单元格字典为空");
+                    return;
                 }
-
-                // 预分配容量并填充空单元格
+                
+                // 预分配容量
                 tempList.Capacity = targetCells.Count;
-                AddEmptyCells(targetCells.Values, tempList);
-
-                // 添加空单元格
-                void AddEmptyCells(IEnumerable<MergeableCell> cells, List<MergeableCell> targetList)
+                
+                // 收集所有空地块
+                foreach (var cell in targetCells.Values)
                 {
-                    targetList.AddRange(cells.Where(IsCellEmpty));
-                }
-                if (!allowQueryFromAllAreas)
-                {
-                    tempList.Capacity = BelongRegion.BelongArea.MergeableCellsDictionary.Count;
-                    foreach (var cell in BelongRegion.BelongArea.MergeableCellsDictionary.Values)
+                    if (cell.PlacedItem == null && cell.CellStatus == ECellStatus.Mergeable)
                     {
-                        if (!IsCellEmpty(cell))continue;
-                        
                         tempList.Add(cell);
                     }
                 }
-                else
-                {
-                    var totalCells = TripleMergeSystem.Instance.Gameplay.MapManager.MapArea.MergeableCellsDictionary;
-                    tempList.Capacity = totalCells.Count;
-                    var area = TripleMergeSystem.Instance.Gameplay.MapManager.MapArea;
-                    foreach (var cell in area.MergeableCellsDictionary.Values)
-                    {
-                        if (!IsCellEmpty(cell)) continue;
-                        
-                        tempList.Add(cell);
-                    }
-                }
-
-                if (tempList.Count < targetCellNum)
+                
+                // 如果找到的空地块数量不足，直接返回所有找到的空地块
+                if (tempList.Count <= targetCellNum)
                 {
                     result.AddRange(tempList);
                     return;
                 }
-
+                
+                // 使用快速选择算法找出最近的N个空地块
                 QuickSelectByDistance(tempList, 0, tempList.Count - 1, targetCellNum);
-                result.AddRange(tempList.Take(targetCellNum));
+                
+                // 只取前N个结果
+                for (int i = 0; i < targetCellNum; i++)
+                {
+                    result.Add(tempList[i]);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"查找最近空地块时发生异常: {e}");
             }
             finally
             {
+                // 释放临时列表
                 ListPool<MergeableCell>.Release(tempList);
             }
-        }
-
-        private bool IsCellEmpty(MergeableCell cell)
-        {
-            return cell.PlacedItem == null &&
-                   cell.CellStatus == ECellStatus.Mergeable;
         }
 
         // 优化5：使用快速选择算法，只排序需要的部分
@@ -537,7 +526,7 @@ namespace TripleMerge
                 // 延迟处理合成后的逻辑
                 IEnumerator DelayedKeepMerge(int finalMergeItemId)
                 {
-                    yield return new WaitForSeconds(0.035f);
+                    yield return new WaitForSeconds(MERGE_DELAY);
                     ProcessAfterMerge(finalMergeItemId);
                 }
                 // 处理合成后的逻辑
@@ -617,6 +606,8 @@ namespace TripleMerge
             catch (Exception e)
             {
                 Debug.LogError($"三合合成时发生异常:{e}");
+                // 发生异常时重置合并状态
+                TripleMergeSystem.Instance.Gameplay.MapManager.IsMerging = false;
             }
             finally
             {
@@ -747,18 +738,40 @@ namespace TripleMerge
         /// </summary>
         private void RecycleItemsToDestroy(List<MergeableObject> tobeMergeItems, int remainCount)
         {
-            for (var i = tobeMergeItems.Count - 1; i >= remainCount; i--)
+            // 保留前remainCount个物品
+            if (remainCount > 0 && remainCount < tobeMergeItems.Count)
             {
-                var tobeDestroyItem = tobeMergeItems[i];
-                tobeDestroyItem.IsMerging = false;
-                tobeMergeItems.Remove(tobeDestroyItem);
-                OnCellObjectPool.Recycle(tobeDestroyItem);
+                // 使用对象池避免额外的内存分配
+                var tempItems = ListPool<MergeableObject>.Get();
+                for (int i = 0; i < remainCount; i++)
+                {
+                    tempItems.Add(tobeMergeItems[i]);
+                }
+                
+                // 回收剩余物品
+                for (int i = remainCount; i < tobeMergeItems.Count; i++)
+                {
+                    var item = tobeMergeItems[i];
+                    item.IsMerging = false;
+                    OnCellObjectPool.Recycle(item);
+                }
+                
+                // 清空并重新添加保留的物品
+                tobeMergeItems.Clear();
+                tobeMergeItems.AddRange(tempItems);
+                
+                ListPool<MergeableObject>.Release(tempItems);
             }
-            
-            // 清空待合并列表，保留剩余物品
-            var remainItems = tobeMergeItems.Take(remainCount).ToList();
-            tobeMergeItems.Clear();
-            tobeMergeItems.AddRange(remainItems);
+            else if (remainCount == 0)
+            {
+                // 全部回收
+                foreach (var item in tobeMergeItems)
+                {
+                    item.IsMerging = false;
+                    OnCellObjectPool.Recycle(item);
+                }
+                tobeMergeItems.Clear();
+            }
         }
 
         /// <summary>
@@ -817,109 +830,105 @@ namespace TripleMerge
         public IReadOnlyList<MergeableObject> GetContinuousSameItems(MergeableObject referenceItem)
         {
             _continuousCellsQueryResult.Clear();
+            
+            // 使用对象池获取临时集合
             var queriedCells = HashSetPool<MergeableCell>.Get();
+            var cellsToCheck = ListPool<MergeableCell>.Get();
+            
             try
             {
                 // 添加初始参考物品
                 _continuousCellsQueryResult.Add(referenceItem);
-
-                // 检查当前格子的物品
-                CheckCurrentCellItem(referenceItem, ref queriedCells);
-
-                // 如果当前检查未返回，继续递归检查相邻格子
-                if (_continuousCellsQueryResult.Count > 0)
+                
+                // 将初始格子添加到待检查列表
+                cellsToCheck.Add(this);
+                
+                // 使用迭代方式替代递归
+                while (cellsToCheck.Count > 0)
                 {
-                    QueryConnectedCells(this, ref queriedCells);
+                    // 取出并移除列表中最后一个元素（模拟栈操作，提高性能）
+                    var currentCell = cellsToCheck[cellsToCheck.Count - 1];
+                    cellsToCheck.RemoveAt(cellsToCheck.Count - 1);
+                    
+                    // 如果已经检查过，跳过
+                    if (queriedCells.Contains(currentCell))
+                        continue;
+                    
+                    // 标记为已检查
+                    queriedCells.Add(currentCell);
+                    
+                    // 检查当前格子的物品
+                    if (currentCell != this) // 跳过初始格子，因为它已经在初始化时处理过
+                    {
+                        CheckCellItem(referenceItem, currentCell);
+                    }
+                    
+                    // 如果当前格子有效，检查其四个方向的相邻格子
+                    AddNeighborIfValid(currentCell.Left, cellsToCheck, queriedCells);
+                    AddNeighborIfValid(currentCell.Right, cellsToCheck, queriedCells);
+                    AddNeighborIfValid(currentCell.Above, cellsToCheck, queriedCells);
+                    AddNeighborIfValid(currentCell.Below, cellsToCheck, queriedCells);
                 }
-
+                
                 return _continuousCellsQueryResult;
             }
             finally
             {
+                // 释放临时集合
                 HashSetPool<MergeableCell>.Release(queriedCells);
+                ListPool<MergeableCell>.Release(cellsToCheck);
             }
         }
 
-        private void CheckCurrentCellItem(MergeableObject referenceItem, ref HashSet<MergeableCell> queriedCells)
+        /// <summary>
+        /// 检查指定格子中的物品是否可以与参考物品合成
+        /// </summary>
+        private void CheckCellItem(MergeableObject referenceItem, MergeableCell cell)
         {
             // 如果格子为空或其他无效情况，直接返回
-            if (!IsCurrentCellValid(referenceItem)) return;
-
-            var currentItem = PlacedItem as MergeableObject;
-
+            if (cell.PlacedItem == null || cell.PlacedItem == referenceItem || !(cell.PlacedItem is MergeableObject currentItem))
+                return;
+            
+            // 根据参考物品类型处理合成逻辑
             if (referenceItem.IsUniversalCard)
             {
-                HandleUniversalMerge(ref referenceItem, currentItem, ref queriedCells);
+                // 万能卡合成逻辑
+                if (!currentItem.IsUniversalCard && 
+                    Utils.ParseTripleMergeItemType(currentItem.CfgData.ItemType) == TripleMergeItemType.MergeableNormal)
+                {
+                    // 避免重复添加
+                    if (!_continuousCellsQueryResult.Contains(currentItem))
+                    {
+                        _continuousCellsQueryResult.Add(currentItem);
+                    }
+                }
             }
             else
             {
-                HandleNormalMerge(referenceItem, currentItem);
+                // 普通合成逻辑
+                if (cell.PlacedItem.CfgData.Id == referenceItem.CfgData.Id && 
+                    !_continuousCellsQueryResult.Contains(currentItem))
+                {
+                    _continuousCellsQueryResult.Add(currentItem);
+                }
             }
         }
 
-        private bool IsCurrentCellValid(MergeableObject referenceItem)
+        /// <summary>
+        /// 如果相邻格子有效且未被检查过，则添加到待检查列表
+        /// </summary>
+        private void AddNeighborIfValid(MergeableCell neighborCell, List<MergeableCell> cellsToCheck, HashSet<MergeableCell> queriedCells)
         {
-            return PlacedItem != null
-                && PlacedItem != referenceItem
-                && PlacedItem is MergeableObject;
-        }
-
-        private void HandleUniversalMerge(ref MergeableObject referenceItem, MergeableObject currentItem, ref HashSet<MergeableCell> queriedCells)
-        {
-            // 检查是否满足万能卡合成的限制条件
-            if (currentItem.IsUniversalCard)
-            {
-                _continuousCellsQueryResult.Clear();
+            if (neighborCell == null || queriedCells.Contains(neighborCell))
                 return;
-            }
-
-            // 检查目标物品是否可以被万能卡合成
-            if (Utils.ParseTripleMergeItemType(currentItem.CfgData.ItemType) == TripleMergeItemType.MergeableNormal)
+            
+            // 检查格子是否可合成
+            if (neighborCell.CellStatus == ECellStatus.Mergeable && 
+                neighborCell._placeableItem != null && 
+                !neighborCell._placeableItem.IsDragging)
             {
-                queriedCells.Add(referenceItem.BelongCell);
-                referenceItem = currentItem;
-                _continuousCellsQueryResult.Add(currentItem);
+                cellsToCheck.Add(neighborCell);
             }
-        }
-
-        private void HandleNormalMerge(MergeableObject referenceItem, MergeableObject currentItem)
-        {
-            if (PlacedItem.CfgData.Id == referenceItem.CfgData.Id)
-            {
-                _continuousCellsQueryResult.Add(currentItem);
-            }
-        }
-
-        private void QueryConnectedCells(MergeableCell cell, ref HashSet<MergeableCell> queriedCells)
-        {
-            if (queriedCells.Contains(cell)) return;
-
-            queriedCells.Add(cell);
-
-            // 检查四个方向的相邻格子
-            CheckNeighborCell(cell.Left, ref queriedCells);
-            CheckNeighborCell(cell.Right, ref queriedCells);
-            CheckNeighborCell(cell.Above, ref queriedCells);
-            CheckNeighborCell(cell.Below, ref queriedCells);
-        }
-
-        private void CheckNeighborCell(MergeableCell neighborCell, ref HashSet<MergeableCell> queriedCells)
-        {
-            if (neighborCell == null || !IsCellMergeable(neighborCell)) return;
-
-            var neighborItem = neighborCell._placeableItem as MergeableObject;
-            if (neighborItem != null && !_continuousCellsQueryResult.Contains(neighborItem))
-            {
-                _continuousCellsQueryResult.Add(neighborItem);
-                QueryConnectedCells(neighborCell, ref queriedCells);
-            }
-        }
-
-        private bool IsCellMergeable(MergeableCell cell)
-        {
-            return cell.CellStatus == ECellStatus.Mergeable
-                && cell._placeableItem != null
-                && !cell._placeableItem.IsDragging;
         }
 
         #region input listener
