@@ -500,7 +500,7 @@ namespace TripleMerge
                 item = PlacedItem;
             }
 
-            if (item is not MergeableObject OnCellObject)
+            if (item is not MergeableObject mergeableObject)
             {
                 return false;
             }
@@ -510,67 +510,108 @@ namespace TripleMerge
                 return false;
             }
 
-
-            var continuousCell = GetContinuousSameItems(OnCellObject);
-            var continuousCnt = continuousCell.Count;
-            if (continuousCnt >= 3)
+            try
             {
-                DebugUtil.Log($"三合开始");
-                void OnMergeCompleted(int finalMergeItemId, Dictionary<int,int> mergeResult)
+                var continuousCell = GetContinuousSameItems(mergeableObject);
+                var continuousCnt = continuousCell.Count;
+                if (continuousCnt >= 3)
                 {
-                    DebugUtil.Log($"三合完成");
+                    DebugUtil.Log($"三合开始");
                     
-                    // 处理合成后的逻辑
-                    StartCoroutine(DelayedKeepMerge(finalMergeItemId));
-                }
-                
-                // 延迟处理合成后的逻辑
-                IEnumerator DelayedKeepMerge(int finalMergeItemId)
-                {
-                    yield return new WaitForSeconds(MERGE_DELAY);
-                    ProcessAfterMerge(finalMergeItemId);
-                }
-                // 处理合成后的逻辑
-                void ProcessAfterMerge(int finalMergeItemId)
-                {
-                    TripleMergeSystem.Instance.Gameplay.MapManager.IsMerging = false;
-                    DebugUtil.Log($"set mark is merging false");
-                    
-                    // 如果合出的是万能卡，不允许combo合成
-                    if (_placeableItem != null && _placeableItem.IsUniversalCard)
-                    {
-                        var chainCfg = TripleMergeConfigManager.Instance.GetChainConfig(_placeableItem.CfgData.ChainId);
-                        if (chainCfg.Chain[^1] == _placeableItem.CfgData.Id)
-                        {
-                            _placeableItem.PlayMaxTipAnim();
-                        }
-                        return;
-                    }
-                    
-                    // 尝试继续合成，如果不能继续合成则执行后续操作
-                    if (!TryToMerge(null, onFinish))
-                    {
-                        onFinish?.Invoke(finalMergeItemId);
+                    // 能够进行合成的情况，先进行合成计算，合成完毕后，再对合成完毕后的合成物进行新的位置分配
+                    DoMerge(ref continuousCell, (finalMergeItemId, mergeResult) => 
+                        OnMergeCompleted(finalMergeItemId, mergeResult, onFinish));
 
-                        if (_placeableItem != null)
-                        {
-                            // 检查是否是最高级物品
-                            var chainCfg = TripleMergeConfigManager.Instance.GetChainConfig(_placeableItem.CfgData.ChainId);
-                            if (chainCfg.Chain[^1] == _placeableItem.CfgData.Id)
-                            {
-                                _placeableItem.PlayMaxTipAnim();
-                            }
-                        }
-                    }
+                    return true;
                 }
-                
-                // 能够进行合成的情况，先进行合成计算，合成完毕后，再对合成完毕后的合成物进行新的位置分配
-                DoMerge(ref continuousCell, OnMergeCompleted);
-
-                return true;
+            }
+            catch (Exception e)
+            {
+                DebugUtil.LogError($"尝试合成时发生异常: {e}");
+                TripleMergeSystem.Instance.Gameplay.MapManager.IsMerging = false;
             }
 
             return false;
+        }
+
+        private void OnMergeCompleted(int finalMergeItemId, Dictionary<int,int> mergeResult, Action<int> onFinish)
+        {
+            DebugUtil.Log($"三合完成");
+            StartCoroutine(DelayedKeepMerge(finalMergeItemId, onFinish));
+        }
+
+        private IEnumerator DelayedKeepMerge(int finalMergeItemId, Action<int> onFinish)
+        {
+            yield return new WaitForSeconds(MERGE_DELAY);
+            
+            // 检查对象是否仍然有效
+            if (this == null || !gameObject.activeInHierarchy)
+            {
+                TripleMergeSystem.Instance.Gameplay.MapManager.IsMerging = false;
+                yield break;
+            }
+            
+            ProcessAfterMerge(finalMergeItemId, onFinish);
+        }
+
+        private void ProcessAfterMerge(int finalMergeItemId, Action<int> onFinish)
+        {
+            TripleMergeSystem.Instance.Gameplay.MapManager.IsMerging = false;
+            DebugUtil.Log($"set mark is merging false");
+            
+            // 如果合出的是万能卡，不允许combo合成
+            if (CheckAndHandleMaxLevelItem())
+            {
+                return;
+            }
+            
+            // 使用迭代而非递归方式处理连续合成
+            StartCoroutine(ContinuousMergeCoroutine(finalMergeItemId, onFinish));
+        }
+
+        private bool CheckAndHandleMaxLevelItem()
+        {
+            if (_placeableItem != null && _placeableItem.IsUniversalCard)
+            {
+                var chainCfg = TripleMergeConfigManager.Instance.GetChainConfig(_placeableItem.CfgData.ChainId);
+                if (chainCfg.Chain[^1] == _placeableItem.CfgData.Id)
+                {
+                    _placeableItem.PlayMaxTipAnim();
+                }
+                return true;
+            }
+            
+            if (_placeableItem != null)
+            {
+                var chainCfg = TripleMergeConfigManager.Instance.GetChainConfig(_placeableItem.CfgData.ChainId);
+                if (chainCfg.Chain[^1] == _placeableItem.CfgData.Id)
+                {
+                    _placeableItem.PlayMaxTipAnim();
+                    return true;
+                }
+            }
+            
+            return false;
+        }
+
+        private IEnumerator ContinuousMergeCoroutine(int finalMergeItemId, Action<int> onFinish)
+        {
+            bool canContinue = true;
+            int currentMergeItemId = finalMergeItemId;
+            
+            while (canContinue)
+            {
+                canContinue = TryToMerge(null, null);
+                
+                if (!canContinue)
+                {
+                    onFinish?.Invoke(currentMergeItemId);
+                    CheckAndHandleMaxLevelItem();
+                    break;
+                }
+                
+                yield return new WaitForSeconds(MERGE_DELAY);
+            }
         }
 
         /// <summary>

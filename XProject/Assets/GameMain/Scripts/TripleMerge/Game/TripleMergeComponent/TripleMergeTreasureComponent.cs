@@ -17,7 +17,6 @@ namespace TripleMerge
 
         public void GenerateTreasure(Vector3 generatePosition)
         {
-            Debug.LogWarning($"Generate Treasure in position {generatePosition}");
             //todo 没有宝箱了,弹出对应弹窗提示玩家游玩Match玩法来获取宝箱
             if (!CurrencyModel.Instance.IsCurrencyEnough(CurrencyType.TreasureChest, 1))
             {
@@ -53,6 +52,8 @@ namespace TripleMerge
             chestInstance.transform.position = generateWorldPosition;
             // 因为宝箱会从出生位置飞行到对应的地块,所以飞行过程中提高其sortingOrder
             chestInstance.OnFlyBegin();
+            
+            Debug.LogWarning($"Generate Treasure in targetCell {targetCell.MapCoordinate}");
             // 将宝箱放置到目标地块
             targetCell.PlaceItem(chestInstance,
                 () =>

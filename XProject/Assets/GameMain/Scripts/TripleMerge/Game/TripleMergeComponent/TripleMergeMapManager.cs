@@ -64,8 +64,7 @@ namespace TripleMerge
 
             foreach (var mergeableCell in MapArea.MergeableCellsDictionary.Values)
             {
-                //todo 现在还没有自动合成功能
-                if (mergeableCell.CellStatus != MergeableCell.ECellStatus.Mergeable /*|| mergeableCell.IsAnyItemFlyingTo*/)
+                if (mergeableCell.CellStatus != MergeableCell.ECellStatus.Mergeable || mergeableCell.PlacedItem != null)
                 {
                     continue;
                 }
