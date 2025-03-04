@@ -48,7 +48,15 @@ MonoBehaviour:
       - CollectPath: Assets/ExtraRes/Configs/DataJson
         CollectorGUID: e65435d69e228c24e94b9402437224f0
         CollectorType: 0
-        AddressRuleName: AddressByFileName
+        AddressRuleName: AddressDisable
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/ExtraRes/Materials
+        CollectorGUID: ac1e99a52f9f4554b88a1245f2a478a9
+        CollectorType: 0
+        AddressRuleName: AddressDisable
         PackRuleName: PackDirectory
         FilterRuleName: CollectAll
         AssetTags: 
