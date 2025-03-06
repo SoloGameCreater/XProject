@@ -51,7 +51,7 @@ namespace Framework
                 return null;
             }
 
-            string path = m_UseSd ? atlasPathNode.SdPath : atlasPathNode.HdPath;
+            string path = atlasPathNode.HdPath;
 
             var spriteAtlas = LoadResource<SpriteAtlas>(path);
             if (null == spriteAtlas)
@@ -61,11 +61,6 @@ namespace Framework
             }
 
             return spriteAtlas;
-        }
-
-        public void UseSDAtlas(bool useSd)
-        {
-            m_UseSd = useSd;
         }
 
         public void ReleaseRes(string path, bool free = false)

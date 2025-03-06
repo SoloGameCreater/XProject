@@ -61,6 +61,14 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
+      - CollectPath: Assets/ExtraRes/SpriteAtlas
+        CollectorGUID: 8991a61daaac32349b0a89e0182ec792
+        CollectorType: 0
+        AddressRuleName: AddressDisable
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
     - GroupName: Scene
       GroupDesc: 
       AssetTags: BASE_RES

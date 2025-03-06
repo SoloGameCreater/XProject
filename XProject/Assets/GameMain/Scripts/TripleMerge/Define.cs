@@ -15,4 +15,9 @@ namespace TripleMerge
         /// </summary>
         UniversalCard = 3,
     }
+    public static class Const
+    {
+        public const string AtlasName = "MergeItemAtlas";
+
+    }
 }

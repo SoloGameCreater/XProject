@@ -19,6 +19,7 @@ namespace BaseModule
             await UniTask.Yield();
             
             LoadingPanel.Hide();
+            var _ = AtlasConfigController.Instance;//触发图集信息加载
             GameModule.Scene.LoadScene("Assets/Scenes/InitScene");
         }
     }
