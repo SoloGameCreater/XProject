@@ -57,7 +57,7 @@ public class AtlasConfigController : ScriptableObject
     private void GetFileName(string path)
     {
         DirectoryInfo root = new DirectoryInfo(path);
-        var files = root.GetFiles("*.spriteatlasv2");
+        var files = root.GetFiles("*.spriteatlas");
         foreach (var file in files)
         {
             Debug.Log(file.FullName);
@@ -79,7 +79,7 @@ public class AtlasConfigController : ScriptableObject
     {
         if (AtlasPathNodeList == null) AtlasPathNodeList = new List<AtlasPathNode>();
 
-        var _atlasName = atlasName.Substring(0, atlasName.Length - 14); // 删除".spriteatlasv2";
+        var _atlasName = atlasName.Substring(0, atlasName.Length - 12); // 删除".spriteatlas";
         fullPath = fullPath.Replace('\\', '/');
         var _atlasRelativePath = fullPath.Split(new string[] { "ExtraRes/" }, StringSplitOptions.RemoveEmptyEntries)[1];
 
@@ -98,7 +98,7 @@ public class AtlasConfigController : ScriptableObject
 
     private void RefreshAtlasPath(AtlasPathNode atlasPathNode, string relativePath)
     {
-        string relativePathWithoutExt = relativePath.Substring(0, relativePath.Length - 14); // 删除".spriteatlasv2";
+        string relativePathWithoutExt = relativePath.Substring(0, relativePath.Length - 12); // 删除".spriteatlas";
 
         atlasPathNode.HdPath = relativePathWithoutExt;
     }
