@@ -48,6 +48,7 @@ namespace TripleMerge
         protected override void OnRecycle()
         {
             transform.localScale = Vector3.one;
+            transform.DOKill();
 
             _mergeTippingItems = null;
             _isMergeTipping = false;

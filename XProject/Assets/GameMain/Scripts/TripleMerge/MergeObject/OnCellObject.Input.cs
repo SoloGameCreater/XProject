@@ -1,5 +1,6 @@
 using System;
 using DG.Tweening;
+using Framework;
 using UnityEngine;
 
 namespace TripleMerge
@@ -205,43 +206,111 @@ namespace TripleMerge
             }
 
             OnTouchCellUpdateBefore();
-            if (TouchedCell != null && TouchedCell.PlacedItem != null && TouchedCell.PlacedItem != this)
-            {
-                var cellTransform = TouchedCell.PlacedItem.transform;
-
-                cellTransform.DOKill();
-
-                TouchedCell.PlacedItem.transform.DOLocalMove(new Vector3(0, 0, cellTransform.position.z), 0.15f);
-            }
-
+            
+            ResetPreviousTouchedCell();
+            
             TouchedCell = cell;
+            
+            HandleTouchedCellItem();
+        }
 
-            if (TouchedCell != null && TouchedCell.PlacedItem != null && TouchedCell.PlacedItem != this)
+        /// <summary>
+        /// 重置之前触摸的单元格中的物品位置
+        /// </summary>
+        private void ResetPreviousTouchedCell()
+        {
+            if (TouchedCell == null || TouchedCell.PlacedItem == null || TouchedCell.PlacedItem == this)
             {
-                var selfPosition = transform.position;
-                var touchItemPosition = TouchedCell.PlacedItem.transform.position;
-                var xDistance = selfPosition.x - touchItemPosition.x;
-                var yDistance = selfPosition.y - touchItemPosition.y;
-
-                if (Mathf.Abs(xDistance) >= Mathf.Abs(yDistance))
-                {
-                    TouchedCell.PlacedItem.transform.DOKill();
-                    TouchedCell.PlacedItem.transform.DOLocalMove(
-                                    new Vector3(
-                                        xDistance >= 0 ? TouchedCell.PlacedItem.transform.localPosition.x - 0.25f : TouchedCell.PlacedItem.transform.localPosition.x + 0.25f, 0,
-                                        TouchedCell.PlacedItem.transform.localPosition.z), 0.15f)
-                               .OnComplete(OnTouchCellUpdated);
-                }
-                else
-                {
-                    TouchedCell.PlacedItem.transform.DOKill();
-                    TouchedCell.PlacedItem.transform.DOLocalMove(
-                                    new Vector3(0,
-                                        yDistance >= 0 ? TouchedCell.PlacedItem.transform.localPosition.y - 0.25f : TouchedCell.PlacedItem.transform.localPosition.y + 0.25f,
-                                        TouchedCell.PlacedItem.transform.localPosition.z), 0.15f)
-                               .OnComplete(OnTouchCellUpdated);
-                }
+                return;
             }
+            
+            var cellTransform = TouchedCell.PlacedItem.transform;
+            if (cellTransform == null)
+            {
+                return;
+            }
+            
+            cellTransform.DOKill();
+            cellTransform.DOLocalMove(new Vector3(0, 0, cellTransform.position.z), 0.15f);
+        }
+
+        /// <summary>
+        /// 处理当前触摸单元格中的物品位置
+        /// </summary>
+        private void HandleTouchedCellItem()
+        {
+            if (TouchedCell == null || TouchedCell.PlacedItem == null || TouchedCell.PlacedItem == this)
+            {
+                return;
+            }
+            
+            var placedItem = TouchedCell.PlacedItem;
+            if (placedItem.transform == null)
+            {
+                return;
+            }
+            
+            var selfPosition = transform.position;
+            var touchItemPosition = placedItem.transform.position;
+            var xDistance = selfPosition.x - touchItemPosition.x;
+            var yDistance = selfPosition.y - touchItemPosition.y;
+            
+            var safeItem = placedItem;
+            
+            if (Mathf.Abs(xDistance) >= Mathf.Abs(yDistance))
+            {
+                MoveItemHorizontally(safeItem, xDistance);
+            }
+            else
+            {
+                MoveItemVertically(safeItem, yDistance);
+            }
+        }
+
+        /// <summary>
+        /// 水平方向移动物品
+        /// </summary>
+        private void MoveItemHorizontally(OnCellObject item, float xDistance)
+        {   
+            item.transform.DOKill();
+            
+            float offsetX = xDistance >= 0 ? -0.25f : 0.25f;
+            Vector3 targetPosition = new(
+                item.transform.localPosition.x + offsetX,//x
+                0,//y
+                item.transform.localPosition.z//z
+            );
+            
+            item.transform.DOLocalMove(targetPosition, 0.15f)
+                .OnComplete(() => {
+                    if (item != null && item.transform != null)
+                    {
+                        OnTouchCellUpdated();
+                    }
+                });
+        }
+
+        /// <summary>
+        /// 垂直方向移动物品
+        /// </summary>
+        private void MoveItemVertically(OnCellObject item, float yDistance)
+        {   
+            item.transform.DOKill();
+            
+            float offsetY = yDistance >= 0 ? -0.25f : 0.25f;
+            Vector3 targetPosition = new(
+                0,//x
+                item.transform.localPosition.y + offsetY,//y
+                item.transform.localPosition.z//z
+            );
+            
+            item.transform.DOLocalMove(targetPosition, 0.15f)
+                .OnComplete(() => {
+                    if (item != null && item.transform != null)
+                    {
+                        OnTouchCellUpdated();
+                    }
+                });
         }
 
         protected virtual void OnTouchCellUpdateBefore()
@@ -312,7 +381,8 @@ namespace TripleMerge
             else
             {
                 // 万能卡
-                if (TouchedCell.PlacedItem != null && TouchedCell.PlacedItem != this && IsUniversalCard && this is MergeableObject mergeableObject)
+                if (TouchedCell.PlacedItem != null && TouchedCell.PlacedItem != this 
+                && IsUniversalCard && this is MergeableObject mergeableObject)
                 {
                     var continuousItems = TouchedCell.GetContinuousSameItems(mergeableObject);
                     if (continuousItems.Count >= 3)

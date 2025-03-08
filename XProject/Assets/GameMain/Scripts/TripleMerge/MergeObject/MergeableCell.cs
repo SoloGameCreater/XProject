@@ -557,8 +557,6 @@ namespace TripleMerge
         private void ProcessAfterMerge(int finalMergeItemId, Action<int> onFinish)
         {
             TripleMergeSystem.Instance.Gameplay.MapManager.IsMerging = false;
-            DebugUtil.Log($"set mark is merging false");
-            
             // 如果合出的是万能卡，不允许combo合成
             if (CheckAndHandleMaxLevelItem())
             {
