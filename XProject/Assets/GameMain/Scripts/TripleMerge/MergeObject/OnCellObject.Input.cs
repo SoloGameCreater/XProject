@@ -246,12 +246,10 @@ namespace TripleMerge
 
         protected virtual void OnTouchCellUpdateBefore()
         {
-            Debug.Log("关闭合成提示");
         }
 
         protected virtual void OnTouchCellUpdated()
         {
-            Debug.Log("打开合成提示");
         }
 
         private void ModifyInputStage(EInputStage stage)

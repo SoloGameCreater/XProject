@@ -1,5 +1,7 @@
 
+using System.Collections.Generic;
 using Config.TripleMerge;
+using DG.Tweening;
 using UnityEngine;
 using Framework;
 
@@ -31,6 +33,8 @@ namespace TripleMerge
                 return false;
             }
         }
+        private bool _isMergeTipping;
+        private IReadOnlyList<MergeableObject> _mergeTippingItems;
         protected override void OnSelect()
         {
             _draggingTips.SetActive(true);
@@ -44,6 +48,9 @@ namespace TripleMerge
         protected override void OnRecycle()
         {
             transform.localScale = Vector3.one;
+
+            _mergeTippingItems = null;
+            _isMergeTipping = false;
         }
 
         protected override void OnCfgDataUpdated()
@@ -81,7 +88,7 @@ namespace TripleMerge
 
         protected override void OnDragEnd()
         {
-            //StopMergeTipping();
+            StopMergeTipping();
 
             _rigidbody.Sleep();
 
@@ -91,7 +98,15 @@ namespace TripleMerge
             
             OnBelongCellUpdated();
         }
+        protected override void OnTouchCellUpdateBefore()
+        {
+            StopMergeTipping();
+        }
 
+        protected override void OnTouchCellUpdated()
+        {
+            TryShowMergeTip();
+        }
         protected override void OnInitialize()
         {
             _rigidbody = transform.GetComponent<Rigidbody2D>();
@@ -122,6 +137,94 @@ namespace TripleMerge
         public override void PlayMaxTipAnim()
         {
             Debug.Log("已达到最高等级");
+        }
+        private void StopMergeTipping()
+        {
+            if (!_isMergeTipping)
+            {
+                return;
+            }
+
+            _isMergeTipping = false;
+
+            if (_mergeTippingItems == null)
+            {
+                return;
+            }
+
+            foreach (var mergeTippingItem in _mergeTippingItems)
+            {
+                if (mergeTippingItem == this || mergeTippingItem == null || mergeTippingItem.gameObject == null || !mergeTippingItem.gameObject.activeSelf)
+                {
+                    continue;
+                }
+
+                mergeTippingItem.transform.DOKill();
+                mergeTippingItem.transform.DOLocalMove(new Vector3(0, 0, mergeTippingItem.transform.localPosition.z), 0.125f);
+            }
+
+            _mergeTippingItems = null;
+        }
+        private void TryShowMergeTip()
+        {
+            if (!IsDragging)
+            {
+                return;
+            }
+
+            if (_isMergeTipping)
+            {
+                return;
+            }
+
+            var chainCfg = TripleMergeConfigManager.Instance.GetChainConfig(CfgData.ChainId);
+            if (chainCfg != null && chainCfg.Chain.IndexOf(CfgData.Id) == chainCfg.Chain.Count - 1 && !IsUniversalCard)
+            {
+                Debug.Log($"最高级别物品，不能再合成了!");
+                return;
+            }
+
+            if (TouchedCell == null)
+            {
+                return;
+            }
+
+            _isMergeTipping = true;
+
+            if (TouchedCell.CellStatus != MergeableCell.ECellStatus.Mergeable
+             || TouchedCell.PlacedItem == null 
+             || (TouchedCell.PlacedItem.CfgData.Id != CfgData.Id && !IsUniversalCard))
+            {
+                return;
+            }
+
+            _mergeTippingItems = TouchedCell.GetContinuousSameItems(this);
+
+            if (_mergeTippingItems.Count < 3)
+            {
+                _mergeTippingItems = null;
+                return;
+            }
+
+            Vector2 cellPos = TouchedCell.transform.position;
+            foreach (var mergeableObject in _mergeTippingItems)
+            {
+                if (mergeableObject == this)
+                {
+                    continue;
+                }
+
+                if (mergeableObject.BelongCell == TouchedCell)
+                {
+                    mergeableObject.transform.DOLocalMove(new Vector3(0, 0, mergeableObject.transform.localPosition.z), 0.2f);
+                    continue;
+                }
+
+                var itemPos = mergeableObject.transform.position;
+                var dir = cellPos - (Vector2) itemPos;
+
+                mergeableObject.transform.DOMove(itemPos + (Vector3) dir.normalized * 0.4f, 0.35f).SetLoops(-1, LoopType.Yoyo);
+            }
         }
     }
 }
