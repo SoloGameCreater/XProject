@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Config.TripleMerge;
+using DG.Tweening;
 using Framework;
 using SaveFile.TripleMerge;
 using UnityEngine;
@@ -250,7 +251,7 @@ namespace TripleMerge
             }
         }
 
-        public void PlaceItem(OnCellObject item, Action onPlacedAction = null, Action onMergedAction = null)
+        public void PlaceItem(OnCellObject item, Action onPlacedAction = null, Action onMergedAction = null,bool showMoveTween = true)
         {
             if (item == null)
             {
@@ -284,37 +285,46 @@ namespace TripleMerge
             // 放置合成物品
             var itemTrans = item.transform;
             itemTrans.SetParent(PlaceItemRoot);
-            // todo 后期会区分是否播放位移动画，现在直接放置到对应位置
-            itemTrans.localPosition = Vector3.zero;
-
-            // 5. 处理放置逻辑
-            onPlacedAction?.Invoke();
-
-            if (PlacedItem == null)
+            if (showMoveTween)
             {
-                SetPlacedItem(item);
-                onMergedAction?.Invoke();
-                return;
+                itemTrans.DOLocalMove(new Vector3(0, 0, itemTrans.position.z), 0.15f).OnComplete(OnItemPlaced);
+            }
+            else
+            {
+                itemTrans.localPosition = Vector3.zero;
+                OnItemPlaced();
             }
 
-            if (item == PlacedItem) return;
+            return;
 
-            // 6. 处理合成逻辑
-            if (item.CfgData.Id == PlacedItem.CfgData.Id || item.IsUniversalCard)
+            void OnItemPlaced()
             {
-                int callerItemId = PlacedItem.CfgData.Id;
-                if (TryToMerge(item, (finalItemId) =>
+                // 5. 处理放置逻辑
+                onPlacedAction?.Invoke();
+
+                if (PlacedItem == null)
                 {
-                    DebugUtil.Log($"[MERGE END] caller:{callerItemId} . final: {finalItemId}");
-                }))
-                {
+                    SetPlacedItem(item);
                     onMergedAction?.Invoke();
                     return;
                 }
-            }
 
-            SetPlacedItem(item);
-            onMergedAction?.Invoke();
+                if (item == PlacedItem) return;
+
+                // 6. 处理合成逻辑
+                if (item.CfgData.Id == PlacedItem.CfgData.Id || item.IsUniversalCard)
+                {
+                    int callerItemId = PlacedItem.CfgData.Id;
+                    if (TryToMerge(item, (finalItemId) => { DebugUtil.Log($"[MERGE END] caller:{callerItemId} . final: {finalItemId}"); }))
+                    {
+                        onMergedAction?.Invoke();
+                        return;
+                    }
+                }
+
+                SetPlacedItem(item);
+                onMergedAction?.Invoke();
+            }
         }
 
         private void SetPlacedItem(OnCellObject item)

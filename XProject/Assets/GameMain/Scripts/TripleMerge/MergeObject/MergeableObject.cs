@@ -99,6 +99,19 @@ namespace TripleMerge
             
             OnBelongCellUpdated();
         }
+        protected override void OnBelongCellUpdated()
+        {
+            base.OnBelongCellUpdated();
+
+            if (BelongCell == null) return;
+
+            //todo 意义不明
+            //GrayItemRenderer.sortingOrder = ItemRenderer.sortingOrder = -BelongCell.MapCoordinate.y;
+
+            var itemPosition = ItemRenderer.transform.position;
+            itemPosition.z -= 0.1f;
+            GrayItemRenderer.transform.position = itemPosition;
+        }
         protected override void OnTouchCellUpdateBefore()
         {
             StopMergeTipping();
