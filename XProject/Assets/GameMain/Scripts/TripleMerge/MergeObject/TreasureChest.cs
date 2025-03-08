@@ -72,7 +72,9 @@ namespace TripleMerge
             Deselect();
             var belongCell = BelongCell;
             if(belongCell != null)
+            {
                 belongCell.PlaceItem(null);
+            }
             
             OnCellObjectPool.Recycle(this);
 
@@ -82,7 +84,6 @@ namespace TripleMerge
             if (TryReleaseChestFromConfig(belongCell))
             {
                 model.AddTreasureChestOpenTimes();
-                Debug.Log("OpenChest!!");
                 return;
             }
             //如果超过15次则执行下面这段逻辑
@@ -129,7 +130,7 @@ namespace TripleMerge
                     categoryWeightRandomList.RemoveAt(randomIdx);
                 }
             }
-            // todo 如果经过过滤已合成最高级别物品之后，宝箱可以开出的1级景观种类已经不足3种了
+            // 如果经过过滤已合成最高级别物品之后，宝箱可以开出的1级景观种类已经不足3种了
             else
             {
                 foreach (var item in categoryWeightRandomList)
@@ -137,8 +138,8 @@ namespace TripleMerge
                     resultCfg.Add(item.Item1);
                 }
 
-                var lackOfNum = 3 - categoryWeightRandomList.Count;
-                var gotCnt = 0;
+                // var lackOfNum = 3 - categoryWeightRandomList.Count;
+                // var gotCnt = 0;
                 // foreach (var chain in TripleMergeConfigManager.Instance.MergeChainList)
                 // {
                 //     if (gotCnt >= lackOfNum) break;
@@ -219,8 +220,7 @@ namespace TripleMerge
         private bool TryReleaseChestFromConfig(MergeableCell belongCell)
         {
             var openTimes = TripleMergeSystem.Instance.Model.GetTreasureChestOpenTimes();
-            MergeTreasureChestRewards chestRewardsCfg = null;
-            if (!TripleMergeConfigManager.Instance.TryGetRewardBoxReward(openTimes + 1, out chestRewardsCfg))
+            if (!TripleMergeConfigManager.Instance.TryGetRewardBoxReward(openTimes + 1, out var chestRewardsCfg))
                 return false;
             var addToBubbleNum = 0;
             var cells = GetMergeableEmptyCellsByDistance(chestRewardsCfg.Rewards.Count, belongCell.transform.position);
@@ -231,7 +231,6 @@ namespace TripleMerge
                 if (cells.Count == 0)
                 {
                     addToBubbleNum++;
-                    // todo 加入气泡
                     DebugUtil.LogWarning("地块满了，需要加入气泡缓存起来");
                     //gamePlay.MapManager.MergeableItemsBubble.AddItem(reward.Id, hostCell.transform.position, skipProgress);
                 }

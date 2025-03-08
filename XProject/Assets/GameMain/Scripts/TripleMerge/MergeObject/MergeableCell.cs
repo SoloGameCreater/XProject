@@ -88,7 +88,7 @@ namespace TripleMerge
         /// 当前地块上放置的三合物品
         /// </summary>
 #if UNITY_EDITOR
-        //[ShowInInspector]
+        [ShowInInspector]
 #endif
         private OnCellObject _placeableItem;
 
@@ -350,8 +350,9 @@ namespace TripleMerge
         private void ClearItemReference()
         {
             var takeOffItem = _placeableItem;
-            if (takeOffItem != null)
+            if (takeOffItem != null && takeOffItem.BelongCell != null)
             {
+                DebugUtil.Log($"item 从 :{takeOffItem.BelongCell.MapCoordinate} 被挤走");
                 // 因为老的物品是从该地块被挤出去的，所以这时其实原本的地块已经有了新的物品了，就应该先清除老物品的地块信息，以免地块物品信息被错误清除
                 takeOffItem.BelongCell = null;
             }
@@ -366,15 +367,17 @@ namespace TripleMerge
 
                 foreach (var displacedItem in displacedItems)
                 {
-                    FindNearestEmptyCells(1, ref nearestEmptyCells,
-                        Utils.ParseTripleMergeItemType(displacedItem.CfgData.ItemType) == TripleMergeItemType.TreasureChest);
+                    FindNearestEmptyCells(1, ref nearestEmptyCells);
 
                     if (nearestEmptyCells.Count > 0)
                     {
                         nearestEmptyCells[0].PlaceItem(displacedItem);
+                        DebugUtil.Log($"item 被放置到 :{nearestEmptyCells[0].MapCoordinate}");
                     }
                     else
                     {
+                        
+                        DebugUtil.LogWarning("没有空余地块，尝试将多余的收集物储存起来");
                         // todo 如果找不到空格子，将物品放入存储气泡
                         // var storageBubble = ThreeMergeSystem.Instance.Gameplay.MapManager.MergeableItemsBubble;
                         // storageBubble.AddItem(displacedItem.CfgData.Id, displacedItem.transform.position);
@@ -398,8 +401,7 @@ namespace TripleMerge
         /// </summary>
         /// <param name="targetCellNum">需要查找的空地块数量</param>
         /// <param name="result">结果列表</param>
-        /// <param name="allowQueryFromAllAreas">是否允许从所有区域查询（宝箱专用）</param>
-        private void FindNearestEmptyCells(int targetCellNum, ref List<MergeableCell> result, bool allowQueryFromAllAreas = false)
+        private void FindNearestEmptyCells(int targetCellNum, ref List<MergeableCell> result)
         {
             result.Clear();
             
@@ -408,9 +410,7 @@ namespace TripleMerge
             try
             {
                 // 确定查询范围
-                Dictionary<Vector2Int, MergeableCell> targetCells = allowQueryFromAllAreas
-                    ? TripleMergeSystem.Instance.Gameplay.MapManager.MapArea.MergeableCellsDictionary
-                    : BelongRegion.BelongArea.MergeableCellsDictionary;
+                Dictionary<Vector2Int, MergeableCell> targetCells = TripleMergeSystem.Instance.Gameplay.MapManager.MapArea.MergeableCellsDictionary;
                 
                 // 健壮性检查
                 if (targetCells == null || targetCells.Count == 0)
@@ -857,7 +857,7 @@ namespace TripleMerge
             {
                 // 查找最近的空单元格
                 var nearestEmptyCells = ListPool<MergeableCell>.Get();
-                FindNearestEmptyCells(1, ref nearestEmptyCells, false);
+                FindNearestEmptyCells(1, ref nearestEmptyCells);
                 
                 if (nearestEmptyCells.Count > 0)
                 {
