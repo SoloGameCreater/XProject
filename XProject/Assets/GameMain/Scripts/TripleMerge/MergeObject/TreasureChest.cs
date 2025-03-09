@@ -11,9 +11,12 @@ namespace TripleMerge
     {
         public const int TreasureChestID = 99999; 
         protected SpriteRenderer IconSp { get; set; }
+        private GameObject _draggingTips;
         protected override void OnInitialize()
         {
             IconSp = transform.Find("Icon").GetComponent<SpriteRenderer>();
+            _draggingTips = transform.Find("DraggingTips").gameObject;
+            _draggingTips.SetActive(false);
         }
 
         protected override void OnRecycle()
@@ -23,14 +26,12 @@ namespace TripleMerge
 
         protected override void OnSelect()
         {
-            //_draggingTips.SetActive(true);
-            DebugUtil.Log(" 宝箱选择 ");
+            _draggingTips.SetActive(true);
         }
 
         protected override void OnDeselect()
         {
-            //_draggingTips.SetActive(false);
-            DebugUtil.Log(" 取消选择 ");
+            _draggingTips.SetActive(false);
         }
 
         protected override void OnCfgDataUpdated() { }

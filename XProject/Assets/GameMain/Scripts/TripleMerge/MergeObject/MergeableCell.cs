@@ -638,6 +638,9 @@ namespace TripleMerge
             }
         }
 
+        
+        private const float BeforeMergePerformDuration = 0.15f;
+        private const float AfterMergePerformDuration = 0.15f;
         /// <summary>
         /// 执行三合一合并操作
         /// </summary>
@@ -645,62 +648,81 @@ namespace TripleMerge
         /// <param name="onMergeCompleted">合并完成后的回调</param>
         private void DoMerge(ref IReadOnlyList<MergeableObject> continuousItems, Action<int, Dictionary<int, int>> onMergeCompleted = null)
         {
+            // 用于存储最终合成物品的ID
+            var finalMergeItemId = 0;
             // 资源池初始化
             var afterMergeItems = ListPool<MergeableObject>.Get();
             var tobeMergeItems = ListPool<MergeableObject>.Get();
             var unlockNewItems = HashSetPool<int>.Get();
             var mergeResults = DictionaryPool<int, int>.Get();
             
+            // 获取当前格子的位置，用于合成物品的动画效果
+            var cellPosition = transform.position;
             try
             {
                 // 设置合并状态标记
                 TripleMergeSystem.Instance.Gameplay.MapManager.IsMerging = true;
-                DebugUtil.Log($"设置合并状态为true");
                 
-                // 准备合并物品
-                PrepareItemsForMerge(continuousItems, tobeMergeItems);
-                
-                // 执行合并计算
-                int finalMergeItemId = PerformMergeCalculation(tobeMergeItems, afterMergeItems, mergeResults, unlockNewItems);
-                
-                // 放置合并后的物品
-                PlaceMergedItems(afterMergeItems);
-                
-                // 调用合并完成回调
-                onMergeCompleted?.Invoke(finalMergeItemId, mergeResults);
+                // 第一步：准备合成物品
+                // 将参与合成的物品从各自格子中移除，并添加到待合成列表
+                for (var i = 0; i < continuousItems.Count; i++)
+                {
+                    var item = continuousItems[i];
+                    // 标记物品正在合成中
+                    item.IsMerging = true;
+                    tobeMergeItems.Add(item);
+
+                    if (item.BelongCell != null)
+                    {
+                        // 从原格子中移除物品
+                        item.BelongCell.PlaceItem(null);
+                        item.BelongCell = null;
+                        
+                        // 如果不跳过合成进度动画，则播放物品移动到合成中心的动画
+                        //if (!skipMergeProgress)
+                        {
+                            item.transform.DOKill();
+                            // 物品移动到合成中心位置
+                            item.transform.DOMove(new Vector3(cellPosition.x, cellPosition.y, item.transform.position.z), BeforeMergePerformDuration).SetEase(Ease.InSine).SetAutoKill(true);
+                            // 物品缩小至消失的动画
+                            item.transform.DOScale(0, BeforeMergePerformDuration).SetEase(Ease.InSine).SetAutoKill(true);
+                            // 物品透明度降低的动画，最后一个物品完成时触发合成计算
+                            item.ItemRenderer.DOFade(0, BeforeMergePerformDuration).SetEase(Ease.InSine).SetAutoKill(true).OnComplete(i == continuousItems.Count - 1 ?
+                                CalculateMerge : null);
+                        }
+                    }
+                }
+
+                void CalculateMerge()
+                {
+                    // 执行合并计算
+                    finalMergeItemId = PerformMergeCalculation(tobeMergeItems, afterMergeItems, mergeResults, unlockNewItems);
+                    // 放置合并后的物品
+                    PlaceMergedItems(afterMergeItems,cellPosition);
+                    // 调用合并完成回调
+                    onMergeCompleted?.Invoke(finalMergeItemId, mergeResults);
+
+                    // 释放资源
+                    ListPool<MergeableObject>.Release(afterMergeItems);
+                    ListPool<MergeableObject>.Release(tobeMergeItems);
+                    HashSetPool<int>.Release(unlockNewItems);
+                    DictionaryPool<int, int>.Release(mergeResults);
+                }
             }
             catch (Exception e)
             {
                 DebugUtil.LogError($"三合合成时发生异常:{e}");
                 // 发生异常时重置合并状态
                 TripleMergeSystem.Instance.Gameplay.MapManager.IsMerging = false;
-            }
-            finally
-            {
-                // 释放资源
+                
+                // 确保异常情况下也释放资源
                 ListPool<MergeableObject>.Release(afterMergeItems);
                 ListPool<MergeableObject>.Release(tobeMergeItems);
                 HashSetPool<int>.Release(unlockNewItems);
                 DictionaryPool<int, int>.Release(mergeResults);
-                
-                // 注意：这里不重置IsMerging状态，应该在连锁合并完成后重置
             }
         }
-
-        /// <summary>
-        /// 准备要合并的物品
-        /// </summary>
-        private void PrepareItemsForMerge(IReadOnlyList<MergeableObject> continuousItems, List<MergeableObject> tobeMergeItems)
-        {
-            // 将连续物品添加到待合并列表
-            for (var i = 0; i < continuousItems.Count; i++)
-            {
-                var item = continuousItems[i];
-                item.IsMerging = true;
-                tobeMergeItems.Add(item);
-            }
-        }
-
+        
         /// <summary>
         /// 执行合并计算逻辑
         /// </summary>
@@ -765,9 +787,12 @@ namespace TripleMerge
         /// 合并一批物品（每3个合成1个高级物品）
         /// </summary>
         /// <returns>合并出的物品ID</returns>
-        private int MergeItemsBatch(List<MergeableObject> tobeMergeItems, MergeChain targetChain, 
-            MergeableItemCfg mergeBaseItem, Dictionary<int, int> mergeResults, 
-            HashSet<int> unlockNewItems, List<MergeableObject> afterMergeItems)
+        private int MergeItemsBatch(List<MergeableObject> tobeMergeItems,
+                                    MergeChain targetChain,
+                                    MergeableItemCfg mergeBaseItem,
+                                    Dictionary<int, int> mergeResults,
+                                    HashSet<int> unlockNewItems,
+                                    List<MergeableObject> afterMergeItems)
         {
             var itemId = mergeBaseItem.Id;
             
@@ -867,7 +892,7 @@ namespace TripleMerge
         /// <summary>
         /// 放置合并后的物品
         /// </summary>
-        private void PlaceMergedItems(List<MergeableObject> afterMergeItems)
+        private void PlaceMergedItems(List<MergeableObject> afterMergeItems,Vector3 cellPosition)
         {
             foreach (var item in afterMergeItems)
             {
@@ -879,6 +904,19 @@ namespace TripleMerge
                 {
                     // 放置物品
                     nearestEmptyCells[0].PlaceItem(item);
+                    // 播放物品出现动画
+                    //if (!skipMergeProgress)
+                    {
+                        var originColor = item.ItemRenderer.color;
+                        originColor.a = 0;
+                        item.ItemRenderer.color = originColor;
+                        var itemTransform = item.transform;
+                        itemTransform.localScale = Vector3.zero;
+                        itemTransform.position = new Vector3(cellPosition.x, cellPosition.y, itemTransform.position.z);
+                        item.transform.DOLocalMove(new Vector3(0, 0, item.transform.position.z), AfterMergePerformDuration).SetEase(Ease.OutCubic).SetAutoKill(true);
+                        item.transform.DOScale(1, AfterMergePerformDuration).SetEase(Ease.OutCubic).SetAutoKill(true);
+                        item.ItemRenderer.DOFade(1, AfterMergePerformDuration).SetEase(Ease.OutCubic).SetAutoKill(true);
+                    }
                 }
                 else
                 {
@@ -896,54 +934,189 @@ namespace TripleMerge
         public IReadOnlyList<MergeableObject> GetContinuousSameItems(MergeableObject referenceItem)
         {
             _continuousCellsQueryResult.Clear();
-            
-            // 使用对象池获取临时集合
+
+            // 记录参考物品是否为万能卡
+            var isCallerOmnipotentMergeable = referenceItem.IsUniversalCard;
             var queriedCells = HashSetPool<MergeableCell>.Get();
-            var cellsToCheck = ListPool<MergeableCell>.Get();
-            
-            try
+
+            _continuousCellsQueryResult.Add(referenceItem);
+
+            var callerItem = referenceItem;
+
+            // 处理当前格子上的物品
+            if (PlacedItem != null && PlacedItem != referenceItem && PlacedItem is MergeableObject mergeableItem)
             {
-                // 添加初始参考物品
-                _continuousCellsQueryResult.Add(referenceItem);
-                
-                // 将初始格子添加到待检查列表
-                cellsToCheck.Add(this);
-                
-                // 使用迭代方式替代递归
-                while (cellsToCheck.Count > 0)
+                // 如果参考物品是万能卡
+                if (referenceItem.IsUniversalCard)
                 {
-                    // 取出并移除列表中最后一个元素（模拟栈操作，提高性能）
-                    int lastIndex = cellsToCheck.Count - 1;
-                    var currentCell = cellsToCheck[lastIndex];
-                    cellsToCheck.RemoveAt(lastIndex);
-                    
-                    // 如果已经检查过，跳过
-                    if (queriedCells.Contains(currentCell))
-                        continue;
-                    
-                    // 标记为已检查
-                    queriedCells.Add(currentCell);
-                    
-                    // 检查当前格子的物品
-                    if (currentCell != this) // 跳过初始格子，因为它已经在初始化时处理过
+                    // 检查当前物品是否符合万能卡合成条件
+                    if (mergeableItem.IsUniversalCard
+                        //|| !TripleMergeConfigManager.Instance.GlobalConfig.OmnipotentCardTargets.Contains(mergeableItem.CfgData.ItemType)
+                        || TripleMergeConfigManager.Instance.GetChainConfig(mergeableItem.CfgData.ChainId).Chain[^1] == mergeableItem.CfgData.Id)
                     {
-                        CheckCellItem(referenceItem, currentCell);
+                        return _continuousCellsQueryResult;
                     }
-                    
-                    // 如果当前格子有效，检查其四个方向的相邻格子
-                    AddNeighborIfValid(currentCell.Left, cellsToCheck, queriedCells);
-                    AddNeighborIfValid(currentCell.Right, cellsToCheck, queriedCells);
-                    AddNeighborIfValid(currentCell.Above, cellsToCheck, queriedCells);
-                    AddNeighborIfValid(currentCell.Below, cellsToCheck, queriedCells);
+
+                    // 如果当前物品是万能卡目标类型，加入结果列表
+                    //if (TripleMergeConfigManager.Instance.GlobalConfig.OmnipotentCardTargets.Contains(mergeableItem.CfgData.ItemType))
+                    {
+                        queriedCells.Add(referenceItem.BelongCell);
+                        referenceItem = mergeableItem;
+                        _continuousCellsQueryResult.Add(mergeableItem);
+                    }
                 }
-                
-                return _continuousCellsQueryResult;
+                else
+                {
+                    // 如果是普通物品，检查ID是否相同
+                    if (PlacedItem.CfgData.Id == referenceItem.CfgData.Id)
+                    {
+                        _continuousCellsQueryResult.Add(mergeableItem);
+                    }
+                }
             }
-            finally
+            else
             {
-                // 释放临时集合
-                HashSetPool<MergeableCell>.Release(queriedCells);
-                ListPool<MergeableCell>.Release(cellsToCheck);
+                // 如果参考物品是万能卡且当前格子为空，直接返回
+                if (referenceItem.IsUniversalCard)
+                {
+                    return _continuousCellsQueryResult;
+                }
+            }
+
+            // 递归查询相邻格子
+            QueryCell(this);
+
+            HashSetPool<MergeableCell>.Release(queriedCells);
+
+            // 处理万能卡的特殊合成规则
+            if (_continuousCellsQueryResult.Count > 3 && callerItem.IsUniversalCard)
+            {
+                // 根据距离和万能卡优先级排序
+                _continuousCellsQueryResult.Sort((left, right) =>
+                {
+                    var leftPriority = 0f;
+                    var rightPriority = 0f;
+
+                    if (left == callerItem)
+                    {
+                        leftPriority = float.MinValue;
+                    }
+                    else
+                    {
+                        if (left.IsUniversalCard && Mathf.Approximately(Vector2.Distance(left.BelongCell.MapCoordinate, referenceItem.BelongCell.MapCoordinate), 1))
+                        {
+                            leftPriority += 1.5f;
+                        }
+
+                        leftPriority += Vector2.Distance(_placeableItem.BelongCell.MapCoordinate, left.BelongCell.MapCoordinate);
+                    }
+
+                    if (right == callerItem)
+                    {
+                        rightPriority = float.MinValue;
+                    }
+                    else
+                    {
+                        if (right.IsUniversalCard && Mathf.Approximately(Vector2.Distance(left.BelongCell.MapCoordinate, referenceItem.BelongCell.MapCoordinate), 1))
+                        {
+                            rightPriority += 1.5f;
+                        }
+
+                        rightPriority += Vector2.Distance(_placeableItem.BelongCell.MapCoordinate, right.BelongCell.MapCoordinate);
+                    }
+
+                    if (leftPriority < rightPriority)
+                    {
+                        return -1;
+                    }
+                    else if (leftPriority > rightPriority)
+                    {
+                        return 1;
+                    }
+
+                    return 0;
+                });
+
+                // 只保留前3个物品
+                for (var i = _continuousCellsQueryResult.Count - 1; i >= 3; i--)
+                {
+                    _continuousCellsQueryResult.Remove(_continuousCellsQueryResult[i]);
+                }
+            }
+
+            return _continuousCellsQueryResult;
+
+            // 递归查询相邻格子的函数
+            void QueryCell(MergeableCell queryCell)
+            {
+                if (queriedCells.Contains(queryCell))
+                {
+                    return;
+                }
+
+                queriedCells.Add(queryCell);
+
+                // 查询上下左右四个方向的相邻格子
+                QueryContinuousCell(queryCell.Left);
+                QueryContinuousCell(queryCell.Right);
+                QueryContinuousCell(queryCell.Above);
+                QueryContinuousCell(queryCell.Below);
+
+                // 检查相邻格子是否可合成
+                void QueryContinuousCell(MergeableCell continuousCell)
+                {
+                    if (IsTargetCellMergeable(continuousCell))
+                    {
+                        if (continuousCell._placeableItem is MergeableObject mergeableObject)
+                        {
+                            if (!_continuousCellsQueryResult.Contains(mergeableObject))
+                            {
+                                _continuousCellsQueryResult.Add(mergeableObject);
+                            }
+
+                            QueryCell(continuousCell);
+                        }
+                    }
+                }
+
+                // 检查目标格子是否满足合成条件
+                bool IsTargetCellMergeable(MergeableCell cell)
+                {
+                    // 基础检查：格子是否有效、状态是否正确、是否有物品等
+                    if (cell == null)
+                    {
+                        return false;
+                    }
+
+                    if (cell.CellStatus != ECellStatus.Mergeable)
+                    {
+                        return false;
+                    }
+
+                    if (cell._placeableItem == null || cell._placeableItem.CfgData == null)
+                    {
+                        return false;
+                    }
+
+                    if (cell._placeableItem.IsDragging)
+                    {
+                        return false;
+                    }
+
+                    // 检查合成链配置
+                    var chainCfg = TripleMergeConfigManager.Instance.GetChainConfig(cell._placeableItem.CfgData.ChainId);
+                    if (chainCfg == null)
+                    {
+                        return false;
+                    }
+
+                    if (chainCfg.Chain[^1] == cell._placeableItem.CfgData.Id && !cell._placeableItem.IsUniversalCard)
+                    {
+                        return false;
+                    }
+
+                    return true;
+                }
             }
         }
 
