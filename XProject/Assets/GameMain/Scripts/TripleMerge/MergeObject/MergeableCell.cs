@@ -286,6 +286,8 @@ namespace TripleMerge
                 item.BindItemSaveData(TripleMergeSystem.Instance.Model.GetCellPlacedItem(_saveData));
             }
 
+            // 首先将合成物放到自身地块的位置中心
+            PlaceItemRoot.localPosition = Vector2.zero;
             // 放置合成物品
             var itemTrans = item.transform;
             itemTrans.SetParent(PlaceItemRoot);
@@ -342,7 +344,9 @@ namespace TripleMerge
             if (_placeableItem != null)
             {
                 if (item != null)
-                    tobeReplaceItems.Add(item);
+                {
+                    tobeReplaceItems.Add(_placeableItem);
+                }
 
                 ClearItemReference();
             }
@@ -360,7 +364,9 @@ namespace TripleMerge
             var takeOffItem = _placeableItem;
             if (takeOffItem != null && takeOffItem.BelongCell != null)
             {
-                DebugUtil.Log($"item 从 :{takeOffItem.BelongCell.MapCoordinate} 被挤走");
+#if UNITY_EDITOR
+                DebugUtil.Log($"item {takeOffItem.GUID} 从 :{takeOffItem.BelongCell.MapCoordinate} 被挤走"); 
+#endif
                 // 因为老的物品是从该地块被挤出去的，所以这时其实原本的地块已经有了新的物品了，就应该先清除老物品的地块信息，以免地块物品信息被错误清除
                 takeOffItem.BelongCell = null;
             }
@@ -380,7 +386,9 @@ namespace TripleMerge
                     if (nearestEmptyCells.Count > 0)
                     {
                         nearestEmptyCells[0].PlaceItem(displacedItem);
-                        DebugUtil.Log($"item 被放置到 :{nearestEmptyCells[0].MapCoordinate}");
+#if UNITY_EDITOR
+                        DebugUtil.Log($"item {displacedItem.GUID} 被放置到 :{nearestEmptyCells[0].MapCoordinate}"); 
+#endif
                     }
                     else
                     {
