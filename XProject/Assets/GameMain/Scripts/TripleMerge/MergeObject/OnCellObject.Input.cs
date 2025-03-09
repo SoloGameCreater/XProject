@@ -2,24 +2,14 @@ using System;
 using DG.Tweening;
 using Framework;
 using UnityEngine;
+#if UNITY_EDITOR
+using Sirenix.OdinInspector;
+#endif
 
 namespace TripleMerge
 {
     public partial class OnCellObject
     {
-        protected enum EInputOrderStage
-        {
-            None,
-            MouseDown,
-            LongPressListen,
-            LongPressed,
-            Dragging,
-        }
-        
-        private const float LongPressListenTriggerTime = 0.2f;
-        private const float LongPressListenEnterTime = 0.5f;
-        public bool IsDragging { private set; get; }
-
         protected enum EInputStage
         {
             None,
@@ -30,6 +20,22 @@ namespace TripleMerge
         }
 
         private EInputStage _currentInputStage;
+        private const float LongPressListenTriggerTime = 0.2f;
+        private const float LongPressListenEnterTime = 0.5f;
+#if UNITY_EDITOR
+        [ShowInInspector]
+#endif
+        private bool _isDragging;
+        public bool IsDragging {
+            get => _isDragging;
+            private set
+            {
+                _isDragging = value;
+#if UNITY_EDITOR
+                DebugUtil.Log($"OnCellObject {GUID} Dragging {(_isDragging ? "begin" : "end")}");
+#endif
+            }
+        }
 
         protected bool IsLongPressedTriggered { get; set; }
         private float _mouseDownTime = float.NegativeInfinity;
