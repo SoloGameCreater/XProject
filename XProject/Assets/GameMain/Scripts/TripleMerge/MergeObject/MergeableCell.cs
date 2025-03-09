@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using Sirenix.OdinInspector;
+using UnityEditor;
 #endif
 using System;
 using System.Collections;
@@ -262,6 +263,9 @@ namespace TripleMerge
             // 先清除其原本的地块信息
             if (item.BelongCell != null)
             {
+#if UNITY_EDITOR
+                DebugUtil.Log($"Clear placed item {item.GUID} belong cell: {item.BelongCell.MapCoordinate}");
+#endif
                 var oldCell = item.BelongCell;
                 item.BelongCell = null;  // 先断开引用防止循环
                 if (oldCell.PlacedItem == item)
@@ -299,6 +303,10 @@ namespace TripleMerge
 
             void OnItemPlaced()
             {
+                
+#if UNITY_EDITOR
+                DebugUtil.Log($"{item.GUID} Placed to cell: {MapCoordinate}");  
+#endif
                 // 5. 处理放置逻辑
                 onPlacedAction?.Invoke();
 
@@ -1027,5 +1035,37 @@ namespace TripleMerge
         }
 
         #endregion
+
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
+        {
+            // 设置 Gizmos 颜色为绿色
+            Gizmos.color = Color.green;
+            
+            // 获取当前对象的位置
+            Vector3 position = transform.position;
+            
+            // 在场景视图中绘制一个小球体标记位置
+            Gizmos.DrawSphere(position, 0.1f);
+            
+            // 使用 UnityEditor.Handles 绘制文本
+            Handles.color = Color.yellow;
+            
+            // 计算文本位置（稍微偏上一点）
+            Vector3 textPosition = position + Vector3.up * 0.3f;
+            Vector3 textPosition2 = position + Vector3.up * 0.4f;
+            
+            // 绘制坐标文本
+            Handles.Label(textPosition, $"({MapCoordinate.x}, {MapCoordinate.y})");
+            if(PlacedItem != null)
+            {
+                GUIStyle style = new GUIStyle();
+                style.normal.textColor = Color.red;
+                style.fontSize = 12;
+                style.fontStyle = FontStyle.Bold;
+                Handles.Label(textPosition2, $"GUID: {PlacedItem.GUID}", style);
+            }
+        }
+#endif
     }
 }

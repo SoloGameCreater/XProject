@@ -7,6 +7,9 @@ namespace TripleMerge
     public class OnCellObjectPool : MonoBehaviour
     {
         private const int POOL_LIMIT_SINGLE_ELEMENT_TYPE = 250;
+        #if UNITY_EDITOR
+        private static uint _guid = 0;
+        #endif
 
         private static OnCellObjectPool _instance;
 
@@ -63,6 +66,10 @@ namespace TripleMerge
             item.name = prefabKey;
             item.Initialize();
             item.Active();
+
+            #if UNITY_EDITOR
+            item.GUID = _guid++;
+            #endif
 
             return (T) item;
         }

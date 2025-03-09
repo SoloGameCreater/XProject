@@ -11,6 +11,9 @@ namespace TripleMerge
 {
     public abstract partial class OnCellObject : ItemBase
     {
+        #if UNITY_EDITOR
+        public uint GUID { get; set; }
+        #endif
         private MergeableCell _belongCell;
         /// <summary>
         /// 当前所属的地块
