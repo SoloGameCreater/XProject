@@ -453,9 +453,13 @@ namespace TripleMerge
                     result.AddRange(tempList);
                     return;
                 }
-                
-                // 使用快速选择算法找出最近的N个空地块
-                QuickSelectByDistance(tempList, 0, tempList.Count - 1, targetCellNum);
+                // 按照与当前格子的距离对结果进行排序，距离近的优先
+                tempList.Sort((left, right) =>
+                {
+                    var leftToSelf = Vector2.Distance(left.MapCoordinate, MapCoordinate);
+                    var rightToSelf = Vector2.Distance(right.MapCoordinate, MapCoordinate);
+                    return leftToSelf < rightToSelf ? -1 : 1;
+                });
                 
                 // 只取前N个结果
                 for (int i = 0; i < targetCellNum; i++)
@@ -471,27 +475,6 @@ namespace TripleMerge
             {
                 // 释放临时列表
                 ListPool<MergeableCell>.Release(tempList);
-            }
-        }
-
-        // 优化5：使用快速选择算法，只排序需要的部分
-        private void QuickSelectByDistance(List<MergeableCell> cells, int left, int right, int k)
-        {
-            while (true)
-            {
-                if (left >= right) return;
-
-                int pivot = Partition(cells, left, right);
-
-                if (pivot == k - 1) return;
-                if (pivot > k - 1)
-                {
-                    right = pivot - 1;
-                }
-                else
-                {
-                    left = pivot + 1;
-                }
             }
         }
 
@@ -840,48 +823,7 @@ namespace TripleMerge
             
             return nextLevelItemId;
         }
-
-        /// <summary>
-        /// 回收要销毁的物品
-        /// </summary>
-        private void RecycleItemsToDestroy(List<MergeableObject> tobeMergeItems, int remainCount)
-        {
-            // 保留前remainCount个物品
-            if (remainCount > 0 && remainCount < tobeMergeItems.Count)
-            {
-                // 使用对象池避免额外的内存分配
-                var tempItems = ListPool<MergeableObject>.Get();
-                for (int i = 0; i < remainCount; i++)
-                {
-                    tempItems.Add(tobeMergeItems[i]);
-                }
-                
-                // 回收剩余物品
-                for (int i = remainCount; i < tobeMergeItems.Count; i++)
-                {
-                    var item = tobeMergeItems[i];
-                    item.IsMerging = false;
-                    OnCellObjectPool.Recycle(item);
-                }
-                
-                // 清空并重新添加保留的物品
-                tobeMergeItems.Clear();
-                tobeMergeItems.AddRange(tempItems);
-                
-                ListPool<MergeableObject>.Release(tempItems);
-            }
-            else if (remainCount == 0)
-            {
-                // 全部回收
-                foreach (var item in tobeMergeItems)
-                {
-                    item.IsMerging = false;
-                    OnCellObjectPool.Recycle(item);
-                }
-                tobeMergeItems.Clear();
-            }
-        }
-
+        
         /// <summary>
         /// 生成下一级物品
         /// </summary>
