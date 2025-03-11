@@ -806,8 +806,25 @@ namespace TripleMerge
                 mergeResults[itemId] = remainCurrentLevelNum;
             }
             
-            // 回收要销毁的物品
-            RecycleItemsToDestroy(tobeMergeItems, remainCurrentLevelNum);
+            // 移除已合成的物品
+            for (var i = tobeMergeItems.Count - 1; i >= remainCurrentLevelNum; i--)
+            {
+                var tobeDestroyItem = tobeMergeItems[i];
+                tobeDestroyItem.IsMerging = false;
+                // 从待合成列表中移除
+                tobeMergeItems.Remove(tobeDestroyItem);
+                // 回收物品对象
+                OnCellObjectPool.Recycle(tobeDestroyItem);
+            }
+            // 将剩余的当前级别物品添加到合成后物品列表
+            foreach (var mergeableObject in tobeMergeItems)
+            {
+                mergeableObject.IsMerging = false;
+                afterMergeItems.Add(mergeableObject);
+            }
+
+            // 清空待合成列表准备下一轮合成
+            tobeMergeItems.Clear();
             
             // 生成下一级物品
             var nextLevelItemId = GenerateNextLevelItems(targetChain, itemId, nextLevelItemNumAfterMerge, 
@@ -936,7 +953,7 @@ namespace TripleMerge
             _continuousCellsQueryResult.Clear();
 
             // 记录参考物品是否为万能卡
-            var isCallerOmnipotentMergeable = referenceItem.IsUniversalCard;
+            var referenceItemIsUniversalCard = referenceItem.IsUniversalCard;
             var queriedCells = HashSetPool<MergeableCell>.Get();
 
             _continuousCellsQueryResult.Add(referenceItem);
@@ -946,26 +963,8 @@ namespace TripleMerge
             // 处理当前格子上的物品
             if (PlacedItem != null && PlacedItem != referenceItem && PlacedItem is MergeableObject mergeableItem)
             {
-                // 如果参考物品是万能卡
-                if (referenceItem.IsUniversalCard)
-                {
-                    // 检查当前物品是否符合万能卡合成条件
-                    if (mergeableItem.IsUniversalCard
-                        //|| !TripleMergeConfigManager.Instance.GlobalConfig.OmnipotentCardTargets.Contains(mergeableItem.CfgData.ItemType)
-                        || TripleMergeConfigManager.Instance.GetChainConfig(mergeableItem.CfgData.ChainId).Chain[^1] == mergeableItem.CfgData.Id)
-                    {
-                        return _continuousCellsQueryResult;
-                    }
-
-                    // 如果当前物品是万能卡目标类型，加入结果列表
-                    //if (TripleMergeConfigManager.Instance.GlobalConfig.OmnipotentCardTargets.Contains(mergeableItem.CfgData.ItemType))
-                    {
-                        queriedCells.Add(referenceItem.BelongCell);
-                        referenceItem = mergeableItem;
-                        _continuousCellsQueryResult.Add(mergeableItem);
-                    }
-                }
-                else
+                // 如果参考物品不是万能卡
+                if (!referenceItemIsUniversalCard)
                 {
                     // 如果是普通物品，检查ID是否相同
                     if (PlacedItem.CfgData.Id == referenceItem.CfgData.Id)
@@ -977,7 +976,7 @@ namespace TripleMerge
             else
             {
                 // 如果参考物品是万能卡且当前格子为空，直接返回
-                if (referenceItem.IsUniversalCard)
+                if (referenceItemIsUniversalCard)
                 {
                     return _continuousCellsQueryResult;
                 }
@@ -1079,7 +1078,6 @@ namespace TripleMerge
                     }
                 }
 
-                // 检查目标格子是否满足合成条件
                 bool IsTargetCellMergeable(MergeableCell cell)
                 {
                     // 基础检查：格子是否有效、状态是否正确、是否有物品等
@@ -1088,86 +1086,44 @@ namespace TripleMerge
                         return false;
                     }
 
+                    // 检查格子状态是否为可合成状态
                     if (cell.CellStatus != ECellStatus.Mergeable)
                     {
                         return false;
                     }
 
+                    // 检查格子上是否有物品且物品配置有效
                     if (cell._placeableItem == null || cell._placeableItem.CfgData == null)
                     {
                         return false;
                     }
 
+                    // 如果物品正在被拖拽中，则不参与合成
                     if (cell._placeableItem.IsDragging)
                     {
                         return false;
                     }
 
-                    // 检查合成链配置
+                    // 检查物品所属的合成链配置是否存在
                     var chainCfg = TripleMergeConfigManager.Instance.GetChainConfig(cell._placeableItem.CfgData.ChainId);
                     if (chainCfg == null)
                     {
                         return false;
                     }
 
+                    // 如果物品是合成链中的最高级物品且不是万能卡，则不能参与合成
                     if (chainCfg.Chain[^1] == cell._placeableItem.CfgData.Id && !cell._placeableItem.IsUniversalCard)
                     {
                         return false;
                     }
-
+                    
+                    // 检查物品ID是否与参考物品相同（只有相同物品才能合成）
+                    if (cell._placeableItem.CfgData.Id != referenceItem.CfgData.Id)
+                    {
+                        return false;
+                    }
                     return true;
                 }
-            }
-        }
-
-        /// <summary>
-        /// 检查指定格子中的物品是否可以与参考物品合成
-        /// </summary>
-        private void CheckCellItem(MergeableObject referenceItem, MergeableCell cell)
-        {
-            // 如果格子为空或其他无效情况，直接返回
-            if (cell.PlacedItem == null || cell.PlacedItem == referenceItem || !(cell.PlacedItem is MergeableObject currentItem))
-                return;
-            
-            // 根据参考物品类型处理合成逻辑
-            if (referenceItem.IsUniversalCard)
-            {
-                // 万能卡合成逻辑
-                if (!currentItem.IsUniversalCard && 
-                    Utils.ParseTripleMergeItemType(currentItem.CfgData.ItemType) == TripleMergeItemType.MergeableNormal)
-                {
-                    // 避免重复添加
-                    if (!_continuousCellsQueryResult.Contains(currentItem))
-                    {
-                        _continuousCellsQueryResult.Add(currentItem);
-                    }
-                }
-            }
-            else
-            {
-                // 普通合成逻辑
-                if (cell.PlacedItem.CfgData.Id == referenceItem.CfgData.Id && 
-                    !_continuousCellsQueryResult.Contains(currentItem))
-                {
-                    _continuousCellsQueryResult.Add(currentItem);
-                }
-            }
-        }
-
-        /// <summary>
-        /// 如果相邻格子有效且未被检查过，则添加到待检查列表
-        /// </summary>
-        private void AddNeighborIfValid(MergeableCell neighborCell, List<MergeableCell> cellsToCheck, HashSet<MergeableCell> queriedCells)
-        {
-            if (neighborCell == null || queriedCells.Contains(neighborCell))
-                return;
-            
-            // 检查格子是否可合成
-            if (neighborCell.CellStatus == ECellStatus.Mergeable && 
-                neighborCell._placeableItem != null && 
-                !neighborCell._placeableItem.IsDragging)
-            {
-                cellsToCheck.Add(neighborCell);
             }
         }
 
