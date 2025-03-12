@@ -5,6 +5,8 @@ using UnityEditor.EditorTools;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
+using System.IO;
+using System.Collections.Generic;
 
 namespace TripleMerge.Editor
 {
@@ -26,6 +28,9 @@ namespace TripleMerge.Editor
         
         private const string CellAPath = "Assets/ExtraRes/TMatchRessss/World_Grass/grass_03_01.png";
         private const string CellBPath = "Assets/ExtraRes/TMatchRessss/World_Grass/grass_04_01.png";
+        
+        private string _exportPath = "Assets/Resources/TripleMapData";
+        private string _fileName = "MapData.json";
 
         public override void OnToolGUI(EditorWindow window)
         {
@@ -41,23 +46,35 @@ namespace TripleMerge.Editor
             _mergeCellPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(CellPrefabPath);
             Handles.BeginGUI();
 
-            using (new GUILayout.VerticalScope("MAP TOOLS", "window", GUILayout.Height(200), GUILayout.Width(200)))
+            using (new GUILayout.VerticalScope("MAP TOOLS", "window", GUILayout.Height(250), GUILayout.Width(200)))
             {
-                if (GUILayout.Button("Merge Map"))
+                if (GUILayout.Button("生成地图"))
                 {
                     if (GenerateMap())
-                        Debug.Log("Merge Map");
+                        Debug.Log("地图生成成功");
                     else
-                        Debug.LogWarning("Generate map failed");
+                        Debug.LogWarning("地图生成失败");
+                }
+                
+                GUILayout.Space(10);
+                
+                _exportPath = EditorGUILayout.TextField("导出路径", _exportPath);
+                _fileName = EditorGUILayout.TextField("文件名", _fileName);
+                
+                if (GUILayout.Button("导出地图数据"))
+                {
+                    ExportMapData();
                 }
             }
 
             Handles.EndGUI();
         }
+        
         public override bool IsAvailable()
         {
             return SceneManager.GetActiveScene().name.Equals("MergeScene");
         }
+        
         private bool GenerateMap()
         {
             if (_mapRoot == null) return false;
@@ -110,6 +127,68 @@ namespace TripleMerge.Editor
             var cell = cellObj.AddComponent<MergeableCell>();
             cell.CellStatus = MergeableCell.ECellStatus.Locked;
             cell.MapCoordinate = new Vector2Int(x, y);
+        }
+        
+        private void ExportMapData()
+        {
+            if (_mapRoot == null)
+            {
+                EditorUtility.DisplayDialog("错误", "请先生成地图", "确定");
+                return;
+            }
+
+            Transform regionTransform = _mapRoot.transform.Find("LogicNode/MergeableRegion/Region");
+            if (regionTransform == null || regionTransform.childCount == 0)
+            {
+                EditorUtility.DisplayDialog("错误", "未找到有效的地块数据", "确定");
+                return;
+            }
+
+            // 创建导出目录
+            if (!Directory.Exists(_exportPath))
+            {
+                Directory.CreateDirectory(_exportPath);
+            }
+
+            // 收集地块数据
+            var mapData = new MapData();
+            mapData.cells = new Dictionary<string, CellData>();
+
+            foreach (Transform cellTransform in regionTransform)
+            {
+                var cell = cellTransform.GetComponent<MergeableCell>();
+                if (cell != null)
+                {
+                    // 使用坐标作为键
+                    string key = $"{cell.MapCoordinate.x}_{cell.MapCoordinate.y}";
+                    
+                    // 创建单元格数据
+                    var cellData = new CellData
+                    {
+                        belongRegionId = cell.BelongRegionId,
+                        cellStatus = (int)cell.CellStatus,
+                        purifiedPriority = cell.PurifiedPriority,
+                        requiredPurifiedNum = cell.RequiredPurifiedNum,
+                        initialPlacedItemId = cell.InitialPlacedItemId,
+                        mapCoordinate = new int[] { cell.MapCoordinate.x, cell.MapCoordinate.y }
+                    };
+                    
+                    // 添加到字典
+                    mapData.cells.Add(key, cellData);
+                }
+            }
+
+            // 序列化为JSON
+            string json = JsonUtility.ToJson(mapData, true);
+            
+            // 保存到文件
+            string fullPath = Path.Combine(_exportPath, _fileName);
+            File.WriteAllText(fullPath, json);
+            
+            AssetDatabase.Refresh();
+            
+            EditorUtility.DisplayDialog("成功", $"地图数据已导出到: {fullPath}", "确定");
+            Debug.Log($"地图数据已导出到: {fullPath}");
         }
     }
 }
