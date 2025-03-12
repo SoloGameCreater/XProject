@@ -30,9 +30,25 @@ namespace TripleMerge.Editor
         private const string CellBPath = "Assets/ExtraRes/TMatchRessss/World_Grass/grass_04_01.png";
         
         private string _exportPath = "Assets/Resources/TripleMapData";
-        private string _fileName = "MapData.json";
+        private string _fileName = "MapData";
 
-        public override void OnToolGUI(EditorWindow window)
+        // 添加菜单项，可以从菜单中直接访问地图生成工具
+        [MenuItem("Tools/三合一/地图生成工具")]
+        public static void ShowMapGenerator()
+        {
+            ToolManager.SetActiveTool<MergeMapGenerator>();
+        }
+
+        // 添加菜单项，可以直接导出当前地图数据
+        [MenuItem("Tools/三合一/导出地图数据")]
+        public static void ExportMapDataFromMenu()
+        {
+            var mapGenerator = CreateInstance<MergeMapGenerator>();
+            mapGenerator.InitializeMapRoot();
+            mapGenerator.ExportMapData();
+        }
+
+        private void InitializeMapRoot()
         {
             _mapRoot = GameObject.Find("AreaRootEditor");
             if (_mapRoot == null)
@@ -40,14 +56,21 @@ namespace TripleMerge.Editor
                 _mapRoot = Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(EditorRootPrefabPath));
                 _mapRoot.name = "AreaRootEditor";
             }
+        }
+
+        public override void OnToolGUI(EditorWindow window)
+        {
+            InitializeMapRoot();
 
             _cellRoot = _mapRoot?.transform.Find("LogicNode/MergeableRegion");
             _tilemap = _mapRoot?.transform.Find("Terrain/Grass").GetComponent<Tilemap>();
             _mergeCellPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(CellPrefabPath);
             Handles.BeginGUI();
 
-            using (new GUILayout.VerticalScope("MAP TOOLS", "window", GUILayout.Height(250), GUILayout.Width(200)))
+            using (new GUILayout.VerticalScope("三合地图工具", "window", GUILayout.Height(300), GUILayout.Width(250)))
             {
+                GUILayout.Label("地图生成", EditorStyles.boldLabel);
+                
                 if (GUILayout.Button("生成地图"))
                 {
                     if (GenerateMap())
@@ -58,12 +81,38 @@ namespace TripleMerge.Editor
                 
                 GUILayout.Space(10);
                 
-                _exportPath = EditorGUILayout.TextField("导出路径", _exportPath);
-                _fileName = EditorGUILayout.TextField("文件名", _fileName);
+                GUILayout.Label("导出设置", EditorStyles.boldLabel);
+                
+                EditorGUILayout.BeginVertical("box");
+                
+                // 导出路径（只读）
+                EditorGUILayout.LabelField("导出路径:");
+                EditorGUI.BeginDisabledGroup(true);
+                EditorGUILayout.SelectableLabel(_exportPath, EditorStyles.textField, GUILayout.Height(20));
+                EditorGUI.EndDisabledGroup();
+                
+                // 文件名输入（不含后缀）
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.PrefixLabel("文件名");
+                _fileName = EditorGUILayout.TextField(_fileName, GUILayout.Width(120));
+                EditorGUILayout.LabelField(".json", GUILayout.Width(40));
+                EditorGUILayout.EndHorizontal();
+                
+                EditorGUILayout.EndVertical();
+                
+                GUILayout.Space(5);
                 
                 if (GUILayout.Button("导出地图数据"))
                 {
                     ExportMapData();
+                }
+                
+                // 显示地图信息
+                if (_regionObj != null)
+                {
+                    GUILayout.Space(10);
+                    GUILayout.Label("地图信息", EditorStyles.boldLabel);
+                    EditorGUILayout.LabelField($"地块数量: {_regionObj.transform.childCount}");
                 }
             }
 
@@ -182,7 +231,7 @@ namespace TripleMerge.Editor
             string json = JsonUtility.ToJson(mapData, true);
             
             // 保存到文件
-            string fullPath = Path.Combine(_exportPath, _fileName);
+            string fullPath = Path.Combine(_exportPath, _fileName + ".json");
             File.WriteAllText(fullPath, json);
             
             AssetDatabase.Refresh();
