@@ -1,0 +1,3 @@
+[submodule "GoogleSheet2Json"]
+	path = GoogleSheet2Json
+	url = git@github.com:SoloGameCreater/GG2Json.git
