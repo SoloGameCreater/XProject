@@ -1,26 +1,128 @@
-# Add directories or file patterns to ignore during indexing (e.g. foo/ or *.csv)
-Library/
-Temp/
-obj/
-Logs/
+# Unity开发常用忽略文件配置
 
-bin/
-Debug/
-Release/
+# 忽略Unity生成的临时文件和目录
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+.vs/
+.vscode/
+.idea/
+.gradle/
+ExportedObj/
+.consulo/
+ProjectSettings/ProjectVersion.txt
+MemoryCaptures/
+Recordings/
+Assets/AssetStoreTools*
 
+# 忽略构建输出
+[Bb]uild/
+[Bb]uilds/
+[Bb]in/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# 忽略版本控制目录
 .git/
 .svn/
+.hg/
 
-*.meta
+# 忽略Unity生成的元数据文件
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# 忽略日志和临时文件
 *.log
 *.tmp
 *.bak
+*.unitypackage
+*.symbols.zip
+*.apk
+*.aab
+*.app
+*.exe
+*.dll
+*.so
+*.dylib
+*.DS_Store
+*.dwlt
 
-*.meta.meta
-*.log.meta
-*.tmp.meta
-*.bak.meta
+# 忽略大型媒体文件和源文件
+*.mp4
+*.mov
+*.wav
+*.mp3
+*.psd
+*.ai
+*.tif
+*.tga
+*.exr
+*.blend
+*.blend1
+*.blend2
+*.fbx
+*.max
+*.ma
+*.mb
 
-*.meta.log
-*.meta.tmp
+# 忽略崩溃转储和调试文件
+*.dmp
+*.stackdump
+crash-*
+sysinfo-*
+
+# 忽略Unity缓存和自动生成文件
+/[Aa]ssets/[Ss]treamingAssets/aa/*
+/[Aa]ssets/[Ss]treamingAssets/aa.meta
+.collabignore
+/[Aa]ssets/Plugins/Editor/JetBrains*
+/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
+/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/link.xml*
+/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/[Rr]esources/Links.meta
+
+# 忽略特定于平台的插件
+/[Aa]ssets/[Pp]lugins/Android/.idea*
+
+# 忽略特定于项目的设置
+ProjectSettings/ProjectVersion.txt
+ProjectSettings/UnityConnectSettings.asset
+
+# 忽略特定于编辑器的文件
+.plastic/
+.localhistory/
+
+# 忽略性能分析数据
+*.memory
+*.memorybin
+*.data
+*.data.meta
+*.data.resource
+*.data.resource.meta
+
+# 忽略测试结果
+TestResults/
+TestResults.xml
 
