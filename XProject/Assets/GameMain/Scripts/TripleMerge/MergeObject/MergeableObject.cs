@@ -62,12 +62,6 @@ namespace TripleMerge
             }
 
             ItemRenderer.sprite = GrayItemRenderer.sprite = ResourcesManager.Instance.GetSpriteVariant(Const.AtlasName, CfgData.Icon);
-
-            if (!string.IsNullOrEmpty(CfgData.SpinePrefab))
-            {
-                ItemRenderer.gameObject.SetActive(false);
-                GrayItemRenderer.gameObject.SetActive(false);
-            }
         }
 
         protected override void OnClicked()

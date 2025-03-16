@@ -18,7 +18,7 @@ namespace TripleMerge
 
             // 这里是因为美术库和程序库的路径不一样做的特殊处理
             var jsonAsset = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/ExtraRes/Configs/DataJson/MergeableItem.json");
-            var itemList = JsonConvert.DeserializeObject<List<MergeableItemCfg>>(jsonAsset.text);
+            var itemList = JsonConvert.DeserializeObject<List<MergeableItem>>(jsonAsset.text);
             
             foreach (var item in itemList)
             {

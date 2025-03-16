@@ -88,13 +88,13 @@ namespace TripleMerge
                 return;
             }
             //如果超过15次则执行下面这段逻辑
-            var resultCfg = ListPool<MergeableItemCfg>.Get();
+            var resultCfg = ListPool<MergeableItem>.Get();
             
             //todo 功能待定： 开启宝箱后，会获得11件物品，其中必然出现一个编号最靠前的，未完成的1级人物
             // 另外会出现3种合计10个已解锁的1级景观
             var skipNum = 0;
             var unlockedItems = model.UnlockedMergeableItems;
-            var categoryWeightRandomList = ListPool<(MergeableItemCfg, int)>.Get();
+            var categoryWeightRandomList = ListPool<(MergeableItem, int)>.Get();
             foreach (var threeMergeableItemId in unlockedItems)
             {
                 if (!TripleMergeConfigManager.Instance.TryGetItemConfig(threeMergeableItemId, out var threeMergeableItem))continue;
@@ -153,7 +153,7 @@ namespace TripleMerge
                 // }
             }
 
-            ListPool<(MergeableItemCfg, int)>.Release(categoryWeightRandomList);
+            ListPool<(MergeableItem, int)>.Release(categoryWeightRandomList);
 
             var addToBubbleNum = 0;
             var cells = GetMergeableEmptyCellsByDistance(GenerateItemNum + 1, belongCell.transform.position);
@@ -204,7 +204,7 @@ namespace TripleMerge
                 }
             }
 
-            ListPool<MergeableItemCfg>.Release(resultCfg);
+            ListPool<MergeableItem>.Release(resultCfg);
             ListPool<MergeableCell>.Release(cells);
 
             if (addToBubbleNum > 0)

@@ -741,7 +741,7 @@ namespace TripleMerge
         /// <summary>
         /// 获取合并链和基础物品
         /// </summary>
-        private (MergeChain chain, MergeableItemCfg baseItem) GetMergeChainAndBaseItem(List<MergeableObject> items)
+        private (MergeChain chain, MergeableItem baseItem) GetMergeChainAndBaseItem(List<MergeableObject> items)
         {
             foreach (var item in items.Where(item => !item.IsUniversalCard))
             {
@@ -772,7 +772,7 @@ namespace TripleMerge
         /// <returns>合并出的物品ID</returns>
         private int MergeItemsBatch(List<MergeableObject> tobeMergeItems,
                                     MergeChain targetChain,
-                                    MergeableItemCfg mergeBaseItem,
+                                    MergeableItem mergeBaseItem,
                                     Dictionary<int, int> mergeResults,
                                     HashSet<int> unlockNewItems,
                                     List<MergeableObject> afterMergeItems)

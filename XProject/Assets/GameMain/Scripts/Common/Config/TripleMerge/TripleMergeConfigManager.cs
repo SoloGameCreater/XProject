@@ -3,24 +3,24 @@ using Framework;
 
 namespace Config.TripleMerge
 {
-    public partial class TripleMergeConfigManager
+    public partial class TripleMergeConfigManager : GlobalSystem<TripleMergeConfigManager>
     {
-        private Dictionary<int, MergeableItemCfg> _itemCfgDict = new();
+        private Dictionary<int, MergeableItem> _itemCfgDict = new();
         
-        public MergeableItemCfg GetItemConfig(int itemId)
+        public MergeableItem GetItemConfig(int itemId)
         {
             if (_itemCfgDict.TryGetValue(itemId, out var cfg)) return cfg;
 
-            cfg = MergeableItemCfgList.Find(c => c.Id == itemId);
+            cfg = MergeableItemList.Find(c => c.Id == itemId);
             _itemCfgDict[itemId] = cfg;
             return cfg;
         }
 
-        public bool TryGetItemConfig(int itemId, out MergeableItemCfg config)
+        public bool TryGetItemConfig(int itemId, out MergeableItem config)
         {
             if (_itemCfgDict.TryGetValue(itemId, out config)) return true;
 
-            config = MergeableItemCfgList.Find(c => c.Id == itemId);
+            config = MergeableItemList.Find(c => c.Id == itemId);
             if (config == null) return false;
 
             _itemCfgDict[itemId] = config;

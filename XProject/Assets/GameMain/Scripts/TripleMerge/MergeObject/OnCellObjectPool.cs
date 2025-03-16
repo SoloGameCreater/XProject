@@ -17,7 +17,7 @@ namespace TripleMerge
 
         private Transform _poolRoot;
 
-        public static OnCellObject GetItem(MergeableItemCfg itemCfg, Transform parent = null)
+        public static OnCellObject GetItem(MergeableItem itemCfg, Transform parent = null)
         {
             OnCellObject item = null;
 

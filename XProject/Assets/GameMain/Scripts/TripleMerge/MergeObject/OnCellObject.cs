@@ -32,7 +32,7 @@ namespace TripleMerge
         /// <summary>
         /// 绑定的配置数据
         /// </summary>
-        public MergeableItemCfg CfgData { private set; get; }
+        public MergeableItem CfgData { private set; get; }
         /// <summary>
         /// 存储model
         /// </summary>
@@ -98,7 +98,7 @@ namespace TripleMerge
         {
             ItemSaveData = setCellPlaceItem;
         }
-        public void SetCfgData(MergeableItemCfg cfgData)
+        public void SetCfgData(MergeableItem cfgData)
         {
             CfgData = cfgData;
 

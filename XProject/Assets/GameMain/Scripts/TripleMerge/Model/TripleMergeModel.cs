@@ -40,9 +40,9 @@ namespace TripleMerge
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MergeableItemCfg GetMergeableItem(int id)
+        public MergeableItem GetMergeableItem(int id)
         {
-            return TripleMergeConfigManager.Instance.MergeableItemCfgList.Find(x => x.Id == id);
+            return TripleMergeConfigManager.Instance.MergeableItemList.Find(x => x.Id == id);
         }
 
         /// <summary>
@@ -50,9 +50,9 @@ namespace TripleMerge
         /// </summary>
         /// <param name="mergeChainId"></param>
         /// <returns></returns>
-        public MergeableItemCfg GetMergeableItemByChainId(int mergeChainId)
+        public MergeableItem GetMergeableItemByChainId(int mergeChainId)
         {
-            foreach (var itemCfg in TripleMergeConfigManager.Instance.MergeableItemCfgList)
+            foreach (var itemCfg in TripleMergeConfigManager.Instance.MergeableItemList)
             {
                 if (itemCfg.ChainId != mergeChainId) continue;
                 if (itemCfg.Level == 1) return itemCfg;
@@ -115,7 +115,7 @@ namespace TripleMerge
                 _unlockedMergeableItems.Add(v);
             }
 
-            foreach (var threeMergeableItem in TripleMergeConfigManager.Instance.MergeableItemCfgList)
+            foreach (var threeMergeableItem in TripleMergeConfigManager.Instance.MergeableItemList)
             {
                 if (!threeMergeableItem.IsInitUnlock)
                 {
