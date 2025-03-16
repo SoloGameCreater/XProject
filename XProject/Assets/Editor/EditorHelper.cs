@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEditor.SceneManagement;
 using UnityEditor;
 using UnityEngine;
-using DataTableTools;
 
 public class EditorHelper : EditorWindow
 {
@@ -46,8 +45,6 @@ public static class AutoRefreshOnPlay
     {
         if (state == PlayModeStateChange.ExitingEditMode)
         {
-            // 自动拆分一次配置表
-            //DataTableGeneratorMenu.GenerateDataTables();
             AssetDatabase.Refresh();
             Debug.Log("Refreshing assets before entering play mode...");
         }
