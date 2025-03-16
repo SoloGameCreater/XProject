@@ -100,3 +100,11 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
+      - CollectPath: Assets/ExtraRes/Configs/TripleMapData
+        CollectorGUID: d0b11e9bb227fa74493bfa5d389fa30c
+        CollectorType: 0
+        AddressRuleName: AddressDisable
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
