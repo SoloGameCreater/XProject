@@ -10,6 +10,9 @@ namespace TripleMerge
         
         public void OnEnterTripleMerge()
         {
+            // 加载地图数据
+            MapDataLoader.Instance.LoadMapData();
+
             Gameplay = new TripleMergeGameplay();
             Gameplay.Init();
 

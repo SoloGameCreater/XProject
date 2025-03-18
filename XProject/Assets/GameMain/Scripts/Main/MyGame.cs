@@ -70,7 +70,8 @@ public class MyGame : Game
 
             //配置
             _subSystemManager.AddSubSystem<TripleMergeConfigManager>();
-            
+            _subSystemManager.AddSubSystem<MapDataLoader>();
+
         }
     }
 

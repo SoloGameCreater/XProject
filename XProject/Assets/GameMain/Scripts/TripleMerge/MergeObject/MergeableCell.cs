@@ -13,6 +13,7 @@ using Framework;
 using SaveFile.TripleMerge;
 using UnityEngine;
 using UnityEngine.Pool;
+using TripleMerge;
 
 namespace TripleMerge
 {
@@ -143,8 +144,8 @@ namespace TripleMerge
 
         // 存档数据
         private SaveFileTripleMergeCellData _saveData;
-        private string SaveKey => $"{MapCoordinate.x}_{MapCoordinate.y}";
-
+        public string SaveKey => $"{MapCoordinate.x}_{MapCoordinate.y}";
+        public CellData CellConfig { get; set; }
         // 使用可配置的延迟值
         private const float MERGE_DELAY = 0.035f;
 

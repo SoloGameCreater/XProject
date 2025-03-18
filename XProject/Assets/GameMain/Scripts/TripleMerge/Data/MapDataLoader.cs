@@ -1,27 +1,16 @@
 using System.Collections.Generic;
 using Framework;
 using UnityEngine;
+using Newtonsoft.Json;
 
 namespace TripleMerge
 {
     /// <summary>
     /// 三合地图数据加载器
     /// </summary>
-    public class MapDataLoader
+    public class MapDataLoader : GlobalSystem<MapDataLoader>
     {
-        private static MapDataLoader _instance;
-        public static MapDataLoader Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new MapDataLoader();
-                }
-                return _instance;
-            }
-        }
-
+        private const string MapDataAssetName = "Configs/TripleMapData/MapData.json";
         private MapData _mapData;
         private bool _isLoaded = false;
 
@@ -30,18 +19,19 @@ namespace TripleMerge
         /// </summary>
         /// <param name="mapName">地图名称，默认为MapData</param>
         /// <returns>是否加载成功</returns>
-        public bool LoadMapData(string mapName = "MapData")
+        public bool LoadMapData()
         {
             if (_isLoaded) return true;
 
-            TextAsset mapDataAsset = Resources.Load<TextAsset>($"TripleMapData/{mapName}");
-            if (mapDataAsset == null)
+            var ta = ResourcesManager.Instance.LoadResource<TextAsset>(MapDataAssetName);
+            var mapDataCfg = JsonConvert.DeserializeObject<MapData>(ta.text); 
+            if (mapDataCfg == null)
             {
-                DebugUtil.LogError($"无法加载地图数据: TripleMapData/{mapName}");
+                DebugUtil.LogError($"无法加载地图数据: {MapDataAssetName}");
                 return false;
             }
 
-            _mapData = JsonUtility.FromJson<MapData>(mapDataAsset.text);
+            _mapData = mapDataCfg;
             if (_mapData == null)
             {
                 DebugUtil.LogError("地图数据解析失败");
@@ -129,66 +119,5 @@ namespace TripleMerge
 
             return true;
         }
-    }
-
-    /// <summary>
-    /// 地图数据类
-    /// </summary>
-    [System.Serializable]
-    public class MapData : UnityEngine.ISerializationCallbackReceiver
-    {
-        // 由于Unity的JsonUtility不支持直接序列化Dictionary，我们需要一个自定义的序列化器
-        [System.Serializable]
-        public class CellDictionary
-        {
-            public string key;
-            public CellData value;
-        }
-
-        public List<CellDictionary> cellList = new List<CellDictionary>();
-
-        // 这个字段不会被序列化，仅用于内部处理
-        [System.NonSerialized]
-        public Dictionary<string, CellData> cells = new Dictionary<string, CellData>();
-
-        // 在序列化前将Dictionary转换为List
-        public void OnBeforeSerialize()
-        {
-            cellList.Clear();
-            if (cells != null)
-            {
-                foreach (var pair in cells)
-                {
-                    cellList.Add(new CellDictionary { key = pair.Key, value = pair.Value });
-                }
-            }
-        }
-
-        // 在反序列化后将List转换回Dictionary
-        public void OnAfterDeserialize()
-        {
-            cells = new Dictionary<string, CellData>();
-            foreach (var item in cellList)
-            {
-                if (item.key != null && item.value != null)
-                {
-                    cells[item.key] = item.value;
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    /// 单元格数据类
-    /// </summary>
-    [System.Serializable]
-    public class CellData
-    {
-        public int belongRegionId;
-        public int cellStatus;
-        public int purifiedPriority;
-        public int requiredPurifiedNum;
-        public int initialPlacedItemId;
-        public int[] mapCoordinate; // [x, y]
     }
 } 
