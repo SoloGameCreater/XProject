@@ -17,7 +17,7 @@ namespace TripleMerge
             _mergeableItemList.Add(new ValueDropdownItem<int>("不放置任何合成物", 0));
 
             // 这里是因为美术库和程序库的路径不一样做的特殊处理
-            var jsonAsset = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/ExtraRes/Configs/DataJson/MergeableItem.json");
+            var jsonAsset = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/ExtraRes/Configs/DataJson/TripleMerge/mergeableitem.json");
             var itemList = JsonConvert.DeserializeObject<List<MergeableItem>>(jsonAsset.text);
             
             foreach (var item in itemList)

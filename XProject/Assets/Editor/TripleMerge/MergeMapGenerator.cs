@@ -32,22 +32,6 @@ namespace TripleMerge.Editor
         private string _exportPath = "Assets/Resources/TripleMapData";
         private string _fileName = "MapData";
 
-        // 添加菜单项，可以从菜单中直接访问地图生成工具
-        [MenuItem("Tools/三合一/地图生成工具")]
-        public static void ShowMapGenerator()
-        {
-            ToolManager.SetActiveTool<MergeMapGenerator>();
-        }
-
-        // 添加菜单项，可以直接导出当前地图数据
-        [MenuItem("Tools/三合一/导出地图数据")]
-        public static void ExportMapDataFromMenu()
-        {
-            var mapGenerator = CreateInstance<MergeMapGenerator>();
-            mapGenerator.InitializeMapRoot();
-            mapGenerator.ExportMapData();
-        }
-
         private void InitializeMapRoot()
         {
             _mapRoot = GameObject.Find("AreaRootEditor");
