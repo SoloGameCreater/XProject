@@ -165,6 +165,11 @@ namespace TripleMerge
         public void LoadData()
         {
             _isInitialized = false;
+            if(!MapDataLoader.Instance.ApplyCellData(this))
+            {
+                Debug.LogWarning($"未找到坐标为 {MapCoordinate} 的地块数据");
+            }
+
             _saveData = TripleMergeSystem.Instance.Model.GetOrCreateCellData(SaveKey);
             var isNeverStorageBefore = _saveData.State == (int)ECellStatus.Unset;
             InitCellStatus(isNeverStorageBefore);
@@ -183,16 +188,11 @@ namespace TripleMerge
             // 如果从存档数据中读取的状态是未设置，则代表是初始状态
             if (isNeverStorageBefore)
             {
-                //第一次取预制体上的存储数据
-                // if ()
-                // {
-                //     CellStatus = ECellStatus.Locked;
-                // }
-                // else
-                // {
-                //     //读取初始配置信息，如果初始配置时，该地块需要一定数量的净化值，则代表其初始状态是未净化状态
-                //     CellStatus = RequiredPurifiedNum > 0 ? ECellStatus.UnPurified : ECellStatus.Mergeable;
-                // }
+                if (CellStatus != ECellStatus.Locked)
+                {
+                    //读取初始配置信息，如果初始配置时，该地块需要一定数量的净化值，则代表其初始状态是未净化状态
+                    CellStatus = RequiredPurifiedNum > 0 ? ECellStatus.UnPurified : ECellStatus.Mergeable;
+                }
 
                 TripleMergeSystem.Instance.Model.SetCellState(_saveData, (int)CellStatus);
             }
@@ -203,7 +203,8 @@ namespace TripleMerge
 
                 if (CellStatus == ECellStatus.Locked) //如果时锁定的地块，从新检查路段解锁状态，防止某些情况路段解锁了之后地块信息没正常更新
                 {
-                    // if (BelongRegion.BelongArea.AreaRegionDictionary.TryGetValue(HostRegionId, out var belongToAreaRegion) && belongToAreaRegion.IsUnlock())
+                    // if (BelongRegion.BelongArea.AreaRegionDictionary.TryGetValue(HostRegionId, out var belongToAreaRegion) 
+                    // && belongToAreaRegion.IsUnlock())
                     // {
                     //     //读取初始配置信息，如果初始配置时，该地块需要一定数量的净化值，则代表其初始状态是未净化状态
                     //     CellStatus = RequiredPurifiedNum > 0 ? ECellStatus.UnPurified : ECellStatus.Mergeable;

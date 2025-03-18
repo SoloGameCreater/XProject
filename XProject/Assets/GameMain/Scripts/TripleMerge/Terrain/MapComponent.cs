@@ -65,7 +65,6 @@ namespace TripleMerge
             // 加载地块数据
             foreach (var mergeableCell in MergeableCellsDictionary.Values)
             {
-                mergeableCell.CellConfig = MapDataLoader.Instance.GetCellData(mergeableCell.MapCoordinate);
                 mergeableCell.LoadData();
             }
 

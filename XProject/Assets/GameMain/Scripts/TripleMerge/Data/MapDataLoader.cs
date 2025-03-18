@@ -58,6 +58,7 @@ namespace TripleMerge
                 return false;
             }
 
+            _mapData.OnAfterDeserialize();
             _isLoaded = true;
             DebugUtil.Log($"成功加载地图数据，共 {_mapData.cells.Count} 个地块");
             return true;
