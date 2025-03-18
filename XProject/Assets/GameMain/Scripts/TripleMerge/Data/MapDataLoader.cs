@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Framework;
 using UnityEngine;
+using System.IO;
 using Newtonsoft.Json;
 
 namespace TripleMerge
@@ -11,9 +12,28 @@ namespace TripleMerge
     public class MapDataLoader : GlobalSystem<MapDataLoader>
     {
         private const string MapDataAssetName = "Configs/TripleMapData/MapData.json";
+        private static string MapDataPath = $"{Application.dataPath}/ExtraRes/Configs/TripleMapData/MapData.json";
         private MapData _mapData;
         private bool _isLoaded = false;
 
+        /// <summary>
+        /// 直接获取地图数据（编辑器使用）
+        /// </summary>
+        /// <returns></returns>
+        public static MapData GetMapData()
+        {
+            if (File.Exists(MapDataPath))
+            {
+                var mapData = JsonConvert.DeserializeObject<MapData>(File.ReadAllText(MapDataPath));
+                if(mapData != null)
+                {
+                    mapData.OnAfterDeserialize();
+                    return mapData;
+                }
+            }
+            DebugUtil.LogError($"无法加载地图数据: {MapDataPath}");
+            return null;
+        }
         /// <summary>
         /// 加载地图数据
         /// </summary>

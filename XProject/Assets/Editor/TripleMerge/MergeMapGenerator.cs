@@ -108,58 +108,185 @@ namespace TripleMerge.Editor
             return SceneManager.GetActiveScene().name.Equals("MergeScene");
         }
         
+        /// <summary>
+        /// 生成合并地图
+        /// </summary>
+        /// <returns>是否成功生成地图</returns>
         private bool GenerateMap()
         {
-            if (_mapRoot == null) return false;
-            if (_cellRoot == null) return false;
-            if (_tilemap == null) return false;
-            if (_mergeCellPrefab == null) return false;
+            // 验证必要组件是否存在
+            if (!ValidateMapComponents())
+                return false;
+
+            // 准备地图区域
+            PrepareRegionObject();
+            
+            // 加载地图数据
+            var mapData = LoadMapData();
+            
+            // 根据Tilemap信息生成地块
+            GenerateCellsFromTilemap(mapData);
+            
+            return true;
+        }
+
+        /// <summary>
+        /// 验证地图生成所需的组件是否存在
+        /// </summary>
+        private bool ValidateMapComponents()
+        {
+            if (_mapRoot == null)
+            {
+                Debug.LogError("错误: 地图根节点为空");
+                return false;
+            }
+            
+            if (_cellRoot == null)
+            {
+                Debug.LogError("错误: 地块根节点为空");
+                return false;
+            }
+            
+            if (_tilemap == null)
+            {
+                Debug.LogError("错误: Tilemap为空");
+                return false;
+            }
+            
+            if (_mergeCellPrefab == null)
+            {
+                Debug.LogError("错误: 合并地块预制体为空");
+                return false;
+            }
+            
+            return true;
+        }
+
+        /// <summary>
+        /// 准备地图区域对象
+        /// </summary>
+        private void PrepareRegionObject()
+        {
+            // 移除已存在的区域对象
             if (_regionObj != null)
             {
                 DestroyImmediate(_regionObj);
             }
+            
+            // 加载地块精灵图
             _cellA = AssetDatabase.LoadAssetAtPath<Sprite>(CellAPath);
             _cellB = AssetDatabase.LoadAssetAtPath<Sprite>(CellBPath);
+            
+            // 创建新的区域对象
             _regionObj = new GameObject("Region");
             _regionObj.transform.SetParent(_cellRoot);
             _regionObj.transform.Reset();
-            // 合成地块管理
+            
+            // 添加合成地块管理组件
             _regionObj.AddComponent<MergeableRegion>();
+        }
 
-            // 获取地图grid信息
+        /// <summary>
+        /// 加载地图数据，如果不存在则创建新的
+        /// </summary>
+        private MapData LoadMapData()
+        {
+            var mapData = MapDataLoader.GetMapData();
+            
+            if (mapData == null)
+            {
+                Debug.LogWarning("没有地图数据，将创建新的地图数据");
+                mapData = new MapData
+                {
+                    cells = new Dictionary<string, CellData>()
+                };
+            }
+            
+            return mapData;
+        }
+
+        /// <summary>
+        /// 从Tilemap生成地块
+        /// </summary>
+        /// <param name="mapData">地图数据</param>
+        private void GenerateCellsFromTilemap(MapData mapData)
+        {
+            // 获取地图边界信息
             BoundsInt bounds = _tilemap.cellBounds;
             bool isCellA = true;
+            
+            // 遍历所有地图单元
             for (int x = bounds.xMin; x < bounds.xMax; x++)
             {
                 for (int y = bounds.yMin; y < bounds.yMax; y++)
                 {
+                    // 检查当前位置是否有瓦片
                     Vector3Int cellPosition = new Vector3Int(x, y, 0);
                     TileBase tile = _tilemap.GetTile(cellPosition);
-
-                    if (tile != null)
+                    
+                    // 跳过空白区域
+                    if (tile == null)
+                        continue;
+                    
+                    // 获取瓦片的世界坐标
+                    Vector3 worldPos = _tilemap.GetCellCenterWorld(cellPosition);
+                    string cellKey = $"{x}_{y}";
+                    
+                    // 根据现有数据或创建新的地块
+                    if (mapData.cells.TryGetValue(cellKey, out CellData cellData))
                     {
-                        Vector3 worldPos = _tilemap.GetCellCenterWorld(cellPosition);
-
-                        // 在对应位置创建cell
-                        CreateCell(worldPos, x, y,isCellA);
-                        isCellA = !isCellA;
+                        // 使用现有数据创建地块
+                        CreateCell(worldPos, x, y, isCellA, cellData);
                     }
+                    else
+                    {
+                        // 创建新地块
+                        CreateCell(worldPos, x, y, isCellA);
+                    }
+                    
+                    // 交替地块样式
+                    isCellA = !isCellA;
                 }
             }
-
-            return true;
         }
-
-        void CreateCell(Vector3 position, int x, int y, bool isCellA)
+        
+        /// <summary>
+        /// 创建合并地块
+        /// </summary>
+        /// <param name="position">世界坐标位置</param>
+        /// <param name="x">地图X坐标</param>
+        /// <param name="y">地图Y坐标</param>
+        /// <param name="isCellA">是否使用A类型精灵图</param>
+        /// <param name="cellData">单元格数据(可选)</param>
+        private void CreateCell(Vector3 position, int x, int y, bool isCellA, CellData cellData = null)
         {
+            // 实例化地块对象
             var cellObj = Instantiate(_mergeCellPrefab, position,
                 Quaternion.identity, _regionObj.transform);
             
+            // 设置地块名称
             cellObj.name = $"Cell_[{x},{y}]";
+            
+            // 设置地块精灵图
             cellObj.GetComponent<SpriteRenderer>().sprite = isCellA ? _cellA : _cellB;
+            
+            // 添加可合并单元格组件
             var cell = cellObj.AddComponent<MergeableCell>();
+            
+            // 设置基本属性
             cell.CellStatus = MergeableCell.ECellStatus.Locked;
             cell.MapCoordinate = new Vector2Int(x, y);
+
+            // 如果有预设数据，则应用预设数据
+            if (cellData == null) 
+                return;
+            
+            // 应用预设数据
+            cell.BelongRegionId = cellData.belongRegionId;
+            cell.CellStatus = (MergeableCell.ECellStatus)cellData.cellStatus;
+            cell.PurifiedPriority = cellData.purifiedPriority;
+            cell.RequiredPurifiedNum = cellData.requiredPurifiedNum;
+            cell.InitialPlacedItemId = cellData.initialPlacedItemId;
         }
         
         private void ExportMapData()
