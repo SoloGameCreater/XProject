@@ -29,7 +29,7 @@ namespace TripleMerge.Editor
         private const string CellAPath = "Assets/ExtraRes/TMatchRessss/World_Grass/grass_03_01.png";
         private const string CellBPath = "Assets/ExtraRes/TMatchRessss/World_Grass/grass_04_01.png";
         
-        private string _exportPath = "Assets/Resources/TripleMapData";
+        private readonly string _exportPath = "Assets/ExtraRes/Configs/TripleMapData";
         private string _fileName = "MapData";
 
         private void InitializeMapRoot()

@@ -270,7 +270,7 @@
             "key": "-1_-1",
             "value": {
                 "belongRegionId": 0,
-                "cellStatus": 3,
+                "cellStatus": 1,
                 "purifiedPriority": 0,
                 "requiredPurifiedNum": 0,
                 "initialPlacedItemId": 0,
@@ -578,7 +578,7 @@
             "key": "1_-1",
             "value": {
                 "belongRegionId": 0,
-                "cellStatus": 3,
+                "cellStatus": 1,
                 "purifiedPriority": 0,
                 "requiredPurifiedNum": 0,
                 "initialPlacedItemId": 0,
