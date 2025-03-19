@@ -89,8 +89,8 @@
             "value": {
                 "belongRegionId": 0,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 4,
+                "requiredPurifiedNum": 40,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -2,
@@ -103,8 +103,8 @@
             "value": {
                 "belongRegionId": 0,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 3,
+                "requiredPurifiedNum": 30,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -2,
@@ -117,8 +117,8 @@
             "value": {
                 "belongRegionId": 0,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 2,
+                "requiredPurifiedNum": 20,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -2,
@@ -131,8 +131,8 @@
             "value": {
                 "belongRegionId": 0,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 1,
+                "requiredPurifiedNum": 10,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -2,
@@ -145,8 +145,8 @@
             "value": {
                 "belongRegionId": 0,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 1,
+                "requiredPurifiedNum": 10,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -2,
@@ -243,8 +243,8 @@
             "value": {
                 "belongRegionId": 0,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 4,
+                "requiredPurifiedNum": 40,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -1,
@@ -257,8 +257,8 @@
             "value": {
                 "belongRegionId": 0,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 3,
+                "requiredPurifiedNum": 30,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -1,
@@ -271,8 +271,8 @@
             "value": {
                 "belongRegionId": 0,
                 "cellStatus": 1,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 2,
+                "requiredPurifiedNum": 20,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -1,
@@ -285,8 +285,8 @@
             "value": {
                 "belongRegionId": 0,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 1,
+                "requiredPurifiedNum": 10,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -1,
@@ -299,8 +299,8 @@
             "value": {
                 "belongRegionId": 0,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 1,
+                "requiredPurifiedNum": 10,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -1,
@@ -397,8 +397,8 @@
             "value": {
                 "belongRegionId": 0,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 4,
+                "requiredPurifiedNum": 40,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     0,
@@ -411,8 +411,8 @@
             "value": {
                 "belongRegionId": 0,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 3,
+                "requiredPurifiedNum": 30,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     0,
@@ -425,8 +425,8 @@
             "value": {
                 "belongRegionId": 0,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 2,
+                "requiredPurifiedNum": 20,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     0,
@@ -440,7 +440,7 @@
                 "belongRegionId": 0,
                 "cellStatus": 3,
                 "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "requiredPurifiedNum": 10,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     0,
@@ -454,7 +454,7 @@
                 "belongRegionId": 0,
                 "cellStatus": 3,
                 "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "requiredPurifiedNum": 10,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     0,
@@ -551,8 +551,8 @@
             "value": {
                 "belongRegionId": 0,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 4,
+                "requiredPurifiedNum": 40,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     1,
@@ -565,8 +565,8 @@
             "value": {
                 "belongRegionId": 0,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 3,
+                "requiredPurifiedNum": 30,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     1,
@@ -579,8 +579,8 @@
             "value": {
                 "belongRegionId": 0,
                 "cellStatus": 1,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 2,
+                "requiredPurifiedNum": 20,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     1,
@@ -594,7 +594,7 @@
                 "belongRegionId": 0,
                 "cellStatus": 3,
                 "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "requiredPurifiedNum": 10,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     1,
@@ -608,7 +608,7 @@
                 "belongRegionId": 0,
                 "cellStatus": 3,
                 "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "requiredPurifiedNum": 10,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     1,
@@ -705,8 +705,8 @@
             "value": {
                 "belongRegionId": 0,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 4,
+                "requiredPurifiedNum": 40,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     2,
@@ -719,8 +719,8 @@
             "value": {
                 "belongRegionId": 0,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 3,
+                "requiredPurifiedNum": 30,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     2,
@@ -859,8 +859,8 @@
             "value": {
                 "belongRegionId": 0,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 4,
+                "requiredPurifiedNum": 40,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     3,
@@ -873,8 +873,8 @@
             "value": {
                 "belongRegionId": 0,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 3,
+                "requiredPurifiedNum": 30,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     3,
@@ -1013,8 +1013,8 @@
             "value": {
                 "belongRegionId": 0,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 4,
+                "requiredPurifiedNum": 40,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     4,
@@ -1027,8 +1027,8 @@
             "value": {
                 "belongRegionId": 0,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 3,
+                "requiredPurifiedNum": 30,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     4,
@@ -1167,8 +1167,8 @@
             "value": {
                 "belongRegionId": 0,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 4,
+                "requiredPurifiedNum": 40,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     5,
@@ -1181,8 +1181,8 @@
             "value": {
                 "belongRegionId": 0,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 3,
+                "requiredPurifiedNum": 30,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     5,

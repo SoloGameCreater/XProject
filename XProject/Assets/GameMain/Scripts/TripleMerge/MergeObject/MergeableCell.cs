@@ -188,11 +188,8 @@ namespace TripleMerge
             // 如果从存档数据中读取的状态是未设置，则代表是初始状态
             if (isNeverStorageBefore)
             {
-                if (CellStatus != ECellStatus.Locked)
-                {
-                    //读取初始配置信息，如果初始配置时，该地块需要一定数量的净化值，则代表其初始状态是未净化状态
-                    CellStatus = RequiredPurifiedNum > 0 ? ECellStatus.UnPurified : ECellStatus.Mergeable;
-                }
+                 //读取初始配置信息，如果初始配置时，该地块需要一定数量的净化值，则代表其初始状态是未净化状态
+                CellStatus = RequiredPurifiedNum > 0 ? ECellStatus.UnPurified : ECellStatus.Mergeable;
 
                 TripleMergeSystem.Instance.Model.SetCellState(_saveData, (int)CellStatus);
             }
