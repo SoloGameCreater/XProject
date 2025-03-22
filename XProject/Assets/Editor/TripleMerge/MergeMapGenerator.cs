@@ -218,7 +218,9 @@ namespace TripleMerge.Editor
             // 遍历所有地图单元
             for (int x = bounds.xMin; x < bounds.xMax; x++)
             {
-                for (int y = bounds.yMin; y < bounds.yMax; y++)
+                int tilesInColumn = 0; // 记录当前列中的瓦片数量
+                // 这里采取倒序遍历，方便生成地块间隔
+                for (int y = bounds.yMax - 1; y >= bounds.yMin ; y--)
                 {
                     // 检查当前位置是否有瓦片
                     Vector3Int cellPosition = new Vector3Int(x, y, 0);
@@ -227,6 +229,8 @@ namespace TripleMerge.Editor
                     // 跳过空白区域
                     if (tile == null)
                         continue;
+                    
+                    tilesInColumn++; // 增加当前列的瓦片计数
                     
                     // 获取瓦片的世界坐标
                     Vector3 worldPos = _tilemap.GetCellCenterWorld(cellPosition);
@@ -245,6 +249,12 @@ namespace TripleMerge.Editor
                     }
                     
                     // 交替地块样式
+                    isCellA = !isCellA;
+                }
+                
+                // 如果前一列的瓦片数量不为0且为偶数，则再次翻转isCellA的值
+                if (tilesInColumn > 0 && tilesInColumn % 2 == 0)
+                {
                     isCellA = !isCellA;
                 }
             }
