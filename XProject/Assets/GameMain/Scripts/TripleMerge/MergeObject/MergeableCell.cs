@@ -23,7 +23,8 @@ namespace TripleMerge
     public partial class MergeableCell : ItemBase
     {
 #if UNITY_EDITOR
-        [LabelText("所属地段ID")] [ValueDropdown(nameof(GetValidRegions))]
+        [LabelText("所属地段ID")]
+        [ValueDropdown(nameof(GetValidRegions))]
 #endif
         public int BelongRegionId;
 
@@ -55,7 +56,8 @@ namespace TripleMerge
             RightTop,
         }
 #if UNITY_EDITOR
-        [LabelText("初始默认放置合成物品")] [ValueDropdown(nameof(GetMergeableItemConfigList))]
+        [LabelText("初始默认放置合成物品")]
+        [ValueDropdown(nameof(GetMergeableItemConfigList))]
 #endif
         public int InitialPlacedItemId;
 
@@ -165,7 +167,7 @@ namespace TripleMerge
         public void LoadData()
         {
             _isInitialized = false;
-            if(!MapDataLoader.Instance.ApplyCellData(this))
+            if (!MapDataLoader.Instance.ApplyCellData(this))
             {
                 Debug.LogWarning($"未找到坐标为 {MapCoordinate} 的地块数据");
             }
@@ -188,7 +190,7 @@ namespace TripleMerge
             // 如果从存档数据中读取的状态是未设置，则代表是初始状态
             if (isNeverStorageBefore)
             {
-                 //读取初始配置信息，如果初始配置时，该地块需要一定数量的净化值，则代表其初始状态是未净化状态
+                //读取初始配置信息，如果初始配置时，该地块需要一定数量的净化值，则代表其初始状态是未净化状态
                 CellStatus = RequiredPurifiedNum > 0 ? ECellStatus.UnPurified : ECellStatus.Mergeable;
 
                 TripleMergeSystem.Instance.Model.SetCellState(_saveData, (int)CellStatus);
@@ -251,7 +253,7 @@ namespace TripleMerge
             }
         }
 
-        public void PlaceItem(OnCellObject item, Action onPlacedAction = null, Action onMergedAction = null,bool showMoveTween = true)
+        public void PlaceItem(OnCellObject item, Action onPlacedAction = null, Action onMergedAction = null, bool showMoveTween = true)
         {
             if (item == null)
             {
@@ -304,9 +306,9 @@ namespace TripleMerge
 
             void OnItemPlaced()
             {
-                
+
 #if UNITY_EDITOR
-                DebugUtil.Log($"{item.GUID} Placed to cell: {MapCoordinate}");  
+                DebugUtil.Log($"{item.GUID} Placed to cell: {MapCoordinate}");
 #endif
                 // 5. 处理放置逻辑
                 onPlacedAction?.Invoke();
@@ -364,7 +366,7 @@ namespace TripleMerge
             if (takeOffItem != null && takeOffItem.BelongCell != null)
             {
 #if UNITY_EDITOR
-                DebugUtil.Log($"item {takeOffItem.GUID} 从 :{takeOffItem.BelongCell.MapCoordinate} 被挤走"); 
+                DebugUtil.Log($"item {takeOffItem.GUID} 从 :{takeOffItem.BelongCell.MapCoordinate} 被挤走");
 #endif
                 // 因为老的物品是从该地块被挤出去的，所以这时其实原本的地块已经有了新的物品了，就应该先清除老物品的地块信息，以免地块物品信息被错误清除
                 takeOffItem.BelongCell = null;
@@ -386,12 +388,12 @@ namespace TripleMerge
                     {
                         nearestEmptyCells[0].PlaceItem(displacedItem);
 #if UNITY_EDITOR
-                        DebugUtil.Log($"item {displacedItem.GUID} 被放置到 :{nearestEmptyCells[0].MapCoordinate}"); 
+                        DebugUtil.Log($"item {displacedItem.GUID} 被放置到 :{nearestEmptyCells[0].MapCoordinate}");
 #endif
                     }
                     else
                     {
-                        
+
                         DebugUtil.LogWarning("没有空余地块，尝试将多余的收集物储存起来");
                         // todo 如果找不到空格子，将物品放入存储气泡
                         // var storageBubble = ThreeMergeSystem.Instance.Gameplay.MapManager.MergeableItemsBubble;
@@ -419,24 +421,24 @@ namespace TripleMerge
         private void FindNearestEmptyCells(int targetCellNum, ref List<MergeableCell> result)
         {
             result.Clear();
-            
+
             // 获取临时列表
             var tempList = ListPool<MergeableCell>.Get();
             try
             {
                 // 确定查询范围
                 Dictionary<Vector2Int, MergeableCell> targetCells = TripleMergeSystem.Instance.Gameplay.MapManager.MapArea.MergeableCellsDictionary;
-                
+
                 // 健壮性检查
                 if (targetCells == null || targetCells.Count == 0)
                 {
                     DebugUtil.LogWarning("目标单元格字典为空");
                     return;
                 }
-                
+
                 // 预分配容量
                 tempList.Capacity = targetCells.Count;
-                
+
                 // 收集所有空地块
                 foreach (var cell in targetCells.Values)
                 {
@@ -445,7 +447,7 @@ namespace TripleMerge
                         tempList.Add(cell);
                     }
                 }
-                
+
                 // 如果找到的空地块数量不足，直接返回所有找到的空地块
                 if (tempList.Count <= targetCellNum)
                 {
@@ -459,7 +461,7 @@ namespace TripleMerge
                     var rightToSelf = Vector2.Distance(right.MapCoordinate, MapCoordinate);
                     return leftToSelf < rightToSelf ? -1 : 1;
                 });
-                
+
                 // 只取前N个结果
                 for (int i = 0; i < targetCellNum; i++)
                 {
@@ -525,9 +527,9 @@ namespace TripleMerge
                 if (continuousCnt >= 3)
                 {
                     DebugUtil.Log($"三合开始");
-                    
+
                     // 能够进行合成的情况，先进行合成计算，合成完毕后，再对合成完毕后的合成物进行新的位置分配
-                    DoMerge(ref continuousCell, (finalMergeItemId, mergeResult) => 
+                    DoMerge(ref continuousCell, (finalMergeItemId, mergeResult) =>
                         OnMergeCompleted(finalMergeItemId, mergeResult, onFinish));
 
                     return true;
@@ -542,7 +544,7 @@ namespace TripleMerge
             return false;
         }
 
-        private void OnMergeCompleted(int finalMergeItemId, Dictionary<int,int> mergeResult, Action<int> onFinish)
+        private void OnMergeCompleted(int finalMergeItemId, Dictionary<int, int> mergeResult, Action<int> onFinish)
         {
             DebugUtil.Log($"三合完成");
             StartCoroutine(DelayedKeepMerge(finalMergeItemId, onFinish));
@@ -551,14 +553,14 @@ namespace TripleMerge
         private IEnumerator DelayedKeepMerge(int finalMergeItemId, Action<int> onFinish)
         {
             yield return new WaitForSeconds(MERGE_DELAY);
-            
+
             // 检查对象是否仍然有效
             if (this == null || !gameObject.activeInHierarchy)
             {
                 TripleMergeSystem.Instance.Gameplay.MapManager.IsMerging = false;
                 yield break;
             }
-            
+
             ProcessAfterMerge(finalMergeItemId, onFinish);
         }
 
@@ -570,7 +572,7 @@ namespace TripleMerge
             {
                 return;
             }
-            
+
             // 使用迭代而非递归方式处理连续合成
             StartCoroutine(ContinuousMergeCoroutine(finalMergeItemId, onFinish));
         }
@@ -586,7 +588,7 @@ namespace TripleMerge
                 }
                 return true;
             }
-            
+
             if (_placeableItem != null)
             {
                 var chainCfg = TripleMergeConfigManager.Instance.GetChainConfig(_placeableItem.CfgData.ChainId);
@@ -596,7 +598,7 @@ namespace TripleMerge
                     return true;
                 }
             }
-            
+
             return false;
         }
 
@@ -604,23 +606,23 @@ namespace TripleMerge
         {
             bool canContinue = true;
             int currentMergeItemId = finalMergeItemId;
-            
+
             while (canContinue)
             {
                 canContinue = TryToMerge(null, null);
-                
+
                 if (!canContinue)
                 {
                     onFinish?.Invoke(currentMergeItemId);
                     CheckAndHandleMaxLevelItem();
                     break;
                 }
-                
+
                 yield return new WaitForSeconds(MERGE_DELAY);
             }
         }
 
-        
+
         private const float BeforeMergePerformDuration = 0.15f;
         private const float AfterMergePerformDuration = 0.15f;
         /// <summary>
@@ -637,14 +639,14 @@ namespace TripleMerge
             var tobeMergeItems = ListPool<MergeableObject>.Get();
             var unlockNewItems = HashSetPool<int>.Get();
             var mergeResults = DictionaryPool<int, int>.Get();
-            
+
             // 获取当前格子的位置，用于合成物品的动画效果
             var cellPosition = transform.position;
             try
             {
                 // 设置合并状态标记
                 TripleMergeSystem.Instance.Gameplay.MapManager.IsMerging = true;
-                
+
                 // 第一步：准备合成物品
                 // 将参与合成的物品从各自格子中移除，并添加到待合成列表
                 for (var i = 0; i < continuousItems.Count; i++)
@@ -659,7 +661,7 @@ namespace TripleMerge
                         // 从原格子中移除物品
                         item.BelongCell.PlaceItem(null);
                         item.BelongCell = null;
-                        
+
                         // 如果不跳过合成进度动画，则播放物品移动到合成中心的动画
                         //if (!skipMergeProgress)
                         {
@@ -680,7 +682,7 @@ namespace TripleMerge
                     // 执行合并计算
                     finalMergeItemId = PerformMergeCalculation(tobeMergeItems, afterMergeItems, mergeResults, unlockNewItems);
                     // 放置合并后的物品
-                    PlaceMergedItems(afterMergeItems,cellPosition);
+                    PlaceMergedItems(afterMergeItems, cellPosition);
                     // 调用合并完成回调
                     onMergeCompleted?.Invoke(finalMergeItemId, mergeResults);
 
@@ -696,7 +698,7 @@ namespace TripleMerge
                 DebugUtil.LogError($"三合合成时发生异常:{e}");
                 // 发生异常时重置合并状态
                 TripleMergeSystem.Instance.Gameplay.MapManager.IsMerging = false;
-                
+
                 // 确保异常情况下也释放资源
                 ListPool<MergeableObject>.Release(afterMergeItems);
                 ListPool<MergeableObject>.Release(tobeMergeItems);
@@ -704,12 +706,12 @@ namespace TripleMerge
                 DictionaryPool<int, int>.Release(mergeResults);
             }
         }
-        
+
         /// <summary>
         /// 执行合并计算逻辑
         /// </summary>
         /// <returns>最终合并出的物品ID</returns>
-        private int PerformMergeCalculation(List<MergeableObject> tobeMergeItems, List<MergeableObject> afterMergeItems, 
+        private int PerformMergeCalculation(List<MergeableObject> tobeMergeItems, List<MergeableObject> afterMergeItems,
             Dictionary<int, int> mergeResults, HashSet<int> unlockNewItems)
         {
             // 获取合并链和基础物品
@@ -718,22 +720,22 @@ namespace TripleMerge
             {
                 return 0;
             }
-            
+
             int finalMergeItemId = 0;
-            
+
             // 执行合并循环
             while (tobeMergeItems.Count >= 3)
             {
-                finalMergeItemId = MergeItemsBatch(tobeMergeItems, targetChain, mergeBaseItem, 
+                finalMergeItemId = MergeItemsBatch(tobeMergeItems, targetChain, mergeBaseItem,
                     mergeResults, unlockNewItems, afterMergeItems);
-                
+
                 // 更新基础物品为新生成的物品
                 if (tobeMergeItems.Count >= 3)
                 {
                     mergeBaseItem = tobeMergeItems[0].CfgData;
                 }
             }
-            
+
             return finalMergeItemId;
         }
 
@@ -747,7 +749,7 @@ namespace TripleMerge
                 var chain = TripleMergeConfigManager.Instance.GetChainConfig(item.CfgData.ChainId);
                 return (chain, item.CfgData);
             }
-            
+
             // 如果全是万能卡，返回空
             return (null, null);
         }
@@ -777,17 +779,17 @@ namespace TripleMerge
                                     List<MergeableObject> afterMergeItems)
         {
             var itemId = mergeBaseItem.Id;
-            
+
             // 计算合并结果
             var nextLevelItemNumAfterMerge = tobeMergeItems.Count / 3;
             var remainCurrentLevelNum = tobeMergeItems.Count % 3;
-            
+
             // 记录剩余物品
             if (remainCurrentLevelNum > 0)
             {
                 mergeResults[itemId] = remainCurrentLevelNum;
             }
-            
+
             // 移除已合成的物品
             for (var i = tobeMergeItems.Count - 1; i >= remainCurrentLevelNum; i--)
             {
@@ -807,11 +809,11 @@ namespace TripleMerge
 
             // 清空待合成列表准备下一轮合成
             tobeMergeItems.Clear();
-            
+
             // 生成下一级物品
-            var nextLevelItemId = GenerateNextLevelItems(targetChain, itemId, nextLevelItemNumAfterMerge, 
+            var nextLevelItemId = GenerateNextLevelItems(targetChain, itemId, nextLevelItemNumAfterMerge,
                 tobeMergeItems, unlockNewItems);
-            
+
             // 处理剩余物品
             if (tobeMergeItems.Count < 3)
             {
@@ -819,21 +821,21 @@ namespace TripleMerge
                 mergeResults[nextLevelItemId] = tobeMergeItems.Count;
                 tobeMergeItems.Clear();
             }
-            
+
             return nextLevelItemId;
         }
-        
+
         /// <summary>
         /// 生成下一级物品
         /// </summary>
         /// <returns>生成的物品ID</returns>
-        private int GenerateNextLevelItems(MergeChain targetChain, int currentItemId, int count, 
+        private int GenerateNextLevelItems(MergeChain targetChain, int currentItemId, int count,
             List<MergeableObject> targetList, HashSet<int> unlockNewItems)
         {
             // 获取下一级物品配置
             int currentIndex = targetChain.Chain.IndexOf(currentItemId);
             var nextLevelItemCfg = TripleMergeConfigManager.Instance.GetItemConfig(targetChain.Chain[currentIndex + 1]);
-            
+
             // 生成物品
             for (int i = 0; i < count; i++)
             {
@@ -843,21 +845,21 @@ namespace TripleMerge
                 nextLevelItem.transform.position = new Vector3(transform.position.x, transform.position.y, nextLevelItem.transform.position.z);
                 targetList.Add(nextLevelItem);
             }
-            
+
             return nextLevelItemCfg.Id;
         }
 
         /// <summary>
         /// 放置合并后的物品
         /// </summary>
-        private void PlaceMergedItems(List<MergeableObject> afterMergeItems,Vector3 cellPosition)
+        private void PlaceMergedItems(List<MergeableObject> afterMergeItems, Vector3 cellPosition)
         {
             foreach (var item in afterMergeItems)
             {
                 // 查找最近的空单元格
                 var nearestEmptyCells = ListPool<MergeableCell>.Get();
                 FindNearestEmptyCells(1, ref nearestEmptyCells);
-                
+
                 if (nearestEmptyCells.Count > 0)
                 {
                     // 放置物品
@@ -881,7 +883,7 @@ namespace TripleMerge
                     // 没有空单元格，回收物品
                     OnCellObjectPool.Recycle(item);
                 }
-                
+
                 ListPool<MergeableCell>.Release(nearestEmptyCells);
             }
         }
@@ -1057,7 +1059,7 @@ namespace TripleMerge
                     {
                         return false;
                     }
-                    
+
                     // 检查物品ID是否与参考物品相同（只有相同物品才能合成）
                     if (cell._placeableItem.CfgData.Id != referenceItem.CfgData.Id)
                     {
@@ -1119,29 +1121,73 @@ namespace TripleMerge
         {
             // 设置 Gizmos 颜色为绿色
             Gizmos.color = Color.green;
-            
+
             // 获取当前对象的位置
             Vector3 position = transform.position;
-            
+
             // 在场景视图中绘制一个小球体标记位置
             Gizmos.DrawSphere(position, 0.1f);
-            
+
             // 使用 UnityEditor.Handles 绘制文本
             Handles.color = Color.yellow;
-            
+
             // 计算文本位置（稍微偏上一点）
             Vector3 textPosition = position + Vector3.up * 0.3f;
             Vector3 textPosition2 = position + Vector3.up * 0.4f;
-            
+
             // 绘制坐标文本
             Handles.Label(textPosition, $"({MapCoordinate.x}, {MapCoordinate.y})");
-            if(PlacedItem != null)
+            if (PlacedItem != null)
             {
                 GUIStyle style = new GUIStyle();
                 style.normal.textColor = Color.red;
                 style.fontSize = 12;
                 style.fontStyle = FontStyle.Bold;
                 Handles.Label(textPosition2, $"GUID: {PlacedItem.GUID}", style);
+            }
+            if (Application.isPlaying) return;
+
+            // 绘制所属区域ID（左侧）
+            if (BelongRegionId > 0)
+            {
+                Vector3 regionIdPosition = position + Vector3.left * 0.7f;
+                GUIStyle regionStyle = new GUIStyle();
+                regionStyle.fontSize = 12;
+                regionStyle.fontStyle = FontStyle.Bold;
+                if (BelongRegionId == 1)
+                {
+                    regionStyle.normal.textColor = Color.gray;
+                    Handles.Label(regionIdPosition, "初始区域", regionStyle);
+                }
+                else
+                {
+                    regionStyle.normal.textColor = Color.cyan;
+                    Handles.Label(regionIdPosition, $"区域: {BelongRegionId}", regionStyle);
+                }
+            }
+
+            // 绘制所需净化值（右侧）
+            if (RequiredPurifiedNum > 0)
+            {
+                Vector3 purifyValuePosition = position + Vector3.right * 0.3f;
+                GUIStyle purifyStyle = new GUIStyle();
+                purifyStyle.normal.textColor = Color.magenta;
+                purifyStyle.fontSize = 12;
+                purifyStyle.fontStyle = FontStyle.Bold;
+                purifyStyle.alignment = TextAnchor.MiddleRight;
+                Handles.Label(purifyValuePosition, $"净化值: {RequiredPurifiedNum}", purifyStyle);
+            }
+
+            // 绘制净化优先级（下方）
+            if (PurifiedPriority > 0)
+            {
+                Vector3 priorityPosition = position + Vector3.down * 0.3f;
+                GUIStyle priorityStyle = new GUIStyle();
+                priorityStyle.normal.textColor = Color.green;
+                priorityStyle.alignment = TextAnchor.MiddleCenter;
+                priorityStyle.fontSize = 12;
+                priorityStyle.fontStyle = FontStyle.Bold;
+                Handles.Label(priorityPosition, $"优先级: {PurifiedPriority}", priorityStyle);
             }
         }
 #endif
