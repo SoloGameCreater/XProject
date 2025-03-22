@@ -168,6 +168,7 @@ namespace TripleMerge.Editor
         private void PrepareRegionObject()
         {
             // 移除已存在的区域对象
+            _regionObj = GameObject.Find("Region");
             if (_regionObj != null)
             {
                 DestroyImmediate(_regionObj);

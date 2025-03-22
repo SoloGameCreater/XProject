@@ -1559,8 +1559,8 @@
             "value": {
                 "belongRegionId": 2,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 1,
+                "requiredPurifiedNum": 10,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     5,
@@ -1573,8 +1573,8 @@
             "value": {
                 "belongRegionId": 2,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 1,
+                "requiredPurifiedNum": 10,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     5,
@@ -1587,8 +1587,8 @@
             "value": {
                 "belongRegionId": 2,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 2,
+                "requiredPurifiedNum": 10,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     5,
@@ -1601,8 +1601,8 @@
             "value": {
                 "belongRegionId": 2,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 2,
+                "requiredPurifiedNum": 10,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     5,
@@ -1699,8 +1699,8 @@
             "value": {
                 "belongRegionId": 2,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 3,
+                "requiredPurifiedNum": 10,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     6,
@@ -1713,8 +1713,8 @@
             "value": {
                 "belongRegionId": 2,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 3,
+                "requiredPurifiedNum": 10,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     6,
@@ -1727,8 +1727,8 @@
             "value": {
                 "belongRegionId": 2,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 3,
+                "requiredPurifiedNum": 30,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     6,
@@ -1741,8 +1741,8 @@
             "value": {
                 "belongRegionId": 2,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 4,
+                "requiredPurifiedNum": 30,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     6,
