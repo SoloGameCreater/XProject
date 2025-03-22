@@ -34,6 +34,10 @@ namespace TripleMerge
         {
             cellData.State = statusValue;
         }
+        public void SetCellPurificationValue(SaveFileTripleMergeCellData cellData, int value)
+        {
+            cellData.PurificationValue = value;
+        }
 
         /// <summary>
         /// 通过ID获取合成物

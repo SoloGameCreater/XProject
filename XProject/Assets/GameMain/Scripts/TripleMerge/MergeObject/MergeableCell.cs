@@ -68,6 +68,7 @@ namespace TripleMerge
 
         // 当前净化值
         public int CurrentPurificationNum { private set; get; }
+        public int LackOfPurificationNum => RequiredPurifiedNum - CurrentPurificationNum;
 #if UNITY_EDITOR
         [LabelText("净化优先级")]
 #endif
@@ -265,7 +266,7 @@ namespace TripleMerge
             if (item.BelongCell != null)
             {
 #if UNITY_EDITOR
-                DebugUtil.Log($"Clear placed item {item.GUID} belong cell: {item.BelongCell.MapCoordinate}");
+                //DebugUtil.Log($"Clear placed item {item.GUID} belong cell: {item.BelongCell.MapCoordinate}");
 #endif
                 var oldCell = item.BelongCell;
                 item.BelongCell = null;  // 先断开引用防止循环
@@ -308,7 +309,7 @@ namespace TripleMerge
             {
 
 #if UNITY_EDITOR
-                DebugUtil.Log($"{item.GUID} Placed to cell: {MapCoordinate}");
+                //DebugUtil.Log($"{item.GUID} Placed to cell: {MapCoordinate}");
 #endif
                 // 5. 处理放置逻辑
                 onPlacedAction?.Invoke();
@@ -366,7 +367,7 @@ namespace TripleMerge
             if (takeOffItem != null && takeOffItem.BelongCell != null)
             {
 #if UNITY_EDITOR
-                DebugUtil.Log($"item {takeOffItem.GUID} 从 :{takeOffItem.BelongCell.MapCoordinate} 被挤走");
+                //DebugUtil.Log($"item {takeOffItem.GUID} 从 :{takeOffItem.BelongCell.MapCoordinate} 被挤走");
 #endif
                 // 因为老的物品是从该地块被挤出去的，所以这时其实原本的地块已经有了新的物品了，就应该先清除老物品的地块信息，以免地块物品信息被错误清除
                 takeOffItem.BelongCell = null;
@@ -388,7 +389,7 @@ namespace TripleMerge
                     {
                         nearestEmptyCells[0].PlaceItem(displacedItem);
 #if UNITY_EDITOR
-                        DebugUtil.Log($"item {displacedItem.GUID} 被放置到 :{nearestEmptyCells[0].MapCoordinate}");
+                        //DebugUtil.Log($"item {displacedItem.GUID} 被放置到 :{nearestEmptyCells[0].MapCoordinate}");
 #endif
                     }
                     else
@@ -526,7 +527,7 @@ namespace TripleMerge
                 var continuousCnt = continuousCell.Count;
                 if (continuousCnt >= 3)
                 {
-                    DebugUtil.Log($"三合开始");
+                    //DebugUtil.Log($"三合开始");
 
                     // 能够进行合成的情况，先进行合成计算，合成完毕后，再对合成完毕后的合成物进行新的位置分配
                     DoMerge(ref continuousCell, (finalMergeItemId, mergeResult) =>
@@ -546,7 +547,7 @@ namespace TripleMerge
 
         private void OnMergeCompleted(int finalMergeItemId, Dictionary<int, int> mergeResult, Action<int> onFinish)
         {
-            DebugUtil.Log($"三合完成");
+            //DebugUtil.Log($"三合完成");
             StartCoroutine(DelayedKeepMerge(finalMergeItemId, onFinish));
         }
 
@@ -706,7 +707,8 @@ namespace TripleMerge
                 DictionaryPool<int, int>.Release(mergeResults);
             }
         }
-
+        // 生成净化能量
+        private const int PureNumBase = 10;
         /// <summary>
         /// 执行合并计算逻辑
         /// </summary>
@@ -728,6 +730,13 @@ namespace TripleMerge
             {
                 finalMergeItemId = MergeItemsBatch(tobeMergeItems, targetChain, mergeBaseItem,
                     mergeResults, unlockNewItems, afterMergeItems);
+                // 计算合成后下一级物品的数量
+                var nextLevelItemNumAfterMerge = tobeMergeItems.Count / 3;
+                // 生成净化能量
+                for (int i = 0; i < nextLevelItemNumAfterMerge; i++)
+                {
+                    TripleMergeSystem.Instance.Gameplay.MapManager.MapArea.ProducePurification(PureNumBase, transform.position, true);
+                }
 
                 // 更新基础物品为新生成的物品
                 if (tobeMergeItems.Count >= 3)
@@ -1069,7 +1078,98 @@ namespace TripleMerge
                 }
             }
         }
+        // 添加净化值
+        public bool AddPurification(int randomPurificationNum)
+        {
+            CurrentPurificationNum += randomPurificationNum;
 
+            if (CurrentPurificationNum > RequiredPurifiedNum)
+            {
+                CurrentPurificationNum = RequiredPurifiedNum;
+            }
+
+            var isBecomeMergeableThisTime = false;
+
+            TripleMergeSystem.Instance.Model.SetCellPurificationValue(_saveData, CurrentPurificationNum);
+
+            if (CurrentPurificationNum >= RequiredPurifiedNum && CellStatus != ECellStatus.Mergeable)
+            {
+                CellStatus = ECellStatus.Mergeable;
+
+                TripleMergeSystem.Instance.Model.SetCellState(_saveData, (int) CellStatus);
+
+                isBecomeMergeableThisTime = true;
+            }
+            DebugUtil.Log($"地块 {MapCoordinate} 添加净化值：{randomPurificationNum}，当前净化值：{CurrentPurificationNum}");
+            return isBecomeMergeableThisTime;
+        }
+
+        /// <summary>
+        /// 处理净化能量到达地块时的逻辑
+        /// </summary>
+        /// <param name="isBecomeMergeableThisTime">本次净化是否使地块变为可合成状态</param>
+        /// <param name="skipAddProgress">是否跳过进度条动画</param>
+        public void OnPurificationArrive(bool isBecomeMergeableThisTime, bool skipAddProgress = true)
+        {
+            // todo 前期功能搭建，忽略进度条
+            // 如果跳过进度条动画，直接设置进度并更新状态
+            if (skipAddProgress)
+            {
+                //_unPurifiedProgressBar.SetProgress(CurrentPurificationNum);
+                OnPurificationUpdated();
+            }
+            else
+            {
+                // todo 播放净化能量落地的特效
+
+                // var aroundVfx = ThreeMergeEffectPool.Get(ThreeMergeEffectPool.VfxType.PurifyValueLanding);
+                // aroundVfx.transform.position = transform.position;
+                // aroundVfx.transform.DOScaleX(1, 0.75f).OnComplete(() => { ThreeMergeEffectPool.Recycle(aroundVfx); });
+
+                // // 更新进度条并触发更新回调
+                // _unPurifiedProgressBar.UpdateProgress(CurrentPurificationNum, OnPurificationUpdated);
+            }
+
+            // 净化更新完成后的回调函数
+            void OnPurificationUpdated()
+            {
+                // 如果本次净化使地块变为可合成状态
+                if (isBecomeMergeableThisTime)
+                {
+                    // 隐藏未净化状态的渲染器
+                    _unPurifiedRenderer.gameObject.SetActive(false);
+
+                    // 如果地块上有可合成物品，更新其状态
+                    if (PlacedItem != null && PlacedItem is MergeableObject mergeableItem)
+                    {
+                        // 取消物品的灰色状态
+                        mergeableItem.IsGray = false;
+                        // todo 销毁进度条
+                        // if (_unPurifiedProgressBar != null)
+                        // {
+                        //     DestroyImmediate(_unPurifiedProgressBar.gameObject);
+                        // }
+                        
+                    }
+
+                    // 如果未跳过进度动画，播放净化完成音效和特效
+                    // if (!skipAddProgress)
+                    // {
+                    //     ThreeMergeAudioPlayer.PlayAudioOnce("sfx_merge3_tile_purification");
+                    //     var aroundVfx = ThreeMergeEffectPool.Get(ThreeMergeEffectPool.VfxType.CellPurify);
+                    //     aroundVfx.transform.position = transform.position;
+                    //     aroundVfx.transform.DOScaleX(1, 2f).OnComplete(() => { ThreeMergeEffectPool.Recycle(aroundVfx); });
+                    // }
+
+                    // 更新碰撞器状态
+                    _cellCollider.enabled = _placeableItem == null;
+                    // 触发地块变为可合成状态的事件
+                    EventDispatcher.Instance.DispatchEventImmediately(EventEnum.TripleMergeOnCellBecomeMergeable, this);
+                    EventDispatcher.Instance.DispatchEventImmediately(EventEnum.TripleMergeOnMapContentChanged);
+
+                }
+            }
+        }
         #region input listener
 
         public void OnMouseDown()

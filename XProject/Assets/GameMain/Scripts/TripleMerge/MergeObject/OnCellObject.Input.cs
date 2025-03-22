@@ -32,7 +32,7 @@ namespace TripleMerge
             {
                 _isDragging = value;
 #if UNITY_EDITOR
-                DebugUtil.Log($"OnCellObject {GUID} Dragging {(_isDragging ? "begin" : "end")}");
+                //DebugUtil.Log($"OnCellObject {GUID} Dragging {(_isDragging ? "begin" : "end")}");
 #endif
             }
         }

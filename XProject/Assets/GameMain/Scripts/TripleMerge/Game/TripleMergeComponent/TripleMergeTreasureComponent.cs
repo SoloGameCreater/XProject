@@ -53,7 +53,6 @@ namespace TripleMerge
             // 因为宝箱会从出生位置飞行到对应的地块,所以飞行过程中提高其sortingOrder
             chestInstance.OnFlyBegin();
             
-            Debug.Log($"Generate Treasure in targetCell {targetCell.MapCoordinate}");
             // 将宝箱放置到目标地块
             targetCell.PlaceItem(chestInstance,
                 () =>

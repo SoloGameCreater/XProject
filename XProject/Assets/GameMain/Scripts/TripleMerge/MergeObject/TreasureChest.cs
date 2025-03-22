@@ -21,7 +21,7 @@ namespace TripleMerge
 
         protected override void OnRecycle()
         {
-            DebugUtil.Log(" 宝箱回收 ");
+            
         }
 
         protected override void OnSelect()
