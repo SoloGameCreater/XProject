@@ -82,10 +82,11 @@ namespace SaveFile
             // 读取存档
             if (PlayerPrefs.HasKey(SaveFileKey))
             {
-                byte[] encryptData = System.Convert.FromBase64String(PlayerPrefs.GetString(SaveFileKey));
+                var saveFileKey = PlayerPrefs.GetString(SaveFileKey);
+                byte[] encryptData = System.Convert.FromBase64String(saveFileKey);
                 var jsonData = RijndaelEncryptionManager.Instance.Decrypt(encryptData);
 #if UNITY_EDITOR
-                DebugUtil.LogWarning(" read storage json from local : " + jsonData);
+                DebugUtil.LogWarning(" read storage json from local : " + jsonData + "saveFileKey : " + saveFileKey);
 #endif
                 FromJson(jsonData);
             }
@@ -99,10 +100,11 @@ namespace SaveFile
             // 读取本地存档版本
             if (PlayerPrefs.HasKey(LocalVersionKey))
             {
-                string strVersion = RijndaelEncryptionManager.Instance.Decrypt(System.Convert.FromBase64String(PlayerPrefs.GetString(LocalVersionKey)));
+                var versionKey = PlayerPrefs.GetString(LocalVersionKey);
+                string strVersion = RijndaelEncryptionManager.Instance.Decrypt(System.Convert.FromBase64String(versionKey));
                 LocalVersion = ulong.Parse(strVersion);
 #if UNITY_EDITOR
-                DebugUtil.LogWarning(" read local version : " + LocalVersion);
+                DebugUtil.LogWarning(" read local version : " + LocalVersion + "versionKey : " + versionKey);
 #endif
             }
             else

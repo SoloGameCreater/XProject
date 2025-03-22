@@ -728,8 +728,6 @@ namespace TripleMerge
             // 执行合并循环
             while (tobeMergeItems.Count >= 3)
             {
-                finalMergeItemId = MergeItemsBatch(tobeMergeItems, targetChain, mergeBaseItem,
-                    mergeResults, unlockNewItems, afterMergeItems);
                 // 计算合成后下一级物品的数量
                 var nextLevelItemNumAfterMerge = tobeMergeItems.Count / 3;
                 // 生成净化能量
@@ -737,7 +735,9 @@ namespace TripleMerge
                 {
                     TripleMergeSystem.Instance.Gameplay.MapManager.MapArea.ProducePurification(PureNumBase, transform.position, true);
                 }
-
+                finalMergeItemId = MergeItemsBatch(tobeMergeItems, targetChain, mergeBaseItem,
+                    mergeResults, unlockNewItems, afterMergeItems);
+                
                 // 更新基础物品为新生成的物品
                 if (tobeMergeItems.Count >= 3)
                 {
