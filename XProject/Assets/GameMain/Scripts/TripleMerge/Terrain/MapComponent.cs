@@ -149,32 +149,40 @@ namespace TripleMerge
             {
                 // 按净化优先级排序
                 unPurifiedCells.Sort((left, right) => left.PurifiedPriority - right.PurifiedPriority);
-                var lackNum = 0;
-                var highPriority = unPurifiedCells[0].PurifiedPriority;
-                var lastCellIndex = 0;
+                // 获取最高优先级
+                int highestPriority = unPurifiedCells[0].PurifiedPriority;
+                int totalPurificationNeeded = 0;
+                int lastValidIndex = 0;
 
-                // 遍历格子，计算所需净化值并筛选同优先级的格子
+                // 遍历所有未净化的格子，计算所需净化值并筛选同优先级的格子
                 for (var i = 0; i < unPurifiedCells.Count; i++)
                 {
                     var cell = unPurifiedCells[i];
-                    lackNum += cell.LackOfPurificationNum;
-                    if (lackNum >= purificationNum)
+                    // 累加当前格子所需的净化值
+                    totalPurificationNeeded += cell.LackOfPurificationNum;
+                    
+                    // 如果累计所需净化值已经达到或超过目标净化值
+                    if (totalPurificationNeeded >= purificationNum)
                     {
-                        if (cell.PurifiedPriority != highPriority)
+                        // 如果当前格子的优先级与最高优先级不同，则停止遍历
+                        // 这确保了只处理相同优先级的格子
+                        if (cell.PurifiedPriority != highestPriority)
                         {
                             break;
                         }
                     }
 
-                    lastCellIndex = i;
-                    if (lastCellIndex >= maxNum - 1)
+                    // 记录最后一个有效的格子索引
+                    lastValidIndex = i;
+                    // 如果已经达到最大处理格子数量限制，则停止遍历
+                    if (lastValidIndex >= maxNum - 1)
                     {
                         break;
                     }
                 }
 
                 // 移除超出范围的格子
-                for (var i = unPurifiedCells.Count - 1; i > lastCellIndex; i--)
+                for (var i = unPurifiedCells.Count - 1; i > lastValidIndex; i--)
                 {
                     unPurifiedCells.Remove(unPurifiedCells[i]);
                 }
