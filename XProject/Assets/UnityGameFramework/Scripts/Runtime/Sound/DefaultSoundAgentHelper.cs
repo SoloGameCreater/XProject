@@ -54,7 +54,10 @@ namespace UnityGameFramework.Runtime
             }
             set
             {
-                m_AudioSource.time = value;
+                if (m_AudioSource.clip != null)
+                {
+                    m_AudioSource.time = value;
+                }
             }
         }
 

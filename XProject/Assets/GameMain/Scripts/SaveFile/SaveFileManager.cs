@@ -12,22 +12,32 @@ namespace SaveFile
     {
         const string SaveFileKey = "SaveFile";
         const string LocalVersionKey = "SSaveFileVersion";
-        
+
         Dictionary<string, SaveFileBase> storageMap;
-        
-        static Dictionary<System.Type, string> gType2Name = new ();
-        
+
+        static Dictionary<System.Type, string> gType2Name = new();
+
+        private const float localInterval = 1.0f;
+        ulong lastSavedLocalVersion;
         private ulong _localVersion;
         public ulong LocalVersion
         {
-            get;
-            set;
+            get
+            {
+                return _localVersion;
+            }
+            set
+            {
+                if (_localVersion != value)
+                {
+                    _localVersion = value;
+                    //DebugUtil.LogWarning("LocalVersion changed: " + _localVersion);
+                }
+            }
         }
-        public bool Inited
-        {
-            get;
-            private set;
-        }
+        public bool Inited { get; private set; }
+        float LocalTickTime { get; set; }
+        public bool SyncForce { get; set; }
         public T GetSaveFile<T>() where T : SaveFileBase
         {
             System.Type storage_type = typeof(T);
@@ -37,7 +47,7 @@ namespace SaveFile
                 gType2Name[storage_type] = name;
             }
 
-            return (T)storageMap[name];            
+            return (T)storageMap[name];
         }
 
         public void Init(List<SaveFileBase> storages)
@@ -64,18 +74,19 @@ namespace SaveFile
         }
         public void SaveToLocal()
         {
-            var tripleMergeSD = GetSaveFile<SaveFileTripleMerge>();
-            if (tripleMergeSD != null)
-            {
-                _localVersion -= 1;
-            }
             JsonSerializerSettings setting = new JsonSerializerSettings();
             setting.NullValueHandling = NullValueHandling.Ignore;
-            
-            string jsonData = JsonConvert.SerializeObject(storageMap,setting);
-            byte[] encryptJsonData = RijndaelEncryptionManager.Instance.Encrypt(jsonData);
-            PlayerPrefs.SetString(SaveFileKey, System.Convert.ToBase64String(encryptJsonData));
-            PlayerPrefs.SetString(LocalVersionKey, System.Convert.ToBase64String(RijndaelEncryptionManager.Instance.Encrypt(LocalVersion.ToString())));
+            foreach (var storage in storageMap.Values)
+            {
+                DebugUtil.LogWarning("SaveToLocal: " + storage.GetType().Name);
+            }
+            string jsonData = JsonConvert.SerializeObject(storageMap, setting);
+            PlayerPrefs.SetString(SaveFileKey,
+             System.Convert.ToBase64String(RijndaelEncryptionManager.Instance.Encrypt(jsonData)));
+            PlayerPrefs.SetString(LocalVersionKey,
+             System.Convert.ToBase64String(RijndaelEncryptionManager.Instance.Encrypt(LocalVersion.ToString())));
+            DebugUtil.LogWarning("SaveToLocal Version : " + LocalVersion);
+            lastSavedLocalVersion = LocalVersion;
         }
         private void ReadFromLocal()
         {
@@ -86,7 +97,7 @@ namespace SaveFile
                 byte[] encryptData = System.Convert.FromBase64String(saveFileKey);
                 var jsonData = RijndaelEncryptionManager.Instance.Decrypt(encryptData);
 #if UNITY_EDITOR
-                DebugUtil.LogWarning(" read storage json from local : " + jsonData + "saveFileKey : " + saveFileKey);
+                DebugUtil.LogWarning(" read storage json from local : " + jsonData + "  saveFileKey : " + saveFileKey);
 #endif
                 FromJson(jsonData);
             }
@@ -104,7 +115,7 @@ namespace SaveFile
                 string strVersion = RijndaelEncryptionManager.Instance.Decrypt(System.Convert.FromBase64String(versionKey));
                 LocalVersion = ulong.Parse(strVersion);
 #if UNITY_EDITOR
-                DebugUtil.LogWarning(" read local version : " + LocalVersion + "versionKey : " + versionKey);
+                DebugUtil.LogWarning(" read local version : " + LocalVersion + "  versionKey : " + versionKey);
 #endif
             }
             else
@@ -116,7 +127,7 @@ namespace SaveFile
             }
             _localVersion = LocalVersion;
         }
-        
+
         private void FromJson(string jsonData)
         {
             var jObj = JObject.Parse(jsonData);
@@ -133,6 +144,19 @@ namespace SaveFile
 
                 setting.NullValueHandling = NullValueHandling.Ignore;
                 JsonConvert.PopulateObject(str, storageMap[type], setting);
+            }
+        }
+        private void Update()
+        {
+            if (!Inited)
+                return;
+
+            LocalTickTime += Time.deltaTime;
+            if (SyncForce || (LocalTickTime > localInterval && LocalVersion > lastSavedLocalVersion))
+            {
+                SyncForce = false;
+                LocalTickTime = 0.0f;
+                SaveToLocal();
             }
         }
     }

@@ -17,7 +17,7 @@ namespace TripleMerge
         const string MapRootPrefabAssetName = "TripleMerge/Prefabs/MergeRoot";
         public void Init()
         {
-            TripleMergeSystem.Instance.Model.ClearData();
+            //TripleMergeSystem.Instance.Model.ClearData();
             _components.Clear();
             _components.Add(MapManager);
             _components.Add(CameraInputManager);
