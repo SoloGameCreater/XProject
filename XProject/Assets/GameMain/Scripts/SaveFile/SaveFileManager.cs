@@ -76,16 +76,11 @@ namespace SaveFile
         {
             JsonSerializerSettings setting = new JsonSerializerSettings();
             setting.NullValueHandling = NullValueHandling.Ignore;
-            foreach (var storage in storageMap.Values)
-            {
-                DebugUtil.LogWarning("SaveToLocal: " + storage.GetType().Name);
-            }
             string jsonData = JsonConvert.SerializeObject(storageMap, setting);
             PlayerPrefs.SetString(SaveFileKey,
              System.Convert.ToBase64String(RijndaelEncryptionManager.Instance.Encrypt(jsonData)));
             PlayerPrefs.SetString(LocalVersionKey,
              System.Convert.ToBase64String(RijndaelEncryptionManager.Instance.Encrypt(LocalVersion.ToString())));
-            DebugUtil.LogWarning("SaveToLocal Version : " + LocalVersion);
             lastSavedLocalVersion = LocalVersion;
         }
         private void ReadFromLocal()
@@ -96,9 +91,6 @@ namespace SaveFile
                 var saveFileKey = PlayerPrefs.GetString(SaveFileKey);
                 byte[] encryptData = System.Convert.FromBase64String(saveFileKey);
                 var jsonData = RijndaelEncryptionManager.Instance.Decrypt(encryptData);
-#if UNITY_EDITOR
-                DebugUtil.LogWarning(" read storage json from local : " + jsonData + "  saveFileKey : " + saveFileKey);
-#endif
                 FromJson(jsonData);
             }
             else
@@ -114,9 +106,6 @@ namespace SaveFile
                 var versionKey = PlayerPrefs.GetString(LocalVersionKey);
                 string strVersion = RijndaelEncryptionManager.Instance.Decrypt(System.Convert.FromBase64String(versionKey));
                 LocalVersion = ulong.Parse(strVersion);
-#if UNITY_EDITOR
-                DebugUtil.LogWarning(" read local version : " + LocalVersion + "  versionKey : " + versionKey);
-#endif
             }
             else
             {

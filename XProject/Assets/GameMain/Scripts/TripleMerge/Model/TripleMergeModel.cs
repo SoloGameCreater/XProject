@@ -94,9 +94,11 @@ namespace TripleMerge
                 TryUnlockMergeableItemAndNotify(itemData.ItemId);
             }
 
-            var itemDataCopy = new SaveFileTripleMergeItemData();
-            itemDataCopy.ItemId = itemData.ItemId;
-            return itemData;
+            var itemDataCopy = new SaveFileTripleMergeItemData
+            {
+                ItemId = itemData.ItemId
+            };
+            return itemDataCopy;
         }
 
         public SaveFileTripleMergeItemData GetCellPlacedItem(SaveFileTripleMergeCellData storageData)

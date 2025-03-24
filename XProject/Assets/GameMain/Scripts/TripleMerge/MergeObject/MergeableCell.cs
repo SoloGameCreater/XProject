@@ -268,11 +268,9 @@ namespace TripleMerge
 #if UNITY_EDITOR
                 //DebugUtil.Log($"Clear placed item {item.GUID} belong cell: {item.BelongCell.MapCoordinate}");
 #endif
-                var oldCell = item.BelongCell;
-                item.BelongCell = null;  // 先断开引用防止循环
-                if (oldCell.PlacedItem == item)
+                if (item.BelongCell.PlacedItem == item)
                 {
-                    oldCell.SetPlacedItem(null);
+                    item.BelongCell.SetPlacedItem(null);
                 }
             }
 
