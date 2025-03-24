@@ -1,14 +1,17 @@
 using System.Collections.Generic;
 using Config.TripleMerge;
+using SaveFile;
 using SaveFile.TripleMerge;
 
 namespace TripleMerge
 {
     public class TripleMergeModel
     {
-        public SaveFileTripleMerge SaveFileTripleMerge { get; } = new();
+        public SaveFileTripleMerge SaveFileTripleMerge => SaveFileManager.Instance.GetSaveFile<SaveFileTripleMerge>();
+        
         private readonly List<int> _unlockedMergeableItems = new();
         public IReadOnlyList<int> UnlockedMergeableItems => _unlockedMergeableItems;
+
         public void ClearData()
         {
             SaveFileTripleMerge.Clear();
@@ -34,6 +37,7 @@ namespace TripleMerge
         {
             cellData.State = statusValue;
         }
+
         public void SetCellPurificationValue(SaveFileTripleMergeCellData cellData, int value)
         {
             cellData.PurificationValue = value;
@@ -69,7 +73,7 @@ namespace TripleMerge
         {
             var item = cellData.PlacedItem;
             item.ItemId = itemId;
-            
+
             if (cellData.State == 1)
             {
                 TryUnlockMergeableItemAndNotify(itemId);
@@ -79,11 +83,12 @@ namespace TripleMerge
             itemData.ItemId = itemId;
             return itemData;
         }
+
         public SaveFileTripleMergeItemData SetCellPlaceItem(SaveFileTripleMergeCellData cellData, SaveFileTripleMergeItemData itemData)
         {
             var item = cellData.PlacedItem;
             item.ItemId = itemData.ItemId;
-            
+
             if (cellData.State == 1)
             {
                 TryUnlockMergeableItemAndNotify(itemData.ItemId);
@@ -93,12 +98,19 @@ namespace TripleMerge
             itemDataCopy.ItemId = itemData.ItemId;
             return itemData;
         }
+
         public SaveFileTripleMergeItemData GetCellPlacedItem(SaveFileTripleMergeCellData storageData)
         {
             var copyModel = new SaveFileTripleMergeItemData();
             copyModel.ItemId = storageData.PlacedItem.ItemId;
 
             return copyModel;
+        }
+        
+        public void ClearCellPlaceItem(SaveFileTripleMergeCellData cellData)
+        {
+            cellData.PlacedItemId = 0;
+            cellData.PlacedItem.ItemId = 0;
         }
 
         public void AddTreasureChestOpenTimes()
@@ -110,6 +122,7 @@ namespace TripleMerge
         {
             return SaveFileTripleMerge.OpenChestTimes;
         }
+
         public void LoadUnlockMergeableItems()
         {
             _unlockedMergeableItems.Clear();
@@ -152,12 +165,13 @@ namespace TripleMerge
 
         private void TryUnlockMergeableItemAndNotify(int itemId)
         {
-            if (TripleMergeConfigManager.Instance.GetItemConfig(itemId) != null 
-                && !_unlockedMergeableItems.Contains(itemId))
+            if (TripleMergeConfigManager.Instance.GetItemConfig(itemId) != null
+             && !_unlockedMergeableItems.Contains(itemId))
             {
                 AddUnlockMergeableItems(itemId);
             }
         }
+
         private void SetUnlockMergeableItemAndNotify(int itemId)
         {
             SaveFileTripleMerge.UnlockedMergeableItems[SaveFileTripleMerge.UnlockedMergeableItems.Count] = itemId;

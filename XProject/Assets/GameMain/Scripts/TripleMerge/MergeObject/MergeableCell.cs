@@ -366,6 +366,7 @@ namespace TripleMerge
             var takeOffItem = _placeableItem;
             if (takeOffItem != null && takeOffItem.BelongCell != null)
             {
+                TripleMergeSystem.Instance.Model.ClearCellPlaceItem(takeOffItem.BelongCell._saveData);
 #if UNITY_EDITOR
                 //DebugUtil.Log($"item {takeOffItem.GUID} 从 :{takeOffItem.BelongCell.MapCoordinate} 被挤走");
 #endif
@@ -384,7 +385,7 @@ namespace TripleMerge
                 foreach (var displacedItem in displacedItems)
                 {
                     FindNearestEmptyCells(1, ref nearestEmptyCells);
-
+                    TripleMergeSystem.Instance.Model.ClearCellPlaceItem(displacedItem.BelongCell._saveData);
                     if (nearestEmptyCells.Count > 0)
                     {
                         nearestEmptyCells[0].PlaceItem(displacedItem);
@@ -480,31 +481,12 @@ namespace TripleMerge
             }
         }
 
-        private int Partition(List<MergeableCell> cells, int left, int right)
-        {
-            var pivot = cells[right];
-            var pivotDistance = Vector2.Distance(pivot.transform.position, transform.position);
-            var i = left - 1;
-
-            for (int j = left; j < right; j++)
-            {
-                var distance = Vector2.Distance(cells[j].transform.position, transform.position);
-                if (distance < pivotDistance)
-                {
-                    i++;
-                    (cells[i], cells[j]) = (cells[j], cells[i]);
-                }
-            }
-
-            (cells[i + 1], cells[right]) = (cells[right], cells[i + 1]);
-            return i + 1;
-        }
-
         public bool CanPlaceTargetSizeItem()
         {
             return CellStatus == ECellStatus.Mergeable;
         }
-        public bool TryToMerge(OnCellObject item = null, Action<int> onFinish = null)
+
+        private bool TryToMerge(OnCellObject item = null, Action<int> onFinish = null)
         {
             if (item == null)
             {

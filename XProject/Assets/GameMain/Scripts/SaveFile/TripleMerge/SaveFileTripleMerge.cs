@@ -18,6 +18,7 @@ namespace SaveFile.TripleMerge
                 if (openRegionIds != value)
                 {
                     openRegionIds = value;
+                    SaveFileManager.Instance.LocalVersion++;
                 }
             }
         }
@@ -42,6 +43,7 @@ namespace SaveFile.TripleMerge
                 if (openChestTimes != value)
                 {
                     openChestTimes = value;
+                    SaveFileManager.Instance.LocalVersion++;
                 }
             }
         }

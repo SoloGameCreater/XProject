@@ -19,6 +19,7 @@ namespace SaveFile.TripleMerge
                 if(itemId != value)
                 {
                     itemId = value;
+                    SaveFileManager.Instance.LocalVersion++;
                 }
             }
         }

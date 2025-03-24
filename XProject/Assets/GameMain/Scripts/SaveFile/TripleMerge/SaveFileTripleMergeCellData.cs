@@ -11,12 +11,13 @@ namespace SaveFile.TripleMerge
         [JsonIgnore]
         public int State
         {
-            get { return state; }
+            get => state;
             set
             {
                 if (state != value)
                 {
                     state = value;
+                    SaveFileManager.Instance.LocalVersion++;
                 }
             }
         }
@@ -27,12 +28,13 @@ namespace SaveFile.TripleMerge
         [JsonIgnore]
         public int PlacedItemId
         {
-            get { return placedItemId; }
+            get => placedItemId;
             set
             {
                 if (placedItemId != value)
                 {
                     placedItemId = value;
+                    SaveFileManager.Instance.LocalVersion++;
                 }
             }
         }
@@ -62,6 +64,7 @@ namespace SaveFile.TripleMerge
                 if(purificationValue != value)
                 {
                     purificationValue = value;
+                    SaveFileManager.Instance.LocalVersion++;
                 }
             }
         }
