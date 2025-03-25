@@ -265,13 +265,11 @@ namespace TripleMerge
             // 先清除其原本的地块信息
             if (item.BelongCell != null)
             {
-#if UNITY_EDITOR
-                //DebugUtil.Log($"Clear placed item {item.GUID} belong cell: {item.BelongCell.MapCoordinate}");
-#endif
-                if (item.BelongCell.PlacedItem == item)
+                if (item.BelongCell.PlacedItem != null && item.BelongCell.PlacedItem == item)
                 {
-                    item.BelongCell.SetPlacedItem(null);
+                    item.BelongCell.PlaceItem(null);
                 }
+                item.BelongCell = null;
             }
 
             // 绑定地块和Item的关系
@@ -305,10 +303,6 @@ namespace TripleMerge
 
             void OnItemPlaced()
             {
-
-#if UNITY_EDITOR
-                //DebugUtil.Log($"{item.GUID} Placed to cell: {MapCoordinate}");
-#endif
                 // 5. 处理放置逻辑
                 onPlacedAction?.Invoke();
 
@@ -364,10 +358,7 @@ namespace TripleMerge
             var takeOffItem = _placeableItem;
             if (takeOffItem != null && takeOffItem.BelongCell != null)
             {
-                TripleMergeSystem.Instance.Model.ClearCellPlaceItem(takeOffItem.BelongCell._saveData);
-#if UNITY_EDITOR
                 //DebugUtil.Log($"item {takeOffItem.GUID} 从 :{takeOffItem.BelongCell.MapCoordinate} 被挤走");
-#endif
                 // 因为老的物品是从该地块被挤出去的，所以这时其实原本的地块已经有了新的物品了，就应该先清除老物品的地块信息，以免地块物品信息被错误清除
                 takeOffItem.BelongCell = null;
             }
@@ -383,13 +374,11 @@ namespace TripleMerge
                 foreach (var displacedItem in displacedItems)
                 {
                     FindNearestEmptyCells(1, ref nearestEmptyCells);
-                    TripleMergeSystem.Instance.Model.ClearCellPlaceItem(displacedItem.BelongCell._saveData);
                     if (nearestEmptyCells.Count > 0)
                     {
                         nearestEmptyCells[0].PlaceItem(displacedItem);
-#if UNITY_EDITOR
+
                         //DebugUtil.Log($"item {displacedItem.GUID} 被放置到 :{nearestEmptyCells[0].MapCoordinate}");
-#endif
                     }
                     else
                     {
