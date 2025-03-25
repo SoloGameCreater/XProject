@@ -152,9 +152,9 @@ namespace TripleMerge
         // 使用可配置的延迟值
         private const float MERGE_DELAY = 0.035f;
 
-        public void Initialize(MergeableRegion hostRegion)
+        public void Initialize(MergeableRegion belongRegion)
         {
-            BelongRegion = hostRegion;
+            BelongRegion = belongRegion;
 
             _cellCollider = transform.GetComponent<PolygonCollider2D>();
 
@@ -475,11 +475,14 @@ namespace TripleMerge
 
         private bool TryToMerge(OnCellObject item = null, Action<int> onFinish = null)
         {
+            var isCombo = false;
             if (item == null)
             {
                 item = PlacedItem;
+                isCombo = true;
             }
-
+            if(isCombo)
+                DebugUtil.Log("产生了一次连击");
             if (item is not MergeableObject mergeableObject)
             {
                 return false;
@@ -496,8 +499,6 @@ namespace TripleMerge
                 var continuousCnt = continuousCell.Count;
                 if (continuousCnt >= 3)
                 {
-                    //DebugUtil.Log($"三合开始");
-
                     // 能够进行合成的情况，先进行合成计算，合成完毕后，再对合成完毕后的合成物进行新的位置分配
                     DoMerge(ref continuousCell, (finalMergeItemId, mergeResult) =>
                         OnMergeCompleted(finalMergeItemId, mergeResult, onFinish));
@@ -523,14 +524,7 @@ namespace TripleMerge
         private IEnumerator DelayedKeepMerge(int finalMergeItemId, Action<int> onFinish)
         {
             yield return new WaitForSeconds(MERGE_DELAY);
-
-            // 检查对象是否仍然有效
-            if (this == null || !gameObject.activeInHierarchy)
-            {
-                TripleMergeSystem.Instance.Gameplay.MapManager.IsMerging = false;
-                yield break;
-            }
-
+            
             ProcessAfterMerge(finalMergeItemId, onFinish);
         }
 
@@ -543,8 +537,12 @@ namespace TripleMerge
                 return;
             }
 
-            // 使用迭代而非递归方式处理连续合成
-            StartCoroutine(ContinuousMergeCoroutine(finalMergeItemId, onFinish));
+            if (!TryToMerge(null, onFinish))
+            {
+                onFinish?.Invoke(finalMergeItemId);
+                // 检查是否是最高级物品
+                CheckAndHandleMaxLevelItem();
+            }
         }
 
         private bool CheckAndHandleMaxLevelItem()
@@ -571,27 +569,6 @@ namespace TripleMerge
 
             return false;
         }
-
-        private IEnumerator ContinuousMergeCoroutine(int finalMergeItemId, Action<int> onFinish)
-        {
-            bool canContinue = true;
-            int currentMergeItemId = finalMergeItemId;
-
-            while (canContinue)
-            {
-                canContinue = TryToMerge(null, null);
-
-                if (!canContinue)
-                {
-                    onFinish?.Invoke(currentMergeItemId);
-                    CheckAndHandleMaxLevelItem();
-                    break;
-                }
-
-                yield return new WaitForSeconds(MERGE_DELAY);
-            }
-        }
-
 
         private const float BeforeMergePerformDuration = 0.15f;
         private const float AfterMergePerformDuration = 0.15f;
@@ -841,7 +818,7 @@ namespace TripleMerge
                 if (nearestEmptyCells.Count > 0)
                 {
                     // 放置物品
-                    nearestEmptyCells[0].PlaceItem(item);
+                    nearestEmptyCells[0].PlaceItem(item,null,null,false);
                     // 播放物品出现动画
                     //if (!skipMergeProgress)
                     {
