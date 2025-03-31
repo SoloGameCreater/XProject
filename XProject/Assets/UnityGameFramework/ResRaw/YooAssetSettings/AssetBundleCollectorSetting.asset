@@ -89,7 +89,7 @@ MonoBehaviour:
       Collectors: []
     - GroupName: TripleMerge
       GroupDesc: 
-      AssetTags: 
+      AssetTags: BASE_RES
       ActiveRuleName: EnableGroup
       Collectors:
       - CollectPath: Assets/ExtraRes/TripleMerge
