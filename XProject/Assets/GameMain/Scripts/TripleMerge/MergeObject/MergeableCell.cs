@@ -809,6 +809,47 @@ namespace TripleMerge
         /// </summary>
         private void PlaceMergedItems(List<MergeableObject> afterMergeItems, Vector3 cellPosition)
         {
+            // 确保最高级物品放置在当前格子
+            if (afterMergeItems.Count > 0)
+            {
+                // 找出最高级物品
+                MergeableObject highestLevelItem = afterMergeItems[0];
+                foreach (var item in afterMergeItems)
+                {
+                    if (item.CfgData.ChainId == highestLevelItem.CfgData.ChainId)
+                    {
+                        var highestChain = TripleMergeConfigManager.Instance.GetChainConfig(highestLevelItem.CfgData.ChainId);
+                        var itemChain = TripleMergeConfigManager.Instance.GetChainConfig(item.CfgData.ChainId);
+                        
+                        int highestIndex = highestChain.Chain.IndexOf(highestLevelItem.CfgData.Id);
+                        int itemIndex = itemChain.Chain.IndexOf(item.CfgData.Id);
+                        
+                        if (itemIndex > highestIndex)
+                        {
+                            highestLevelItem = item;
+                        }
+                    }
+                }
+                
+                // 从列表中移除最高级物品
+                afterMergeItems.Remove(highestLevelItem);
+                
+                // 在当前格子放置最高级物品
+                PlaceItem(highestLevelItem, null, null, false);
+                
+                // 播放物品出现动画
+                var originColor = highestLevelItem.ItemRenderer.color;
+                originColor.a = 0;
+                highestLevelItem.ItemRenderer.color = originColor;
+                var itemTransform = highestLevelItem.transform;
+                itemTransform.localScale = Vector3.zero;
+                itemTransform.position = new Vector3(cellPosition.x, cellPosition.y, itemTransform.position.z);
+                itemTransform.DOLocalMove(new Vector3(0, 0, itemTransform.position.z), AfterMergePerformDuration).SetEase(Ease.OutCubic).SetAutoKill(true);
+                itemTransform.DOScale(1, AfterMergePerformDuration).SetEase(Ease.OutCubic).SetAutoKill(true);
+                highestLevelItem.ItemRenderer.DOFade(1, AfterMergePerformDuration).SetEase(Ease.OutCubic).SetAutoKill(true);
+            }
+
+            // 处理剩余物品
             foreach (var item in afterMergeItems)
             {
                 // 查找最近的空单元格
@@ -880,8 +921,8 @@ namespace TripleMerge
                 }
             }
 
-            // 递归查询相邻格子
-            QueryCell(this);
+            // 递归查询相邻格子，增加搜索深度和范围
+            QueryCell(this, 0, 3); // 增加了一个深度参数，限制搜索深度为3
 
             HashSetPool<MergeableCell>.Release(queriedCells);
 
@@ -943,10 +984,10 @@ namespace TripleMerge
 
             return _continuousCellsQueryResult;
 
-            // 递归查询相邻格子的函数
-            void QueryCell(MergeableCell queryCell)
+            // 递归查询相邻格子的函数，增加了深度限制
+            void QueryCell(MergeableCell queryCell, int depth, int maxDepth)
             {
-                if (queriedCells.Contains(queryCell))
+                if (queriedCells.Contains(queryCell) || depth >= maxDepth)
                 {
                     return;
                 }
@@ -954,13 +995,38 @@ namespace TripleMerge
                 queriedCells.Add(queryCell);
 
                 // 查询上下左右四个方向的相邻格子
-                QueryContinuousCell(queryCell.Left);
-                QueryContinuousCell(queryCell.Right);
-                QueryContinuousCell(queryCell.Above);
-                QueryContinuousCell(queryCell.Below);
+                QueryContinuousCell(queryCell.Left, depth + 1);
+                QueryContinuousCell(queryCell.Right, depth + 1);
+                QueryContinuousCell(queryCell.Above, depth + 1);
+                QueryContinuousCell(queryCell.Below, depth + 1);
+                
+                // 增加斜对角方向的查询
+                if(depth < 1) // 只在第一层检查斜对角
+                {
+                    // 检查左上角
+                    if(queryCell.Left != null && queryCell.Left.Above != null)
+                    {
+                        QueryContinuousCell(queryCell.Left.Above, depth + 2);
+                    }
+                    // 检查右上角
+                    if(queryCell.Right != null && queryCell.Right.Above != null)
+                    {
+                        QueryContinuousCell(queryCell.Right.Above, depth + 2);
+                    }
+                    // 检查左下角
+                    if(queryCell.Left != null && queryCell.Left.Below != null)
+                    {
+                        QueryContinuousCell(queryCell.Left.Below, depth + 2);
+                    }
+                    // 检查右下角
+                    if(queryCell.Right != null && queryCell.Right.Below != null)
+                    {
+                        QueryContinuousCell(queryCell.Right.Below, depth + 2);
+                    }
+                }
 
                 // 检查相邻格子是否可合成
-                void QueryContinuousCell(MergeableCell continuousCell)
+                void QueryContinuousCell(MergeableCell continuousCell, int newDepth)
                 {
                     if (IsTargetCellMergeable(continuousCell))
                     {
@@ -971,7 +1037,7 @@ namespace TripleMerge
                                 _continuousCellsQueryResult.Add(mergeableObject);
                             }
 
-                            QueryCell(continuousCell);
+                            QueryCell(continuousCell, newDepth, maxDepth);
                         }
                     }
                 }
