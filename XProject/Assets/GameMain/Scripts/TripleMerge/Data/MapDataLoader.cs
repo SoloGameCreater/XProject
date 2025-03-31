@@ -37,7 +37,6 @@ namespace TripleMerge
         /// <summary>
         /// 加载地图数据
         /// </summary>
-        /// <param name="mapName">地图名称，默认为MapData</param>
         /// <returns>是否加载成功</returns>
         public bool LoadMapData()
         {

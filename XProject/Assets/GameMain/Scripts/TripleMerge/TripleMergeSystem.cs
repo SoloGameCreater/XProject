@@ -7,11 +7,12 @@ namespace TripleMerge
     {
         public TripleMergeGameplay Gameplay { get; private set; }
         public TripleMergeModel Model { get; } = new();
-        
+
         public void OnEnterTripleMerge()
         {
             // 加载地图数据
-            MapDataLoader.Instance.LoadMapData();
+            var loaded = MapDataLoader.Instance.LoadMapData();
+            if (!loaded) return;
 
             Gameplay = new TripleMergeGameplay();
             Gameplay.Init();
@@ -32,7 +33,7 @@ namespace TripleMerge
 
         public void LateUpdate(float deltaTime)
         {
-            Gameplay?.OnLateUpdate(deltaTime);  
+            Gameplay?.OnLateUpdate(deltaTime);
         }
 
         public void Exit()
