@@ -922,7 +922,7 @@ namespace TripleMerge
             }
 
             // 递归查询相邻格子，增加搜索深度和范围
-            QueryCell(this, 0, 3); // 增加了一个深度参数，限制搜索深度为3
+            QueryCell(this, 0, 5); // 增加了一个深度参数，限制搜索深度为5
 
             HashSetPool<MergeableCell>.Release(queriedCells);
 
