@@ -5,7 +5,8 @@
         "UnityGameFramework.Runtime",
         "HybridCLR.Editor",
         "YooAsset",
-        "YooAsset.Editor"
+        "YooAsset.Editor",
+        "UniTask"
     ],
     "includePlatforms": [
         "Editor"

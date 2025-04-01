@@ -1,5 +1,14 @@
+using System;
 using System.Threading.Tasks;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+using DebugTools;
+using Framework;
+
+#endif
+using SaveFile;
+using SaveFile.TripleMerge;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 namespace TripleMerge
@@ -8,19 +17,36 @@ namespace TripleMerge
     public class LobbyMainUI : UIView
     {
         [ComponentBinder("StartButton")] private Button _startButton;
+        [ComponentBinder("DebugBtn")] private Button _debugButton;
         public override void OnViewOpen(UIViewParam param)
         {
             base.OnViewOpen(param);
-
+            _debugButton.gameObject.SetActive(false);
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            _debugButton.gameObject.SetActive(true);
+#endif
             _startButton.onClick.AddListener(OnStartClick);
+            _debugButton.onClick.AddListener(OnDebugClick);
         }
 
         public override async Task OnViewClose()
         {
             _startButton.onClick.RemoveListener(OnStartClick);
-            base.OnViewClose();
+            _debugButton.onClick.RemoveListener(OnDebugClick);
+            await base.OnViewClose();
         }
 
+
+        private void OnDebugClick()
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            //todo debug工具弹出框
+            //UIViewSystem.Instance.Open<DebugPopup>();
+            SaveFileManager.Instance.GetSaveFile<SaveFileTripleMerge>().Clear();
+            DebugUtil.LogWarning("清除三消数据");
+            QuitApp();
+#endif
+        }
         private void OnStartClick()
         {
             var generationViewportPos = UIRoot.Instance.mUICamera.ScreenToViewportPoint(((RectTransform) transform).anchoredPosition);
@@ -30,6 +56,14 @@ namespace TripleMerge
         public void Show()
         {
             Debug.LogWarning("Shoooooooow");
+        }
+        private void QuitApp()
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
         }
     }
 }
