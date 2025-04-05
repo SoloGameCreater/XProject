@@ -1,0 +1,97 @@
+[
+  {
+    "id": 1,
+    "isValid": true
+  },
+  {
+    "id": 2,
+    "isValid": true
+  },
+  {
+    "id": 3,
+    "previousRegion": 2,
+    "unlockMergeableItems": [
+      300037,
+      300077
+    ],
+    "unlockMergeableItemNums": [
+      6,
+      0
+    ],
+    "unlockRewardItems": 1,
+    "unlockRewardItemNums": 5,
+    "isValid": true
+  },
+  {
+    "id": 4,
+    "previousRegion": 3,
+    "unlockMergeableItems": "300047",
+    "unlockMergeableItemNums": 6,
+    "unlockRewardItems": 1,
+    "unlockRewardItemNums": 5,
+    "isValid": true
+  },
+  {
+    "id": 5,
+    "previousRegion": 4,
+    "unlockMergeableItems": [
+      300057,
+      300100
+    ],
+    "unlockMergeableItemNums": [
+      6,
+      0
+    ],
+    "unlockRewardItems": 1,
+    "unlockRewardItemNums": 5,
+    "isValid": true
+  },
+  {
+    "id": 6,
+    "previousRegion": 5,
+    "unlockMergeableItems": "300067",
+    "unlockMergeableItemNums": 6,
+    "unlockRewardItems": 1,
+    "unlockRewardItemNums": 5,
+    "isValid": true
+  },
+  {
+    "id": 7,
+    "previousRegion": 6,
+    "unlockMergeableItems": [
+      300100,
+      300084
+    ],
+    "unlockMergeableItemNums": [
+      6,
+      0
+    ],
+    "unlockRewardItems": 1,
+    "unlockRewardItemNums": 5,
+    "isValid": true
+  },
+  {
+    "id": 8,
+    "previousRegion": 7,
+    "unlockMergeableItems": "300091",
+    "unlockMergeableItemNums": 6,
+    "unlockRewardItems": 1,
+    "unlockRewardItemNums": 5,
+    "isValid": true
+  },
+  {
+    "id": 9,
+    "previousRegion": 8,
+    "unlockMergeableItems": [
+      300108,
+      300091
+    ],
+    "unlockMergeableItemNums": [
+      6,
+      0
+    ],
+    "unlockRewardItems": 1,
+    "unlockRewardItemNums": 5,
+    "isValid": true
+  }
+]

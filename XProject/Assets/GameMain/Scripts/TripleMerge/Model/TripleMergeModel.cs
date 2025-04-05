@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Config.TripleMerge;
 using SaveFile;
@@ -22,7 +23,10 @@ namespace TripleMerge
             if (!SaveFileTripleMerge.OpenRegionIds.Contains(regionId))
                 SaveFileTripleMerge.OpenRegionIds.Add(regionId);
         }
-
+        public bool IsRegionUnlocked(int regionId)
+        {
+            return SaveFileTripleMerge.OpenRegionIds.Contains(regionId);
+        }
         public SaveFileTripleMergeCellData GetOrCreateCellData(string cellKey)
         {
             if (SaveFileTripleMerge.Cells.TryGetValue(cellKey, out var cellData)) return cellData;

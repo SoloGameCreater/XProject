@@ -29,7 +29,7 @@ namespace TripleMerge
         public float CameraMaxScaler { private set; get; }
         public Dictionary<Vector2Int, MergeableCell> MergeableCellsDictionary { private set; get; } = new();
         
-        //public Dictionary<int, MapAreaRegion> AreaRegionDictionary { private set; get; } = new();
+        public Dictionary<int, MapAreaRegion> AreaRegionDictionary { private set; get; } = new();
         public void Initialize()
         {
             InitRegions();
