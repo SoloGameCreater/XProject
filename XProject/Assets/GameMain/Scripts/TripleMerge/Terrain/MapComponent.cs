@@ -47,7 +47,12 @@ namespace TripleMerge
         }
         private void InitRegions()
         {
-            
+            foreach (var childRegion in transform.Find("Regions").GetComponentsInChildren<MapAreaRegion>())
+            {
+                childRegion.Initialize(this);
+                    
+                AreaRegionDictionary.TryAdd(childRegion.ID, childRegion);
+            }
         }
         private void InitMergeableRegion()
         {
