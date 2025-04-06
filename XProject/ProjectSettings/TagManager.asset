@@ -47,6 +47,9 @@ TagManager:
   - name: TripleMergeItem
     uniqueID: 1218314099
     locked: 0
+  - name: OverTripleMergeItem
+    uniqueID: 967729413
+    locked: 0
   - name: UI
     uniqueID: 3456915601
     locked: 0
