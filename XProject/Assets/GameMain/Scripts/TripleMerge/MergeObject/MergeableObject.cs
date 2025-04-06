@@ -17,7 +17,24 @@ namespace TripleMerge
 
         public bool IsMerging { get; set; }
 
-        public bool IsGray { get; set; }
+        private bool _isGray;
+        public bool IsGray
+        {
+            get => _isGray;
+            set
+            {
+                _isGray = value;
+                if (ItemRenderer != null)
+                {
+                    ItemRenderer.gameObject.SetActive(!value);
+                }
+
+                if (GrayItemRenderer != null)
+                {
+                    GrayItemRenderer.gameObject.SetActive(value);
+                }
+            }
+        }
         public override bool IsUniversalCard
         {
             get

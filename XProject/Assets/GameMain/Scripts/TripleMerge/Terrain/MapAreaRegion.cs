@@ -32,7 +32,7 @@ namespace TripleMerge
         {
             BelongArea = mapArea;
 
-            UnlockUITipPoint = transform.Find("Functional/UnlockTipPoint");
+            //UnlockUITipPoint = transform.Find("Functional/UnlockTipPoint");
 
             foreach (var mapRegionCfg in TripleMergeConfigManager.Instance.MapRegionList)
             {
@@ -74,7 +74,7 @@ namespace TripleMerge
             DebugUtil.Log($"MapAreaRegion: {ID} 解锁");
         }
 
-        public void PayfulRegionUnlock(bool skipPerformProgress = false, Action onEnd = null)
+        public void PayfulRegionUnlock(Action onEnd = null)
         {
             BecomeUnlock();
 
@@ -107,9 +107,7 @@ namespace TripleMerge
                 // bubble.Save();
             }
 
-            if (skipPerformProgress)
-            {
-                if (CfgData.UnlockRewardItems != null)
+            if (CfgData.UnlockRewardItems != null)
                 {
                     DebugUtil.Log($"这里应该发放解锁奖励，功能缺失");
                     // 如果跳过地段解锁表演过程,则直接发放地段解锁奖励
@@ -138,7 +136,6 @@ namespace TripleMerge
                 EventDispatcher.Instance.DispatchEventImmediately(EventEnum.TripleMergeOnRegionUnlocked, ID);
 
                 return;
-            }
         }
 
         /// <summary>
