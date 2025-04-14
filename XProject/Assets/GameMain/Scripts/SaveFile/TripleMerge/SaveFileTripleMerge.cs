@@ -7,10 +7,10 @@ namespace SaveFile.TripleMerge
     public class SaveFileTripleMerge : SaveFileBase
     {
         // 当前开启的区域id列表
-        [JsonProperty] List<int> openRegionIds = new List<int>();
+        [JsonProperty] SaveFileList<int> openRegionIds = new SaveFileList<int>();
 
         [JsonIgnore]
-        public List<int> OpenRegionIds
+        public SaveFileList<int> OpenRegionIds
         {
             get { return openRegionIds; }
             set

@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using Framework;
 
 namespace SaveFile
 {
@@ -60,6 +61,12 @@ namespace SaveFile
                     var prop = pi.GetValue(this, null);
                     var methodInfo = prop.GetType().GetMethod("Clear");
                     methodInfo.Invoke(prop, new object[] { });
+                }
+                else
+                {
+                    #if UNITY_EDITOR || DEVELOPMENT_BUILD
+                    DebugUtil.LogError($"存档数据格式错误 类型 {type.GetGenericTypeDefinition()}");
+                    #endif
                 }
             }
         }
