@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TripleMerge.Editor
 {
@@ -18,6 +19,18 @@ namespace TripleMerge.Editor
         private Tilemap _tilemap;
 
         private GameObject _regionObj;
+        
+        // 选中的区域ID
+        private int _selectedRegionId = 0;
+        
+        // 选中的优先级
+        private int _selectedPriorityId = 0;
+        
+        // 当前区域内的所有优先级
+        private int[] _currentPriorities = new int[0];
+
+        // 标记是否是通过工具选择的
+        private bool _isToolSelection = false;
 
         private const string EditorRootPrefabPath = "Assets/ExtraRes/TripleMerge/Prefabs/Area/AreaRootEditor.prefab";
         private const string CellPrefabPath = "Assets/ExtraRes/TripleMerge/Prefabs/MergeCell/MergeableCell.prefab";
@@ -31,6 +44,51 @@ namespace TripleMerge.Editor
         
         private readonly string _exportPath = "Assets/ExtraRes/Configs/TripleMapData";
         private string _fileName = "MapData";
+
+        public override void OnActivated()
+        {
+            base.OnActivated();
+            // 注册Selection变化事件
+            Selection.selectionChanged += OnSelectionChanged;
+        }
+
+        public override void OnWillBeDeactivated()
+        {
+            base.OnWillBeDeactivated();
+            // 注销Selection变化事件
+            Selection.selectionChanged -= OnSelectionChanged;
+        }
+
+        /// <summary>
+        /// 当场景中的选择发生变化时调用
+        /// </summary>
+        private void OnSelectionChanged()
+        {
+            // 如果是通过工具选择的，则不需要重置，并重置标记
+            if (_isToolSelection)
+            {
+                _isToolSelection = false;
+                return;
+            }
+            
+            // 如果当前有选中区域或优先级，则重置选择
+            if (_selectedRegionId > 0 || _selectedPriorityId > 0)
+            {
+                ResetSelections();
+                // 强制重绘编辑器窗口以更新UI状态
+                SceneView.RepaintAll();
+            }
+        }
+
+        /// <summary>
+        /// 重置区域和优先级选择
+        /// </summary>
+        private void ResetSelections()
+        {
+            _selectedRegionId = 0;
+            _selectedPriorityId = 0;
+            _currentPriorities = new int[0];
+        }
 
         private void InitializeMapRoot()
         {
@@ -97,6 +155,78 @@ namespace TripleMerge.Editor
                     GUILayout.Space(10);
                     GUILayout.Label("地图信息", EditorStyles.boldLabel);
                     EditorGUILayout.LabelField($"地块数量: {_regionObj.transform.childCount}");
+                    
+                    // 区域ID下拉框
+                    GUILayout.Space(5);
+                    GUILayout.Label("区域选择", EditorStyles.boldLabel);
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.PrefixLabel("区域ID");
+                    
+                    // 存储之前的选择
+                    int previousRegionId = _selectedRegionId;
+                    
+                    // 创建0-9的选项数组
+                    string[] options = new string[10];
+                    for (int i = 0; i < 10; i++)
+                    {
+                        options[i] = i.ToString();
+                    }
+                    
+                    // 显示下拉框
+                    _selectedRegionId = EditorGUILayout.Popup(_selectedRegionId, options, GUILayout.Width(100));
+                    EditorGUILayout.EndHorizontal();
+                    
+                    // 如果选中的区域ID大于0，显示优先级下拉框
+                    if (_selectedRegionId > 0)
+                    {
+                        // 如果区域ID发生变化，重新获取该区域内的所有优先级
+                        if (previousRegionId != _selectedRegionId)
+                        {
+                            _currentPriorities = GetPrioritiesInRegion(_selectedRegionId);
+                            _selectedPriorityId = 0; // 重置优先级选择
+                        }
+                        
+                        // 显示优先级下拉框
+                        EditorGUILayout.BeginHorizontal();
+                        EditorGUILayout.PrefixLabel("优先级");
+                        
+                        // 存储之前的优先级选择
+                        int previousPriorityId = _selectedPriorityId;
+                        
+                        // 创建优先级选项数组 (0代表全部)
+                        string[] priorityOptions = new string[_currentPriorities.Length + 1];
+                        priorityOptions[0] = "全部";
+                        for (int i = 0; i < _currentPriorities.Length; i++)
+                        {
+                            priorityOptions[i + 1] = _currentPriorities[i].ToString();
+                        }
+                        
+                        // 显示优先级下拉框
+                        int selectedIndex = _selectedPriorityId == 0 ? 0 : System.Array.IndexOf(_currentPriorities, _selectedPriorityId) + 1;
+                        selectedIndex = Mathf.Max(0, selectedIndex); // 防止找不到优先级时出现负数
+                        
+                        int newSelectedIndex = EditorGUILayout.Popup(selectedIndex, priorityOptions, GUILayout.Width(100));
+                        
+                        // 更新选中的优先级
+                        _selectedPriorityId = newSelectedIndex == 0 ? 0 : _currentPriorities[newSelectedIndex - 1];
+                        
+                        EditorGUILayout.EndHorizontal();
+                        
+                        // 如果区域ID或优先级发生变化，更新选中状态
+                        if (previousRegionId != _selectedRegionId || previousPriorityId != _selectedPriorityId)
+                        {
+                            HighlightCellsByRegionId(_selectedRegionId, _selectedPriorityId);
+                        }
+                    }
+                    else
+                    {
+                        // 如果区域ID变化为0，更新选中状态
+                        if (previousRegionId != _selectedRegionId)
+                        {
+                            _selectedPriorityId = 0;
+                            HighlightCellsByRegionId(_selectedRegionId, _selectedPriorityId);
+                        }
+                    }
                 }
             }
 
@@ -360,6 +490,79 @@ namespace TripleMerge.Editor
             
             EditorUtility.DisplayDialog("成功", $"地图数据已导出到: {fullPath}", "确定");
             Debug.Log($"地图数据已导出到: {fullPath}");
+        }
+        
+        /// <summary>
+        /// 获取指定区域内的所有优先级并排序
+        /// </summary>
+        /// <param name="regionId">区域ID</param>
+        /// <returns>从低到高排序的优先级数组</returns>
+        private int[] GetPrioritiesInRegion(int regionId)
+        {
+            if (_regionObj == null || _regionObj.transform.childCount == 0)
+                return new int[0];
+            
+            // 收集区域内所有不同的优先级
+            HashSet<int> priorities = new HashSet<int>();
+            
+            foreach (Transform cellTransform in _regionObj.transform)
+            {
+                var cell = cellTransform.GetComponent<MergeableCell>();
+                if (cell != null && cell.BelongRegionId == regionId)
+                {
+                    priorities.Add(cell.PurifiedPriority);
+                }
+            }
+            
+            // 转换为数组并从低到高排序
+            int[] result = priorities.ToArray();
+            System.Array.Sort(result);
+            
+            return result;
+        }
+        
+        /// <summary>
+        /// 高亮显示指定区域ID和优先级的地块
+        /// </summary>
+        /// <param name="regionId">区域ID</param>
+        /// <param name="priorityId">优先级ID，0表示不筛选优先级</param>
+        private void HighlightCellsByRegionId(int regionId, int priorityId = 0)
+        {
+            if (_regionObj == null || _regionObj.transform.childCount == 0)
+                return;
+            
+            // 如果选择的区域ID为0，则清空选择
+            if (regionId == 0)
+            {
+                Selection.objects = new Object[0];
+                return;
+            }
+            
+            // 收集属于指定区域ID的地块对象
+            List<GameObject> selectedCells = new List<GameObject>();
+            
+            // 遍历所有地块，找出属于指定区域ID的地块
+            foreach (Transform cellTransform in _regionObj.transform)
+            {
+                var cell = cellTransform.GetComponent<MergeableCell>();
+                if (cell != null && cell.BelongRegionId == regionId)
+                {
+                    // 如果优先级ID为0或与地块优先级匹配，则选中该地块
+                    if (priorityId == 0 || cell.PurifiedPriority == priorityId)
+                    {
+                        selectedCells.Add(cellTransform.gameObject);
+                    }
+                }
+            }
+            
+            // 设置标记，表示这是工具选择，防止触发OnSelectionChanged重置选择
+            _isToolSelection = true;
+            
+            // 设置Unity选择（会自动高亮显示）
+            Selection.objects = selectedCells.ToArray();
+            
+            // 确保场景视图刷新
+            SceneView.RepaintAll();
         }
     }
 }
