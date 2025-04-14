@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using Config.TripleMerge;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Pool;
 using Framework;
 
 namespace TripleMerge
@@ -22,9 +20,11 @@ namespace TripleMerge
         public MapRegion CfgData { private set; get; }
 
         public bool IsUnlockPerformanceEnd { private set; get; }
+        public GameObject LockedTip;
 
         private void Awake()
         {
+            LockedTip = transform.Find("CloudTipContent").gameObject;
             RegEventListener();
         }
 
@@ -65,8 +65,7 @@ namespace TripleMerge
 
         private void OnLockStatusChanged()
         {
-            //todo 解锁状态改变
-            DebugUtil.Log($"这里应该刷新区域锁定状态，功能缺失");
+            LockedTip?.SetActive(!IsUnlock());
         }
 
         public void BecomeUnlock()
@@ -259,8 +258,23 @@ namespace TripleMerge
 
         private void PushRegionUnlockPerformance()
         {
-            // todo 区域解锁表现
-            DebugUtil.Log($"MapAreaRegion: {ID} 解锁");
+            // 区域解锁表现
+            // 如果当前解锁地块位于摄像机中心点，直接播放解锁表现
+            // todo 否则先将摄像机移动到对应位置，再播放解锁表现
+            var isCenter = true;
+            if (isCenter)
+            {
+                OnLockStatusChanged();
+                EventDispatcher.Instance.DispatchEventImmediately(EventEnum.TripleMergeOnRegionUnlocked, ID);
+
+                TripleMergeSystem.Instance.Gameplay.MapManager.MapArea.UpdateNextUnlockRegion();
+
+                IsUnlockPerformanceEnd = true;
+            }
+            else
+            {
+
+            }
         }
 
         private void OnDestroy()

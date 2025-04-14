@@ -350,5 +350,23 @@ namespace TripleMerge
             }
         }
 
+        public void UpdateNextUnlockRegion()
+        {
+            var storageModel = TripleMergeSystem.Instance.Model;
+
+            foreach (var areaRegion in AreaRegionDictionary.Values)
+            {
+                if (areaRegion.IsUnlock() || areaRegion.CfgData.IsPlayful)
+                {
+                    continue;
+                }
+
+                if (areaRegion.CfgData.PreviousRegion != 0 && storageModel.IsRegionUnlocked(areaRegion.CfgData.PreviousRegion))
+                {
+                    areaRegion.LoadUnlockProgressData();
+                    return;
+                }
+            }
+        }
     }
 }

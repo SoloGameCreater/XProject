@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Config.TripleMerge;
+using Framework;
 using SaveFile;
 using SaveFile.TripleMerge;
 
@@ -20,6 +21,7 @@ namespace TripleMerge
 
         public void AddRegionId(int regionId)
         {
+            DebugUtil.Log($"试图解锁区域 {regionId}");
             if (!SaveFileTripleMerge.OpenRegionIds.Contains(regionId))
                 SaveFileTripleMerge.OpenRegionIds.Add(regionId);
         }
