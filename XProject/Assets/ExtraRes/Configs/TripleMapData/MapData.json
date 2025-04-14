@@ -3,10 +3,10 @@
         {
             "key": "-7_-5",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 6,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 22,
+                "requiredPurifiedNum": 180,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -7,
@@ -17,10 +17,10 @@
         {
             "key": "-7_-6",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 6,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 22,
+                "requiredPurifiedNum": 180,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -7,
@@ -31,10 +31,10 @@
         {
             "key": "-7_-7",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 6,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 24,
+                "requiredPurifiedNum": 180,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -7,
@@ -45,10 +45,10 @@
         {
             "key": "-7_-8",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 6,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 24,
+                "requiredPurifiedNum": 180,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -7,
@@ -59,10 +59,10 @@
         {
             "key": "-6_-5",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 6,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 21,
+                "requiredPurifiedNum": 180,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -6,
@@ -73,10 +73,10 @@
         {
             "key": "-6_-6",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 6,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 21,
+                "requiredPurifiedNum": 180,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -6,
@@ -87,10 +87,10 @@
         {
             "key": "-6_-7",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 6,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 23,
+                "requiredPurifiedNum": 180,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -6,
@@ -101,10 +101,10 @@
         {
             "key": "-6_-8",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 6,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 23,
+                "requiredPurifiedNum": 20,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -6,
@@ -115,10 +115,10 @@
         {
             "key": "-6_-9",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 6,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 25,
+                "requiredPurifiedNum": 20,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -6,
@@ -129,10 +129,10 @@
         {
             "key": "-6_-10",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 6,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 26,
+                "requiredPurifiedNum": 180,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -6,
@@ -143,10 +143,10 @@
         {
             "key": "-6_-11",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 6,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 26,
+                "requiredPurifiedNum": 180,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -6,
@@ -157,10 +157,10 @@
         {
             "key": "-5_-5",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 6,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 19,
+                "requiredPurifiedNum": 20,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -5,
@@ -171,10 +171,10 @@
         {
             "key": "-5_-6",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 6,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 19,
+                "requiredPurifiedNum": 150,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -5,
@@ -185,10 +185,10 @@
         {
             "key": "-5_-7",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 6,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 20,
+                "requiredPurifiedNum": 20,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -5,
@@ -199,10 +199,10 @@
         {
             "key": "-5_-8",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 6,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 25,
+                "requiredPurifiedNum": 20,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -5,
@@ -213,10 +213,10 @@
         {
             "key": "-5_-9",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 7,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 1,
+                "requiredPurifiedNum": 200,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -5,
@@ -227,10 +227,10 @@
         {
             "key": "-5_-10",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 7,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 1,
+                "requiredPurifiedNum": 200,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -5,
@@ -241,10 +241,10 @@
         {
             "key": "-5_-11",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 7,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 3,
+                "requiredPurifiedNum": 200,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -5,
@@ -255,10 +255,10 @@
         {
             "key": "-5_-12",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 7,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 5,
+                "requiredPurifiedNum": 60,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -5,
@@ -269,10 +269,10 @@
         {
             "key": "-5_-13",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 7,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 5,
+                "requiredPurifiedNum": 60,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -5,
@@ -283,10 +283,10 @@
         {
             "key": "-5_-14",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 7,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 6,
+                "requiredPurifiedNum": 200,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -5,
@@ -297,10 +297,10 @@
         {
             "key": "-4_-5",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 6,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 18,
+                "requiredPurifiedNum": 20,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -4,
@@ -311,10 +311,10 @@
         {
             "key": "-4_-6",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 6,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 18,
+                "requiredPurifiedNum": 180,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -4,
@@ -325,10 +325,10 @@
         {
             "key": "-4_-7",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 6,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 20,
+                "requiredPurifiedNum": 20,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -4,
@@ -367,10 +367,10 @@
         {
             "key": "-4_-10",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 7,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 2,
+                "requiredPurifiedNum": 200,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -4,
@@ -381,10 +381,10 @@
         {
             "key": "-4_-11",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 7,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 3,
+                "requiredPurifiedNum": 60,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -4,
@@ -395,10 +395,10 @@
         {
             "key": "-4_-12",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 7,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 4,
+                "requiredPurifiedNum": 200,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -4,
@@ -409,10 +409,10 @@
         {
             "key": "-4_-13",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 7,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 5,
+                "requiredPurifiedNum": 200,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -4,
@@ -423,10 +423,10 @@
         {
             "key": "-4_-14",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 7,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 6,
+                "requiredPurifiedNum": 200,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -4,
@@ -507,10 +507,10 @@
         {
             "key": "-3_-10",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 7,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 2,
+                "requiredPurifiedNum": 200,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -3,
@@ -521,10 +521,10 @@
         {
             "key": "-3_-11",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 7,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 4,
+                "requiredPurifiedNum": 60,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -3,
@@ -535,10 +535,10 @@
         {
             "key": "-3_-12",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 7,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 4,
+                "requiredPurifiedNum": 180,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -3,
@@ -549,10 +549,10 @@
         {
             "key": "-3_-13",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 8,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 31,
+                "requiredPurifiedNum": 60,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -3,
@@ -563,10 +563,10 @@
         {
             "key": "-3_-14",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 8,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 31,
+                "requiredPurifiedNum": 250,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -3,
@@ -675,10 +675,10 @@
         {
             "key": "-2_-12",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 8,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 28,
+                "requiredPurifiedNum": 250,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -2,
@@ -689,10 +689,10 @@
         {
             "key": "-2_-13",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 8,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 32,
+                "requiredPurifiedNum": 250,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -2,
@@ -703,10 +703,10 @@
         {
             "key": "-2_-14",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 8,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 33,
+                "requiredPurifiedNum": 60,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -2,
@@ -815,10 +815,10 @@
         {
             "key": "-1_-12",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 8,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 28,
+                "requiredPurifiedNum": 250,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -1,
@@ -829,10 +829,10 @@
         {
             "key": "-1_-13",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 8,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 32,
+                "requiredPurifiedNum": 250,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -1,
@@ -843,10 +843,10 @@
         {
             "key": "-1_-14",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 8,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 33,
+                "requiredPurifiedNum": 250,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     -1,
@@ -955,10 +955,10 @@
         {
             "key": "0_-12",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 8,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 29,
+                "requiredPurifiedNum": 60,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     0,
@@ -969,10 +969,10 @@
         {
             "key": "0_-13",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 8,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 34,
+                "requiredPurifiedNum": 60,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     0,
@@ -983,10 +983,10 @@
         {
             "key": "0_-14",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 8,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 34,
+                "requiredPurifiedNum": 250,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     0,
@@ -1095,10 +1095,10 @@
         {
             "key": "1_-12",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 8,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 29,
+                "requiredPurifiedNum": 60,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     1,
@@ -1109,10 +1109,10 @@
         {
             "key": "1_-13",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 8,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 35,
+                "requiredPurifiedNum": 250,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     1,
@@ -1123,10 +1123,10 @@
         {
             "key": "1_-14",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 9,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 15,
+                "requiredPurifiedNum": 10,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     1,
@@ -1235,10 +1235,10 @@
         {
             "key": "2_-12",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 8,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 30,
+                "requiredPurifiedNum": 60,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     2,
@@ -1249,10 +1249,10 @@
         {
             "key": "2_-13",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 9,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 15,
+                "requiredPurifiedNum": 60,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     2,
@@ -1263,10 +1263,10 @@
         {
             "key": "2_-14",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 9,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 37,
+                "requiredPurifiedNum": 60,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     2,
@@ -1375,10 +1375,10 @@
         {
             "key": "3_-12",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 8,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 30,
+                "requiredPurifiedNum": 250,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     3,
@@ -1389,10 +1389,10 @@
         {
             "key": "3_-13",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 9,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 37,
+                "requiredPurifiedNum": 60,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     3,
@@ -1403,10 +1403,10 @@
         {
             "key": "3_-14",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 9,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 37,
+                "requiredPurifiedNum": 300,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     3,
@@ -1515,10 +1515,10 @@
         {
             "key": "4_-12",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 9,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 36,
+                "requiredPurifiedNum": 300,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     4,
@@ -1529,10 +1529,10 @@
         {
             "key": "4_-13",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 9,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 38,
+                "requiredPurifiedNum": 60,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     4,
@@ -1543,10 +1543,10 @@
         {
             "key": "4_-14",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 9,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 39,
+                "requiredPurifiedNum": 240,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     4,
@@ -1627,10 +1627,10 @@
         {
             "key": "5_-10",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 9,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 35,
+                "requiredPurifiedNum": 60,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     5,
@@ -1641,10 +1641,10 @@
         {
             "key": "5_-11",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 9,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 36,
+                "requiredPurifiedNum": 60,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     5,
@@ -1655,10 +1655,10 @@
         {
             "key": "5_-12",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 9,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 38,
+                "requiredPurifiedNum": 60,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     5,
@@ -1669,10 +1669,10 @@
         {
             "key": "5_-13",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 9,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 39,
+                "requiredPurifiedNum": 60,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     5,
@@ -1683,10 +1683,10 @@
         {
             "key": "5_-14",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 9,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 39,
+                "requiredPurifiedNum": 240,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     5,
@@ -1767,10 +1767,10 @@
         {
             "key": "6_-10",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 9,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 35,
+                "requiredPurifiedNum": 300,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     6,
@@ -1781,10 +1781,10 @@
         {
             "key": "6_-11",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 9,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 36,
+                "requiredPurifiedNum": 60,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     6,
@@ -1795,10 +1795,10 @@
         {
             "key": "6_-12",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 9,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 38,
+                "requiredPurifiedNum": 300,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     6,
@@ -1809,10 +1809,10 @@
         {
             "key": "6_-13",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 9,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 40,
+                "requiredPurifiedNum": 60,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     6,
@@ -1823,10 +1823,10 @@
         {
             "key": "6_-14",
             "value": {
-                "belongRegionId": 0,
+                "belongRegionId": 9,
                 "cellStatus": 3,
-                "purifiedPriority": 0,
-                "requiredPurifiedNum": 0,
+                "purifiedPriority": 40,
+                "requiredPurifiedNum": 60,
                 "initialPlacedItemId": 0,
                 "mapCoordinate": [
                     6,
