@@ -227,10 +227,110 @@ namespace TripleMerge.Editor
                             HighlightCellsByRegionId(_selectedRegionId, _selectedPriorityId);
                         }
                     }
+                    
+                    // 检查是否选中了恰好两个MergeableCell对象
+                    GUILayout.Space(10);
+                    MergeableCell[] selectedCells = GetSelectedMergeableCells();
+                    if (selectedCells != null && selectedCells.Length == 2)
+                    {
+                        GUILayout.Label("地块操作", EditorStyles.boldLabel);
+                        
+                        // 显示选中的两个地块信息
+                        EditorGUILayout.BeginVertical("box");
+                        
+                        EditorGUILayout.LabelField("地块1:", EditorStyles.boldLabel);
+                        DisplayCellInfo(selectedCells[0]);
+                        
+                        EditorGUILayout.Space(5);
+                        
+                        EditorGUILayout.LabelField("地块2:", EditorStyles.boldLabel);
+                        DisplayCellInfo(selectedCells[1]);
+                        
+                        EditorGUILayout.EndVertical();
+                        
+                        // 交换按钮
+                        GUILayout.Space(5);
+                        if (GUILayout.Button("交换地块属性", GUILayout.Height(30)))
+                        {
+                            SwapCellProperties(selectedCells[0], selectedCells[1]);
+                        }
+                    }
                 }
             }
 
             Handles.EndGUI();
+        }
+        
+        /// <summary>
+        /// 显示单个地块的信息
+        /// </summary>
+        private void DisplayCellInfo(MergeableCell cell)
+        {
+            if (cell == null) return;
+            
+            EditorGUILayout.LabelField($"坐标: [{cell.MapCoordinate.x}, {cell.MapCoordinate.y}]");
+            EditorGUILayout.LabelField($"区域ID: {cell.BelongRegionId}");
+            EditorGUILayout.LabelField($"优先级: {cell.PurifiedPriority}");
+            EditorGUILayout.LabelField($"所需净化值: {cell.RequiredPurifiedNum}");
+        }
+        
+        /// <summary>
+        /// 获取当前选中的MergeableCell对象
+        /// </summary>
+        /// <returns>选中的MergeableCell数组</returns>
+        private MergeableCell[] GetSelectedMergeableCells()
+        {
+            if (Selection.gameObjects == null || Selection.gameObjects.Length == 0)
+                return null;
+            
+            List<MergeableCell> cells = new List<MergeableCell>();
+            
+            foreach (GameObject obj in Selection.gameObjects)
+            {
+                MergeableCell cell = obj.GetComponent<MergeableCell>();
+                if (cell != null)
+                {
+                    cells.Add(cell);
+                }
+            }
+            
+            return cells.ToArray();
+        }
+        
+        /// <summary>
+        /// 交换两个地块的属性
+        /// </summary>
+        /// <param name="cell1">地块1</param>
+        /// <param name="cell2">地块2</param>
+        private void SwapCellProperties(MergeableCell cell1, MergeableCell cell2)
+        {
+            if (cell1 == null || cell2 == null)
+                return;
+            
+            // 交换区域ID
+            int tempRegionId = cell1.BelongRegionId;
+            cell1.BelongRegionId = cell2.BelongRegionId;
+            cell2.BelongRegionId = tempRegionId;
+            
+            // 交换所需净化值
+            int tempRequiredPurifiedNum = cell1.RequiredPurifiedNum;
+            cell1.RequiredPurifiedNum = cell2.RequiredPurifiedNum;
+            cell2.RequiredPurifiedNum = tempRequiredPurifiedNum;
+            
+            // 交换优先级
+            int tempPurifiedPriority = cell1.PurifiedPriority;
+            cell1.PurifiedPriority = cell2.PurifiedPriority;
+            cell2.PurifiedPriority = tempPurifiedPriority;
+            
+            // 标记场景为已修改
+            EditorUtility.SetDirty(cell1);
+            EditorUtility.SetDirty(cell2);
+            
+            // 显示交换成功消息
+            Debug.Log($"已交换地块 [{cell1.MapCoordinate.x},{cell1.MapCoordinate.y}] 和 [{cell2.MapCoordinate.x},{cell2.MapCoordinate.y}] 的属性");
+            
+            // 刷新编辑器
+            SceneView.RepaintAll();
         }
         
         public override bool IsAvailable()
