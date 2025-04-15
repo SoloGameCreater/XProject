@@ -14,6 +14,7 @@ using SaveFile.TripleMerge;
 using UnityEngine;
 using UnityEngine.Pool;
 using TripleMerge;
+using UnityEngine.Rendering;
 
 namespace TripleMerge
 {
@@ -151,7 +152,63 @@ namespace TripleMerge
         public CellData CellConfig { get; set; }
         // 使用可配置的延迟值
         private const float MERGE_DELAY = 0.035f;
+        private void Awake()
+        {
+            RegEventListener();
+        }
+        private void OnDestroy()
+        {
+            UnRegEventListener();
+        }
+        private void RegEventListener()
+        {
+            EventDispatcher.Instance.AddEventListener(EventEnum.TripleMergeOnRegionUnlocked, OnRegionUnlocked);
+        }
 
+        private void UnRegEventListener()
+        {
+            EventDispatcher.Instance.RemoveEventListener(EventEnum.TripleMergeOnRegionUnlocked, OnRegionUnlocked);
+        }
+        private void OnRegionUnlocked(BaseEvent baseEvent)
+        {
+            var regionId = baseEvent.datas.Length > 0 ? (int) baseEvent.datas[0] : -1;
+            if (regionId < 0) return;
+            if (BelongRegionId == regionId)
+            {
+                CellStatus = RequiredPurifiedNum > 0 ? ECellStatus.UnPurified : ECellStatus.Mergeable;
+
+                TripleMergeSystem.Instance.Model.SetCellState(_saveData, (int) CellStatus);
+
+                if (_placeableItem != null)
+                {
+                    _placeableItem.gameObject.SetActive(true);
+                }
+
+                if (CellStatus == ECellStatus.UnPurified && _unPurifiedRenderer == null)
+                {
+                    _unPurifiedRenderer = Utils.InstantiateWorldGameObject("TripleMerge/Prefabs/MergeCell/UnPurifiedCell", transform).GetComponent<SpriteRenderer>();
+                    _unPurifiedRenderer.sprite = GetComponent<SpriteRenderer>().sprite;
+                }
+
+                if (CellStatus == ECellStatus.Mergeable)
+                {
+                    _unPurifiedRenderer.gameObject.SetActive(false);
+
+                    if (PlacedItem != null && PlacedItem.CfgData != null)
+                    {
+                        var storageModel = TripleMergeSystem.Instance.Model;
+                        storageModel.AddUnlockMergeableItems(PlacedItem.CfgData.Id);
+                        if (PlacedItem is MergeableObject mergeableObject)
+                        {
+                            mergeableObject.IsGray = CellStatus >= ECellStatus.UnPurified;
+                        }
+                        // todo 地块解锁通知
+                        DebugUtil.Log($"地块 {MapCoordinate} 解锁");
+                        //EventDispatcher.Instance.DispatchEvent(EventEnum.TripleMergeOnRegionUnlockCell, this);
+                    }
+                }
+            }
+        }
         public void Initialize(MergeableRegion belongRegion)
         {
             BelongRegion = belongRegion;

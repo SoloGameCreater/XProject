@@ -9,4 +9,5 @@
     public const string TripleMergeOnMapContentChanged = "TripleMergeOnMapContentChanged";
     public const string TripleMergeOnCellBecomeMergeable  = "TripleMergeOnCellBecomeMergeable";
     public const string TripleMergeOnRegionUnlocked = "TripleMergeOnRegionUnlocked";
+    public const string TripleMergeOnRegionUnlockCell = "TripleMergeOnRegionUnlockCell";
 }
