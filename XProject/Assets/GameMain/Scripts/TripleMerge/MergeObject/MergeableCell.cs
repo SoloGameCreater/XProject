@@ -13,8 +13,6 @@ using Framework;
 using SaveFile.TripleMerge;
 using UnityEngine;
 using UnityEngine.Pool;
-using TripleMerge;
-using UnityEngine.Rendering;
 
 namespace TripleMerge
 {
