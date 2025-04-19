@@ -14,7 +14,6 @@ namespace TripleMerge
         const string AreaPrefabAssetName = "AreaRoot";
 
         public bool IsMerging { get; set; }
-        public GameObject MapRoot { get; private set; }
         //public TripleMergeCameraComponent CameraController { get; private set; }
         public MapAreaComponent MapArea { get; private set; }
         public OnCellObject SelectedCellItem { get; private set;  }
@@ -22,8 +21,6 @@ namespace TripleMerge
         public Camera MapCamera { get; private set; }
         protected override void OnInitialize()
         {
-            GameObject mapPrefab = ResourcesManager.Instance.LoadResource<GameObject>($"TripleMerge/Prefabs/{MapRootPrefabAssetName}");
-            MapRoot = GameObject.Instantiate(mapPrefab, TripleMergeSystem.Instance.Gameplay.MergeRoot);
             MapCamera = Camera.main;
             LoadMap();
         }
@@ -40,11 +37,13 @@ namespace TripleMerge
         private void InitArea()
         {
             GameObject areaPrefab = ResourcesManager.Instance.LoadResource<GameObject>($"TripleMerge/Prefabs/Area/{AreaPrefabAssetName}");
-            var areaNode = GameObject.Instantiate(areaPrefab, MapRoot.transform.Find("Area")).AddComponent<MapAreaComponent>();
+            var mapRoot = TripleMergeSystem.Instance.Gameplay.MapRoot;
+            var areaNode = GameObject.Instantiate(areaPrefab, mapRoot.Find("Area")).AddComponent<MapAreaComponent>();
             areaNode.Initialize();
-            var cameraNode = MapRoot.transform.Find("CameraControl");
+            var cameraNode = mapRoot.Find("CameraControl");
             areaNode.InitMapCamera(cameraNode);
             MapArea = areaNode;
+            MapArea.UpdateNextUnlockRegion();
         }
 
         public void SelectCellItemChanged(OnCellObject cellObject)

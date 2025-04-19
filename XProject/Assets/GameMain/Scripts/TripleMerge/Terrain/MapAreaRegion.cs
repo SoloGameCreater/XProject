@@ -21,6 +21,7 @@ namespace TripleMerge
 
         public bool IsUnlockPerformanceEnd { private set; get; }
         public GameObject LockedTip;
+        public AreaRegionUnlockProgressView ProgressView { private set; get; }
 
         private void Awake()
         {
@@ -32,7 +33,7 @@ namespace TripleMerge
         {
             BelongArea = mapArea;
 
-            //UnlockUITipPoint = transform.Find("Functional/UnlockTipPoint");
+            UnlockUITipPoint = transform.Find("UnlockTipPoint");
 
             foreach (var mapRegionCfg in TripleMergeConfigManager.Instance.MapRegionList)
             {
@@ -70,71 +71,8 @@ namespace TripleMerge
 
         public void BecomeUnlock()
         {
+            ProgressView = null;
             DebugUtil.Log($"MapAreaRegion: {ID} 解锁");
-        }
-
-        public void PayfulRegionUnlock(Action onEnd = null)
-        {
-            BecomeUnlock();
-
-            // 存档中设置解锁
-            var storageModel = TripleMergeSystem.Instance.Model;
-            storageModel.AddRegionId(ID);
-            // 随地段解锁的三合物品
-            if (CfgData.UnlockMergeableItems?.Count > 0)
-            {
-                DebugUtil.Log($"这里应该发放气泡，功能缺失");
-                // var bubble = ThreeMergeSystem.Instance.Gameplay.MapManager.MergeableItemsBubble;
-                // var rewardDic = DictionaryPool<int, int>.Get();
-                // for (var i = 0; i < CfgData.UnlockMergeableItems.Count; i++)
-                // {
-                //     var unlockItemId = CfgData.UnlockMergeableItems[i];
-                //     var rewardNum = CfgData.UnlockMergeableItemNums[i];
-                //     storageModel.AddUnlockMergeableItems(unlockItemId);
-                //     for (int j = 0; j < rewardNum; j++)
-                //     {
-                //         bubble.AddItem(unlockItemId, UnlockUITipPoint.position, skipPerformProgress);
-                //     }
-
-                //     if (rewardDic.ContainsKey(unlockItemId))
-                //         rewardDic[unlockItemId] += rewardNum;
-                //     else
-                //         rewardDic[unlockItemId] = rewardNum;
-                // }
-
-                // DictionaryPool<int, int>.Release(rewardDic);
-                // bubble.Save();
-            }
-
-            if (CfgData.UnlockRewardItems != null)
-                {
-                    DebugUtil.Log($"这里应该发放解锁奖励，功能缺失");
-                    // 如果跳过地段解锁表演过程,则直接发放地段解锁奖励
-                    // for (var i = 0; i < CfgData.UnlockRewardItems.Count; i++)
-                    // {
-                    //     var rewardItemId = CfgData.UnlockRewardItems[i];
-                    //     var rewardItemNum = CfgData.UnlockRewardItemNums[i];
-
-                    //     Debug.Log($"MapIAP, {rewardItemId}-{rewardItemNum}");
-
-                    //     CommonUtils.AddRewards(new List<ItemData> {new ItemData {id = rewardItemId, cnt = rewardItemNum}}, new()
-                    //     {
-                    //         reason = BiEventMergeMatch.Types.ItemChangeReason.AreaUnlock,
-                    //         data1 = CfgData.Id.ToString()
-                    //     });
-                    // }
-                }
-
-                // 让云消失
-                //PlayUnlockPerformance();
-                DebugUtil.Log($"这里应该播放云消失，功能缺失");
-
-                IsUnlockPerformanceEnd = true;
-
-                // 通知地图，该地段解锁了
-                EventDispatcher.Instance.DispatchEventImmediately(EventEnum.TripleMergeOnRegionUnlocked, ID);
-
-                return;
         }
 
         /// <summary>
@@ -159,6 +97,10 @@ namespace TripleMerge
                     totalUnlockedCellNumOfPreRegion++;
                 }
             }
+            ProgressView = TripleMergeSystem.Instance.Gameplay.MapUIManager.Show<AreaRegionUnlockProgressView>("UIMapAreaRegionUnlockProgressBar", UnlockUITipPoint.position);
+            ProgressView.ViewRoot.SetParent(TripleMergeSystem.Instance.Gameplay.MapUIManager.GetOrCreateTransform("RegionUnlockProgressViews"));
+            ProgressView.SetProgress(totalUnlockedCellNumOfPreRegion, totalCellNumOfPreRegion);
+            ProgressView.BindRegion(this);
         }
 
         public bool IsUnlock()

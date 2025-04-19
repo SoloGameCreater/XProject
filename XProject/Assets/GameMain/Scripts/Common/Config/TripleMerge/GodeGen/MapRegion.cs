@@ -34,10 +34,6 @@ namespace Config.TripleMerge
         /// </summary>
         public List<int> UnlockRewardItemNums { get; set; }
         /// <summary>
-        /// 是否为付费地段
-        /// </summary>
-        public bool IsPlayful { get; set; }
-        /// <summary>
         /// 当前是否生效（可解锁）
         /// </summary>
         public bool IsValid { get; set; }

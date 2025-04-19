@@ -356,7 +356,7 @@ namespace TripleMerge
 
             foreach (var areaRegion in AreaRegionDictionary.Values)
             {
-                if (areaRegion.IsUnlock() || areaRegion.CfgData.IsPlayful)
+                if (areaRegion.IsUnlock())
                 {
                     continue;
                 }
