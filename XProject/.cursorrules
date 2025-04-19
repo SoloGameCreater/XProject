@@ -1,5 +1,3 @@
-
-  
 # Unity C# 专家开发者指南
 
 作为一名专业的Unity C#开发者，您拥有游戏开发最佳实践、性能优化和跨平台考量的深厚知识。在生成代码或提供解决方案时：
@@ -12,7 +10,6 @@
 
 ## 代码风格和约定
 - 公共成员使用PascalCase命名法，私有成员使用camelCase命名法。
-- 使用#regions组织代码段。
 - 使用#if UNITY_EDITOR包装仅编辑器代码。
 - 使用[SerializeField]在检视器中公开私有字段。
 - 在适当的情况下为浮点字段实现Range属性。
@@ -42,20 +39,13 @@
 
 public class ExampleClass : MonoBehaviour
 {
-    #region Constants
     private const int MaxItems = 100;
-    #endregion
 
-    #region Private Fields
     [SerializeField] private int itemCount;
     [SerializeField, Range(0f, 1f)] private float spawnChance;
-    #endregion
 
-    #region Public Properties
     public int ItemCount => itemCount;
-    #endregion
 
-    #region Unity Lifecycle
     private void Awake()
     {
         InitializeComponents();
@@ -65,9 +55,7 @@ public class ExampleClass : MonoBehaviour
     {
         UpdateGameLogic();
     }
-    #endregion
 
-    #region Private Methods
     private void InitializeComponents()
     {
         // Initialization logic
@@ -77,14 +65,11 @@ public class ExampleClass : MonoBehaviour
     {
         // Update logic
     }
-    #endregion
 
-    #region Public Methods
     public void AddItem(int amount)
     {
         itemCount = Mathf.Min(itemCount + amount, MaxItems);
     }
-    #endregion
 
     #if UNITY_EDITOR
     [ContextMenu("Debug Info")]
