@@ -17,30 +17,10 @@ namespace TripleMerge
             UICanvas = TripleMergeSystem.Instance.Gameplay.MapRoot.transform.Find("Canvas").GetComponent<Canvas>();
             UICanvas.worldCamera = Camera.main;
             GetOrCreateTransform("RegionUnlockProgressViews");
-            
-            RegisterEvents();
         }
 
         protected override void OnDispose()
         {
-            UnregisterEvents();
-        }
-
-        private void RegisterEvents()
-        {
-            EventDispatcher.Instance.AddEventListener(EventEnum.TripleMergeOnMapContentChanged, OnMapContentChanged);
-        }
-
-        private void UnregisterEvents()
-        {
-            EventDispatcher.Instance.RemoveEventListener(EventEnum.TripleMergeOnMapContentChanged, OnMapContentChanged);
-        }
-
-        private void OnMapContentChanged(BaseEvent baseEvent)
-        {
-            // 地图内容变化时更新UI
-            DebugUtil.Log("地图内容已变化，更新UI");
-            // 在这里实现地图UI更新逻辑
         }
 
         /// <summary>
@@ -61,7 +41,13 @@ namespace TripleMerge
             }
             return ret;
         }
-
+        protected override void OnUpdate()
+        {
+            for (var i = _displayingViewList.Count - 1; i >= 0; i--)
+            {
+                _displayingViewList[i].OnUpdate();
+            }
+        }
         /// <summary>
         /// 显示世界UI
         /// </summary>

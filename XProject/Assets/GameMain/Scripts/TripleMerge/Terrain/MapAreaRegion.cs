@@ -114,6 +114,8 @@ namespace TripleMerge
             if (!cell) return;
             if (CfgData.PreviousRegion != 0 && cell.BelongRegionId == CfgData.PreviousRegion)
             {
+                ProgressView.AddProgress();
+                
                 if (!CfgData.IsValid)
                 {
                     return;
