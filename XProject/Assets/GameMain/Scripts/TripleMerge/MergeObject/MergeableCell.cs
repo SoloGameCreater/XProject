@@ -139,6 +139,7 @@ namespace TripleMerge
         /// 可合成地块检查
         /// </summary>
         private readonly List<MergeableObject> _continuousCellsQueryResult = new();
+        private CellUnlockProgressView _cellUnlockProgressView;
 
         private bool _isMouseDown;
 
@@ -184,8 +185,9 @@ namespace TripleMerge
 
                 if (CellStatus == ECellStatus.UnPurified && _unPurifiedRenderer == null)
                 {
-                    _unPurifiedRenderer = Utils.InstantiateWorldGameObject("TripleMerge/Prefabs/MergeCell/UnPurifiedCell", transform).GetComponent<SpriteRenderer>();
-                    _unPurifiedRenderer.sprite = GetComponent<SpriteRenderer>().sprite;
+                    _cellUnlockProgressView = CellUnlockProgressView.Get(CurrentPurificationNum, RequiredPurifiedNum);
+                    _cellUnlockProgressView.transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+                    _cellUnlockProgressView.gameObject.SetActive(false);
                 }
 
                 if (CellStatus == ECellStatus.Mergeable)
@@ -279,9 +281,67 @@ namespace TripleMerge
             {
                 _unPurifiedRenderer = Utils.InstantiateWorldGameObject("TripleMerge/Prefabs/MergeCell/UnPurifiedCell", transform).GetComponent<SpriteRenderer>();
                 _unPurifiedRenderer.sprite = GetComponent<SpriteRenderer>().sprite;
+                if (RequiredPurifiedNum > 0)
+                {
+                    if (CellStatus == ECellStatus.UnPurified && _cellUnlockProgressView == null)
+                    {
+                        _cellUnlockProgressView = CellUnlockProgressView.Get(CurrentPurificationNum, RequiredPurifiedNum);
+                        _cellUnlockProgressView.transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+                        _cellUnlockProgressView.gameObject.SetActive(false);
+                    }
+                }
             }
         }
+        public void ShowCellStatusTips()
+        {
+            if (CommonUtils.IsTouchUGUI())
+            {
+                return;
+            }
 
+            if (TripleMergeSystem.Instance.Gameplay.CameraInputManager.IsInputDisabled)
+            {
+                return;
+            }
+
+            if (CellStatus == ECellStatus.UnPurified)
+            {
+                ShowPurificationTipView();
+            }
+            else if (CellStatus == ECellStatus.Locked)
+            {
+                if (BelongRegion.BelongArea.AreaRegionDictionary.TryGetValue(BelongRegionId, out var belongToAreaRegion))
+                {
+                    if (!belongToAreaRegion.CfgData.IsValid)
+                    {
+                        return;
+                    }
+
+                    if (belongToAreaRegion.ProgressView != null && belongToAreaRegion.ProgressView.ViewRoot.gameObject.activeSelf)
+                    {
+                        var progressViewPos = belongToAreaRegion.ProgressView.ViewRoot.position;
+                        var tipsView = TripleMergeSystem.Instance.Gameplay.MapUIManager.Show<AreaRegionUnlockTipsView>("UILockLandBubble",
+                            new Vector3(progressViewPos.x, progressViewPos.y, progressViewPos.z));
+                        tipsView.BindRegionData(belongToAreaRegion);
+                    }
+                    else
+                    {
+                        belongToAreaRegion.LockedTip.transform.DOKill();
+                        belongToAreaRegion.LockedTip.transform.localPosition = Vector3.zero;
+                        belongToAreaRegion.LockedTip.transform.DOShakePosition(0.5f, new Vector3(0.1f, 0.1f, 0));
+                    }
+                }
+            }
+        }
+        public void ShowPurificationTipView()
+        {
+            if (CellStatus == ECellStatus.UnPurified)
+            {
+                var showPosition = transform.position;
+                var popUpTipView = TripleMergeSystem.Instance.Gameplay.MapUIManager.Show<CellPurificationTipView>("UILockLandSlider", showPosition, 3.5f, "Merge3_unlock_land");
+                popUpTipView.SetProgress(_saveData.PurificationValue, RequiredPurifiedNum, () => _cellUnlockProgressView.DisplayProgress);
+            }
+        }
         private void InitPlacedItem(bool isNeverStorageBefore)
         {
             var placedItemId = 0;
@@ -1284,8 +1344,8 @@ namespace TripleMerge
             if (_isMouseDown)
             {
                 _isMouseDown = false;
-                //todo 应该弹出状态信息
-                DebugUtil.Log($"点击item {gameObject.name}");
+
+                ShowCellStatusTips();
             }
         }
 

@@ -15,7 +15,7 @@ namespace TripleMerge
     {
         private const float SPEED = 0.25f;
 
-        private LocalizeTextMeshProUGUI _textProgress;
+        private TextMeshProUGUI _textProgress;
 
         private Slider _sliderProgress;
 
@@ -33,7 +33,7 @@ namespace TripleMerge
         {
             _sliderProgress = ViewRoot.Find("Progress").GetComponent<Slider>();
 
-            _textProgress = ViewRoot.Find("Progress/TextProgress").GetComponent<LocalizeTextMeshProUGUI>();
+            _textProgress = ViewRoot.Find("Progress/TextProgress").GetComponent<TextMeshProUGUI>();
 
             ViewRoot.Find("LockBtn").GetComponent<Button>().onClick.AddListener(OpenTipsView);
         }
