@@ -107,6 +107,9 @@ namespace TripleMerge
                 DebugUtil.LogWarning("区域未解锁");
                 return;
             }
+            var tipsView = TripleMergeSystem.Instance.Gameplay.MapUIManager.Show<AreaRegionUnlockTipsView>("UILockLandBubble",
+             new Vector3(ViewRoot.position.x, ViewRoot.position.y + 2.5f, ViewRoot.position.z));
+            tipsView.BindRegionData(_bindRegion);
         }
 
         private void Hide()

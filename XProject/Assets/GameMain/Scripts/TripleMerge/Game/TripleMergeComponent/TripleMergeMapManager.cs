@@ -9,8 +9,6 @@ namespace TripleMerge
 {
     public class TripleMergeMapManager : TripleMergeComponent
     {
-        // map root prefab name
-        const string MapRootPrefabAssetName = "MapRoot";
         const string AreaPrefabAssetName = "AreaRoot";
 
         public bool IsMerging { get; set; }

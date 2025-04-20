@@ -10,8 +10,6 @@ namespace TripleMerge
 {
     public class AreaRegionUnlockTipsView : ITripleMergeMapView
     {
-        private const float BASE_CAMERA_SIZE = 20;
-
         public Transform ViewRoot { get; set; }
 
         private MapAreaRegion _bindRegion;
@@ -26,7 +24,7 @@ namespace TripleMerge
         public void OnShow(params object[] extra)
         {
             var originScale = ViewRoot.localScale;
-            var targetSize = TripleMergeSystem.Instance.Gameplay.MapManager.MapCamera.orthographicSize * 1.0f / BASE_CAMERA_SIZE;
+            var targetSize = TripleMergeSystem.Instance.Gameplay.MapManager.MapCamera.orthographicSize * 1.0f / Const.BASE_CAMERA_SIZE;
             ViewRoot.localScale = originScale * targetSize;
 
             if (extra.Length > 0)

@@ -170,13 +170,13 @@ namespace TripleMerge
         }
         private void OnRegionUnlocked(BaseEvent baseEvent)
         {
-            var regionId = baseEvent.datas.Length > 0 ? (int) baseEvent.datas[0] : -1;
+            var regionId = baseEvent.datas.Length > 0 ? (int)baseEvent.datas[0] : -1;
             if (regionId < 0) return;
             if (BelongRegionId == regionId)
             {
                 CellStatus = RequiredPurifiedNum > 0 ? ECellStatus.UnPurified : ECellStatus.Mergeable;
 
-                TripleMergeSystem.Instance.Model.SetCellState(_saveData, (int) CellStatus);
+                TripleMergeSystem.Instance.Model.SetCellState(_saveData, (int)CellStatus);
 
                 if (_placeableItem != null)
                 {
@@ -267,7 +267,7 @@ namespace TripleMerge
 
                 if (CellStatus == ECellStatus.Locked) //如果时锁定的地块，从新检查路段解锁状态，防止某些情况路段解锁了之后地块信息没正常更新
                 {
-                    if (BelongRegion.BelongArea.AreaRegionDictionary.TryGetValue(BelongRegionId, out var belongToAreaRegion) 
+                    if (BelongRegion.BelongArea.AreaRegionDictionary.TryGetValue(BelongRegionId, out var belongToAreaRegion)
                     && belongToAreaRegion.IsUnlock())
                     {
                         //读取初始配置信息，如果初始配置时，该地块需要一定数量的净化值，则代表其初始状态是未净化状态
@@ -275,7 +275,7 @@ namespace TripleMerge
                     }
                 }
             }
-            
+
             // 地块置灰
             if (CellStatus >= ECellStatus.UnPurified)
             {
@@ -321,7 +321,7 @@ namespace TripleMerge
                     {
                         var progressViewPos = belongToAreaRegion.ProgressView.ViewRoot.position;
                         var tipsView = TripleMergeSystem.Instance.Gameplay.MapUIManager.Show<AreaRegionUnlockTipsView>("UILockLandBubble",
-                            new Vector3(progressViewPos.x, progressViewPos.y, progressViewPos.z));
+                            new Vector3(progressViewPos.x, progressViewPos.y + 2.5f, progressViewPos.z));
                         tipsView.BindRegionData(belongToAreaRegion);
                     }
                     else
@@ -604,7 +604,7 @@ namespace TripleMerge
                 item = PlacedItem;
                 isCombo = true;
             }
-            if(isCombo)
+            if (isCombo)
                 DebugUtil.Log("产生了一次连击");
             if (item is not MergeableObject mergeableObject)
             {
@@ -647,7 +647,7 @@ namespace TripleMerge
         private IEnumerator DelayedKeepMerge(int finalMergeItemId, Action<int> onFinish)
         {
             yield return new WaitForSeconds(MERGE_DELAY);
-            
+
             ProcessAfterMerge(finalMergeItemId, onFinish);
         }
 
@@ -806,7 +806,7 @@ namespace TripleMerge
                 }
                 finalMergeItemId = MergeItemsBatch(tobeMergeItems, targetChain, mergeBaseItem,
                     mergeResults, unlockNewItems, afterMergeItems);
-                
+
                 // 更新基础物品为新生成的物品
                 if (tobeMergeItems.Count >= 3)
                 {
@@ -943,23 +943,23 @@ namespace TripleMerge
                     {
                         var highestChain = TripleMergeConfigManager.Instance.GetChainConfig(highestLevelItem.CfgData.ChainId);
                         var itemChain = TripleMergeConfigManager.Instance.GetChainConfig(item.CfgData.ChainId);
-                        
+
                         int highestIndex = highestChain.Chain.IndexOf(highestLevelItem.CfgData.Id);
                         int itemIndex = itemChain.Chain.IndexOf(item.CfgData.Id);
-                        
+
                         if (itemIndex > highestIndex)
                         {
                             highestLevelItem = item;
                         }
                     }
                 }
-                
+
                 // 从列表中移除最高级物品
                 afterMergeItems.Remove(highestLevelItem);
-                
+
                 // 在当前格子放置最高级物品
                 PlaceItem(highestLevelItem, null, null, false);
-                
+
                 // 播放物品出现动画
                 var originColor = highestLevelItem.ItemRenderer.color;
                 originColor.a = 0;
@@ -982,7 +982,7 @@ namespace TripleMerge
                 if (nearestEmptyCells.Count > 0)
                 {
                     // 放置物品
-                    nearestEmptyCells[0].PlaceItem(item,null,null,false);
+                    nearestEmptyCells[0].PlaceItem(item, null, null, false);
                     // 播放物品出现动画
                     //if (!skipMergeProgress)
                     {
@@ -1122,27 +1122,27 @@ namespace TripleMerge
                 QueryContinuousCell(queryCell.Right, depth + 1);
                 QueryContinuousCell(queryCell.Above, depth + 1);
                 QueryContinuousCell(queryCell.Below, depth + 1);
-                
+
                 // 增加斜对角方向的查询
-                if(depth < 1) // 只在第一层检查斜对角
+                if (depth < 1) // 只在第一层检查斜对角
                 {
                     // 检查左上角
-                    if(queryCell.Left != null && queryCell.Left.Above != null)
+                    if (queryCell.Left != null && queryCell.Left.Above != null)
                     {
                         QueryContinuousCell(queryCell.Left.Above, depth + 2);
                     }
                     // 检查右上角
-                    if(queryCell.Right != null && queryCell.Right.Above != null)
+                    if (queryCell.Right != null && queryCell.Right.Above != null)
                     {
                         QueryContinuousCell(queryCell.Right.Above, depth + 2);
                     }
                     // 检查左下角
-                    if(queryCell.Left != null && queryCell.Left.Below != null)
+                    if (queryCell.Left != null && queryCell.Left.Below != null)
                     {
                         QueryContinuousCell(queryCell.Left.Below, depth + 2);
                     }
                     // 检查右下角
-                    if(queryCell.Right != null && queryCell.Right.Below != null)
+                    if (queryCell.Right != null && queryCell.Right.Below != null)
                     {
                         QueryContinuousCell(queryCell.Right.Below, depth + 2);
                     }
@@ -1231,7 +1231,7 @@ namespace TripleMerge
             {
                 CellStatus = ECellStatus.Mergeable;
 
-                TripleMergeSystem.Instance.Model.SetCellState(_saveData, (int) CellStatus);
+                TripleMergeSystem.Instance.Model.SetCellState(_saveData, (int)CellStatus);
 
                 isBecomeMergeableThisTime = true;
             }
@@ -1284,7 +1284,7 @@ namespace TripleMerge
                         // {
                         //     DestroyImmediate(_unPurifiedProgressBar.gameObject);
                         // }
-                        
+
                     }
 
                     // 如果未跳过进度动画，播放净化完成音效和特效
