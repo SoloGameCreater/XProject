@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Pool;
 using System.Collections;
+using Framework;
 
 namespace TripleMerge
 {
@@ -79,9 +80,8 @@ namespace TripleMerge
         {
             Destroy(item.gameObject);
         }
-        public void Setup(int currentProgress, int maxProgress)
+        public void SetProgress(int currentProgress)
         {
-            _maxProgress = maxProgress;
             // 确保 _progressBar 和 _textProgress 已初始化
             if (_progressBar == null || _textProgress == null)
             {
@@ -89,11 +89,11 @@ namespace TripleMerge
             }
 
             DisplayProgress = _realProgress = currentProgress;
-            _progressBar.value = (maxProgress > 0) ? (currentProgress * 1.0f / maxProgress) : 0f;
+            _progressBar.value = (_maxProgress > 0) ? (currentProgress * 1.0f / _maxProgress) : 0f;
             _textProgress.text = $"{DisplayProgress}/{_maxProgress}";
-
+            DebugUtil.Log($"SetProgress: {currentProgress}/{_maxProgress}");
             // 如果初始进度已经是最大进度，可能不需要显示动画，直接隐藏或回收
-            if(currentProgress >= maxProgress)
+            if(currentProgress >= _maxProgress)
             {
                  // gameObject.SetActive(false); // 或者直接回收
                  ReleaseAction?.Invoke(this);
@@ -102,8 +102,6 @@ namespace TripleMerge
         public void UpdateProgress(int progress, Action onUpdated = null)
         {
             _realProgress = progress;
-
-            // gameObject.SetActive(true); // OnTakeFromPool 会处理激活
 
             if (_progressUpdateTask != null)
             {
@@ -159,7 +157,8 @@ namespace TripleMerge
             InitializePool(); // 确保 Pool 已初始化
 
             var item = _pool.Get();
-            item.Setup(currentProgress, maxProgress); // 设置初始状态
+            item._maxProgress = maxProgress;
+            item.SetProgress(currentProgress); // 设置初始状态
             return item;
         }
         public static void Recycle(CellUnlockProgressView item)

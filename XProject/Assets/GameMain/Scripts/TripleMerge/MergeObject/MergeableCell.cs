@@ -1250,7 +1250,7 @@ namespace TripleMerge
             // 如果跳过进度条动画，直接设置进度并更新状态
             if (skipAddProgress)
             {
-                //_unPurifiedProgressBar.SetProgress(CurrentPurificationNum);
+                _cellUnlockProgressView.SetProgress(CurrentPurificationNum);
                 OnPurificationUpdated();
             }
             else
@@ -1261,8 +1261,8 @@ namespace TripleMerge
                 // aroundVfx.transform.position = transform.position;
                 // aroundVfx.transform.DOScaleX(1, 0.75f).OnComplete(() => { ThreeMergeEffectPool.Recycle(aroundVfx); });
 
-                // // 更新进度条并触发更新回调
-                // _unPurifiedProgressBar.UpdateProgress(CurrentPurificationNum, OnPurificationUpdated);
+                // 更新进度条并触发更新回调
+                _cellUnlockProgressView.UpdateProgress(CurrentPurificationNum, OnPurificationUpdated);
             }
 
             // 净化更新完成后的回调函数
@@ -1279,11 +1279,11 @@ namespace TripleMerge
                     {
                         // 取消物品的灰色状态
                         mergeableItem.IsGray = false;
-                        // todo 销毁进度条
-                        // if (_unPurifiedProgressBar != null)
-                        // {
-                        //     DestroyImmediate(_unPurifiedProgressBar.gameObject);
-                        // }
+                        // 销毁进度条
+                        if (_cellUnlockProgressView != null)
+                        {
+                            DestroyImmediate(_cellUnlockProgressView.gameObject);
+                        }
 
                     }
 

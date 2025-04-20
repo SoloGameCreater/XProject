@@ -303,21 +303,21 @@ namespace TripleMerge
                     // todo 创建净化值移动特效
                     // var purificationEffect = ThreeMergeEffectPool.Get(ThreeMergeEffectPool.VfxType.PurifyValueFly);
                     // purificationEffect.transform.position = position;
-                    // var duration = Vector2.Distance(targetCell.transform.position, position) / speed;
+                    var duration = 0.5f;//Vector2.Distance(targetCell.transform.position, position) / speed;
                     
-                    // // 记录最短移动时间
-                    // if (minDurationCell == null || duration < minDuration)
-                    // {
-                    //     minDurationCell = targetCell;
-                    //     minDuration = duration;
-                    // }
+                    // 记录最短移动时间
+                    if (minDurationCell == null || duration < minDuration)
+                    {
+                        minDurationCell = targetCell;
+                        minDuration = duration;
+                    }
 
-                    // // 设置净化值移动动画
-                    // purificationEffect.transform.DOMove(targetCell.transform.position, duration).OnComplete(() =>
-                    // {
-                    //     ThreeMergeEffectPool.Recycle(purificationEffect);
-                    //     targetCell.OnPurificationArrive(isBecomeMergeableThisTime, false);
-                    // });
+                    // todo 这里可能需要增加一个净化值飞行的粒子特效
+                    // 使用DOTween延迟执行，不使用特效资源
+                    DOTween.Sequence().SetDelay(duration).OnComplete(() =>
+                    {
+                        targetCell.OnPurificationArrive(isBecomeMergeableThisTime, false);
+                    });
                 }
             }
 
