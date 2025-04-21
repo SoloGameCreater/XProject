@@ -51,7 +51,7 @@ namespace TripleMerge
 
         public void OnUpdate()
         {
-            if (Input.anyKeyDown)
+            if (Input.anyKeyDown || Input.mouseScrollDelta.y != 0f)
             {
                 TripleMergeSystem.Instance.Gameplay.MapUIManager.Hide(this);
             }
