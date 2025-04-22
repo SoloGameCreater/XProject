@@ -802,7 +802,7 @@ namespace TripleMerge
                 // 生成净化能量
                 for (int i = 0; i < nextLevelItemNumAfterMerge; i++)
                 {
-                    TripleMergeSystem.Instance.Gameplay.MapManager.MapArea.ProducePurification(PureNumBase, transform.position, true);
+                    TripleMergeSystem.Instance.Gameplay.MapManager.MapArea.ProducePurification(PureNumBase, transform.position, false);
                 }
                 finalMergeItemId = MergeItemsBatch(tobeMergeItems, targetChain, mergeBaseItem,
                     mergeResults, unlockNewItems, afterMergeItems);
@@ -1244,7 +1244,7 @@ namespace TripleMerge
         /// </summary>
         /// <param name="isBecomeMergeableThisTime">本次净化是否使地块变为可合成状态</param>
         /// <param name="skipAddProgress">是否跳过进度条动画</param>
-        public void OnPurificationArrive(bool isBecomeMergeableThisTime, bool skipAddProgress = true)
+        public void OnPurificationArrive(bool isBecomeMergeableThisTime, bool skipAddProgress)
         {
             // todo 前期功能搭建，忽略进度条
             // 如果跳过进度条动画，直接设置进度并更新状态
