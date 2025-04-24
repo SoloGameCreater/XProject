@@ -35,7 +35,7 @@ namespace YooAsset
         /// <summary>
         /// 默认的YooAsset PackageName
         /// </summary>
-        public string DefaultYooPackageName = "cee523c0e04c";
+        public string DefaultYooPackageName = "hmerge";
 
         /// <summary>
         /// 清单文件头标记
