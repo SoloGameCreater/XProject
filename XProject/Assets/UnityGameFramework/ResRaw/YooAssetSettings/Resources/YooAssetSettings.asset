@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: YooAssetSettings
   m_EditorClassIdentifier: 
   ManifestFileName: b4792ca7ea6e
+  AndroidDefaultYooFolderName: assetpack
+  IOSDefaultYooFolderName: f6d808864443
+  DefaultYooPackageName: hmerge
