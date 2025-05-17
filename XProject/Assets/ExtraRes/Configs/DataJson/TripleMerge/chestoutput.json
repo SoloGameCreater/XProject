@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "itemLevelRange": [
+      1
+    ],
+    "itemLevelRatio": [
+      100
+    ]
+  },
+  {
+    "id": 2,
+    "itemLevelRange": [
+      1,
+      2
+    ],
+    "itemLevelRatio": [
+      40,
+      60
+    ]
+  },
+  {
+    "id": 3,
+    "itemLevelRange": [
+      1,
+      2,
+      3
+    ],
+    "itemLevelRatio": [
+      10,
+      60,
+      30
+    ]
+  }
+]
