@@ -1,5 +1,4 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// Inherit from this base class to create a singleton.
@@ -78,5 +77,14 @@ public class Manager<T> : MonoBehaviour where T : MonoBehaviour
     private void OnApplicationQuit()
     {
         m_ShuttingDown = true;
+    }
+
+    protected virtual void OnDestroy()
+    {
+        m_ShuttingDown = true;
+        if (m_Instance == this)
+        {
+            m_Instance = null;
+        }
     }
 }
