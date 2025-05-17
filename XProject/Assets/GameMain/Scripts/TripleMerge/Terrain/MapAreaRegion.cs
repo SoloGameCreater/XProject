@@ -116,11 +116,6 @@ namespace TripleMerge
             {
                 ProgressView.AddProgress();
                 
-                if (!CfgData.IsValid)
-                {
-                    return;
-                }
-
                 if (IsUnlock()) return;
 
                 var totalCellNumOfPreRegion = 0;

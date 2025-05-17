@@ -312,11 +312,6 @@ namespace TripleMerge
             {
                 if (BelongRegion.BelongArea.AreaRegionDictionary.TryGetValue(BelongRegionId, out var belongToAreaRegion))
                 {
-                    if (!belongToAreaRegion.CfgData.IsValid)
-                    {
-                        return;
-                    }
-
                     if (belongToAreaRegion.ProgressView != null && belongToAreaRegion.ProgressView.ViewRoot.gameObject.activeSelf)
                     {
                         var progressViewPos = belongToAreaRegion.ProgressView.ViewRoot.position;

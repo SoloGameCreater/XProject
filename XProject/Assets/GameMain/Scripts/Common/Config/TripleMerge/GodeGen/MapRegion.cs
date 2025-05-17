@@ -33,10 +33,6 @@ namespace Config.TripleMerge
         /// 解锁后获得的奖励道具数量
         /// </summary>
         public List<int> UnlockRewardItemNums { get; set; }
-        /// <summary>
-        /// 当前是否生效（可解锁）
-        /// </summary>
-        public bool IsValid { get; set; }
 
     }
 }

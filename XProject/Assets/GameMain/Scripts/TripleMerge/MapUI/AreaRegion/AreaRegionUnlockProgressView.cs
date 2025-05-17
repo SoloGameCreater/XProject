@@ -40,12 +40,12 @@ namespace TripleMerge
 
         public void OnShow(params object[] extra)
         {
-            
+
         }
 
         public void OnHide()
         {
-            
+
         }
 
         public void OnUpdate()
@@ -55,19 +55,16 @@ namespace TripleMerge
                 return;
             }
 
-            if (_bindRegion.CfgData.IsValid)
+            if (_displayUnlockedCellNum >= TotalUnlockedCellNumOfPreRegion)
             {
-                if (_displayUnlockedCellNum >= TotalUnlockedCellNumOfPreRegion)
+                if (TotalUnlockedCellNumOfPreRegion >= TotalCellNumOfPreRegion)
                 {
-                    if (TotalUnlockedCellNumOfPreRegion >= TotalCellNumOfPreRegion)
-                    {
-                        Hide();
+                    Hide();
 
-                        _bindRegion.BecomeUnlock();
-                    }
-
-                    return;
+                    _bindRegion.BecomeUnlock();
                 }
+
+                return;
             }
 
             var nextProgress = _sliderProgress.value + SPEED * Time.deltaTime;
@@ -102,11 +99,6 @@ namespace TripleMerge
 
         private void OpenTipsView()
         {
-            if (!_bindRegion.CfgData.IsValid)
-            {
-                DebugUtil.LogWarning("区域未解锁");
-                return;
-            }
             var tipsView = TripleMergeSystem.Instance.Gameplay.MapUIManager.Show<AreaRegionUnlockTipsView>("UILockLandBubble",
              new Vector3(ViewRoot.position.x, ViewRoot.position.y + 2.5f, ViewRoot.position.z));
             tipsView.BindRegionData(_bindRegion);
@@ -123,5 +115,5 @@ namespace TripleMerge
         }
         #endregion
     }
-    
+
 }
