@@ -39,11 +39,7 @@ namespace Config.TripleMerge
 
         public MergeChain GetChainConfig(int cfgDataChainId)
         {
-            //todo 临时构建的合成链配置
-            var chainCfg = new MergeChain();
-            chainCfg.Id = cfgDataChainId;
-            chainCfg.Chain = new List<int>() { 300028, 300029, 300030, 300031, 300032, 300033, 300034, 300035, 300036 };
-            return chainCfg;
+           return MergeChainList.Find(c => c.Id == cfgDataChainId);
         }
     }
 }
