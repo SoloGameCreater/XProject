@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MineAtals
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 0
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 3285f85db142bd34f889b6da4b091218, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+    packedSpriteRenderDataKeys:
+    - 9eb653216937e2a4d86cd5351d6316b9: 21300000
+    - c907b0f8c062d03468d0ef20760b9aa5: 21300000
+    - f2b3a03982bde3749a71e2c30c68ac46: 21300000
+    - c4d713c9dc98970469fbd6d096eb7468: 21300000
+    - a5d1452ab4bb3bc4dbfb1c8430916464: 21300000
+    - 002bf82a65101f5419022e7c2cf712ef: 21300000
+    - b84707ecb48c01647b63e3bdc46522fd: 21300000
+    - 351e876ee626e4e4a82f017d80cfdf85: 21300000
+    - 19ac719f19b99374e8a13ee5551335d4: 21300000
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 9eb653216937e2a4d86cd5351d6316b9, type: 3}
+  - {fileID: 21300000, guid: c907b0f8c062d03468d0ef20760b9aa5, type: 3}
+  - {fileID: 21300000, guid: f2b3a03982bde3749a71e2c30c68ac46, type: 3}
+  - {fileID: 21300000, guid: c4d713c9dc98970469fbd6d096eb7468, type: 3}
+  - {fileID: 21300000, guid: a5d1452ab4bb3bc4dbfb1c8430916464, type: 3}
+  - {fileID: 21300000, guid: 002bf82a65101f5419022e7c2cf712ef, type: 3}
+  - {fileID: 21300000, guid: b84707ecb48c01647b63e3bdc46522fd, type: 3}
+  - {fileID: 21300000, guid: 351e876ee626e4e4a82f017d80cfdf85, type: 3}
+  - {fileID: 21300000, guid: 19ac719f19b99374e8a13ee5551335d4, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - Coal
+  - Cut Emerald
+  - Cut Sapphire
+  - Cut Topaz
+  - Cut Ruby
+  - Copper Ingot
+  - Copper Nugget
+  - Crystal
+  - Diamond
+  m_RenderDataMap: {}
+  m_Tag: MineAtals
+  m_IsVariant: 0
