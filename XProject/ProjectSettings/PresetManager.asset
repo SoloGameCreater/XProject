@@ -4,4 +4,13 @@
 PresetManager:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_DefaultPresets: {}
+  m_DefaultPresets:
+  - first:
+      m_NativeTypeID: 1006
+      m_ManagedTypePPtr: {fileID: 0}
+      m_ManagedTypeFallback: 
+    second:
+    - m_Preset: {fileID: 2655988077585873504, guid: cd978a7f26b667c4f8a20678d22f9990,
+        type: 2}
+      m_Filter: glob:"Assets/ExtraRes/TMatchRessss/Texture/*/*"
+      m_Disabled: 0
