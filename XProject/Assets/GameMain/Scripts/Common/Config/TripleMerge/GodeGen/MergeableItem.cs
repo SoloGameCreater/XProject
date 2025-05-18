@@ -52,6 +52,10 @@ namespace Config.TripleMerge
         /// </summary>
         public string Prefab { get; set; }
         /// <summary>
+        /// 图集
+        /// </summary>
+        public string Atlas { get; set; }
+        /// <summary>
         /// 图标
         /// </summary>
         public string Icon { get; set; }

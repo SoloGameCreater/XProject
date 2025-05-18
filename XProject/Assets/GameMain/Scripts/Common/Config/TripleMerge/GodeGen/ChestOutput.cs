@@ -21,6 +21,10 @@ namespace Config.TripleMerge
         /// 每个等级出现概率
         /// </summary>
         public List<int> ItemLevelRatio { get; set; }
+        /// <summary>
+        /// 宝箱产出数量
+        /// </summary>
+        public int OutputCount { get; set; }
 
     }
 }

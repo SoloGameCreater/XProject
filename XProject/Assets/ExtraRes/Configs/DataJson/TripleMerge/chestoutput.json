@@ -6,7 +6,8 @@
     ],
     "itemLevelRatio": [
       100
-    ]
+    ],
+    "outputCount": 5
   },
   {
     "id": 2,
@@ -17,7 +18,8 @@
     "itemLevelRatio": [
       40,
       60
-    ]
+    ],
+    "outputCount": 5
   },
   {
     "id": 3,
@@ -30,6 +32,7 @@
       10,
       60,
       30
-    ]
+    ],
+    "outputCount": 6
   }
 ]
