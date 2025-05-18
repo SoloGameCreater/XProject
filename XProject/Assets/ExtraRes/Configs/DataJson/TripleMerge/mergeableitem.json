@@ -227,7 +227,7 @@
       1,
       1
     ],
-    "chainId": 8,
+    "chainId": 2,
     "produceWeight": 10,
     "prefab": "ThreeMergeableItem",
     "atlas": "MineAtals",
@@ -249,7 +249,7 @@
       1,
       1
     ],
-    "chainId": 8,
+    "chainId": 2,
     "produceWeight": 10,
     "prefab": "TripleMergeableItem",
     "atlas": "MineAtals",
@@ -271,7 +271,7 @@
       1,
       1
     ],
-    "chainId": 8,
+    "chainId": 2,
     "produceWeight": 10,
     "prefab": "TripleMergeableItem",
     "atlas": "MineAtals",
@@ -293,7 +293,7 @@
       1,
       1
     ],
-    "chainId": 8,
+    "chainId": 2,
     "produceWeight": 10,
     "prefab": "TripleMergeableItem",
     "atlas": "MineAtals",
@@ -315,7 +315,7 @@
       1,
       1
     ],
-    "chainId": 8,
+    "chainId": 2,
     "produceWeight": 10,
     "prefab": "TripleMergeableItem",
     "atlas": "MineAtals",
@@ -337,7 +337,7 @@
       1,
       1
     ],
-    "chainId": 8,
+    "chainId": 2,
     "produceWeight": 10,
     "prefab": "TripleMergeableItem",
     "atlas": "MineAtals",
@@ -359,7 +359,7 @@
       1,
       1
     ],
-    "chainId": 8,
+    "chainId": 2,
     "produceWeight": 10,
     "prefab": "TripleMergeableItem",
     "atlas": "MineAtals",
@@ -381,7 +381,7 @@
       1,
       1
     ],
-    "chainId": 8,
+    "chainId": 2,
     "produceWeight": 10,
     "prefab": "TripleMergeableItem",
     "atlas": "MineAtals",
@@ -403,7 +403,7 @@
       2,
       1
     ],
-    "chainId": 8,
+    "chainId": 2,
     "produceWeight": 10,
     "prefab": "TripleMergeableItem",
     "atlas": "MineAtals",
@@ -425,7 +425,7 @@
       2,
       2
     ],
-    "chainId": 8,
+    "chainId": 2,
     "produceWeight": 10,
     "prefab": "TripleMergeableItem",
     "atlas": "MineAtals",
