@@ -38,6 +38,7 @@ SpriteAtlas:
     cachedData: {fileID: 0}
     packedSpriteRenderDataKeys:
     - 9eb653216937e2a4d86cd5351d6316b9: 21300000
+    - 5217c0e24949a464c9da794e2b3766b5: 21300000
     - c907b0f8c062d03468d0ef20760b9aa5: 21300000
     - f2b3a03982bde3749a71e2c30c68ac46: 21300000
     - c4d713c9dc98970469fbd6d096eb7468: 21300000
@@ -49,6 +50,7 @@ SpriteAtlas:
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: 9eb653216937e2a4d86cd5351d6316b9, type: 3}
+  - {fileID: 21300000, guid: 5217c0e24949a464c9da794e2b3766b5, type: 3}
   - {fileID: 21300000, guid: c907b0f8c062d03468d0ef20760b9aa5, type: 3}
   - {fileID: 21300000, guid: f2b3a03982bde3749a71e2c30c68ac46, type: 3}
   - {fileID: 21300000, guid: c4d713c9dc98970469fbd6d096eb7468, type: 3}
@@ -58,15 +60,16 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 351e876ee626e4e4a82f017d80cfdf85, type: 3}
   - {fileID: 21300000, guid: 19ac719f19b99374e8a13ee5551335d4, type: 3}
   m_PackedSpriteNamesToIndex:
-  - Coal
-  - Cut Emerald
-  - Cut Sapphire
-  - Cut Topaz
-  - Cut Ruby
-  - Copper Ingot
-  - Copper Nugget
-  - Crystal
-  - Diamond
+  - 01
+  - 10
+  - 05
+  - 07
+  - 08
+  - 06
+  - 02
+  - 03
+  - 04
+  - 09
   m_RenderDataMap: {}
   m_Tag: MineAtals
   m_IsVariant: 0
