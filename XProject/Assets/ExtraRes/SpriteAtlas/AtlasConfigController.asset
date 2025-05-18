@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: AtlasConfigController
   m_EditorClassIdentifier: 
   AtlasPathNodeList:
-  - AtlasName: MergeItemAtlas
-    HdPath: SpriteAtlas/MergeItemAtlas/MergeItemAtlas
+  - AtlasName: MineAtals
+    HdPath: SpriteAtlas/MergeItemAtlas/MineAtals
+  - AtlasName: NormalAtals
+    HdPath: SpriteAtlas/MergeItemAtlas/NormalAtals

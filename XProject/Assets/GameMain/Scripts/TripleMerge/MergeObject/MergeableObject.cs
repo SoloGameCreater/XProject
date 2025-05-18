@@ -78,7 +78,7 @@ namespace TripleMerge
                 return;
             }
 
-            ItemRenderer.sprite = GrayItemRenderer.sprite = ResourcesManager.Instance.GetSpriteVariant(Const.AtlasName, CfgData.Icon);
+            ItemRenderer.sprite = GrayItemRenderer.sprite = ResourcesManager.Instance.GetSpriteVariant(CfgData.Atlas, CfgData.Icon);
         }
 
         protected override void OnClicked()
