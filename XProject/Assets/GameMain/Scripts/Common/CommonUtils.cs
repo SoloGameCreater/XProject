@@ -6,17 +6,18 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+using Framework;
 
 public static class CommonUtils
 {
     public static string GetFontAssetNameWithLanguage(Language language)
     {
         return language switch
-               {
-                   Language.ChineseSimplified => "zh",
-                   Language.English => "LiberationSans",
-                   _ => "LiberationSans"
-               };
+        {
+            Language.ChineseSimplified => "zh",
+            Language.English => "LiberationSans",
+            _ => "LiberationSans"
+        };
     }
     public static async Task PlayAnimationAsync(Animator animator, string aniName, Action callBack = null)
     {
@@ -96,7 +97,7 @@ public static class CommonUtils
     // 判断宽屏设备
     public static bool IsWideScreenDevice()
     {
-        return ((float) Screen.width / Screen.height <= 1.5f);
+        return ((float)Screen.width / Screen.height <= 1.5f);
     }
     public static bool IsTouchUGUI()
     {
@@ -109,31 +110,48 @@ public static class CommonUtils
         else
             return false;
     }
-    
-    // 随机奖励，总权重值为累加结果
-    // 没有奖励时返回权重配置长度
-    public static int GetRandomWeightIndex(List<int> weight)
+
+    /// <summary>
+    /// 根据权重随机选择索引
+    /// </summary>
+    /// <param name="weights">权重数组</param>
+    /// <returns>随机选择的索引</returns>
+    public static int GetRandomIndexByWeight(List<int> weights)
     {
-        if (weight == null || weight.Count == 0)
+        if (weights == null || weights.Count == 0)
         {
-            Debug.LogError("weight is null !!!");
-            return 0;
+            DebugUtil.LogError("权重数组无效");
+            return 0; // 返回默认索引
         }
 
+        // 计算总权重
         int totalWeight = 0;
-        foreach (var v in weight)
+        for (int i = 0; i < weights.Count; i++)
         {
-            totalWeight += v;
+            totalWeight += weights[i];
         }
 
-        var randomInt = Random.Range(0, totalWeight);
-        int curWeight = 0;
-        for (int i = 0; i < weight.Count; i++)
+        if (totalWeight <= 0)
         {
-            curWeight += weight[i];
-            if (randomInt < curWeight) return i;
+            DebugUtil.LogError("总权重为0或负数");
+            return 0; // 返回第一个索引
         }
 
-        return 0;
+        // 生成随机数
+        int randomValue = Random.Range(0, totalWeight);
+        int currentWeight = 0;
+
+        // 根据权重选择索引
+        for (int i = 0; i < weights.Count; i++)
+        {
+            currentWeight += weights[i];
+            if (randomValue < currentWeight)
+            {
+                return i;
+            }
+        }
+
+        // 兜底返回最后一个索引
+        return weights.Count - 1;
     }
 }

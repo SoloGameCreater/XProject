@@ -126,7 +126,7 @@ namespace TripleMerge
                 var itemCategoryNum = Mathf.Min(3, categoryWeightRandomList.Count);
                 for (int i = 0; i < itemCategoryNum; i++)
                 {
-                    var randomIdx = CommonUtils.GetRandomWeightIndex(categoryWeightRandomList.ConvertAll(e => e.Item2));
+                    var randomIdx = CommonUtils.GetRandomIndexByWeight(categoryWeightRandomList.ConvertAll(e => e.Item2));
                     resultCfg.Add(categoryWeightRandomList[randomIdx].Item1);
                     categoryWeightRandomList.RemoveAt(randomIdx);
                 }

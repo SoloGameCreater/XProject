@@ -49,14 +49,22 @@ namespace SaveFile.TripleMerge
         }
         // 已经解锁的三合合成物品
         [JsonProperty]
-        SaveFileDictionary<int,int> unlockedMergeableItems = new SaveFileDictionary<int,int>();
+        SaveFileDictionary<int, int> unlockedMergeableItems = new SaveFileDictionary<int, int>();
         [JsonIgnore]
-        public SaveFileDictionary<int,int> UnlockedMergeableItems
+        public SaveFileDictionary<int, int> UnlockedMergeableItems
         {
             get
             {
                 return unlockedMergeableItems;
             }
+        }
+        // 当前剧情阶段
+        [JsonProperty] int currentStoryPhase;
+        [JsonIgnore]
+        public int CurrentStoryPhase
+        {
+            get { return currentStoryPhase; }
+            set { currentStoryPhase = value; SaveFileManager.Instance.LocalVersion++; }
         }
     }
 }

@@ -10,7 +10,7 @@ namespace TripleMerge
     public class TripleMergeModel
     {
         public SaveFileTripleMerge SaveFileTripleMerge => SaveFileManager.Instance.GetSaveFile<SaveFileTripleMerge>();
-        
+        public int CurrentStoryPhase => SaveFileTripleMerge.CurrentStoryPhase;
         private readonly List<int> _unlockedMergeableItems = new();
         public IReadOnlyList<int> UnlockedMergeableItems => _unlockedMergeableItems;
 
@@ -18,7 +18,10 @@ namespace TripleMerge
         {
             SaveFileTripleMerge.Clear();
         }
-
+        public void SetCurrentStoryPhase(int storyPhase)
+        {
+            SaveFileTripleMerge.CurrentStoryPhase = storyPhase;
+        }
         public void AddRegionId(int regionId)
         {
             DebugUtil.Log($"试图解锁区域 {regionId}");
