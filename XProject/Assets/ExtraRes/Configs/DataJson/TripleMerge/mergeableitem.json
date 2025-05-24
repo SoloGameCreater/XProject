@@ -3,2430 +3,279 @@
     "id": 99999,
     "name": "101",
     "desc": "101",
-    "quality": 1,
     "itemType": 1,
     "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
+    "chainId": 0,
+    "produceWeight": 0,
     "prefab": "TripleMergeBox",
     "icon": "ui_loading_slider_fill",
     "level": 1,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 1,
-    "flyTo": 2,
-    "isDisplayLightVfx": true
+    "canMergeWithOmnipotentCard": false
   },
   {
     "id": 300028,
     "name": "Merge3_build_011",
     "desc": "Merge3_build_011_desc",
-    "quality": 1,
     "itemType": 2,
     "isInitUnlock": true,
-    "cellSize": [
-      1,
-      1
-    ],
     "chainId": 1,
     "produceWeight": 10,
     "prefab": "TripleMergeableItem",
     "atlas": "NormalAtals",
     "icon": "01",
     "level": 1,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
+    "canMergeWithOmnipotentCard": true
   },
   {
     "id": 300029,
     "name": "Merge3_build_012",
     "desc": "Merge3_build_012_desc",
-    "quality": 1,
     "itemType": 2,
     "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
     "chainId": 1,
     "produceWeight": 10,
     "prefab": "TripleMergeableItem",
     "atlas": "NormalAtals",
     "icon": "02",
     "level": 2,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
+    "canMergeWithOmnipotentCard": true
   },
   {
     "id": 300030,
     "name": "Merge3_build_013",
     "desc": "Merge3_build_013_desc",
-    "quality": 1,
     "itemType": 2,
     "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
     "chainId": 1,
     "produceWeight": 10,
     "prefab": "TripleMergeableItem",
     "atlas": "NormalAtals",
     "icon": "03",
     "level": 3,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
+    "canMergeWithOmnipotentCard": true
   },
   {
     "id": 300031,
     "name": "Merge3_build_014",
     "desc": "Merge3_build_014_desc",
-    "quality": 1,
     "itemType": 2,
     "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
     "chainId": 1,
     "produceWeight": 10,
     "prefab": "TripleMergeableItem",
     "atlas": "NormalAtals",
     "icon": "04",
     "level": 4,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
+    "canMergeWithOmnipotentCard": true
   },
   {
     "id": 300032,
     "name": "Merge3_build_015",
     "desc": "Merge3_build_015_desc",
-    "quality": 1,
     "itemType": 2,
     "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
     "chainId": 1,
     "produceWeight": 10,
     "prefab": "TripleMergeableItem",
     "atlas": "NormalAtals",
     "icon": "05",
     "level": 5,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
+    "canMergeWithOmnipotentCard": true
   },
   {
     "id": 300033,
     "name": "Merge3_build_016",
     "desc": "Merge3_build_016_desc",
-    "quality": 1,
     "itemType": 2,
     "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
     "chainId": 1,
     "produceWeight": 10,
     "prefab": "TripleMergeableItem",
     "atlas": "NormalAtals",
     "icon": "06",
     "level": 6,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
+    "canMergeWithOmnipotentCard": true
   },
   {
     "id": 300034,
     "name": "Merge3_build_017",
     "desc": "Merge3_build_017_desc",
-    "quality": 1,
     "itemType": 2,
     "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
     "chainId": 1,
     "produceWeight": 10,
     "prefab": "TripleMergeableItem",
     "atlas": "NormalAtals",
     "icon": "07",
     "level": 7,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
+    "canMergeWithOmnipotentCard": true
   },
   {
     "id": 300035,
     "name": "Merge3_build_018",
     "desc": "Merge3_build_018_desc",
-    "quality": 1,
     "itemType": 2,
     "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
     "chainId": 1,
     "produceWeight": 10,
     "prefab": "TripleMergeableItem",
     "atlas": "NormalAtals",
     "icon": "08",
     "level": 8,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
+    "canMergeWithOmnipotentCard": true
   },
   {
     "id": 300036,
     "name": "Merge3_build_019",
     "desc": "Merge3_build_019_desc",
-    "quality": 1,
     "itemType": 2,
     "isInitUnlock": false,
-    "cellSize": [
-      2,
-      2
-    ],
     "chainId": 1,
     "produceWeight": 10,
     "prefab": "TripleMergeableItem",
     "atlas": "NormalAtals",
     "icon": "09",
     "level": 9,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
+    "canMergeWithOmnipotentCard": false
   },
   {
     "id": 300037,
     "name": "Merge3_build_021",
     "desc": "Merge3_build_021_desc",
-    "quality": 1,
     "itemType": 1,
     "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
     "chainId": 2,
     "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
+    "prefab": "TripleMergeableItem",
     "atlas": "MineAtals",
     "icon": "01",
     "level": 1,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
+    "canMergeWithOmnipotentCard": true
   },
   {
     "id": 300038,
     "name": "Merge3_build_022",
     "desc": "Merge3_build_022_desc",
-    "quality": 1,
     "itemType": 1,
     "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
     "chainId": 2,
     "produceWeight": 10,
     "prefab": "TripleMergeableItem",
     "atlas": "MineAtals",
     "icon": "02",
     "level": 2,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
+    "canMergeWithOmnipotentCard": true
   },
   {
     "id": 300039,
     "name": "Merge3_build_023",
     "desc": "Merge3_build_023_desc",
-    "quality": 1,
     "itemType": 1,
     "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
     "chainId": 2,
     "produceWeight": 10,
     "prefab": "TripleMergeableItem",
     "atlas": "MineAtals",
     "icon": "03",
     "level": 3,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
+    "canMergeWithOmnipotentCard": true
   },
   {
     "id": 300040,
     "name": "Merge3_build_024",
     "desc": "Merge3_build_024_desc",
-    "quality": 1,
     "itemType": 1,
     "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
     "chainId": 2,
     "produceWeight": 10,
     "prefab": "TripleMergeableItem",
     "atlas": "MineAtals",
     "icon": "04",
     "level": 4,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
+    "canMergeWithOmnipotentCard": true
   },
   {
     "id": 300041,
     "name": "Merge3_build_025",
     "desc": "Merge3_build_025_desc",
-    "quality": 1,
     "itemType": 1,
     "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
     "chainId": 2,
     "produceWeight": 10,
     "prefab": "TripleMergeableItem",
     "atlas": "MineAtals",
     "icon": "05",
     "level": 5,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
+    "canMergeWithOmnipotentCard": true
   },
   {
     "id": 300042,
     "name": "Merge3_build_026",
     "desc": "Merge3_build_026_desc",
-    "quality": 1,
     "itemType": 1,
     "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
     "chainId": 2,
     "produceWeight": 10,
     "prefab": "TripleMergeableItem",
     "atlas": "MineAtals",
     "icon": "06",
     "level": 6,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
+    "canMergeWithOmnipotentCard": true
   },
   {
     "id": 300043,
     "name": "Merge3_build_027",
     "desc": "Merge3_build_027_desc",
-    "quality": 1,
     "itemType": 1,
     "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
     "chainId": 2,
     "produceWeight": 10,
     "prefab": "TripleMergeableItem",
     "atlas": "MineAtals",
     "icon": "07",
     "level": 7,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
+    "canMergeWithOmnipotentCard": true
   },
   {
     "id": 300044,
     "name": "Merge3_build_028",
     "desc": "Merge3_build_028_desc",
-    "quality": 1,
     "itemType": 1,
     "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
     "chainId": 2,
     "produceWeight": 10,
     "prefab": "TripleMergeableItem",
     "atlas": "MineAtals",
     "icon": "08",
     "level": 8,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
+    "canMergeWithOmnipotentCard": true
   },
   {
     "id": 300045,
     "name": "Merge3_build_029",
     "desc": "Merge3_build_029_desc",
-    "quality": 1,
     "itemType": 1,
     "isInitUnlock": false,
-    "cellSize": [
-      2,
-      1
-    ],
     "chainId": 2,
     "produceWeight": 10,
     "prefab": "TripleMergeableItem",
     "atlas": "MineAtals",
     "icon": "09",
     "level": 9,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
+    "canMergeWithOmnipotentCard": true
   },
   {
     "id": 300046,
     "name": "Merge3_build_0210",
     "desc": "Merge3_build_0210_desc",
-    "quality": 1,
     "itemType": 1,
     "isInitUnlock": false,
-    "cellSize": [
-      2,
-      2
-    ],
     "chainId": 2,
     "produceWeight": 10,
     "prefab": "TripleMergeableItem",
     "atlas": "MineAtals",
     "icon": "10",
     "level": 10,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300047,
-    "name": "Merge3_build_031",
-    "desc": "Merge3_build_031_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 9,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_well_1",
-    "level": 1,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300048,
-    "name": "Merge3_build_032",
-    "desc": "Merge3_build_032_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 9,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_well_2",
-    "level": 2,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300049,
-    "name": "Merge3_build_033",
-    "desc": "Merge3_build_033_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 9,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_well_3",
-    "level": 3,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300050,
-    "name": "Merge3_build_034",
-    "desc": "Merge3_build_034_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 9,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_well_4",
-    "level": 4,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300051,
-    "name": "Merge3_build_035",
-    "desc": "Merge3_build_035_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 9,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_well_5",
-    "level": 5,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300052,
-    "name": "Merge3_build_036",
-    "desc": "Merge3_build_036_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 9,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_well_6",
-    "level": 6,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300053,
-    "name": "Merge3_build_037",
-    "desc": "Merge3_build_037_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 9,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_well_7",
-    "level": 7,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300054,
-    "name": "Merge3_build_038",
-    "desc": "Merge3_build_038_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 9,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_well_8",
-    "level": 8,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300055,
-    "name": "Merge3_build_039",
-    "desc": "Merge3_build_039_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      2,
-      1
-    ],
-    "chainId": 9,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem_2_1",
-    "icon": "ui_map1_icon_well_9",
-    "level": 9,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300056,
-    "name": "Merge3_build_0310",
-    "desc": "Merge3_build_0310_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      2,
-      1
-    ],
-    "chainId": 9,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem_2_1",
-    "icon": "ui_map1_icon_well_10",
-    "level": 10,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300057,
-    "name": "Merge3_build_041",
-    "desc": "Merge3_build_041_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 10,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_dwarfHouse_1",
-    "level": 1,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300058,
-    "name": "Merge3_build_042",
-    "desc": "Merge3_build_042_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 10,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_dwarfHouse_2",
-    "level": 2,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300059,
-    "name": "Merge3_build_043",
-    "desc": "Merge3_build_043_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 10,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_dwarfHouse_3",
-    "level": 3,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300060,
-    "name": "Merge3_build_044",
-    "desc": "Merge3_build_044_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 10,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_dwarfHouse_4",
-    "level": 4,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300061,
-    "name": "Merge3_build_045",
-    "desc": "Merge3_build_045_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 10,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_dwarfHouse_5",
-    "level": 5,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300062,
-    "name": "Merge3_build_046",
-    "desc": "Merge3_build_046_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 10,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_dwarfHouse_6",
-    "level": 6,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300063,
-    "name": "Merge3_build_047",
-    "desc": "Merge3_build_047_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      2,
-      1
-    ],
-    "chainId": 10,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem_2_1",
-    "icon": "ui_map1_icon_dwarfHouse_7",
-    "level": 7,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300064,
-    "name": "Merge3_build_048",
-    "desc": "Merge3_build_048_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      2,
-      1
-    ],
-    "chainId": 10,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem_2_1",
-    "icon": "ui_map1_icon_dwarfHouse_8",
-    "level": 8,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300065,
-    "name": "Merge3_build_049",
-    "desc": "Merge3_build_049_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      2,
-      2
-    ],
-    "chainId": 10,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem_2_2",
-    "icon": "ui_map1_icon_dwarfHouse_9",
-    "level": 9,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300066,
-    "name": "Merge3_build_0410",
-    "desc": "Merge3_build_0410_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      2,
-      2
-    ],
-    "chainId": 10,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem_2_2",
-    "icon": "ui_map1_icon_dwarfHouse_10",
-    "level": 10,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300067,
-    "name": "Merge3_build_051",
-    "desc": "Merge3_build_051_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 11,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_pumpkinCar_1",
-    "level": 1,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300068,
-    "name": "Merge3_build_052",
-    "desc": "Merge3_build_052_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 11,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_pumpkinCar_2",
-    "level": 2,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300069,
-    "name": "Merge3_build_053",
-    "desc": "Merge3_build_053_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 11,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_pumpkinCar_3",
-    "level": 3,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300070,
-    "name": "Merge3_build_054",
-    "desc": "Merge3_build_054_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 11,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_pumpkinCar_4",
-    "level": 4,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300071,
-    "name": "Merge3_build_055",
-    "desc": "Merge3_build_055_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 11,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_pumpkinCar_5",
-    "level": 5,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300072,
-    "name": "Merge3_build_056",
-    "desc": "Merge3_build_056_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 11,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_pumpkinCar_6",
-    "level": 6,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300073,
-    "name": "Merge3_build_057",
-    "desc": "Merge3_build_057_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 11,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_pumpkinCar_7",
-    "level": 7,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300074,
-    "name": "Merge3_build_058",
-    "desc": "Merge3_build_058_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 11,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_pumpkinCar_8",
-    "level": 8,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300075,
-    "name": "Merge3_build_059",
-    "desc": "Merge3_build_059_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      2,
-      1
-    ],
-    "chainId": 11,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem_2_1",
-    "icon": "ui_map1_icon_pumpkinCar_9",
-    "level": 9,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300076,
-    "name": "Merge3_build_0510",
-    "desc": "Merge3_build_0510_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      2,
-      2
-    ],
-    "chainId": 11,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem_2_2",
-    "icon": "ui_map1_icon_pumpkinCar_10",
-    "level": 10,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300077,
-    "name": "Merge3_animal_011",
-    "desc": "Merge3_animal_011_desc",
-    "quality": 1,
-    "itemType": 3,
-    "isInitUnlock": true,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 12,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_bluebird_1",
-    "level": 1,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300078,
-    "name": "Merge3_animal_012",
-    "desc": "Merge3_animal_012_desc",
-    "quality": 1,
-    "itemType": 3,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 12,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_bluebird_2",
-    "level": 2,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300079,
-    "name": "Merge3_animal_013",
-    "desc": "Merge3_animal_013_desc",
-    "quality": 1,
-    "itemType": 3,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 12,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_bluebird_3",
-    "level": 3,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "produceInterval": 86400,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300080,
-    "name": "Merge3_animal_014",
-    "desc": "Merge3_animal_014_desc",
-    "quality": 1,
-    "itemType": 3,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 12,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_bluebird_4",
-    "level": 4,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "produceInterval": 86400,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300081,
-    "name": "Merge3_animal_015",
-    "desc": "Merge3_animal_015_desc",
-    "quality": 1,
-    "itemType": 3,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 12,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_bluebird_5",
-    "level": 5,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "produceInterval": 86400,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300082,
-    "name": "Merge3_animal_016",
-    "desc": "Merge3_animal_016_desc",
-    "quality": 1,
-    "itemType": 3,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 12,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_bluebird_6",
-    "level": 6,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "produceInterval": 86400,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300083,
-    "name": "Merge3_animal_017",
-    "desc": "Merge3_animal_017_desc",
-    "quality": 1,
-    "itemType": 3,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 12,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_bluebird_7",
-    "level": 7,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 0,
-    "produceInterval": 86400,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300084,
-    "name": "Merge3_animal_021",
-    "desc": "Merge3_animal_021_desc",
-    "quality": 1,
-    "itemType": 3,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 13,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_cat_1",
-    "level": 1,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300085,
-    "name": "Merge3_animal_022",
-    "desc": "Merge3_animal_022_desc",
-    "quality": 1,
-    "itemType": 3,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 13,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_cat_2",
-    "level": 2,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300086,
-    "name": "Merge3_animal_023",
-    "desc": "Merge3_animal_023_desc",
-    "quality": 1,
-    "itemType": 3,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 13,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_cat_3",
-    "level": 3,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "produceInterval": 86400,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300087,
-    "name": "Merge3_animal_024",
-    "desc": "Merge3_animal_024_desc",
-    "quality": 1,
-    "itemType": 3,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 13,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_cat_4",
-    "level": 4,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "produceInterval": 86400,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300088,
-    "name": "Merge3_animal_025",
-    "desc": "Merge3_animal_025_desc",
-    "quality": 1,
-    "itemType": 3,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 13,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_cat_5",
-    "level": 5,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "produceInterval": 86400,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300089,
-    "name": "Merge3_animal_026",
-    "desc": "Merge3_animal_026_desc",
-    "quality": 1,
-    "itemType": 3,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 13,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_cat_6",
-    "level": 6,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "produceInterval": 86400,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300090,
-    "name": "Merge3_animal_027",
-    "desc": "Merge3_animal_027_desc",
-    "quality": 1,
-    "itemType": 3,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 13,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_cat_7",
-    "level": 7,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 0,
-    "produceInterval": 86400,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300091,
-    "name": "Merge3_build_061",
-    "desc": "Merge3_build_061_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 14,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_hamster_1",
-    "level": 1,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300092,
-    "name": "Merge3_build_062",
-    "desc": "Merge3_build_062_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 14,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_hamster_2",
-    "level": 2,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300093,
-    "name": "Merge3_build_063",
-    "desc": "Merge3_build_063_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 14,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_hamster_3",
-    "level": 3,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300094,
-    "name": "Merge3_build_064",
-    "desc": "Merge3_build_064_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 14,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_hamster_4",
-    "level": 4,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300095,
-    "name": "Merge3_build_065",
-    "desc": "Merge3_build_065_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 14,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_hamster_5",
-    "level": 5,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300096,
-    "name": "Merge3_build_066",
-    "desc": "Merge3_build_066_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 14,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_hamster_6",
-    "level": 6,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300097,
-    "name": "Merge3_build_067",
-    "desc": "Merge3_build_067_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 14,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_hamster_7",
-    "level": 7,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300098,
-    "name": "Merge3_build_068",
-    "desc": "Merge3_build_068_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      2,
-      1
-    ],
-    "chainId": 14,
-    "prefab": "ThreeMergeableItem_2_1",
-    "icon": "ui_map1_icon_hamster_8",
-    "level": 8,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300099,
-    "name": "Merge3_build_069",
-    "desc": "Merge3_build_069_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      2,
-      2
-    ],
-    "chainId": 14,
-    "prefab": "ThreeMergeableItem_2_2",
-    "icon": "ui_map1_icon_hamster_9",
-    "level": 9,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300100,
-    "name": "Merge3_build_071",
-    "desc": "Merge3_build_071_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 15,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_potted_1",
-    "level": 1,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300101,
-    "name": "Merge3_build_072",
-    "desc": "Merge3_build_072_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 15,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_potted_2",
-    "level": 2,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300102,
-    "name": "Merge3_build_073",
-    "desc": "Merge3_build_073_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 15,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_potted_3",
-    "level": 3,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300103,
-    "name": "Merge3_build_074",
-    "desc": "Merge3_build_074_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 15,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_potted_4",
-    "level": 4,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300104,
-    "name": "Merge3_build_075",
-    "desc": "Merge3_build_075_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 15,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_potted_5",
-    "level": 5,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300105,
-    "name": "Merge3_build_076",
-    "desc": "Merge3_build_076_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 15,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_potted_6",
-    "level": 6,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300106,
-    "name": "Merge3_build_077",
-    "desc": "Merge3_build_077_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 15,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_potted_7",
-    "level": 7,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300107,
-    "name": "Merge3_build_078",
-    "desc": "Merge3_build_078_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 15,
-    "produceWeight": 10,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_potted_8",
-    "level": 8,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300108,
-    "name": "Merge3_build_081",
-    "desc": "Merge3_build_081_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 16,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_bellTower_1",
-    "level": 1,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300109,
-    "name": "Merge3_build_082",
-    "desc": "Merge3_build_082_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 16,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_bellTower_2",
-    "level": 2,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300110,
-    "name": "Merge3_build_083",
-    "desc": "Merge3_build_083_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 16,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_bellTower_3",
-    "level": 3,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300111,
-    "name": "Merge3_build_084",
-    "desc": "Merge3_build_084_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 16,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_bellTower_4",
-    "level": 4,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300112,
-    "name": "Merge3_build_085",
-    "desc": "Merge3_build_085_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 16,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_bellTower_5",
-    "level": 5,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300113,
-    "name": "Merge3_build_086",
-    "desc": "Merge3_build_086_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 16,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_map1_icon_bellTower_6",
-    "level": 6,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300114,
-    "name": "Merge3_build_087",
-    "desc": "Merge3_build_087_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      2,
-      1
-    ],
-    "chainId": 16,
-    "prefab": "ThreeMergeableItem_2_1",
-    "icon": "ui_map1_icon_bellTower_7",
-    "level": 7,
-    "canMergeWithOmnipotentCard": true,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300115,
-    "name": "Merge3_build_088",
-    "desc": "Merge3_build_088_desc",
-    "quality": 1,
-    "itemType": 1,
-    "isInitUnlock": false,
-    "cellSize": [
-      2,
-      2
-    ],
-    "chainId": 16,
-    "prefab": "ThreeMergeableItem_2_2",
-    "icon": "ui_map1_icon_bellTower_8",
-    "level": 8,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300116,
-    "name": "101",
-    "desc": "101",
-    "quality": 1,
-    "itemType": 2,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "prefab": "ThreeMergeCharactor",
-    "icon": "ui_map1_icon_npc_snowWhite_1",
-    "level": 5,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300117,
-    "name": "101",
-    "desc": "101",
-    "quality": 1,
-    "itemType": 2,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "prefab": "ThreeMergeCharactor",
-    "icon": "ui_map1_icon_npc_snowWhite_2",
-    "level": 5,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300118,
-    "name": "101",
-    "desc": "101",
-    "quality": 1,
-    "itemType": 2,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 17,
-    "prefab": "ThreeMergeCharactor",
-    "icon": "ui_map1_icon_npc_snowWhite_3",
-    "level": 1,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300119,
-    "name": "101",
-    "desc": "101",
-    "quality": 1,
-    "itemType": 2,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 17,
-    "prefab": "ThreeMergeCharactor",
-    "icon": "ui_map1_icon_npc_snowWhite_4",
-    "level": 2,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300120,
-    "name": "101",
-    "desc": "101",
-    "quality": 1,
-    "itemType": 2,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 17,
-    "prefab": "ThreeMergeCharactor",
-    "icon": "ui_map1_icon_npc_snowWhite_5",
-    "level": 3,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 0,
-    "produceInterval": 43200,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300121,
-    "name": "101",
-    "desc": "101",
-    "quality": 1,
-    "itemType": 2,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 18,
-    "prefab": "ThreeMergeCharactor",
-    "icon": "ui_map1_icon_npc_cinderella_1",
-    "level": 1,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300122,
-    "name": "101",
-    "desc": "101",
-    "quality": 1,
-    "itemType": 2,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 18,
-    "prefab": "ThreeMergeCharactor",
-    "icon": "ui_map1_icon_npc_cinderella_2",
-    "level": 2,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300123,
-    "name": "101",
-    "desc": "101",
-    "quality": 1,
-    "itemType": 2,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 18,
-    "prefab": "ThreeMergeCharactor",
-    "icon": "ui_map1_icon_npc_cinderella_3",
-    "level": 3,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300124,
-    "name": "101",
-    "desc": "101",
-    "quality": 1,
-    "itemType": 2,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 18,
-    "prefab": "ThreeMergeCharactor",
-    "icon": "ui_map1_icon_npc_cinderella_4",
-    "level": 4,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300125,
-    "name": "101",
-    "desc": "101",
-    "quality": 1,
-    "itemType": 2,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 18,
-    "prefab": "ThreeMergeCharactor",
-    "icon": "ui_map1_icon_npc_cinderella_5",
-    "level": 5,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 0,
-    "produceInterval": 43200,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300126,
-    "name": "101",
-    "desc": "101",
-    "quality": 1,
-    "itemType": 2,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 19,
-    "prefab": "ThreeMergeCharactor",
-    "icon": "ui_map1_icon_npc_bootsCat_1",
-    "level": 1,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300127,
-    "name": "101",
-    "desc": "101",
-    "quality": 1,
-    "itemType": 2,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 19,
-    "prefab": "ThreeMergeCharactor",
-    "icon": "ui_map1_icon_npc_bootsCat_2",
-    "level": 2,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300128,
-    "name": "101",
-    "desc": "101",
-    "quality": 1,
-    "itemType": 2,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 19,
-    "prefab": "ThreeMergeCharactor",
-    "icon": "ui_map1_icon_npc_bootsCat_3",
-    "level": 3,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300129,
-    "name": "101",
-    "desc": "101",
-    "quality": 1,
-    "itemType": 2,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 19,
-    "prefab": "ThreeMergeCharactor",
-    "icon": "ui_map1_icon_npc_bootsCat_4",
-    "level": 4,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 0,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300130,
-    "name": "101",
-    "desc": "101",
-    "quality": 1,
-    "itemType": 2,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "chainId": 19,
-    "prefab": "ThreeMergeCharactor",
-    "icon": "ui_map1_icon_npc_bootsCat_5",
-    "level": 5,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 0,
-    "produceInterval": 43200,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300245,
-    "name": "101",
-    "desc": "101",
-    "quality": 1,
-    "itemType": 9,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "produceWeight": 0,
-    "prefab": "ThreeMergeaResourceBox",
-    "icon": "ui_special_icon_gem_small",
-    "level": 1,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 1,
-    "flyTo": 2,
-    "isDisplayLightVfx": true
-  },
-  {
-    "id": 300246,
-    "name": "101",
-    "desc": "101",
-    "quality": 1,
-    "itemType": 9,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "produceWeight": 0,
-    "prefab": "ThreeMergeaResourceBox",
-    "icon": "ui_special_icon_gem_large",
-    "level": 1,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 1,
-    "flyTo": 2,
-    "isDisplayLightVfx": true
-  },
-  {
-    "id": 300247,
-    "name": "101",
-    "desc": "101",
-    "quality": 1,
-    "itemType": 9,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "produceWeight": 0,
-    "prefab": "ThreeMergeaResourceBox",
-    "icon": "ui_special_icon_gem_large",
-    "level": 1,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 1,
-    "flyTo": 2,
-    "isDisplayLightVfx": true
-  },
-  {
-    "id": 300248,
-    "name": "101",
-    "desc": "101",
-    "quality": 1,
-    "itemType": 6,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "produceWeight": 0,
-    "prefab": "ThreeMergeaResourceBox",
-    "icon": "ui_special_icon_wise_small",
-    "level": 1,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 1,
-    "flyTo": 2,
-    "isDisplayLightVfx": true
-  },
-  {
-    "id": 300249,
-    "name": "101",
-    "desc": "101",
-    "quality": 1,
-    "itemType": 6,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "produceWeight": 0,
-    "prefab": "ThreeMergeaResourceBox",
-    "icon": "ui_special_icon_wise_large",
-    "level": 1,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 1,
-    "flyTo": 2,
-    "isDisplayLightVfx": true
-  },
-  {
-    "id": 300250,
-    "name": "101",
-    "desc": "101",
-    "quality": 1,
-    "itemType": 6,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "produceWeight": 0,
-    "prefab": "ThreeMergeaResourceBox",
-    "icon": "ui_special_icon_wise_large",
-    "level": 1,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 1,
-    "flyTo": 2,
-    "isDisplayLightVfx": true
-  },
-  {
-    "id": 300251,
-    "name": "101",
-    "desc": "101",
-    "quality": 1,
-    "itemType": 12,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "produceWeight": 0,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_box_icon_free",
-    "level": 1,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 1,
-    "flyTo": 2,
-    "isDisplayLightVfx": false,
-    "lockableBoxRewards": "300091,5;300108,5"
-  },
-  {
-    "id": 300252,
-    "name": "101",
-    "desc": "101",
-    "quality": 1,
-    "itemType": 12,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "produceWeight": 0,
-    "prefab": "ThreeMergeLockableBox",
-    "icon": "ui_box_icon_wish_1",
-    "level": 1,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 1,
-    "flyTo": 2,
-    "isDisplayLightVfx": false,
-    "lockableBoxRewards": "300031,1;300024,8;300077,2;300084,2"
-  },
-  {
-    "id": 300253,
-    "name": "101",
-    "desc": "101",
-    "quality": 1,
-    "itemType": 12,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "produceWeight": 0,
-    "prefab": "ThreeMergeLockableBox",
-    "icon": "ui_box_icon_wish_2",
-    "level": 1,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 1,
-    "flyTo": 2,
-    "isDisplayLightVfx": false,
-    "lockableBoxRewards": "300040,2;300024,8;300078,2;300084,2"
-  },
-  {
-    "id": 300254,
-    "name": "101",
-    "desc": "101",
-    "quality": 1,
-    "itemType": 12,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "produceWeight": 0,
-    "prefab": "ThreeMergeLockableBox",
-    "icon": "ui_box_icon_wish_3",
-    "level": 1,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 1,
-    "flyTo": 2,
-    "isDisplayLightVfx": false,
-    "lockableBoxRewards": "300051,2;300024,8;300078,2;300085,2"
-  },
-  {
-    "id": 300259,
-    "name": "101",
-    "desc": "101",
-    "quality": 1,
-    "itemType": 11,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "produceWeight": 0,
-    "prefab": "ThreeMergeFreeBox",
-    "icon": "ui_box_icon_free",
-    "level": 1,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 1,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300260,
-    "name": "101",
-    "desc": "101",
-    "quality": 1,
-    "itemType": 7,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "produceWeight": 0,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_special_icon_live_Infinite",
-    "level": 1,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 1,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
-  },
-  {
-    "id": 300261,
-    "name": "101",
-    "desc": "101",
-    "quality": 1,
-    "itemType": 7,
-    "isInitUnlock": false,
-    "cellSize": [
-      1,
-      1
-    ],
-    "produceWeight": 0,
-    "prefab": "ThreeMergeableItem",
-    "icon": "ui_special_icon_live_Infinite",
-    "level": 1,
-    "canMergeWithOmnipotentCard": false,
-    "useWay": 1,
-    "flyTo": 2,
-    "isDisplayLightVfx": false
+    "canMergeWithOmnipotentCard": false
   }
 ]
