@@ -40,11 +40,7 @@ namespace TripleMerge
         private void OnDebugClick()
         {
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
-            //todo debug工具弹出框
             UIViewSystem.Instance.Open<DebugUI>();
-            //SaveFileManager.Instance.GetSaveFile<SaveFileTripleMerge>().Clear();
-            //DebugUtil.LogWarning("清除三消数据");
-            //QuitApp();
 #endif
         }
         private void OnStartClick()

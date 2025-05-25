@@ -6,6 +6,7 @@ using UnityEngine;
 
 public partial class DebugOptions
 {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
     // Category ：大类型名称
     // DisplayName ：小类型名称
     [Category("通用")]
@@ -16,10 +17,12 @@ public partial class DebugOptions
         DebugUtil.LogWarning("清除三消数据");
         QuitApp();
     }
+
     [Category("其他")]
     [DisplayName("日志测试")]
     public void LogTest()
     {
         DebugUtil.LogWarning("这是一条日志");
     }
+#endif
 }
