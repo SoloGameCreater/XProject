@@ -15,10 +15,12 @@ public class DebugUI : UIPopup
     [ComponentBinder("Close")] private Button _closeButton;
     [ComponentBinder("ToggleItem")] private Transform _toggleItem; // 左侧选项按钮
     [ComponentBinder("DebugButton")] private Transform _debugButtonItem; // 右侧按钮
-    [ComponentBinder("Root/ContentNode/ScrollView/Viewport/Content")] private Transform _debugContent; // 右侧内容
+
+    [ComponentBinder("Root/ContentNode/ScrollView/Viewport/Content")]
+    private Transform _debugContent; // 右侧内容
 
 
-    private Dictionary<string, List<OptionDefinition>> _options = new Dictionary<string, List<OptionDefinition>>();
+    private Dictionary<string, List<OptionDefinition>> _options;
 
     public GameObject selectObj;
 
@@ -29,6 +31,7 @@ public class DebugUI : UIPopup
         AddMenuBtn();
         _closeButton.onClick.AddListener(OnCloseClick);
     }
+
     private void GetConfig()
     {
         if (_options != null)
@@ -58,6 +61,7 @@ public class DebugUI : UIPopup
             kv.Value.Sort((d1, d2) => d1.SortPriority.CompareTo(d2.SortPriority));
         }
     }
+
     /// <summary>
     /// 扫描指定对象中所有可用作调试选项的成员（属性和方法）
     /// 复制自 SRDebugger 工具并使用 DebugOptions 特性
@@ -68,7 +72,7 @@ public class DebugUI : UIPopup
     {
         // 创建一个列表来存储所有找到的调试选项
         var options = new List<OptionDefinition>();
-        
+
         // 通过反射获取目标对象类型的所有成员（属性和方法）
         // 只获取实例、公共、可读写属性、可调用方法
         var members =
@@ -98,7 +102,7 @@ public class DebugUI : UIPopup
             {
                 // 将成员信息转换为属性信息
                 var propertyInfo = memberInfo as PropertyInfo;
-                
+
                 // 如果属性没有 getter 方法，跳过此属性
                 if (propertyInfo.GetGetMethod() == null)
                 {
@@ -129,7 +133,7 @@ public class DebugUI : UIPopup
 
                 // 只处理无参数且返回类型为 void 的方法
                 // 这样的方法适合作为调试按钮的回调
-                if (methodInfo.ReturnType != typeof (void) || methodInfo.GetParameters().Length > 0)
+                if (methodInfo.ReturnType != typeof(void) || methodInfo.GetParameters().Length > 0)
                 {
                     continue;
                 }
@@ -143,80 +147,83 @@ public class DebugUI : UIPopup
         // 返回所有找到的调试选项定义
         return options;
     }
+
     private void AddMenuBtn()
     {
         _toggleItem.gameObject.SetActive(false);
-        foreach(var kv in _options)
+        _debugButtonItem.gameObject.SetActive(false);
+        foreach (var kv in _options)
         {
             GameObject obj = GameObject.Instantiate(_toggleItem.gameObject, _toggleItem.transform.parent);
             obj.gameObject.SetActive(true);
             obj.transform.Find("Text").GetComponent<Text>().text = kv.Key;
             obj.transform.Find("Selected").gameObject.SetActive(false);
-            obj.GetComponent<Button>().onClick.AddListener(() => { RefreshDebugButtonShow(kv.Value, kv.Key, obj); });
+            obj.GetComponent<Button>().onClick.AddListener(() => { RefreshDebugButtonShow(kv.Value, obj); });
 
-            RefreshDebugButtonShow(kv.Value, kv.Key, obj);
+            RefreshDebugButtonShow(kv.Value, obj);
         }
     }
-    private void RefreshDebugButtonShow(List<OptionDefinition> datas, string menuString, GameObject newObj)
+
+    private void RefreshDebugButtonShow(List<OptionDefinition> datas, GameObject newObj)
     {
         List<OptionDefinition> list = datas;
         var hasValue = list?.Count > 0;
-        if (!hasValue) return; 
+        if (!hasValue) return;
 
         if (selectObj != null)
+        {
+            selectObj.transform.Find("Selected").gameObject.SetActive(false);
+        }
+
+        newObj.transform.Find("Selected").gameObject.SetActive(true);
+        selectObj = newObj;
+        for (var i = 0; i < _debugContent.transform.childCount; i++)
+        {
+            var child = _debugContent.transform.GetChild(i);
+            var childName = child.gameObject.name;
+            // 现在只有button,剩下两个后面添加
+            if (childName == "DebugButton" || childName == "DebugInput" || childName == "DebugText")
             {
-                selectObj.transform.Find("Selected").gameObject.SetActive(false);
+                continue;
             }
 
-            newObj.transform.Find("Selected").gameObject.SetActive(true);
-            selectObj = newObj;
-            for (var i = 0; i < _debugContent.transform.childCount; i++)
+            GameObject.Destroy(child.gameObject);
+        }
+
+        foreach (var optionInfo in list)
+        {
+            var method = optionInfo.Method;
+
+            if (method != null)
             {
-                var child = _debugContent.transform.GetChild(i);
-                var childName = child.gameObject.name;
-                // 现在只有button,剩下两个后面添加
-                if (childName == "DebugButton" || childName == "DebugInput" || childName == "DebugText")
-                {
-                    continue;
-                }
-
-                GameObject.Destroy(child.gameObject);
+                GameObject obj = GameObject.Instantiate(_debugButtonItem.gameObject, _debugContent);
+                obj.gameObject.SetActive(true);
+                obj.transform.Find("Text").GetComponent<Text>().text = optionInfo.Name;
+                obj.GetComponent<Button>().onClick.AddListener(() => { method.Invoke(null); });
             }
-
-            foreach (var optionInfo in list)
+            else
             {
-                var method = optionInfo.Method;
-
-                if (method != null)
-                {
-                    GameObject obj = GameObject.Instantiate(_debugButtonItem.gameObject, _debugContent);
-                    obj.gameObject.SetActive(true);
-                    obj.transform.Find("Text").GetComponent<Text>().text = optionInfo.Name;
-                    obj.GetComponent<Button>().onClick.AddListener(() => { method.Invoke(null); });
-                }
-                else
-                {
-                    // todo 暂时没有功能
-                    DebugUtil.LogWarning($"DebugUI: {optionInfo.Name} 没有对应的debug功能");
-                    // var property = optionInfo.Property;
-                    // if (property != null && property.CanWrite)
-                    // {
-                    //     GameObject obj = GameObject.Instantiate(debugInput.gameObject, _debugContent);
-                    //     obj.gameObject.SetActive(true);
-                    //     obj.GetComponentInChildren<Text>().text = optionInfo.Name;
-                    //     InputField ipt = obj.GetComponentInChildren<InputField>();
-                    //     Type type = optionInfo.GetType();
-                    //     obj.GetComponentInChildren<Button>().onClick.AddListener(() => { property.SetValue(Convert.ChangeType(ipt.text, optionInfo.Property.PropertyType)); });
-                    //     ipt.text = optionInfo.Property.GetValue().ToString();
-                    // }
-                    // else
-                    // {
-                    //     GameObject obj = GameObject.Instantiate(debugText.gameObject, _debugContent);
-                    //     obj.gameObject.SetActive(true);
-                    //     obj.GetComponentInChildren<Text>().text = string.Format("{0}:{1}", optionInfo.Name, optionInfo.Property.GetValue());
-                    // }
-                }
+                // todo 暂时没有功能
+                DebugUtil.LogWarning($"DebugUI: {optionInfo.Name} 没有对应的debug功能");
+                // var property = optionInfo.Property;
+                // if (property != null && property.CanWrite)
+                // {
+                //     GameObject obj = GameObject.Instantiate(debugInput.gameObject, _debugContent);
+                //     obj.gameObject.SetActive(true);
+                //     obj.GetComponentInChildren<Text>().text = optionInfo.Name;
+                //     InputField ipt = obj.GetComponentInChildren<InputField>();
+                //     Type type = optionInfo.GetType();
+                //     obj.GetComponentInChildren<Button>().onClick.AddListener(() => { property.SetValue(Convert.ChangeType(ipt.text, optionInfo.Property.PropertyType)); });
+                //     ipt.text = optionInfo.Property.GetValue().ToString();
+                // }
+                // else
+                // {
+                //     GameObject obj = GameObject.Instantiate(debugText.gameObject, _debugContent);
+                //     obj.gameObject.SetActive(true);
+                //     obj.GetComponentInChildren<Text>().text = string.Format("{0}:{1}", optionInfo.Name, optionInfo.Property.GetValue());
+                // }
             }
+        }
     }
 
     public override async Task OnViewClose()
@@ -229,5 +236,4 @@ public class DebugUI : UIPopup
     {
         DoViewClose();
     }
-
 }

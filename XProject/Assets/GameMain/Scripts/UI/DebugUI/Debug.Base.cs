@@ -16,5 +16,10 @@ public partial class DebugOptions
         DebugUtil.LogWarning("清除三消数据");
         QuitApp();
     }
-
+    [Category("其他")]
+    [DisplayName("日志测试")]
+    public void LogTest()
+    {
+        DebugUtil.LogWarning("这是一条日志");
+    }
 }
