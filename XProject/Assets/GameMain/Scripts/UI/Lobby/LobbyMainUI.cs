@@ -41,10 +41,10 @@ namespace TripleMerge
         {
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             //todo debug工具弹出框
-            //UIViewSystem.Instance.Open<DebugPopup>();
-            SaveFileManager.Instance.GetSaveFile<SaveFileTripleMerge>().Clear();
-            DebugUtil.LogWarning("清除三消数据");
-            QuitApp();
+            UIViewSystem.Instance.Open<DebugUI>();
+            //SaveFileManager.Instance.GetSaveFile<SaveFileTripleMerge>().Clear();
+            //DebugUtil.LogWarning("清除三消数据");
+            //QuitApp();
 #endif
         }
         private void OnStartClick()
@@ -56,14 +56,6 @@ namespace TripleMerge
         public void Show()
         {
             Debug.LogWarning("Shoooooooow");
-        }
-        private void QuitApp()
-        {
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-#else
-            Application.Quit();
-#endif
         }
     }
 }
