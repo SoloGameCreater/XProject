@@ -12,13 +12,43 @@
 - 公共成员使用PascalCase命名法，私有成员使用camelCase命名法。
 - 使用#if UNITY_EDITOR包装仅编辑器代码。
 - 使用DebugUtil.Log()代替Debug.Log()。并且检查是否引用了Framework命名空间。
+- 字段和变量使用明确的访问修饰符，避免使用默认访问级别。
+
+## UI开发规范
+- 默认使用LocalizeTextMeshProUGUI作为UI文本组件，支持多语言。
+- 使用[ComponentBinder]特性绑定UI组件，提高代码可读性和维护性。
+- UI脚本中使用[AssetAddress]特性指定资源地址。
+- 避免在UI代码中使用Transform.Find()，优先使用直接引用。
+- 使用适当的UI布局组件(LayoutGroup, ContentSizeFitter等)而非硬编码位置。
 
 ## 最佳实践
 - 使用TryGetComponent避免空引用异常。
 - 优先使用直接引用或GetComponent()而非GameObject.Find()或Transform.Find()。
-- 默认使用LocalizeTextMeshProUGUI作为UI文本组件。
 - 为频繁实例化的对象实现对象池。
 - 利用Task处理基于时间的操作，使用Job系统处理CPU密集型任务。
+- 实现Singleton模式时考虑线程安全，使用lock机制。
+- 继承自MonoBehaviour的Singleton使用Manager<T>基类。
+- 非继承自MonoBehaviour的Singleton使用GlobalSystem<T>基类。
+
+## 对象池和内存管理
+- 对于频繁创建/销毁的GameObject，使用ObjectPoolMgr.SpawnGameObject()和RecycleGameObject()。
+- 实现PoolableComponent接口，在OnSpawn()和OnDespawn()中处理对象重置逻辑。
+- 使用Object.Instantiate()时总是考虑是否可以用对象池替代。
+- 对于UI元素，使用UnityEngine.Pool.ObjectPool<T>管理简单对象。
+
+## 组件和架构模式
+- 使用[RequireComponent]确保依赖组件存在。
+- 使用[DisallowMultipleComponent]防止重复添加相同组件。
+- 在Awake()中获取组件引用，在Start()中初始化逻辑。
+- 使用事件系统(EventDispatcher)解耦组件间通信。
+- 实现ISerializationCallbackReceiver处理序列化前后的特殊逻辑。
+
+## 性能优化
+- 缓存频繁访问的组件引用。
+- 使用StringBuilder处理字符串拼接。
+- 避免在Update()中进行GC分配操作。
+- 使用协程或async/await处理异步操作，避免阻塞主线程。
+- 合理使用DontDestroyOnLoad，避免场景切换时不必要的对象保留。
 
 ## 命名规范
 - 变量: variableName
@@ -29,8 +59,30 @@
 - 方法: MethodName()
 - 参数: argumentName
 - 临时变量: temporaryVariable
+- 私有字段: _fieldName
+- 事件: OnEventName
+
+## 资源管理
+- 使用AssetAddress特性管理资源路径。
+- 异步加载资源，避免阻塞主线程。
+- 及时释放不再使用的资源引用。
+- 使用资源包(AssetBundle)管理大型资源。
+
+## 错误处理和调试
+- 使用try-catch处理可能的异常。
+- 在关键位置添加断言(Assert)验证假设。
+- 使用条件编译(#if UNITY_EDITOR)分离开发和生产代码。
+- 记录有意义的日志信息，便于问题定位。
+
+## 多线程和异步
+- 使用ThreadDispatcher或Loom处理线程间通信。
+- 避免在非主线程中访问Unity API。
+- 使用CancellationToken取消长时间运行的操作。
+- 合理使用Task.Run()处理CPU密集型计算。
 
 参考Unity文档和C#编程指南了解脚本编写、游戏架构和性能优化的最佳实践。
 提供解决方案时，始终考虑特定上下文、目标平台和性能要求。在适用的情况下提供多种方法，并解释每种方法的优缺点。
   
+
+
   
