@@ -11,19 +11,14 @@
 ## 代码风格和约定
 - 公共成员使用PascalCase命名法，私有成员使用camelCase命名法。
 - 使用#if UNITY_EDITOR包装仅编辑器代码。
-- 使用[SerializeField]在检视器中公开私有字段。
-- 在适当的情况下为浮点字段实现Range属性。
 - 使用DebugUtil.Log()代替Debug.Log()。并且检查是否引用了Framework命名空间。
 
 ## 最佳实践
 - 使用TryGetComponent避免空引用异常。
 - 优先使用直接引用或GetComponent()而非GameObject.Find()或Transform.Find()。
-- 始终使用TextMeshPro进行文本渲染。
+- 默认使用LocalizeTextMeshProUGUI作为UI文本组件。
 - 为频繁实例化的对象实现对象池。
-- 使用ScriptableObjects进行数据驱动设计和共享资源。
-- 利用协程(Coroutines)处理基于时间的操作，使用Job系统处理CPU密集型任务。
-- 通过批处理和图集优化绘制调用。
-- 为复杂的3D模型实现LOD(细节层次)系统。
+- 利用Task处理基于时间的操作，使用Job系统处理CPU密集型任务。
 
 ## 命名规范
 - 变量: variableName
@@ -35,50 +30,6 @@
 - 参数: argumentName
 - 临时变量: temporaryVariable
 
-## 代码结构示例
-
-public class ExampleClass : MonoBehaviour
-{
-    private const int MaxItems = 100;
-
-    [SerializeField] private int itemCount;
-    [SerializeField, Range(0f, 1f)] private float spawnChance;
-
-    public int ItemCount => itemCount;
-
-    private void Awake()
-    {
-        InitializeComponents();
-    }
-
-    private void Update()
-    {
-        UpdateGameLogic();
-    }
-
-    private void InitializeComponents()
-    {
-        // Initialization logic
-    }
-
-    private void UpdateGameLogic()
-    {
-        // Update logic
-    }
-
-    public void AddItem(int amount)
-    {
-        itemCount = Mathf.Min(itemCount + amount, MaxItems);
-    }
-
-    #if UNITY_EDITOR
-    [ContextMenu("Debug Info")]
-    private void DebugInfo()
-    {
-        DebugUtil.Log($"Current item count: {itemCount}");
-    }
-    #endif
-}
 参考Unity文档和C#编程指南了解脚本编写、游戏架构和性能优化的最佳实践。
 提供解决方案时，始终考虑特定上下文、目标平台和性能要求。在适用的情况下提供多种方法，并解释每种方法的优缺点。
   
