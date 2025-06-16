@@ -108,3 +108,16 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
+    - GroupName: Role
+      GroupDesc: 
+      AssetTags: BASE_RES
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/ExtraRes/RoleRes
+        CollectorGUID: 18b27b3114e19134fa7a2858f13e44a1
+        CollectorType: 0
+        AddressRuleName: AddressDisable
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
