@@ -3,6 +3,7 @@ using Framework;
 using Gameplay.SubSystems;
 using TripleMerge;
 using Config.TripleMerge;
+using RoleSystem;
 using Game = Framework.Game;
 
 public class MyGame : Game
@@ -63,6 +64,9 @@ public class MyGame : Game
             
             //三合
             _subSystemManager.AddSubSystem<TripleMergeSystem>();
+            
+            //角色系统
+            _subSystemManager.AddSubSystem<RoleManager>();
 
             //Model
             _subSystemManager.AddSubSystem<SaveFileSystem>();
