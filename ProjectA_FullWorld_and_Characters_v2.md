@@ -1,3 +1,4 @@
+配置地址：https://docs.google.com/spreadsheets/d/1R4lAnuFHvOWN5lbZNTE6Hjz2wBl_w8GTxrv8vOXfd9s/edit?gid=0#gid=0
 
 # 《Chrono Serenade》世界观 & 角色设定 + AI 提示词 完整版
 
