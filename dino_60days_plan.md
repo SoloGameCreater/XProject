@@ -28,9 +28,9 @@ Day 1 — 项目初始化 + 工程结构
 创建 Unity 项目（使用任意 LTS）
 
 建立基础目录：
-
-Scripts
-
+代码类放置于：..Assets\GameMain\Scripts之下，文件夹名为：
+Dinosaur
+资源类放置于：..\Assets\ExtraRes\Dinosaur之下，文件夹名为：
 Prefabs
 
 Art
