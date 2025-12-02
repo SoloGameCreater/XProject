@@ -121,3 +121,16 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
+    - GroupName: Dinosaur
+      GroupDesc: 
+      AssetTags: BASE_RES
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/ExtraRes/Dinosaur
+        CollectorGUID: ddb7db1af43e42fb93cfe69e7a60f972
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackTopDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
