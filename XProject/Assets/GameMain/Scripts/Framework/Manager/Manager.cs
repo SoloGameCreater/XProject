@@ -6,8 +6,6 @@
 /// </summary>
 public class Manager<T> : MonoBehaviour where T : MonoBehaviour
 {
-    // Check to see if we're about to be destroyed.
-    private static bool m_ShuttingDown = false;
     private static object m_Lock = new object();
     private static T m_Instance;
 
@@ -18,34 +16,44 @@ public class Manager<T> : MonoBehaviour where T : MonoBehaviour
     {
         get
         {
-            lock (m_Lock)
-            {
-                if (m_Instance != null) return m_Instance;
+            TryGetInstance(out var instance);
+            return instance;
+        }
+    }
 
-#if UNITY_EDITOR
-                if (m_ShuttingDown)
-                {
-                    // Logging or handling for editor shutdown can be done here if needed.
-                }
-#endif
+    public static bool TryGetInstance(out T instance, bool createWhenMissing = true)
+    {
+        lock (m_Lock)
+        {
+            if (m_Instance != null)
+            {
+                instance = m_Instance;
+                return true;
+            }
+
+            if (!createWhenMissing)
+            {
+                instance = null;
+                return false;
+            }
 
 #if !BAN_FINDOBJECTOFTYPE && !REPLACE_FINDOBJECTOFTYPE
-                // Search for existing instance.
-                m_Instance = (T)FindObjectOfType(typeof(T));
+            // Search for existing instance.
+            m_Instance = (T)FindObjectOfType(typeof(T));
 #endif
 
-                // Create new instance if one doesn't already exist.
-                if (m_Instance == null)
-                {
-                    var singletonObject = CreateSingletonObject();
-                    m_Instance = singletonObject.AddComponent<T>();
-                    singletonObject.name = typeof(T) + " (Singleton)";
-                    DontDestroyOnLoad(singletonObject);
-                    (m_Instance as Manager<T>).InitImmediately();
-                }
-
-                return m_Instance;
+            // Create new instance if one doesn't already exist.
+            if (m_Instance == null)
+            {
+                var singletonObject = CreateSingletonObject();
+                m_Instance = singletonObject.AddComponent<T>();
+                singletonObject.name = typeof(T) + " (Singleton)";
+                DontDestroyOnLoad(singletonObject);
+                (m_Instance as Manager<T>).InitImmediately();
             }
+
+            instance = m_Instance;
+            return instance != null;
         }
     }
 
@@ -74,14 +82,8 @@ public class Manager<T> : MonoBehaviour where T : MonoBehaviour
     {
     }
 
-    private void OnApplicationQuit()
-    {
-        m_ShuttingDown = true;
-    }
-
     protected virtual void OnDestroy()
     {
-        m_ShuttingDown = true;
         if (m_Instance == this)
         {
             m_Instance = null;

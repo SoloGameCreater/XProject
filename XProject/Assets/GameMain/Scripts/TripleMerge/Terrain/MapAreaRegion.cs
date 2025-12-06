@@ -228,7 +228,10 @@ namespace TripleMerge
 
         private void UnRegEventListener()
         {
-            EventDispatcher.Instance.RemoveEventListener(EventEnum.TripleMergeOnCellBecomeMergeable, OnCellBecomeMergeable);
+            if (EventDispatcher.TryGetInstance(out var dispatcher, false))
+            {
+                dispatcher.RemoveEventListener(EventEnum.TripleMergeOnCellBecomeMergeable, OnCellBecomeMergeable);
+            }
         }
     }
 }

@@ -166,7 +166,10 @@ namespace TripleMerge
 
         private void UnRegEventListener()
         {
-            EventDispatcher.Instance.RemoveEventListener(EventEnum.TripleMergeOnRegionUnlocked, OnRegionUnlocked);
+            if (EventDispatcher.TryGetInstance(out var dispatcher, false))
+            {
+                dispatcher.RemoveEventListener(EventEnum.TripleMergeOnRegionUnlocked, OnRegionUnlocked);
+            }
         }
         private void OnRegionUnlocked(BaseEvent baseEvent)
         {
