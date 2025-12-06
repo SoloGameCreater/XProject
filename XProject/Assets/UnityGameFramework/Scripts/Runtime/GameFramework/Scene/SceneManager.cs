@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityGameFramework.Runtime;
 using YooAsset;
+using SceneHandle = YooAsset.SceneHandle;
 
 namespace GameFramework.Scene
 {
