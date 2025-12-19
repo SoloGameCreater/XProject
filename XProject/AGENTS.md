@@ -1,7 +1,13 @@
 # Repository Guidelines 仓库指南
 
--## 项目结构与模块
-- Unity 6000.0.32f1 项目（来源：`ProjectSettings/ProjectVersion.txt`），核心脚本位于 `Assets/GameMain/Scripts`，按 TripleMerge/Game/Model/Terrain/UI/Framework/Common/SaveFile 分层；场景在 `Assets/Scenes`（InitScene/Main/MergeScene）；配置与地图数据在 `Assets/Resources/Configs/TripleMapData`；框架与第三方位于 `Assets/UnityGameFramework`、`Assets/ThirdParty`；`Bundles/` 为 YooAsset 构建产物。
+
+## 全局提示词说明
+- 本仓库的 AI/协作需同时加载 `AGENTS.md` 与 `Global_Agent.md `作为系统提示词，`Global_Agent.md `作为项目开发最佳实践。
+- 若出现规范冲突，优先遵循本文件的工程约束，再结合 `Global_Agent.md` 的业务与架构细节做增量补充；修改其中一份时请同步审视另一份是否需要更新。
+- 新成员或自动化流程接入时，应在初始化指引中显式引用上述两份文档，确保上下文不缺失。
+
+## 项目结构与模块
+- Unity 6000.3.2f1 项目（来源：`ProjectSettings/ProjectVersion.txt`），核心脚本位于 `Assets/GameMain/Scripts`，按 TripleMerge/Game/Model/Terrain/UI/Framework/Common/SaveFile 分层；场景在 `Assets/Scenes`（InitScene/Main/MergeScene）；配置与地图数据在 `Assets/Resources/Configs/TripleMapData`；框架与第三方位于 `Assets/UnityGameFramework`、`Assets/ThirdParty`；`Bundles/` 为 YooAsset 构建产物。
 - 恐龙合成背包方向：代码集中在 `Assets/GameMain/Scripts/Dinosaur`，资源在 `Assets/ExtraRes/Dinosaur`（建议子目录 Prefabs/Art/UI/Data/VFX/Audio）。
 
 ## Dinosaur 模块指引
@@ -24,7 +30,7 @@
 - 手工回归：从 InitScene 验证 Launch→TripleMerge 状态切换、地图净化与拖拽、UI 提示；Dinosaur 任务需走背包→组装→战斗链路；资源或配置改动后执行 `dotnet build` 确认无脚本报错。
 
 ## 提交与 PR 规范
-- git 历史以简短中文/英文句子为主（示例：`文档更新`、`新增一个回溯机制`），建议保持一句话描述 + 影响范围，必要时附 Issue 链接。
+- git 历史以简短中文句子为主（示例：`文档更新`、`新增一个回溯机制`），建议保持一句话描述 + 影响范围，必要时附 Issue 链接。
 - 提交前排除 Library/Temp/Logs/obj 等生成物，确保 .meta 同步；PR 描述需包含变更目的、影响场景（InitScene/Main/MergeScene）、验证步骤/截图，涉及资源包时注明是否需重建 Bundles。
 - 如改动全局配置或公共接口，请说明兼容/回滚方案（如恢复原 Prefab、撤销新增 ScriptableObject）。
 
