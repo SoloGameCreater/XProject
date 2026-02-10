@@ -119,7 +119,7 @@ public class Launching
 
         if (_progress >= 100f)
         {
-            Main.Game.Fsm.ChangeState(FsmStateType.TripleMerge, null);
+            Main.Game.Fsm.ChangeState(FsmStateType.Gameplay, null);
         }
     }
     

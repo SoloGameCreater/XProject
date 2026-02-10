@@ -1,5 +1,6 @@
 
 using UnityEngine;
+using GameplayRuntime;
 
 namespace Framework
 {
@@ -52,7 +53,15 @@ namespace Framework
 
         public bool IsTripleMerge()
         {
-            return _fsm.CurrentState is StateTripleMerge;
+            return IsInGameplay(GameplayIds.TripleMerge) || _fsm.CurrentState is StateTripleMerge;
+        }
+
+        public bool IsInGameplay(string gameplayId)
+        {
+            return _fsm != null
+                   && _fsm.CurrentState != null
+                   && _fsm.CurrentState.Type == FsmStateType.Gameplay
+                   && GameplayDirector.Instance.IsInGameplay(gameplayId);
         }
         
         /// <summary>
@@ -62,6 +71,7 @@ namespace Framework
         public bool IsJustWinInTMatch()
         {
             return MyMain.myGame.IsTripleMerge()
+                   && MyMain.myGame.Fsm.PreviousState != null
                    && MyMain.myGame.Fsm.PreviousState.Type == FsmStateType.MainGame;
         }
     }

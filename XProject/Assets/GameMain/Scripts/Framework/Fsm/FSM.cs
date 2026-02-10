@@ -49,10 +49,6 @@ namespace Framework
             }
             else if (force || newState != _currentState)
             {
-                var needShowLoading =
-                    _currentState != null && _currentState.Type == FsmStateType.MainGame && newState.Type == FsmStateType.TripleMerge ||
-                    _currentState != null && _currentState.Type == FsmStateType.TripleMerge && newState.Type == FsmStateType.MainGame;
-
                 var enterResult = await doChangeToStateAsync(newState, stateParam, onChangeFinised);
                 if (enterResult) EnterFinish();
             }

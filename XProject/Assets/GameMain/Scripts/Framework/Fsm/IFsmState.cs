@@ -7,6 +7,7 @@ namespace Framework
     {
         Non,
         Launch,      //启动的loading
+        Gameplay,    //通用玩法状态
         TripleMerge,  //合成/兼大厅
         MainGame,    //主游戏
     }

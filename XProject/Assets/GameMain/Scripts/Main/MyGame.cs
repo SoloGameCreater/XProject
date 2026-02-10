@@ -1,8 +1,7 @@
 
 using Framework;
+using GameplayRuntime;
 using Gameplay.SubSystems;
-using TripleMerge;
-using Config.TripleMerge;
 using RoleSystem;
 using Game = Framework.Game;
 
@@ -13,6 +12,9 @@ public class MyGame : Game
 
     protected override void OnInit()
     {
+        GameplayBootstrap.RegisterBuiltInModules();
+        GameplayDirector.Instance.Initialize(new GameplayContext(this));
+
         initSubSystems();
         initFsm();
         _fsm.ChangeState(FsmStateType.Launch, null);
@@ -61,27 +63,24 @@ public class MyGame : Game
             _subSystemManager.AddSubSystem<AudioSysManager>();
             _subSystemManager.AddSubSystem<GameSettingSubSystem>();
             _subSystemManager.AddSubSystem<GamePauseManager>();
-            
-            //三合
-            _subSystemManager.AddSubSystem<TripleMergeSystem>();
-            
+
             //角色系统
             _subSystemManager.AddSubSystem<RoleManager>();
+
+            //玩法模块安装
+            GameplayCatalog.Instance.InstallModules(new GameplayInstaller(_subSystemManager, "Gameplay"));
 
             //Model
             _subSystemManager.AddSubSystem<SaveFileSystem>();
             _subSystemManager.AddSubSystem<CurrencyModel>();
-
-            //配置
-            _subSystemManager.AddSubSystem<TripleMergeConfigManager>();
-            _subSystemManager.AddSubSystem<MapDataLoader>();
-
         }
     }
 
     private void initFsm()
     {
-        _fsm.RigsterState(FsmStateType.Launch,      new StateLaunch());
+        _fsm.RigsterState(FsmStateType.Launch, new StateLaunch());
+        _fsm.RigsterState(FsmStateType.Gameplay, new StateGameplay());
+        // 过渡期兼容
         _fsm.RigsterState(FsmStateType.TripleMerge,  new StateTripleMerge());
     }
 }
