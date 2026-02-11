@@ -1,6 +1,6 @@
 ---
 name: ugui-prefab-builder
-description: 生成 Unity UGUI 纯结构 Prefab（仅 Hierarchy、RectTransform、UGUI 组件与布局参数，不含脚本与事件绑定）。当用户提出“搭建背包/商店/设置等 UI 结构”“先出 UI 骨架再做行为绑定”“按 DSL 批量稳定产出 UGUI Prefab”“要求固定命名给后续行为层抓取节点”等请求时使用。
+description: 生成 Unity UGUI 纯结构 Prefab（仅 Hierarchy、RectTransform、UGUI 组件与布局参数，不含脚本与事件绑定）。当用户提出“搭建背包/商店/设置等 UI 结构”“先出 UI 骨架再做行为绑定”“按 DSL 批量稳定产出 UGUI Prefab”“要求固定命名给后续行为层抓取节点”“要求按 UI 前缀分文件夹输出”等请求时使用。
 ---
 
 # UGUI 结构 Prefab 搭建
@@ -30,7 +30,20 @@ description: 生成 Unity UGUI 纯结构 Prefab（仅 Hierarchy、RectTransform�
 
 - 始终生成主 Prefab：`<UIName>View.prefab`。
 - 按需生成 Cell Prefab：`<UIName>ItemCell.prefab`（仅结构，不挂脚本）。
+- 默认按 UI 前缀单独分目录输出（硬规则）：
+  - 输出根目录：`Assets/ExtraRes/Prefabs/UI`
+  - 前缀目录：`Assets/ExtraRes/Prefabs/UI/<UIPrefix>/`
+  - 示例：`InventoryView.prefab` 与 `InventoryItemCell.prefab` 必须放在 `Assets/ExtraRes/Prefabs/UI/Inventory/`
 - 默认不生成 Canvas 与 EventSystem；仅当 `with_canvas=true` 时生成。
+
+### 2.1 生成执行约束（硬规则）
+
+- 不启动新的 Unity 实例（不主动执行 `Unity.exe -projectPath ...`）。
+- 必须优先复用“当前已打开”的 Unity 实例来执行生成。
+- 推荐两种触发方式：
+  - 方式 A：通过 Editor 菜单执行生成方法（如 `Tools/UI/...`）。
+  - 方式 B：通过命令桥写入命令文件，由当前实例消费并执行（如 `Temp/CodexCommands/command.txt`）。
+- 命令桥模式下，需等待结果文件后再汇报完成（如 `Temp/CodexCommands/result.txt`）。
 
 ### 3. 生成 Hierarchy 骨架
 
@@ -144,6 +157,7 @@ InventoryItemCell
 【产物】
 - 主 Prefab:
 - 子 Prefab(可选):
+- 输出目录:
 
 【结构摘要】
 - 根节点:
