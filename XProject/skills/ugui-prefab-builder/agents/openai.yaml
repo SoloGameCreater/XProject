@@ -1,0 +1,4 @@
+interface:
+  display_name: "UGUI结构Prefab搭建"
+  short_description: "按自然语言或DSL稳定生成无脚本无事件的UGUI结构Prefab"
+  default_prompt: "根据我的输入生成仅含结构和组件参数的UGUI Prefab，严格不写脚本和事件绑定。"
