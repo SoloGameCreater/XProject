@@ -3,7 +3,6 @@
     "rootNamespace": "",
     "references": [
         "UnityGameFramework.Runtime",
-        "HybridCLR.Editor",
         "YooAsset",
         "YooAsset.Editor",
         "UniTask"

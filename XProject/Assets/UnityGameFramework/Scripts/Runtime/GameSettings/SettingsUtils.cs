@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using GameFramework;
 using UnityEngine;
@@ -28,27 +27,10 @@ public static class SettingsUtils
         get { return GlobalSettings.FrameworkGlobalSettings; }
     }
 
-    // public static HybridCLRCustomGlobalSettings HybridCLRCustomGlobalSettings
-    // {
-    //     get { return GlobalSettings.HybridClrCustomGlobalSettings; }
-    // }
-
     public static ResourcesArea ResourcesArea
     {
         get { return GlobalSettings.FrameworkGlobalSettings.ResourcesArea; }
     }
-
-    // public static void SetHybridCLRHotUpdateAssemblies(List<string> hotUpdateAssemblies)
-    // {
-    //     HybridCLRCustomGlobalSettings.HotUpdateAssemblies.Clear();
-    //     HybridCLRCustomGlobalSettings.HotUpdateAssemblies.AddRange(hotUpdateAssemblies);
-    // }
-    //
-    // public static void SetHybridCLRAOTMetaAssemblies(List<string> aOTMetaAssemblies)
-    // {
-    //     HybridCLRCustomGlobalSettings.AOTMetaAssemblies.Clear();
-    //     HybridCLRCustomGlobalSettings.AOTMetaAssemblies.AddRange(aOTMetaAssemblies);
-    // }
 
 
 //     public static string GetAppUpdateUrl()

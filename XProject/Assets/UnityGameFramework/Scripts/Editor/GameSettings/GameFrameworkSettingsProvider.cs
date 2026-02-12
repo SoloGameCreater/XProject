@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using UnityEditor;
 using UnityEngine.UIElements;
 using System.Collections.Generic;
@@ -31,7 +31,6 @@ public class GameFrameworkSettingsProvider : SettingsProvider
         base.OnGUI(searchContext);
         using var changeCheckScope = new EditorGUI.ChangeCheckScope();
         EditorGUILayout.PropertyField(m_CustomSettings.FindProperty("m_FrameworkGlobalSettings"));
-        //EditorGUILayout.PropertyField(m_CustomSettings.FindProperty("m_HybridCLRCustomGlobalSettings"));
         EditorGUILayout.Space(20);
         if (!changeCheckScope.changed) return;
         m_CustomSettings.ApplyModifiedPropertiesWithoutUndo();

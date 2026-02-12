@@ -1,8 +1,5 @@
-﻿using System.Linq;
-using System.Reflection;
 using GameFramework.Fsm;
 using GameFramework.Procedure;
-using UnityEngine;
 
 namespace BaseModule
 {
@@ -17,14 +14,7 @@ namespace BaseModule
         {
             base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
 
-            LoadHybrid();
-            
             ChangeState<ProcedureStartGame>(procedureOwner);
-        }
-        
-        private void LoadHybrid()
-        {
-            //不需要热更
         }
     }
 }

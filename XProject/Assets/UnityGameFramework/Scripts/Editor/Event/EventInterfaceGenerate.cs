@@ -73,18 +73,13 @@ public static class EventInterfaceGenerate
         Assembly mainLogicAssembly = null;
         foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
         {
-            // if (string.Compare(SettingsUtils.HybridCLRCustomGlobalSettings.LogicMainDllName, $"{assembly.GetName().Name}.dll",
-            //         StringComparison.Ordinal) == 0)
-            // {
-            //     mainLogicAssembly = assembly;
-            // }
+            // 旧的主逻辑程序集筛选逻辑已移除。
         }
 
         if (mainLogicAssembly == null)
         {
             EventInterfaceGenerateTag.HadGenerate = false;
             
-            //Log.Error($"Could not found assembly: {SettingsUtils.HybridCLRCustomGlobalSettings.LogicMainDllName}");
             return;
         }
 

@@ -37,8 +37,8 @@ public class ComponentBinder
 
         foreach (var item in fieldInfoDict)
         {
-            //ComponentBinderAttribute attr = Attribute.GetCustomAttribute(item.Value,typeAttr) as ComponentBinderAttribute;
-            //ILRuntime的bug，只能这么取attribute
+            // ComponentBinderAttribute attr = Attribute.GetCustomAttribute(item.Value, typeAttr) as ComponentBinderAttribute;
+            // 历史兼容：使用 GetCustomAttributes 获取特性更稳定
             var objAttr = item.Value.GetCustomAttributes(typeAttr, false);
             ComponentBinderAttribute attr = null;
 
