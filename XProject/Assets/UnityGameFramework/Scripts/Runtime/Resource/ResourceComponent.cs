@@ -254,11 +254,18 @@ namespace UnityGameFramework.Runtime
                 return;
             }
 
-            if (PlayMode == EPlayMode.EditorSimulateMode)
+            EPlayMode runtimePlayMode = PlayMode;
+            if (runtimePlayMode == EPlayMode.HostPlayMode || runtimePlayMode == EPlayMode.WebPlayMode)
+            {
+                Log.Warning($"Resource mode '{runtimePlayMode}' is disabled in offline-only project, force switch to {EPlayMode.OfflinePlayMode}.");
+                runtimePlayMode = EPlayMode.OfflinePlayMode;
+            }
+
+            if (runtimePlayMode == EPlayMode.EditorSimulateMode)
             {
                 Log.Info("During this run, Game Framework will use editor resource files, which you should validate first.");
 #if !UNITY_EDITOR
-                PlayMode = EPlayMode.OfflinePlayMode;
+                runtimePlayMode = EPlayMode.OfflinePlayMode;
 #endif
             }
 
@@ -278,17 +285,16 @@ namespace UnityGameFramework.Runtime
             }
 
             m_ResourceManager.DefaultPackageName = PackageName;
-            m_ResourceManager.PlayMode = PlayMode;
+            m_ResourceManager.PlayMode = runtimePlayMode;
             m_ResourceManager.VerifyLevel = VerifyLevel;
             m_ResourceManager.Milliseconds = Milliseconds;
             m_ResourceManager.InstanceRoot = transform;
-            m_ResourceManager.HostServerURL = SettingsUtils.GetResDownLoadPath();
             m_ResourceManager.Initialize();
             m_ResourceManager.AssetAutoReleaseInterval = m_AssetAutoReleaseInterval;
             m_ResourceManager.AssetCapacity = m_AssetCapacity;
             m_ResourceManager.AssetExpireTime = m_AssetExpireTime;
             m_ResourceManager.AssetPriority = m_AssetPriority;
-            Log.Info($"ResourceComponent Run Mode：{PlayMode}");
+            Log.Info($"ResourceComponent Run Mode：{runtimePlayMode}");
         }
 
         /// <summary>

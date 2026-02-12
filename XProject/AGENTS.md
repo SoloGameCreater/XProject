@@ -234,6 +234,7 @@ npm run build
 ## 编码风格与命名
 - C# 使用 4 空格缩进；类型/方法 PascalCase，局部变量 camelCase，常量 ALL_CAPS；命名贴合玩法语义（例：Map/Region/Mergeable）；事件与枚举保持前后一致。
 - 遵循 `TripleMergeSystem → TripleMergeGameplay → ITripleMergeComponent` 生命周期，异步优先使用 UniTask/async，避免高频 LINQ/装箱；注释与日志使用中文。
+- `Assets/GameMain/ScriptBaseModule` 目录内禁止使用 `DebugUtil`，统一使用 `UnityEngine.Debug.Log` / `UnityEngine.Debug.LogWarning` / `UnityEngine.Debug.LogError`。
 - 资源/Prefab 路径保持 `Assets/GameMain/...` 规范，勿随意移动 `UnityGameFramework` 与 `ThirdParty` 目录。
 
 ## 测试指南

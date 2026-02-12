@@ -183,6 +183,13 @@ namespace GameFramework.Resource
             EPlayMode playMode = (EPlayMode)PlayMode;
 #endif
 
+            // 单机项目强制使用离线资源模式，避免依赖资源服务器。
+            if (playMode == EPlayMode.HostPlayMode || playMode == EPlayMode.WebPlayMode)
+            {
+                Log.Warning($"Resource play mode '{playMode}' is not supported in offline-only build, force switch to {EPlayMode.OfflinePlayMode}.");
+                playMode = EPlayMode.OfflinePlayMode;
+            }
+
             if (PackageMap.ContainsKey(packageName))
             {
                 Log.Error($"ResourceSystem has already init package : {packageName}");
@@ -600,6 +607,10 @@ namespace GameFramework.Resource
                 }
                 else
                 {
+                    if (assetHandle is { IsValid: true })
+                    {
+                        assetHandle.Dispose();
+                    }
                     callback?.Invoke(null);
                 }
             };
@@ -643,6 +654,19 @@ namespace GameFramework.Resource
 
             if (cancelOrFailed)
             {
+                if (handle is { IsValid: true })
+                {
+                    handle.Dispose();
+                }
+                return null;
+            }
+
+            if (handle.AssetObject == null || handle.Status == EOperationStatus.Failed)
+            {
+                if (handle is { IsValid: true })
+                {
+                    handle.Dispose();
+                }
                 return null;
             }
             
@@ -673,6 +697,19 @@ namespace GameFramework.Resource
 
             if (cancelOrFailed)
             {
+                if (handle is { IsValid: true })
+                {
+                    handle.Dispose();
+                }
+                return null;
+            }
+
+            if (handle.AssetObject == null || handle.Status == EOperationStatus.Failed)
+            {
+                if (handle is { IsValid: true })
+                {
+                    handle.Dispose();
+                }
                 return null;
             }
 
@@ -746,9 +783,17 @@ namespace GameFramework.Resource
                 if (loadAssetCallbacks.LoadAssetFailureCallback != null)
                 {
                     loadAssetCallbacks.LoadAssetFailureCallback(location, LoadResourceStatus.NotReady, errorMessage, userData);
+                    if (handle is { IsValid: true })
+                    {
+                        handle.Dispose();
+                    }
                     return;
                 }
 
+                if (handle is { IsValid: true })
+                {
+                    handle.Dispose();
+                }
                 throw new GameFrameworkException(errorMessage);
             }
             else
@@ -824,9 +869,17 @@ namespace GameFramework.Resource
                 if (loadAssetCallbacks.LoadAssetFailureCallback != null)
                 {
                     loadAssetCallbacks.LoadAssetFailureCallback(location, LoadResourceStatus.NotReady, errorMessage, userData);
+                    if (handle is { IsValid: true })
+                    {
+                        handle.Dispose();
+                    }
                     return;
                 }
 
+                if (handle is { IsValid: true })
+                {
+                    handle.Dispose();
+                }
                 throw new GameFrameworkException(errorMessage);
             }
             else

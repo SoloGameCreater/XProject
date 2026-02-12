@@ -1,5 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 using YooAsset;
 using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedureManager>;
 
@@ -28,7 +29,7 @@ namespace BaseModule
             {
                 var initializationOperation = await GameModule.Resource.InitPackage();
 
-                if (initializationOperation.Status != EOperationStatus.Succeed)
+                if (initializationOperation == null || initializationOperation.Status != EOperationStatus.Succeed)
                 {
                     OnInitPackageFailed(procedureOwner);
                 }
@@ -37,19 +38,12 @@ namespace BaseModule
                     LoadingPanel.Instance.SetProgress(1.0f);
 
                     await UniTask.Yield();
-
-                    if (GameModule.Resource.PlayMode == EPlayMode.EditorSimulateMode || GameModule.Resource.PlayMode == EPlayMode.OfflinePlayMode)
-                    {
-                        ChangeState<ProcedureLoadAssembly>(procedureOwner);
-                    }
-                    else
-                    {
-                        ChangeState<ProcedureUpdateVersion>(procedureOwner);
-                    }
+                    ChangeState<ProcedureLoadAssembly>(procedureOwner);
                 }
             }
             catch (Exception e)
             {
+                Debug.LogError($"InitPackage Exception: {e}");
                 OnInitPackageFailed(procedureOwner);
             }
         }
