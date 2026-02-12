@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
+using Rijndael;
 
 namespace BaseModule
 {
@@ -13,7 +14,7 @@ namespace BaseModule
         {
             var textAsset = Resources.Load<TextAsset>("Launcher/Config/Localization/localization");
 #if ENCRY_IOS && !UNITY_EDITOR
-            var dec_txt = DragonU3DSDK.Asset.EncryptDecrypt.Decrypt(textAsset.text);
+            var dec_txt = ExternalTextCryptoAdapter.DecryptText(textAsset.text);
             localizationConfig = JsonConvert.DeserializeObject<List<LocalizationConfig>>(dec_txt);
 #else
             localizationConfig = JsonConvert.DeserializeObject<List<LocalizationConfig>>(textAsset.text);

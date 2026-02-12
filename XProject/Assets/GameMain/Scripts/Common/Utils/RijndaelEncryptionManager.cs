@@ -108,4 +108,28 @@ namespace Rijndael
         }
         #endregion
     }
+
+    /// <summary>
+    /// 第三方文本加解密适配层，避免业务侧直接依赖具体 SDK 命名。
+    /// </summary>
+    public static class ExternalTextCryptoAdapter
+    {
+        public static string DecryptText(string text)
+        {
+#if ENCRY_IOS && !UNITY_EDITOR
+            return DragonU3DSDK.Asset.EncryptDecrypt.Decrypt(text);
+#else
+            return text;
+#endif
+        }
+
+        public static string EncryptText(string text)
+        {
+#if ENCRY_IOS && !UNITY_EDITOR
+            return DragonU3DSDK.Asset.EncryptDecrypt.Encrypt(text);
+#else
+            return text;
+#endif
+        }
+    }
 }

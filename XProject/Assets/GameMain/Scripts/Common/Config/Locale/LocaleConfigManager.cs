@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using BaseModule;
 using Framework;
 using Newtonsoft.Json;
+using Rijndael;
 using UnityEngine;
 
 namespace Localizetion
@@ -90,7 +91,7 @@ namespace Localizetion
                 var is_exist = hotValues.TryGetValue(key, out string hk); 
                 if (string.IsNullOrEmpty(hk))
                 {
-                    value = DragonU3DSDK.Asset.EncryptDecrypt.Decrypt(value);
+                    value = ExternalTextCryptoAdapter.DecryptText(value);
                     if (is_exist)
                         hotValues[key] = value;
                 }
@@ -151,8 +152,8 @@ namespace Localizetion
             Dictionary<string, string> dec_result = new Dictionary<string, string>();
             foreach (var kv in result)
             {
-                var k = DragonU3DSDK.Asset.EncryptDecrypt.Decrypt(kv.Key);
-                var v = DragonU3DSDK.Asset.EncryptDecrypt.Decrypt(kv.Value);
+                var k = ExternalTextCryptoAdapter.DecryptText(kv.Key);
+                var v = ExternalTextCryptoAdapter.DecryptText(kv.Value);
                 dec_result[k] = v;
             }
 
@@ -172,7 +173,7 @@ namespace Localizetion
             var is_exist = hotKeys.TryGetValue(key, out string hk); 
             if (string.IsNullOrEmpty(hk))
             {
-                enc_key = DragonU3DSDK.Asset.EncryptDecrypt.Encrypt(enc_key);
+                enc_key = ExternalTextCryptoAdapter.EncryptText(enc_key);
                 if (is_exist)
                 {
                     hotKeys[key] = enc_key;
