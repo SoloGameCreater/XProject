@@ -36,20 +36,27 @@ namespace Gameplay.SubSystems
                 dispatcher.RemoveEventListener(EventEnum.TripleMergeOnMapContentChanged, OnMapContentChanged);
             }
 
-            SaveFileManager.Instance.TryAutoSave("SaveFileSystem.Release", true);
+            // 退出流程中不应再触发单例懒创建，避免出现 Scene 关闭时残留对象告警。
+            if (SaveFileManager.TryGetInstance(out var saveFileManager, createWhenMissing: false))
+            {
+                saveFileManager.TryAutoSave("SaveFileSystem.Release", true);
+            }
         }
 
         public void OnApplicationPause(bool pauseStatus)
         {
-            if (pauseStatus)
+            if (pauseStatus && SaveFileManager.TryGetInstance(out var saveFileManager, createWhenMissing: false))
             {
-                SaveFileManager.Instance.TryAutoSave("OnApplicationPause", true);
+                saveFileManager.TryAutoSave("OnApplicationPause", true);
             }
         }
 
         private void OnMapContentChanged(BaseEvent _)
         {
-            SaveFileManager.Instance.TryAutoSave("TripleMergeOnMapContentChanged");
+            if (SaveFileManager.TryGetInstance(out var saveFileManager, createWhenMissing: false))
+            {
+                saveFileManager.TryAutoSave("TripleMergeOnMapContentChanged");
+            }
         }
     }
 }

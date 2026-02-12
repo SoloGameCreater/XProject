@@ -41,7 +41,7 @@ public class ReferenceFinderWindow : EditorWindow
     [SerializeField] private TreeViewState _treeViewState;
 
     //查找资源引用信息
-    [MenuItem("Assets/Find References In Project %#f", false, 25)]
+    [MenuItem("Assets/Find References In Project [Enhanced] %#f", false, 25)]
     static void FindRef()
     {
         InitDataIfNeeded();
