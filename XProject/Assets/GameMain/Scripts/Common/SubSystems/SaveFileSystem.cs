@@ -5,7 +5,7 @@ using SaveFile;
 
 namespace Gameplay.SubSystems
 {
-    public class SaveFileSystem : GlobalSystem<SaveFileSystem>,IInitable
+    public class SaveFileSystem : GlobalSystem<SaveFileSystem>, IInitable, IOnApplicationPause
     {
         public void Init()
         {
@@ -26,11 +26,30 @@ namespace Gameplay.SubSystems
                 }
             }
             SaveFileManager.Instance.Init(distinctSaveFiles);
+            EventDispatcher.Instance.AddEventListener(EventEnum.TripleMergeOnMapContentChanged, OnMapContentChanged);
         }
 
         public void Release()
         {
-            
+            if (EventDispatcher.TryGetInstance(out var dispatcher, false))
+            {
+                dispatcher.RemoveEventListener(EventEnum.TripleMergeOnMapContentChanged, OnMapContentChanged);
+            }
+
+            SaveFileManager.Instance.TryAutoSave("SaveFileSystem.Release", true);
+        }
+
+        public void OnApplicationPause(bool pauseStatus)
+        {
+            if (pauseStatus)
+            {
+                SaveFileManager.Instance.TryAutoSave("OnApplicationPause", true);
+            }
+        }
+
+        private void OnMapContentChanged(BaseEvent _)
+        {
+            SaveFileManager.Instance.TryAutoSave("TripleMergeOnMapContentChanged");
         }
     }
 }

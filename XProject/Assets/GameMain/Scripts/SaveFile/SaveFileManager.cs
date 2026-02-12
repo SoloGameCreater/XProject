@@ -1,9 +1,9 @@
+using System;
 using System.Collections.Generic;
 using Framework;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Rijndael;
-using SaveFile.TripleMerge;
 using UnityEngine;
 
 namespace SaveFile
@@ -12,14 +12,17 @@ namespace SaveFile
     {
         const string SaveFileKey = "SaveFile";
         const string LocalVersionKey = "SSaveFileVersion";
+        const string ManualSaveFileKey = "SaveFile_ManualBackup";
+        const string ManualVersionKey = "SSaveFileVersion_ManualBackup";
+        const string ManualSavedAtKey = "SaveFile_ManualSavedAtUtcTicks";
 
         Dictionary<string, SaveFileBase> storageMap;
 
         static Dictionary<System.Type, string> gType2Name = new();
 
-        private const float localInterval = 1.0f;
-        ulong lastSavedLocalVersion;
         private ulong _localVersion;
+        private bool _hasUnsavedChanges;
+        private bool _isReadingLocalData;
         public ulong LocalVersion
         {
             get
@@ -31,13 +34,18 @@ namespace SaveFile
                 if (_localVersion != value)
                 {
                     _localVersion = value;
-                    //DebugUtil.LogWarning("LocalVersion changed: " + _localVersion);
+                    if (!_isReadingLocalData)
+                    {
+                        _hasUnsavedChanges = true;
+                    }
                 }
             }
         }
+        public bool HasUnsavedChanges => _hasUnsavedChanges;
         public bool Inited { get; private set; }
-        float LocalTickTime { get; set; }
+        public ulong LastManualSaveUtcTicks { get; private set; }
         public bool SyncForce { get; set; }
+
         public T GetSaveFile<T>() where T : SaveFileBase
         {
             System.Type storage_type = typeof(T);
@@ -47,7 +55,13 @@ namespace SaveFile
                 gType2Name[storage_type] = name;
             }
 
-            return (T)storageMap[name];
+            if (storageMap == null || !storageMap.TryGetValue(name, out var saveFile))
+            {
+                DebugUtil.LogError($"未注册存档类型: {name}");
+                return null;
+            }
+
+            return (T)saveFile;
         }
 
         public void Init(List<SaveFileBase> storages)
@@ -72,81 +86,235 @@ namespace SaveFile
         {
             return JsonConvert.SerializeObject(storageMap);
         }
-        public void SaveToLocal()
+
+        public void MarkDirty()
         {
-            JsonSerializerSettings setting = new JsonSerializerSettings();
-            setting.NullValueHandling = NullValueHandling.Ignore;
-            string jsonData = JsonConvert.SerializeObject(storageMap, setting);
-            PlayerPrefs.SetString(SaveFileKey,
-             System.Convert.ToBase64String(RijndaelEncryptionManager.Instance.Encrypt(jsonData)));
-            PlayerPrefs.SetString(LocalVersionKey,
-             System.Convert.ToBase64String(RijndaelEncryptionManager.Instance.Encrypt(LocalVersion.ToString())));
-            lastSavedLocalVersion = LocalVersion;
+            LocalVersion++;
         }
-        private void ReadFromLocal()
+
+        public bool SaveToLocal()
         {
-            // 读取存档
-            if (PlayerPrefs.HasKey(SaveFileKey))
+            return SaveCurrentToSlot(SaveFileKey, LocalVersionKey, forceSave: true, saveReason: "兼容接口SaveToLocal");
+        }
+
+        public bool TryAutoSave(string triggerName, bool forceSave = false)
+        {
+            if (!Inited)
             {
-                var saveFileKey = PlayerPrefs.GetString(SaveFileKey);
-                byte[] encryptData = System.Convert.FromBase64String(saveFileKey);
-                var jsonData = RijndaelEncryptionManager.Instance.Decrypt(encryptData);
-                FromJson(jsonData);
-            }
-            else
-            {
-#if UNITY_EDITOR
-                DebugUtil.LogWarning("No local storage data can read! ");
-#endif
+                return false;
             }
 
-            // 读取本地存档版本
-            if (PlayerPrefs.HasKey(LocalVersionKey))
+            var reason = string.IsNullOrEmpty(triggerName) ? "触发点自动存档" : $"触发点自动存档: {triggerName}";
+            return SaveCurrentToSlot(SaveFileKey, LocalVersionKey, forceSave, reason);
+        }
+
+        public bool ManualSave(string saveReason = null)
+        {
+            if (!Inited)
             {
-                var versionKey = PlayerPrefs.GetString(LocalVersionKey);
-                string strVersion = RijndaelEncryptionManager.Instance.Decrypt(System.Convert.FromBase64String(versionKey));
-                LocalVersion = ulong.Parse(strVersion);
+                return false;
             }
-            else
+
+            var reason = string.IsNullOrEmpty(saveReason) ? "手动存档" : $"手动存档: {saveReason}";
+            if (!TryBuildEncryptedPayload(out var encryptedData, out var encryptedVersion))
             {
-                LocalVersion = 0;
+                return false;
+            }
+
+            if (!WritePayloadToSlot(SaveFileKey, LocalVersionKey, encryptedData, encryptedVersion, reason))
+            {
+                return false;
+            }
+
+            if (!WritePayloadToSlot(ManualSaveFileKey, ManualVersionKey, encryptedData, encryptedVersion, $"{reason}(备份)"))
+            {
+                return false;
+            }
+
+            LastManualSaveUtcTicks = (ulong)DateTime.UtcNow.Ticks;
+            PlayerPrefs.SetString(ManualSavedAtKey, LastManualSaveUtcTicks.ToString());
+            PlayerPrefs.Save();
+
+            _hasUnsavedChanges = false;
+            return true;
+        }
+
+        private bool SaveCurrentToSlot(string dataKey, string versionKey, bool forceSave, string saveReason)
+        {
+            if (!forceSave && !_hasUnsavedChanges)
+            {
+                return false;
+            }
+
+            if (!TryBuildEncryptedPayload(out var encryptedData, out var encryptedVersion))
+            {
+                return false;
+            }
+
+            if (!WritePayloadToSlot(dataKey, versionKey, encryptedData, encryptedVersion, saveReason))
+            {
+                return false;
+            }
+
+            PlayerPrefs.Save();
+            _hasUnsavedChanges = false;
+            return true;
+        }
+
+        private bool TryBuildEncryptedPayload(out string encryptedData, out string encryptedVersion)
+        {
+            encryptedData = string.Empty;
+            encryptedVersion = string.Empty;
+
+            try
+            {
+                JsonSerializerSettings setting = new JsonSerializerSettings();
+                setting.NullValueHandling = NullValueHandling.Ignore;
+                string jsonData = JsonConvert.SerializeObject(storageMap, setting);
+                encryptedData = Convert.ToBase64String(RijndaelEncryptionManager.Instance.Encrypt(jsonData));
+                encryptedVersion = Convert.ToBase64String(RijndaelEncryptionManager.Instance.Encrypt(LocalVersion.ToString()));
+                return true;
+            }
+            catch (Exception e)
+            {
+                DebugUtil.LogError($"构建存档数据失败: {e.Message}");
+                return false;
+            }
+        }
+
+        private bool WritePayloadToSlot(string dataKey, string versionKey, string encryptedData, string encryptedVersion, string saveReason)
+        {
+            try
+            {
+                PlayerPrefs.SetString(dataKey, encryptedData);
+                PlayerPrefs.SetString(versionKey, encryptedVersion);
+                return true;
+            }
+            catch (Exception e)
+            {
+                DebugUtil.LogError($"{saveReason}写盘失败: {e.Message}");
+                return false;
+            }
+        }
+
+        private void ReadFromLocal()
+        {
+            bool loaded = false;
+            _isReadingLocalData = true;
+
+            if (TryReadSlot(SaveFileKey, LocalVersionKey, out var jsonData, out var localVersion))
+            {
+                loaded = TryPopulateFromJson(jsonData, "主存档");
+                if (loaded)
+                {
+                    _localVersion = localVersion;
+                }
+            }
+
+            if (!loaded && TryReadSlot(ManualSaveFileKey, ManualVersionKey, out jsonData, out localVersion))
+            {
+                loaded = TryPopulateFromJson(jsonData, "手动备份存档");
+                if (loaded)
+                {
+                    _localVersion = localVersion;
+                }
+            }
+
+            if (!loaded)
+            {
+                _localVersion = 0;
 #if UNITY_EDITOR
                 DebugUtil.LogWarning("No local storage version can read! ");
 #endif
             }
-            _localVersion = LocalVersion;
+
+            _isReadingLocalData = false;
+            _hasUnsavedChanges = false;
+
+            if (PlayerPrefs.HasKey(ManualSavedAtKey)
+             && ulong.TryParse(PlayerPrefs.GetString(ManualSavedAtKey), out var manualSavedAtTicks))
+            {
+                LastManualSaveUtcTicks = manualSavedAtTicks;
+            }
         }
 
-        private void FromJson(string jsonData)
+        private bool TryReadSlot(string dataKey, string versionKey, out string jsonData, out ulong localVersion)
         {
-            var jObj = JObject.Parse(jsonData);
-            foreach (var type in storageMap.Keys)
+            jsonData = string.Empty;
+            localVersion = 0;
+
+            if (!PlayerPrefs.HasKey(dataKey))
             {
-                var token = jObj[type];
-                if (token == null)
+                return false;
+            }
+
+            try
+            {
+                var saveFileKey = PlayerPrefs.GetString(dataKey);
+                byte[] encryptData = Convert.FromBase64String(saveFileKey);
+                jsonData = RijndaelEncryptionManager.Instance.Decrypt(encryptData);
+
+                if (PlayerPrefs.HasKey(versionKey))
                 {
-                    continue;
+                    var encryptedVersion = PlayerPrefs.GetString(versionKey);
+                    var versionText = RijndaelEncryptionManager.Instance.Decrypt(Convert.FromBase64String(encryptedVersion));
+                    if (!ulong.TryParse(versionText, out localVersion))
+                    {
+                        localVersion = 0;
+                    }
                 }
 
-                var str = token.ToString();
-                JsonSerializerSettings setting = new JsonSerializerSettings();
-
-                setting.NullValueHandling = NullValueHandling.Ignore;
-                JsonConvert.PopulateObject(str, storageMap[type], setting);
+                return true;
+            }
+            catch (Exception e)
+            {
+                DebugUtil.LogError($"读取存档失败 dataKey={dataKey}: {e.Message}");
+                return false;
             }
         }
+
+        private bool TryPopulateFromJson(string jsonData, string sourceName)
+        {
+            try
+            {
+                var jObj = JObject.Parse(jsonData);
+                foreach (var type in storageMap.Keys)
+                {
+                    var token = jObj[type];
+                    if (token == null)
+                    {
+                        continue;
+                    }
+
+                    var str = token.ToString();
+                    JsonSerializerSettings setting = new JsonSerializerSettings();
+                    setting.NullValueHandling = NullValueHandling.Ignore;
+                    JsonConvert.PopulateObject(str, storageMap[type], setting);
+                }
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                DebugUtil.LogError($"{sourceName}反序列化失败: {e.Message}");
+                return false;
+            }
+        }
+
         private void Update()
         {
-            if (!Inited)
-                return;
-
-            LocalTickTime += Time.deltaTime;
-            if (SyncForce || (LocalTickTime > localInterval && LocalVersion > lastSavedLocalVersion))
+            if (!Inited || !SyncForce)
             {
-                SyncForce = false;
-                LocalTickTime = 0.0f;
-                SaveToLocal();
+                return;
             }
+
+            SyncForce = false;
+            TryAutoSave("兼容接口SyncForce", forceSave: true);
+        }
+
+        private void OnApplicationQuit()
+        {
+            TryAutoSave("应用退出", forceSave: true);
         }
     }
 }

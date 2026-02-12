@@ -40,6 +40,8 @@ public class CurrencyModel : GlobalSystem<CurrencyModel>, IInitable
             newSafeCount.SetValue(amount);
             UserCurrency.Add(intResId, newSafeCount);
         }
+
+        SaveFileManager.Instance.TryAutoSave("货币变更:SetCurrency");
     }
 
     public void AddCurrency(CurrencyType typeId, int amount)
@@ -59,6 +61,8 @@ public class CurrencyModel : GlobalSystem<CurrencyModel>, IInitable
             newSafeCount.SetValue(amount);
             UserCurrency.Add(intResId, newSafeCount);
         }
+
+        SaveFileManager.Instance.TryAutoSave("货币变更:AddCurrency");
     }
 
     /// <summary>
@@ -76,6 +80,7 @@ public class CurrencyModel : GlobalSystem<CurrencyModel>, IInitable
 
         var preAmount = UserCurrency[intResId].GetValue();
         UserCurrency[intResId].SetValue(preAmount - amount);
+        SaveFileManager.Instance.TryAutoSave("货币变更:CostCurrency");
     }
 
     public int GetCurrencyAmount(CurrencyType typeId)

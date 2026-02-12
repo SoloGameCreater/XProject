@@ -31,8 +31,8 @@ namespace SaveFile
                 _encryptAmount = (value - _decryptAmount) / 4f;
             }
 
-            // 更新配置文件版本并保存
-            SaveFileManager.Instance.SaveToLocal();
+            // 标记存档脏数据，具体何时落盘由触发点策略决定
+            SaveFileManager.Instance.MarkDirty();
         }
         
         public int GetValue()
