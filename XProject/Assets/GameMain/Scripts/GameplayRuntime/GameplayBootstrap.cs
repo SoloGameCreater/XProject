@@ -6,7 +6,7 @@ namespace GameplayRuntime
     public static class GameplayBootstrap
     {
         // 关闭 TripleMerge 时，将该值改为 false。
-        private const bool ENABLE_TRIPLE_MERGE = false;
+        private const bool ENABLE_TRIPLE_MERGE = true;
         private static bool s_builtInRegistered;
 
         public static void RegisterBuiltInModules()

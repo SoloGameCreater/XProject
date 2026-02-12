@@ -58,10 +58,8 @@ public class Manager<T> : MonoBehaviour where T : MonoBehaviour
                 return false;
             }
 
-#if !BAN_FINDOBJECTOFTYPE && !REPLACE_FINDOBJECTOFTYPE
             // Search for existing instance.
             m_Instance = (T)FindObjectOfType(typeof(T));
-#endif
 
             // Create new instance if one doesn't already exist.
             if (m_Instance == null)
@@ -87,21 +85,8 @@ public class Manager<T> : MonoBehaviour where T : MonoBehaviour
     {
         var singletonObject = new GameObject();
 
-#if NORMALIZE_SINGLE_PARENT && UNITY_EDITOR
-    var root = GameObject.Find("SINGLETON_ROOT") ?? new GameObject("SINGLETON_ROOT");
-    DontDestroyOnLoad(root);
-    singletonObject.transform.SetParent(root.transform);
-#endif
-
         return singletonObject;
     }
-    
-#if REPLACE_FINDOBJECTOFTYPE
-    public Manager()
-    {
-        m_Instance = this as T;
-    }
-#endif
 
     // 这个方法如果override，会在Instance创建完立刻调用, 派生类可以用来默认初始化一些东西
     protected virtual void InitImmediately()
