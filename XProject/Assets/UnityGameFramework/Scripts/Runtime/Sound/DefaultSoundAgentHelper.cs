@@ -310,7 +310,6 @@ namespace UnityGameFramework.Runtime
         /// </summary>
         public override void Reset()
         {
-            Debug.Log("Reset sound");
             m_CachedTransform.localPosition = Vector3.zero;
             m_AudioSource.clip = null;
             m_BindingEntityLogic = null;

@@ -200,6 +200,8 @@ namespace SaveFile
         private void ReadFromLocal()
         {
             bool loaded = false;
+            bool mainSlotCorrupted = false;
+            bool loadedFromManualSlot = false;
             _isReadingLocalData = true;
 
             if (TryReadSlot(SaveFileKey, LocalVersionKey, out var jsonData, out var localVersion))
@@ -209,6 +211,11 @@ namespace SaveFile
                 {
                     _localVersion = localVersion;
                 }
+                else
+                {
+                    mainSlotCorrupted = true;
+                    ClearCorruptedSlot(SaveFileKey, LocalVersionKey, "主存档");
+                }
             }
 
             if (!loaded && TryReadSlot(ManualSaveFileKey, ManualVersionKey, out jsonData, out localVersion))
@@ -217,7 +224,18 @@ namespace SaveFile
                 if (loaded)
                 {
                     _localVersion = localVersion;
+                    loadedFromManualSlot = true;
                 }
+                else
+                {
+                    ClearCorruptedSlot(ManualSaveFileKey, ManualVersionKey, "手动备份存档");
+                }
+            }
+
+            // 主存档损坏但手动备份可用时，自动回填主存档，避免每次启动重复报错。
+            if (mainSlotCorrupted && loadedFromManualSlot)
+            {
+                SaveCurrentToSlot(SaveFileKey, LocalVersionKey, forceSave: true, saveReason: "主存档损坏后自动修复");
             }
 
             if (!loaded)
@@ -251,14 +269,21 @@ namespace SaveFile
             try
             {
                 var saveFileKey = PlayerPrefs.GetString(dataKey);
-                byte[] encryptData = Convert.FromBase64String(saveFileKey);
-                jsonData = RijndaelEncryptionManager.Instance.Decrypt(encryptData);
+                try
+                {
+                    byte[] encryptData = Convert.FromBase64String(saveFileKey);
+                    jsonData = RijndaelEncryptionManager.Instance.Decrypt(encryptData);
+                }
+                catch (FormatException)
+                {
+                    // 兼容旧格式：历史版本可能直接存明文 JSON。
+                    jsonData = saveFileKey;
+                }
 
                 if (PlayerPrefs.HasKey(versionKey))
                 {
-                    var encryptedVersion = PlayerPrefs.GetString(versionKey);
-                    var versionText = RijndaelEncryptionManager.Instance.Decrypt(Convert.FromBase64String(encryptedVersion));
-                    if (!ulong.TryParse(versionText, out localVersion))
+                    var rawVersion = PlayerPrefs.GetString(versionKey);
+                    if (!TryReadVersion(rawVersion, out localVersion))
                     {
                         localVersion = 0;
                     }
@@ -270,6 +295,49 @@ namespace SaveFile
             {
                 DebugUtil.LogError($"读取存档失败 dataKey={dataKey}: {e.Message}");
                 return false;
+            }
+        }
+
+        private bool TryReadVersion(string rawVersion, out ulong localVersion)
+        {
+            localVersion = 0;
+            if (string.IsNullOrEmpty(rawVersion))
+            {
+                return false;
+            }
+
+            try
+            {
+                var versionText = RijndaelEncryptionManager.Instance.Decrypt(Convert.FromBase64String(rawVersion));
+                if (ulong.TryParse(versionText, out localVersion))
+                {
+                    return true;
+                }
+            }
+            catch (FormatException)
+            {
+                // 兼容旧格式：版本号可能直接写入明文数字。
+            }
+            catch (Exception)
+            {
+                // 统一走明文解析兜底，避免重复抛异常。
+            }
+
+            return ulong.TryParse(rawVersion, out localVersion);
+        }
+
+        private void ClearCorruptedSlot(string dataKey, string versionKey, string sourceName)
+        {
+            try
+            {
+                PlayerPrefs.DeleteKey(dataKey);
+                PlayerPrefs.DeleteKey(versionKey);
+                PlayerPrefs.Save();
+                DebugUtil.LogWarning($"{sourceName}已损坏，已清理本地坏档键位");
+            }
+            catch (Exception e)
+            {
+                DebugUtil.LogError($"清理{sourceName}坏档失败: {e.Message}");
             }
         }
 
@@ -296,7 +364,7 @@ namespace SaveFile
             }
             catch (Exception e)
             {
-                DebugUtil.LogError($"{sourceName}反序列化失败: {e.Message}");
+                DebugUtil.LogError($"{sourceName}反序列化失败: {e.Message}。该存档可能已损坏或来自不兼容的历史加密格式。");
                 return false;
             }
         }
