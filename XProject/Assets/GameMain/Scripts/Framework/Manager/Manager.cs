@@ -6,8 +6,17 @@
 /// </summary>
 public class Manager<T> : MonoBehaviour where T : MonoBehaviour
 {
-    private static object m_Lock = new object();
+    private static readonly object m_Lock = new object();
     private static T m_Instance;
+    // 应用退出阶段禁止再创建单例，避免 OnDestroy 链路反向拉起新对象。
+    private static bool m_IsApplicationQuitting;
+    // 记录单例被销毁的帧，阻止同一帧内被其它 OnDestroy 再次创建。
+    private static int m_LastDestroyFrame = -1;
+
+    static Manager()
+    {
+        Application.quitting += OnApplicationQuitting;
+    }
 
     /// <summary>
     /// Access singleton instance through this property.
@@ -25,6 +34,12 @@ public class Manager<T> : MonoBehaviour where T : MonoBehaviour
     {
         lock (m_Lock)
         {
+            // 关闭 Domain Reload 时，静态字段会跨 Play Session 保留，这里在新 Session 首帧自动复位。
+            if (m_IsApplicationQuitting && Time.frameCount == 0)
+            {
+                m_IsApplicationQuitting = false;
+            }
+
             if (m_Instance != null)
             {
                 instance = m_Instance;
@@ -32,6 +47,12 @@ public class Manager<T> : MonoBehaviour where T : MonoBehaviour
             }
 
             if (!createWhenMissing)
+            {
+                instance = null;
+                return false;
+            }
+
+            if (m_IsApplicationQuitting || m_LastDestroyFrame == Time.frameCount)
             {
                 instance = null;
                 return false;
@@ -55,6 +76,11 @@ public class Manager<T> : MonoBehaviour where T : MonoBehaviour
             instance = m_Instance;
             return instance != null;
         }
+    }
+
+    private static void OnApplicationQuitting()
+    {
+        m_IsApplicationQuitting = true;
     }
 
     private static GameObject CreateSingletonObject()
@@ -87,6 +113,7 @@ public class Manager<T> : MonoBehaviour where T : MonoBehaviour
         if (m_Instance == this)
         {
             m_Instance = null;
+            m_LastDestroyFrame = Time.frameCount;
         }
     }
 }
