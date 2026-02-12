@@ -41,6 +41,7 @@
 - 本项目内允许使用：`git add`、`git diff`、`git status`、`git commit`、`git pull`。
 - 本项目内禁止使用：`git push`。
 - 所有 `git commit` 提交信息必须为中文，且准确描述改动目的与范围。
+- 在本项目中执行 `/review` 命令时，必须使用中文回复评审结果。
 - PR 需包含：
   - 改动内容与动机。
   - 影响范围（场景、预制体、配置）。
