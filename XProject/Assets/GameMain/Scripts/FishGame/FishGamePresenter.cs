@@ -69,7 +69,7 @@ namespace FishGameRuntime
             public int Price;
         }
 
-        private FishGameMainUI _view;
+        private readonly FishGameMainUI _view;
         private readonly RodConfig _rod = new RodConfig
         {
             Name = "Basic Rod",
@@ -129,25 +129,6 @@ namespace FishGameRuntime
             _view = view;
             ShowNotification("钓鱼系统已加载，点击按钮开始。", 3f, Color.white);
             RefreshUi();
-        }
-
-        public void BindView(FishGameMainUI view)
-        {
-            _view = view;
-            ResetHoldButtons();
-            ApplyNotification();
-            RefreshUi();
-        }
-
-        public void UnbindView(FishGameMainUI view)
-        {
-            if (_view != view)
-            {
-                return;
-            }
-
-            ResetHoldButtons();
-            _view = null;
         }
 
         public void Tick(float deltaTime)

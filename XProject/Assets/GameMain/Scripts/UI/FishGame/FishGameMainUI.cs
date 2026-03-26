@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using Framework;
-using Modules.FishGame;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -65,8 +64,7 @@ namespace FishGameRuntime
             _reelHoldButton = CommonUtils.GetOrCreateComponent<FishGameHoldButton>(_reelButton.gameObject);
             _releaseHoldButton = CommonUtils.GetOrCreateComponent<FishGameHoldButton>(_releaseButton.gameObject);
 
-            _presenter = FishGameSession.GetOrCreatePresenter(this);
-            _presenter.BindView(this);
+            _presenter = new FishGamePresenter(this);
 
             _castButton.onClick.AddListener(_presenter.OnCastClicked);
             _prevLureButton.onClick.AddListener(_presenter.OnPrevLureClicked);
@@ -76,11 +74,14 @@ namespace FishGameRuntime
 
         public override async Task OnViewClose()
         {
-            _castButton.onClick.RemoveListener(_presenter.OnCastClicked);
-            _prevLureButton.onClick.RemoveListener(_presenter.OnPrevLureClicked);
-            _nextLureButton.onClick.RemoveListener(_presenter.OnNextLureClicked);
-            _switchButton.onClick.RemoveListener(_presenter.OnSwitchClicked);
-            _presenter.UnbindView(this);
+            if (_presenter != null)
+            {
+                _castButton.onClick.RemoveListener(_presenter.OnCastClicked);
+                _prevLureButton.onClick.RemoveListener(_presenter.OnPrevLureClicked);
+                _nextLureButton.onClick.RemoveListener(_presenter.OnNextLureClicked);
+                _switchButton.onClick.RemoveListener(_presenter.OnSwitchClicked);
+            }
+
             _presenter = null;
             await base.OnViewClose();
         }

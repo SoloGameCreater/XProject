@@ -11,6 +11,11 @@ public static class FishGameUIPrefabGenerator
     [MenuItem("Tools/UI/生成 FishGame UI Prefab")]
     private static void GeneratePrefab()
     {
+        Debug.LogWarning("FishGameUIPrefabGenerator 已转发到 FishGameUIPrefabRefiner，请使用新的布局生成逻辑。");
+        FishGameUIPrefabRefiner.RebuildPrefabAsset();
+        return;
+
+#if false
         EnsureFolder(TargetFolderPath);
 
         var root = new GameObject("FishGameMainUI", typeof(RectTransform), typeof(Image));
@@ -47,6 +52,7 @@ public static class FishGameUIPrefabGenerator
         {
             Object.DestroyImmediate(root);
         }
+#endif
     }
 
     private static void CreateTitle(Transform parent)

@@ -7,14 +7,6 @@ namespace Modules.FishGame
 {
     public class FishGameSession : GameplayRuntime.IGameplaySession
     {
-        private static FishGamePresenter s_presenter;
-
-        public static FishGamePresenter GetOrCreatePresenter(FishGameMainUI view)
-        {
-            s_presenter ??= new FishGamePresenter(view);
-            return s_presenter;
-        }
-
         public Task<bool> EnterAsync(object param = null)
         {
             return Task.FromResult(true);

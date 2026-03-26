@@ -15,7 +15,12 @@ public static class FishGameUIPrefabRefiner
     private const string PrefabPath = TargetFolderPath + "/FishGameMainUI.prefab";
 
     [MenuItem("Tools/UI/刷新 FishGame UI 布局")]
-    private static void RebuildPrefab()
+    private static void RebuildPrefabMenu()
+    {
+        RebuildPrefabAsset();
+    }
+
+    public static void RebuildPrefabAsset()
     {
         EnsureFolder(TargetFolderPath);
 
