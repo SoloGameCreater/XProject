@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Framework;
+using Modules.FishGame;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,24 +9,27 @@ namespace FishGameRuntime
     [AssetAddress("UIFishGame/FishGameMainUI")]
     public class FishGameMainUI : UIView
     {
-        [ComponentBinder("StateText")] private Text _stateText;
-        [ComponentBinder("EquipText")] private Text _equipText;
-        [ComponentBinder("ScoreText")] private Text _scoreText;
-        [ComponentBinder("LineText")] private Text _lineText;
-        [ComponentBinder("HintText")] private Text _hintText;
-        [ComponentBinder("NotifyPanel/NotifyText")] private Text _notifyText;
-        [ComponentBinder("InventoryText")] private Text _inventoryText;
+        [ComponentBinder("HeaderPanel/StateBadge/StateText")] private Text _stateText;
+        [ComponentBinder("HeaderPanel/TitleGroup/EquipText")] private Text _equipText;
+        [ComponentBinder("HeaderPanel/ScoreCard/ScoreText")] private Text _scoreText;
+        [ComponentBinder("StatusPanel/WaterCard/LineText")] private Text _lineText;
+        [ComponentBinder("StatusPanel/WaterCard/HintText")] private Text _hintText;
+        [ComponentBinder("StatusPanel/WaterCard/NotifyPanel/NotifyText")] private Text _notifyText;
+        [ComponentBinder("InventoryPanel/Body/InventoryText")] private Text _inventoryText;
+        [ComponentBinder("HudPanel/StaminaRow/ValueText")] private Text _staminaValueText;
+        [ComponentBinder("HudPanel/TensionRow/ValueText")] private Text _tensionValueText;
+        [ComponentBinder("HudPanel/LineRow/ValueText")] private Text _lineValueText;
 
-        [ComponentBinder("CastButton")] private Button _castButton;
-        [ComponentBinder("PrevLureButton")] private Button _prevLureButton;
-        [ComponentBinder("NextLureButton")] private Button _nextLureButton;
-        [ComponentBinder("SwitchButton")] private Button _switchButton;
-        [ComponentBinder("ReelButton")] private Button _reelButton;
-        [ComponentBinder("ReleaseButton")] private Button _releaseButton;
+        [ComponentBinder("ControlsPanel/PrimaryActions/CastButton")] private Button _castButton;
+        [ComponentBinder("ControlsPanel/LureActions/PrevLureButton")] private Button _prevLureButton;
+        [ComponentBinder("ControlsPanel/LureActions/NextLureButton")] private Button _nextLureButton;
+        [ComponentBinder("ControlsPanel/PrimaryActions/SwitchButton")] private Button _switchButton;
+        [ComponentBinder("ControlsPanel/FightActions/ReelButton")] private Button _reelButton;
+        [ComponentBinder("ControlsPanel/FightActions/ReleaseButton")] private Button _releaseButton;
 
-        [ComponentBinder("HudPanel/StaminaBar/Fill")] private Image _staminaFill;
-        [ComponentBinder("HudPanel/TensionBar/Fill")] private Image _tensionFill;
-        [ComponentBinder("HudPanel/LineBar/Fill")] private Image _lineFill;
+        [ComponentBinder("HudPanel/StaminaRow/StaminaBar/Fill")] private Image _staminaFill;
+        [ComponentBinder("HudPanel/TensionRow/TensionBar/Fill")] private Image _tensionFill;
+        [ComponentBinder("HudPanel/LineRow/LineBar/Fill")] private Image _lineFill;
 
         private FishGamePresenter _presenter;
         private FishGameHoldButton _reelHoldButton;
@@ -38,6 +42,9 @@ namespace FishGameRuntime
         internal Text HintText => _hintText;
         internal Text NotifyText => _notifyText;
         internal Text InventoryText => _inventoryText;
+        internal Text StaminaValueText => _staminaValueText;
+        internal Text TensionValueText => _tensionValueText;
+        internal Text LineValueText => _lineValueText;
         internal Button CastButton => _castButton;
         internal Button PrevLureButton => _prevLureButton;
         internal Button NextLureButton => _nextLureButton;
@@ -58,7 +65,8 @@ namespace FishGameRuntime
             _reelHoldButton = CommonUtils.GetOrCreateComponent<FishGameHoldButton>(_reelButton.gameObject);
             _releaseHoldButton = CommonUtils.GetOrCreateComponent<FishGameHoldButton>(_releaseButton.gameObject);
 
-            _presenter = new FishGamePresenter(this);
+            _presenter = FishGameSession.GetOrCreatePresenter(this);
+            _presenter.BindView(this);
 
             _castButton.onClick.AddListener(_presenter.OnCastClicked);
             _prevLureButton.onClick.AddListener(_presenter.OnPrevLureClicked);
@@ -72,6 +80,8 @@ namespace FishGameRuntime
             _prevLureButton.onClick.RemoveListener(_presenter.OnPrevLureClicked);
             _nextLureButton.onClick.RemoveListener(_presenter.OnNextLureClicked);
             _switchButton.onClick.RemoveListener(_presenter.OnSwitchClicked);
+            _presenter.UnbindView(this);
+            _presenter = null;
             await base.OnViewClose();
         }
 
@@ -84,7 +94,10 @@ namespace FishGameRuntime
         internal void SetBar(Image fill, float ratio)
         {
             ratio = Mathf.Clamp01(ratio);
-            ((RectTransform)fill.transform).sizeDelta = new Vector2(320f * ratio, 0f);
+            var fillRect = (RectTransform)fill.transform;
+            var backgroundRect = fillRect.parent as RectTransform;
+            var width = backgroundRect != null && backgroundRect.rect.width > 1f ? backgroundRect.rect.width : 320f;
+            fillRect.sizeDelta = new Vector2(width * ratio, 0f);
         }
     }
 }

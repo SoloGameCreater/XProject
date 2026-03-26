@@ -69,7 +69,7 @@ namespace FishGameRuntime
             public int Price;
         }
 
-        private readonly FishGameMainUI _view;
+        private FishGameMainUI _view;
         private readonly RodConfig _rod = new RodConfig
         {
             Name = "Basic Rod",
@@ -120,6 +120,8 @@ namespace FishGameRuntime
         private float _castingTimer;
         private float _waitTimer;
         private float _notificationTimer;
+        private string _notificationMessage = string.Empty;
+        private Color _notificationColor = Color.white;
         private bool _isSwitching;
 
         public FishGamePresenter(FishGameMainUI view)
@@ -127,6 +129,25 @@ namespace FishGameRuntime
             _view = view;
             ShowNotification("钓鱼系统已加载，点击按钮开始。", 3f, Color.white);
             RefreshUi();
+        }
+
+        public void BindView(FishGameMainUI view)
+        {
+            _view = view;
+            ResetHoldButtons();
+            ApplyNotification();
+            RefreshUi();
+        }
+
+        public void UnbindView(FishGameMainUI view)
+        {
+            if (_view != view)
+            {
+                return;
+            }
+
+            ResetHoldButtons();
+            _view = null;
         }
 
         public void Tick(float deltaTime)
@@ -174,7 +195,14 @@ namespace FishGameRuntime
             _isSwitching = true;
             ShowNotification("正在切换到 TripleMerge...", 2f, new Color(1f, 0.84f, 0.35f));
             DebugUtil.Log("FishGamePresenter: 切换到 TripleMerge。");
-            await GameplayDirector.Instance.EnterAsync(GameplayIds.TripleMerge);
+            try
+            {
+                await GameplayDirector.Instance.EnterAsync(GameplayIds.TripleMerge);
+            }
+            finally
+            {
+                _isSwitching = false;
+            }
         }
 
         private void UpdateNotification(float deltaTime)
@@ -187,7 +215,11 @@ namespace FishGameRuntime
             _notificationTimer -= deltaTime;
             if (_notificationTimer <= 0f)
             {
-                _view.NotifyText.text = string.Empty;
+                _notificationMessage = string.Empty;
+                if (_view != null)
+                {
+                    _view.NotifyText.text = string.Empty;
+                }
             }
         }
 
@@ -222,8 +254,10 @@ namespace FishGameRuntime
                 return;
             }
 
-            _fight.Reeling = _view.ReelHoldButton.IsPressed;
-            _fight.Releasing = _view.ReleaseHoldButton.IsPressed;
+            var isReelPressed = _view != null && _view.ReelHoldButton.IsPressed;
+            var isReleasePressed = _view != null && _view.ReleaseHoldButton.IsPressed;
+            _fight.Reeling = isReelPressed && !isReleasePressed;
+            _fight.Releasing = isReleasePressed && !isReelPressed;
 
             if (!_fight.IsSprinting)
             {
@@ -358,8 +392,7 @@ namespace FishGameRuntime
             _fight.IsSprinting = false;
             _fight.SprintTimer = 0f;
             _fight.SprintCooldown = 0f;
-            _view.ReelHoldButton.ResetState();
-            _view.ReleaseHoldButton.ResetState();
+            ResetHoldButtons();
             _state = FishingState.Idle;
         }
 
@@ -418,18 +451,30 @@ namespace FishGameRuntime
 
         private void RefreshUi()
         {
+            if (_view == null)
+            {
+                return;
+            }
+
             _view.StateText.text = _state switch
             {
-                FishingState.Idle => "状态：空闲",
-                FishingState.Casting => "状态：抛竿中",
-                FishingState.Waiting => "状态：等待咬钩",
-                FishingState.Fighting => "状态：遛鱼中",
-                _ => "状态：未知"
+                FishingState.Idle => "空闲",
+                FishingState.Casting => "抛竿",
+                FishingState.Waiting => "待鱼",
+                FishingState.Fighting => "遛鱼",
+                _ => "未知"
+            };
+            _view.StateText.color = _state switch
+            {
+                FishingState.Casting => new Color(1f, 0.84f, 0.35f),
+                FishingState.Waiting => new Color(0.72f, 0.9f, 1f),
+                FishingState.Fighting => new Color(0.45f, 1f, 0.55f),
+                _ => Color.white
             };
 
             var lure = _lures[_activeLureIndex];
-            _view.EquipText.text = $"鱼竿：{_rod.Name}    鱼饵：{lure.Name}";
-            _view.ScoreText.text = $"得分：{_totalScore}";
+            _view.EquipText.text = $"装备配置 / {_rod.Name} / {lure.Name}";
+            _view.ScoreText.text = $"累计得分\n{_totalScore}";
 
             if (_state == FishingState.Fighting && _fight.Fish != null)
             {
@@ -444,20 +489,26 @@ namespace FishGameRuntime
                 };
                 _view.SetBar(_view.LineFill, 1f - Mathf.Clamp01((_fight.LineLength - _fight.LineLengthMin) / (_fight.LineLengthMax - _fight.LineLengthMin)));
                 _view.LineFill.color = _fight.Stamina <= 0f ? new Color(1f, 0.82f, 0.15f) : new Color(0.31f, 0.63f, 1f);
-                _view.LineText.text = $"收线距离：{_fight.LineLength:F1} m    目标：{_fight.LineLengthMin:F1} m";
+                _view.StaminaValueText.text = $"{_fight.Stamina:F0} / {_fight.StaminaMax:F0}";
+                _view.TensionValueText.text = $"{_fight.Tension:F0} / {_rod.TensionMax:F0}";
+                _view.LineValueText.text = $"{_fight.LineLength:F1} m";
+                _view.LineText.text = $"当前目标 / {_fight.Fish.Species} / {_fight.Weight:F1} kg / 目标线距 {_fight.LineLengthMin:F1} m";
                 _view.HintText.text = _fight.IsSprinting
-                    ? "鱼在冲刺，按住“放线”降低张力。"
+                    ? "鱼正在冲刺，优先按住“放线”泄压，别急着硬收。"
                     : _fight.Stamina <= 0f
-                        ? "鱼已疲劳，继续按住“收线”即可上鱼。"
-                        : "按住“收线”消耗体力，按住“放线”降低张力。";
+                        ? "鱼已经疲劳，稳住张力后持续“收线”即可完成上鱼。"
+                        : "按住“收线”压低鱼体力，张力过高时改按“放线”缓冲。";
             }
             else
             {
                 _view.SetBar(_view.StaminaFill, 0f);
                 _view.SetBar(_view.TensionFill, 0f);
                 _view.SetBar(_view.LineFill, 0f);
-                _view.LineText.text = "收线距离：--";
-                _view.HintText.text = "点击“抛竿 / 收竿”开始，所有交互都通过 UI 完成。";
+                _view.StaminaValueText.text = "--";
+                _view.TensionValueText.text = "--";
+                _view.LineValueText.text = "--";
+                _view.LineText.text = "当前水域 / 河岸试钓区 / 抛竿后将自动进入等待咬钩阶段";
+                _view.HintText.text = "点击“抛竿 / 收竿”开始，所有操作都通过底部控制台完成。";
             }
 
             _view.CastButton.interactable = _state == FishingState.Idle || _state == FishingState.Waiting;
@@ -494,9 +545,32 @@ namespace FishGameRuntime
 
         private void ShowNotification(string message, float duration, Color color)
         {
-            _view.NotifyText.text = message;
-            _view.NotifyText.color = color;
+            _notificationMessage = message;
+            _notificationColor = color;
             _notificationTimer = duration;
+            ApplyNotification();
+        }
+
+        private void ApplyNotification()
+        {
+            if (_view == null)
+            {
+                return;
+            }
+
+            _view.NotifyText.text = _notificationMessage;
+            _view.NotifyText.color = _notificationColor;
+        }
+
+        private void ResetHoldButtons()
+        {
+            if (_view == null)
+            {
+                return;
+            }
+
+            _view.ReelHoldButton.ResetState();
+            _view.ReleaseHoldButton.ResetState();
         }
 
         private static Color GetRarityColor(string rarity)
