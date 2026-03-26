@@ -43,6 +43,7 @@ namespace GameplayRuntime
                 return true;
             }
 
+            var hasActiveSession = _currentSession != null;
             ExitCurrentSession();
 
             if (!GameplayCatalog.Instance.TryGetModule(gameplayId, out var module))
@@ -68,6 +69,11 @@ namespace GameplayRuntime
             }
 
             _currentGameplayId = gameplayId;
+            if (hasActiveSession)
+            {
+                _currentSession.EnterFinish();
+            }
+
             return true;
         }
 
