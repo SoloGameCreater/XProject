@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using GameplayRuntime;
 using Framework;
@@ -50,6 +50,7 @@ namespace FishGameRuntime
             public float Weight;
             public float Stamina;
             public float StaminaMax;
+            public float Resistance;
             public float Tension;
             public float LineLength;
             public float LineLengthMax = 30f;
@@ -69,10 +70,12 @@ namespace FishGameRuntime
             public int Price;
         }
 
+        private const float DefaultCastLineLength = 20f;
+
         private readonly FishGameMainUI _view;
         private readonly RodConfig _rod = new RodConfig
         {
-            Name = "Basic Rod",
+            Name = "基础鱼竿",
             TensionMax = 60f,
             FatigueMultiplier = 1f,
             ReelSpeed = 1.5f
@@ -80,27 +83,27 @@ namespace FishGameRuntime
 
         private readonly LureConfig[] _lures =
         {
-            new LureConfig { Name = "Basic Mayfly", TargetTag = "any", Unlocked = true },
-            new LureConfig { Name = "Bass Popper", TargetTag = "bass", Unlocked = false },
-            new LureConfig { Name = "Hybrid Sturgeon", TargetTag = "sturgeon", Unlocked = false },
-            new LureConfig { Name = "Salmon Egg", TargetTag = "salmon", Unlocked = false },
-            new LureConfig { Name = "Trout Bugger", TargetTag = "trout", Unlocked = false }
+            new LureConfig { Name = "基础飞蝇", TargetTag = "any", Unlocked = true },
+            new LureConfig { Name = "鲈鱼波趴", TargetTag = "bass", Unlocked = false },
+            new LureConfig { Name = "鲟鱼复合饵", TargetTag = "sturgeon", Unlocked = false },
+            new LureConfig { Name = "鲑鱼卵", TargetTag = "salmon", Unlocked = false },
+            new LureConfig { Name = "鳟鱼毛钩", TargetTag = "trout", Unlocked = false }
         };
 
         private readonly FishDefinition[] _fishDefinitions =
         {
-            new FishDefinition { Species = "Rock Bass", Rarity = "common", Stamina = 40f, FightPower = 15f, SprintInterval = 6f, SprintDuration = 1.5f, WeightRange = new Vector2(0.3f, 1.2f), LureTag = "bass", SellPricePerKg = 5 },
-            new FishDefinition { Species = "Largemouth Bass", Rarity = "common", Stamina = 60f, FightPower = 20f, SprintInterval = 5f, SprintDuration = 2f, WeightRange = new Vector2(0.8f, 3f), LureTag = "bass", SellPricePerKg = 8 },
-            new FishDefinition { Species = "Smallmouth Bass", Rarity = "common", Stamina = 55f, FightPower = 18f, SprintInterval = 5f, SprintDuration = 1.8f, WeightRange = new Vector2(0.5f, 2.5f), LureTag = "bass", SellPricePerKg = 7 },
-            new FishDefinition { Species = "Rainbow Trout", Rarity = "common", Stamina = 50f, FightPower = 22f, SprintInterval = 4f, SprintDuration = 2f, WeightRange = new Vector2(0.4f, 2f), LureTag = "trout", SellPricePerKg = 9 },
-            new FishDefinition { Species = "Bull Trout", Rarity = "uncommon", Stamina = 80f, FightPower = 28f, SprintInterval = 4f, SprintDuration = 2.5f, WeightRange = new Vector2(1f, 5f), LureTag = "trout", SellPricePerKg = 12 },
-            new FishDefinition { Species = "Lake Trout", Rarity = "uncommon", Stamina = 85f, FightPower = 30f, SprintInterval = 4f, SprintDuration = 2.5f, WeightRange = new Vector2(1.5f, 6f), LureTag = "trout", SellPricePerKg = 13 },
-            new FishDefinition { Species = "Golden Trout", Rarity = "rare", Stamina = 100f, FightPower = 35f, SprintInterval = 3f, SprintDuration = 3f, WeightRange = new Vector2(0.5f, 2.5f), LureTag = "trout", SellPricePerKg = 25 },
-            new FishDefinition { Species = "Kokanee Salmon", Rarity = "uncommon", Stamina = 75f, FightPower = 26f, SprintInterval = 4f, SprintDuration = 2f, WeightRange = new Vector2(0.8f, 3.5f), LureTag = "salmon", SellPricePerKg = 11 },
-            new FishDefinition { Species = "Chinook Salmon", Rarity = "rare", Stamina = 120f, FightPower = 40f, SprintInterval = 3f, SprintDuration = 3.5f, WeightRange = new Vector2(3f, 12f), LureTag = "salmon", SellPricePerKg = 20 },
-            new FishDefinition { Species = "Arctic Grayling", Rarity = "uncommon", Stamina = 65f, FightPower = 24f, SprintInterval = 5f, SprintDuration = 2f, WeightRange = new Vector2(0.5f, 2f), LureTag = "salmon", SellPricePerKg = 10 },
-            new FishDefinition { Species = "Paddlefish Sturgeon", Rarity = "rare", Stamina = 150f, FightPower = 45f, SprintInterval = 4f, SprintDuration = 4f, WeightRange = new Vector2(5f, 20f), LureTag = "sturgeon", SellPricePerKg = 22 },
-            new FishDefinition { Species = "Pallid Sturgeon", Rarity = "legendary", Stamina = 200f, FightPower = 55f, SprintInterval = 3f, SprintDuration = 5f, WeightRange = new Vector2(8f, 30f), LureTag = "sturgeon", SellPricePerKg = 35 }
+            new FishDefinition { Species = "岩鲈", Rarity = "common", Stamina = 40f, FightPower = 15f, SprintInterval = 6f, SprintDuration = 1.5f, WeightRange = new Vector2(0.3f, 1.2f), LureTag = "bass", SellPricePerKg = 5 },
+            new FishDefinition { Species = "大口黑鲈", Rarity = "common", Stamina = 60f, FightPower = 20f, SprintInterval = 5f, SprintDuration = 2f, WeightRange = new Vector2(0.8f, 3f), LureTag = "bass", SellPricePerKg = 8 },
+            new FishDefinition { Species = "小口黑鲈", Rarity = "common", Stamina = 55f, FightPower = 18f, SprintInterval = 5f, SprintDuration = 1.8f, WeightRange = new Vector2(0.5f, 2.5f), LureTag = "bass", SellPricePerKg = 7 },
+            new FishDefinition { Species = "虹鳟", Rarity = "common", Stamina = 50f, FightPower = 22f, SprintInterval = 4f, SprintDuration = 2f, WeightRange = new Vector2(0.4f, 2f), LureTag = "trout", SellPricePerKg = 9 },
+            new FishDefinition { Species = "公牛鳟", Rarity = "uncommon", Stamina = 80f, FightPower = 28f, SprintInterval = 4f, SprintDuration = 2.5f, WeightRange = new Vector2(1f, 5f), LureTag = "trout", SellPricePerKg = 12 },
+            new FishDefinition { Species = "湖鳟", Rarity = "uncommon", Stamina = 85f, FightPower = 30f, SprintInterval = 4f, SprintDuration = 2.5f, WeightRange = new Vector2(1.5f, 6f), LureTag = "trout", SellPricePerKg = 13 },
+            new FishDefinition { Species = "金鳟", Rarity = "rare", Stamina = 100f, FightPower = 35f, SprintInterval = 3f, SprintDuration = 3f, WeightRange = new Vector2(0.5f, 2.5f), LureTag = "trout", SellPricePerKg = 25 },
+            new FishDefinition { Species = "红鲑", Rarity = "uncommon", Stamina = 75f, FightPower = 26f, SprintInterval = 4f, SprintDuration = 2f, WeightRange = new Vector2(0.8f, 3.5f), LureTag = "salmon", SellPricePerKg = 11 },
+            new FishDefinition { Species = "帝王鲑", Rarity = "rare", Stamina = 120f, FightPower = 40f, SprintInterval = 3f, SprintDuration = 3.5f, WeightRange = new Vector2(3f, 12f), LureTag = "salmon", SellPricePerKg = 20 },
+            new FishDefinition { Species = "北极茴鱼", Rarity = "uncommon", Stamina = 65f, FightPower = 24f, SprintInterval = 5f, SprintDuration = 2f, WeightRange = new Vector2(0.5f, 2f), LureTag = "salmon", SellPricePerKg = 10 },
+            new FishDefinition { Species = "匙吻鲟", Rarity = "rare", Stamina = 150f, FightPower = 45f, SprintInterval = 4f, SprintDuration = 4f, WeightRange = new Vector2(5f, 20f), LureTag = "sturgeon", SellPricePerKg = 22 },
+            new FishDefinition { Species = "淡白鲟", Rarity = "legendary", Stamina = 200f, FightPower = 55f, SprintInterval = 3f, SprintDuration = 5f, WeightRange = new Vector2(8f, 30f), LureTag = "sturgeon", SellPricePerKg = 35 }
         };
 
         private readonly Dictionary<string, int> _rarityWeight = new Dictionary<string, int>
@@ -127,13 +130,15 @@ namespace FishGameRuntime
         public FishGamePresenter(FishGameMainUI view)
         {
             _view = view;
-            ShowNotification("钓鱼系统已加载，点击按钮开始。", 3f, Color.white);
+            ResetFightDataForCast();
+            ShowNotification("点击屏幕中央的抛竿区开始钓鱼。", 3f, Color.white);
             RefreshUi();
         }
 
         public void Tick(float deltaTime)
         {
             UpdateNotification(deltaTime);
+            UpdateInput();
             UpdateStateTimers(deltaTime);
             UpdateFight(deltaTime);
             RefreshUi();
@@ -141,19 +146,15 @@ namespace FishGameRuntime
 
         public void OnCastClicked()
         {
-            if (_state == FishingState.Idle)
+            if (_state != FishingState.Idle)
             {
-                _state = FishingState.Casting;
-                _castingTimer = 0.8f;
-                ShowNotification("抛竿中...", 1f, Color.white);
                 return;
             }
 
-            if (_state == FishingState.Waiting)
-            {
-                _state = FishingState.Idle;
-                ShowNotification("已收竿。", 1.2f, Color.white);
-            }
+            ResetFightDataForCast();
+            _state = FishingState.Casting;
+            _castingTimer = 0.8f;
+            ShowNotification("抛竿中...", 1f, Color.white);
         }
 
         public void OnPrevLureClicked()
@@ -168,14 +169,14 @@ namespace FishGameRuntime
 
         public async void OnSwitchClicked()
         {
-            if (_isSwitching)
+            if (_state != FishingState.Idle || _isSwitching)
             {
                 return;
             }
 
             _isSwitching = true;
-            ShowNotification("正在切换到 TripleMerge...", 2f, new Color(1f, 0.84f, 0.35f));
-            DebugUtil.Log("FishGamePresenter: 切换到 TripleMerge。");
+            ShowNotification("正在切换到三消玩法...", 2f, new Color(1f, 0.84f, 0.35f));
+            DebugUtil.Log("FishGamePresenter: switching to TripleMerge.");
             try
             {
                 await GameplayDirector.Instance.EnterAsync(GameplayIds.TripleMerge);
@@ -183,6 +184,19 @@ namespace FishGameRuntime
             finally
             {
                 _isSwitching = false;
+            }
+        }
+
+        private void UpdateInput()
+        {
+            if (_view == null)
+            {
+                return;
+            }
+
+            if (_state == FishingState.Idle && _view.CastZoneClickedThisFrame)
+            {
+                OnCastClicked();
             }
         }
 
@@ -214,7 +228,7 @@ namespace FishGameRuntime
                     _state = FishingState.Waiting;
                     var lureFactor = _lures[_activeLureIndex].TargetTag == "any" ? 1f : 0.7f;
                     _waitTimer = UnityEngine.Random.Range(2f, 8f) * lureFactor;
-                    ShowNotification("鱼线已入水，等待咬钩...", 1.4f, new Color(0.75f, 0.9f, 1f));
+                    ShowNotification("鱼线已入水，按住鼠标左键可提前收线。", 1.6f, new Color(0.75f, 0.9f, 1f));
                 }
             }
 
@@ -230,15 +244,30 @@ namespace FishGameRuntime
 
         private void UpdateFight(float deltaTime)
         {
+            var isPrimaryHeld = _view != null && _view.IsPrimaryHeld;
+
+            if (_state == FishingState.Waiting)
+            {
+                _fight.Reeling = isPrimaryHeld;
+                if (_fight.Reeling)
+                {
+                    _fight.LineLength = Mathf.Max(_fight.LineLengthMin, _fight.LineLength - _rod.ReelSpeed * 6f * deltaTime);
+                    if (_fight.LineLength <= _fight.LineLengthMin + 0.05f)
+                    {
+                        ShowNotification("鱼竿已收回，返回待命。", 1.2f, Color.white);
+                        ResetFight();
+                    }
+                }
+
+                return;
+            }
+
             if (_state != FishingState.Fighting || _fight.Fish == null)
             {
                 return;
             }
 
-            var isReelPressed = _view != null && _view.ReelHoldButton.IsPressed;
-            var isReleasePressed = _view != null && _view.ReleaseHoldButton.IsPressed;
-            _fight.Reeling = isReelPressed && !isReleasePressed;
-            _fight.Releasing = isReleasePressed && !isReelPressed;
+            _fight.Reeling = isPrimaryHeld;
 
             if (!_fight.IsSprinting)
             {
@@ -247,7 +276,6 @@ namespace FishGameRuntime
                 {
                     _fight.IsSprinting = true;
                     _fight.SprintTimer = _fight.Fish.SprintDuration;
-                    _fight.SprintDirection = 1;
                 }
             }
             else
@@ -258,40 +286,31 @@ namespace FishGameRuntime
                     _fight.IsSprinting = false;
                     _fight.SprintCooldown = _fight.Fish.SprintInterval + UnityEngine.Random.Range(-1f, 2f);
                 }
-
-                if (_fight.SprintDirection == 1)
-                {
-                    _fight.LineLength = Mathf.Min(_fight.LineLengthMax, _fight.LineLength + deltaTime * 4f);
-                }
-
-                _fight.Tension += _fight.Reeling
-                    ? _fight.Fish.FightPower * 0.25f * deltaTime
-                    : _fight.Fish.FightPower * 0.08f * deltaTime;
             }
 
-            if (_fight.Reeling && !_fight.IsSprinting)
-            {
-                _fight.Stamina = Mathf.Max(0f, _fight.Stamina - _rod.ReelSpeed * _rod.FatigueMultiplier * deltaTime * 8f);
-                var reelSpeed = _fight.Stamina <= 0f ? _rod.ReelSpeed * 2.5f : _rod.ReelSpeed;
-                _fight.LineLength = Mathf.Max(_fight.LineLengthMin, _fight.LineLength - reelSpeed * deltaTime);
-                _fight.Tension += (_fight.Stamina > 0f ? _fight.Fish.FightPower * 0.04f : _fight.Fish.FightPower * 0.005f) * deltaTime;
-            }
+            var basePullSpeed = Mathf.Lerp(0.45f, 1.75f, _fight.Resistance);
+            var sprintPullBonus = _fight.IsSprinting ? Mathf.Lerp(1.5f, 3.5f, _fight.Resistance) : 0f;
+            var fishPullSpeed = basePullSpeed + sprintPullBonus;
 
-            if (_fight.Releasing)
+            if (_fight.Reeling)
             {
-                _fight.Tension = Mathf.Max(0f, _fight.Tension - 30f * deltaTime);
-                _fight.LineLength = Mathf.Min(_fight.LineLengthMax, _fight.LineLength + 2f * deltaTime);
-                _fight.Stamina = Mathf.Min(_fight.StaminaMax, _fight.Stamina + 3f * deltaTime);
+                var tiredBonus = _fight.Stamina <= 0f ? 1.8f : 1f;
+                var reelSpeed = _rod.ReelSpeed * Mathf.Lerp(1.15f, 0.42f, _fight.Resistance) * tiredBonus;
+                var netReelSpeed = Mathf.Max(0.08f, reelSpeed - fishPullSpeed * 0.35f);
+                _fight.Stamina = Mathf.Max(0f, _fight.Stamina - _rod.ReelSpeed * _rod.FatigueMultiplier * deltaTime * Mathf.Lerp(8f, 4.5f, _fight.Resistance));
+                _fight.LineLength = Mathf.Max(_fight.LineLengthMin, _fight.LineLength - netReelSpeed * deltaTime);
+                _fight.Tension += (_fight.Fish.FightPower * Mathf.Lerp(0.045f, 0.115f, _fight.Resistance) + fishPullSpeed * 3.2f) * deltaTime;
             }
-
-            if (!_fight.Reeling && !_fight.Releasing && !_fight.IsSprinting)
+            else
             {
-                _fight.Tension = Mathf.Max(0f, _fight.Tension - 15f * deltaTime);
+                _fight.LineLength = Mathf.Min(_fight.LineLengthMax, _fight.LineLength + fishPullSpeed * deltaTime);
+                _fight.Tension = Mathf.Max(0f, _fight.Tension - Mathf.Lerp(20f, 12f, _fight.Resistance) * deltaTime);
+                _fight.Stamina = Mathf.Min(_fight.StaminaMax, _fight.Stamina + Mathf.Lerp(1.2f, 2.8f, _fight.Resistance) * deltaTime);
             }
 
             if (_fight.Tension >= _rod.TensionMax)
             {
-                Fail("线断了！张力超过了鱼竿上限。");
+                Fail("鱼线断裂：张力超过上限。");
                 return;
             }
 
@@ -314,15 +333,15 @@ namespace FishGameRuntime
             }
 
             var lure = _lures[_activeLureIndex];
-            var suffix = lure.Unlocked ? string.Empty : "（未解锁，当前只做演示）";
-            ShowNotification($"鱼饵切换为：{lure.Name}{suffix}", 1.8f, Color.white);
+            var suffix = lure.Unlocked ? string.Empty : "（暂未解锁，仅演示）";
+            ShowNotification($"已切换鱼饵：{lure.Name}{suffix}", 1.8f, Color.white);
         }
 
         private void StartFight(FishDefinition fish)
         {
             if (fish == null)
             {
-                Fail("没有找到可用鱼种。");
+                Fail("未找到可用的鱼配置。");
                 return;
             }
 
@@ -330,12 +349,18 @@ namespace FishGameRuntime
             _fight.Weight = Mathf.Round(UnityEngine.Random.Range(fish.WeightRange.x, fish.WeightRange.y) * 10f) / 10f;
             _fight.StaminaMax = fish.Stamina * (_fight.Weight / fish.WeightRange.y);
             _fight.Stamina = _fight.StaminaMax;
+            _fight.Resistance = Mathf.Clamp01(_fight.Weight / 12f);
             _fight.Tension = 0f;
-            _fight.LineLength = 20f;
+            _fight.LineLength = Mathf.Clamp(_fight.LineLength, _fight.LineLengthMin, _fight.LineLengthMax);
             _fight.IsSprinting = false;
+            _fight.SprintDirection = 0;
+            _fight.SprintTimer = 0f;
             _fight.SprintCooldown = fish.SprintInterval + UnityEngine.Random.Range(-1f, 2f);
+            _fight.Reeling = false;
+            _fight.Releasing = false;
             _state = FishingState.Fighting;
-            ShowNotification($"咬钩！{fish.Species}（{fish.Rarity}，{_fight.Weight:F1} kg）", 3f, GetRarityColor(fish.Rarity));
+            _view?.ResetPointerState();
+            ShowNotification($"鱼上钩了：{fish.Species} {_fight.Weight:F1} kg，注意控制张力。", 3f, GetRarityColor(fish.Rarity));
         }
 
         private void CatchFish()
@@ -348,33 +373,40 @@ namespace FishGameRuntime
                 Price = price
             });
             _totalScore += price;
-            ShowNotification($"上鱼成功！{_fight.Fish.Species} {_fight.Weight:F1} kg，得分 +{price}", 3f, new Color(0.45f, 1f, 0.55f));
-            DebugUtil.Log($"FishGamePresenter: 成功钓到 {_fight.Fish.Species}, weight={_fight.Weight:F1}, price={price}");
+            ShowNotification($"成功钓起：{_fight.Fish.Species} {_fight.Weight:F1} kg，积分 +{price}", 3f, new Color(0.45f, 1f, 0.55f));
+            DebugUtil.Log($"FishGamePresenter: caught {_fight.Fish.Species}, weight={_fight.Weight:F1}, price={price}");
             ResetFight();
         }
 
         private void Fail(string reason)
         {
             ShowNotification(reason, 2.5f, new Color(1f, 0.45f, 0.45f));
-            DebugUtil.LogWarning($"FishGamePresenter: 钓鱼失败, reason={reason}");
+            DebugUtil.LogWarning($"FishGamePresenter: fishing failed, reason={reason}");
             ResetFight();
         }
 
         private void ResetFight()
         {
+            ResetFightDataForCast();
+            _state = FishingState.Idle;
+        }
+
+        private void ResetFightDataForCast()
+        {
             _fight.Fish = null;
             _fight.Weight = 0f;
             _fight.Stamina = 0f;
             _fight.StaminaMax = 0f;
+            _fight.Resistance = 0f;
             _fight.Tension = 0f;
-            _fight.LineLength = 20f;
+            _fight.LineLength = DefaultCastLineLength;
             _fight.Reeling = false;
             _fight.Releasing = false;
             _fight.IsSprinting = false;
+            _fight.SprintDirection = 0;
             _fight.SprintTimer = 0f;
             _fight.SprintCooldown = 0f;
-            ResetHoldButtons();
-            _state = FishingState.Idle;
+            _view?.ResetPointerState();
         }
 
         private FishDefinition PickFish()
@@ -439,9 +471,9 @@ namespace FishGameRuntime
 
             _view.StateText.text = _state switch
             {
-                FishingState.Idle => "空闲",
+                FishingState.Idle => "待命",
                 FishingState.Casting => "抛竿",
-                FishingState.Waiting => "待鱼",
+                FishingState.Waiting => "等待",
                 FishingState.Fighting => "遛鱼",
                 _ => "未知"
             };
@@ -455,7 +487,7 @@ namespace FishGameRuntime
 
             var lure = _lures[_activeLureIndex];
             _view.EquipText.text = $"装备配置 / {_rod.Name} / {lure.Name}";
-            _view.ScoreText.text = $"累计得分\n{_totalScore}";
+            _view.ScoreText.text = $"积分\n{_totalScore}";
 
             if (_state == FishingState.Fighting && _fight.Fish != null)
             {
@@ -473,12 +505,28 @@ namespace FishGameRuntime
                 _view.StaminaValueText.text = $"{_fight.Stamina:F0} / {_fight.StaminaMax:F0}";
                 _view.TensionValueText.text = $"{_fight.Tension:F0} / {_rod.TensionMax:F0}";
                 _view.LineValueText.text = $"{_fight.LineLength:F1} m";
-                _view.LineText.text = $"当前目标 / {_fight.Fish.Species} / {_fight.Weight:F1} kg / 目标线距 {_fight.LineLengthMin:F1} m";
+                _view.LineText.text = $"目标鱼 / {_fight.Fish.Species} / {_fight.Weight:F1} kg / 阻力 {_fight.Resistance * 100f:F0}% / 收线目标 {_fight.LineLengthMin:F1} m";
                 _view.HintText.text = _fight.IsSprinting
-                    ? "鱼正在冲刺，优先按住“放线”泄压，别急着硬收。"
+                    ? "鱼正在发力外冲，松开鼠标左键，让鱼把线带出去。"
                     : _fight.Stamina <= 0f
-                        ? "鱼已经疲劳，稳住张力后持续“收线”即可完成上鱼。"
-                        : "按住“收线”压低鱼体力，张力过高时改按“放线”缓冲。";
+                        ? "鱼已经乏力，按住鼠标左键把它拉回来。"
+                        : "按住鼠标左键收线；松开后不会主动放线，只有鱼发力时才会被带线。";
+            }
+            else if (_state == FishingState.Casting || _state == FishingState.Waiting)
+            {
+                _view.SetBar(_view.StaminaFill, 0f);
+                _view.SetBar(_view.TensionFill, 0f);
+                _view.SetBar(_view.LineFill, 1f - Mathf.Clamp01((_fight.LineLength - _fight.LineLengthMin) / (_fight.LineLengthMax - _fight.LineLengthMin)));
+                _view.LineFill.color = new Color(0.31f, 0.63f, 1f);
+                _view.StaminaValueText.text = "--";
+                _view.TensionValueText.text = $"0 / {_rod.TensionMax:F0}";
+                _view.LineValueText.text = $"{_fight.LineLength:F1} m";
+                _view.LineText.text = _state == FishingState.Casting
+                    ? "抛竿动作进行中。"
+                    : $"等待咬钩 / 当前线长 {_fight.LineLength:F1} m / 按住鼠标左键可提前收线。";
+                _view.HintText.text = _state == FishingState.Casting
+                    ? "鱼线落水后会自动进入等待阶段。"
+                    : "等待阶段按住鼠标左键会持续收线，松开不会主动放线。";
             }
             else
             {
@@ -488,16 +536,11 @@ namespace FishGameRuntime
                 _view.StaminaValueText.text = "--";
                 _view.TensionValueText.text = "--";
                 _view.LineValueText.text = "--";
-                _view.LineText.text = "当前水域 / 河岸试钓区 / 抛竿后将自动进入等待咬钩阶段";
-                _view.HintText.text = "点击“抛竿 / 收竿”开始，所有操作都通过底部控制台完成。";
+                _view.LineText.text = "待命 / 点击中央抛竿区开始钓鱼。";
+                _view.HintText.text = "待命时只有中央抛竿区负责钓鱼输入；离开待命后，全屏只响应鼠标左键按下和松开。";
             }
 
-            _view.CastButton.interactable = _state == FishingState.Idle || _state == FishingState.Waiting;
-            var canChangeLure = _state != FishingState.Fighting;
-            _view.PrevLureButton.interactable = canChangeLure;
-            _view.NextLureButton.interactable = canChangeLure;
-            _view.ReelButton.gameObject.SetActive(_state == FishingState.Fighting);
-            _view.ReleaseButton.gameObject.SetActive(_state == FishingState.Fighting);
+            _view.ApplyInputMode(_state == FishingState.Idle);
             RefreshInventoryText();
         }
 
@@ -505,12 +548,12 @@ namespace FishGameRuntime
         {
             if (_inventory.Count == 0)
             {
-                _view.InventoryText.text = "背包为空\n\n钓到的鱼会显示在这里。";
+                _view.InventoryText.text = "鱼篓为空\n\n钓到的鱼会显示在这里。";
                 return;
             }
 
             var builder = new StringBuilder();
-            builder.AppendLine("背包");
+            builder.AppendLine("鱼篓");
             builder.AppendLine();
             var totalPrice = 0;
             for (var i = 0; i < _inventory.Count; i++)
@@ -545,13 +588,7 @@ namespace FishGameRuntime
 
         private void ResetHoldButtons()
         {
-            if (_view == null)
-            {
-                return;
-            }
-
-            _view.ReelHoldButton.ResetState();
-            _view.ReleaseHoldButton.ResetState();
+            _view?.ResetPointerState();
         }
 
         private static Color GetRarityColor(string rarity)
