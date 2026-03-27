@@ -48,6 +48,7 @@ namespace FishGameRuntime
         private bool _primaryPressedThisFrame;
         private bool _primaryReleasedThisFrame;
         private bool _castZoneClickedThisFrame;
+        private float _castZoneHoldDuration;
         private bool _pendingCastPress;
 
         internal Text StateText => _stateText;
@@ -73,6 +74,8 @@ namespace FishGameRuntime
         internal bool PrimaryPressedThisFrame => _primaryPressedThisFrame;
         internal bool PrimaryReleasedThisFrame => _primaryReleasedThisFrame;
         internal bool CastZoneClickedThisFrame => _castZoneClickedThisFrame;
+        internal bool IsCastZonePressActive => _isIdleInputMode && _pendingCastPress && _primaryHeld;
+        internal float CastZoneHoldDuration => _castZoneHoldDuration;
 
         public override UIViewLayer ViewLayer => UIViewLayer.Normal;
 
@@ -108,7 +111,7 @@ namespace FishGameRuntime
         public override void OnViewUpdate(float deltaTime)
         {
             base.OnViewUpdate(deltaTime);
-            PollPointerInput();
+            PollPointerInput(deltaTime);
             _presenter?.Tick(deltaTime);
             ClearFrameInput();
         }
@@ -162,7 +165,7 @@ namespace FishGameRuntime
             if (_actionHintText != null)
             {
                 _actionHintText.text = isIdle
-                    ? "待命阶段可切换玩法与鱼饵，点击中央抛竿区开始钓鱼"
+                    ? "待命阶段可切换玩法与鱼饵，按住中央抛竿区蓄力，松开后抛竿"
                     : "钓鱼进行中，按住鼠标左键收线，松开后仅在鱼发力时被带线";
             }
         }
@@ -173,6 +176,7 @@ namespace FishGameRuntime
             _primaryPressedThisFrame = false;
             _primaryReleasedThisFrame = false;
             _castZoneClickedThisFrame = false;
+            _castZoneHoldDuration = 0f;
             _pendingCastPress = false;
         }
 
@@ -229,7 +233,7 @@ namespace FishGameRuntime
             _castZoneLabel.horizontalOverflow = HorizontalWrapMode.Wrap;
             _castZoneLabel.verticalOverflow = VerticalWrapMode.Overflow;
             _castZoneLabel.raycastTarget = false;
-            _castZoneLabel.text = "点击中央区域抛竿";
+            _castZoneLabel.text = "按住蓄力抛竿";
 
             UpdateCastZoneLayout();
             _castZoneVisual.SetSiblingIndex(Mathf.Min(1, transform.childCount - 1));
@@ -258,7 +262,25 @@ namespace FishGameRuntime
             _castZoneVisual.sizeDelta = new Vector2(width, height);
         }
 
-        private void PollPointerInput()
+        internal void UpdateCastZoneChargeDisplay(float currentDistance, float chargeRatio, bool isCharging)
+        {
+            if (_castZoneLabel == null)
+            {
+                return;
+            }
+
+            if (isCharging)
+            {
+                _castZoneLabel.text = $"松开抛竿\n{currentDistance:F1} m";
+                _castZoneLabel.color = Color.Lerp(new Color(0.88f, 0.95f, 0.98f, 1f), new Color(1f, 0.92f, 0.45f, 1f), Mathf.Clamp01(chargeRatio));
+                return;
+            }
+
+            _castZoneLabel.text = "按住蓄力抛竿\n5m - 40m";
+            _castZoneLabel.color = new Color(0.88f, 0.95f, 0.98f, 1f);
+        }
+
+        private void PollPointerInput(float deltaTime)
         {
             UpdateCastZoneLayout();
 
@@ -273,6 +295,10 @@ namespace FishGameRuntime
                 {
                     var pointerPosition = (Vector2)Input.mousePosition;
                     _pendingCastPress = IsPointerInsideCastZone(pointerPosition) && !IsPointerOverIdleOnlyButton(pointerPosition);
+                    if (_pendingCastPress)
+                    {
+                        _castZoneHoldDuration = 0f;
+                    }
                 }
                 else
                 {
@@ -280,14 +306,16 @@ namespace FishGameRuntime
                 }
             }
 
+            if (_isIdleInputMode && _pendingCastPress && _primaryHeld)
+            {
+                _castZoneHoldDuration += deltaTime;
+            }
+
             if (_primaryReleasedThisFrame)
             {
                 if (_isIdleInputMode)
                 {
-                    var pointerPosition = (Vector2)Input.mousePosition;
-                    _castZoneClickedThisFrame = _pendingCastPress
-                        && IsPointerInsideCastZone(pointerPosition)
-                        && !IsPointerOverIdleOnlyButton(pointerPosition);
+                    _castZoneClickedThisFrame = _pendingCastPress;
                 }
 
                 _pendingCastPress = false;

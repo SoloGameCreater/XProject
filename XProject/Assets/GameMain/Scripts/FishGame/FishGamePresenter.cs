@@ -71,6 +71,9 @@ namespace FishGameRuntime
         }
 
         private const float DefaultCastLineLength = 20f;
+        private const float MinCastLineLength = 5f;
+        private const float MaxCastLineLength = 40f;
+        private const float MaxCastChargeDuration = 1.5f;
 
         private readonly FishGameMainUI _view;
         private readonly RodConfig _rod = new RodConfig
@@ -131,7 +134,7 @@ namespace FishGameRuntime
         {
             _view = view;
             ResetFightDataForCast();
-            ShowNotification("点击屏幕中央的抛竿区开始钓鱼。", 3f, Color.white);
+            ShowNotification("按住屏幕中央的抛竿区蓄力，松开后开始钓鱼。", 3f, Color.white);
             RefreshUi();
         }
 
@@ -144,7 +147,7 @@ namespace FishGameRuntime
             RefreshUi();
         }
 
-        public void OnCastClicked()
+        public void OnCastReleased(float holdDuration)
         {
             if (_state != FishingState.Idle)
             {
@@ -152,9 +155,10 @@ namespace FishGameRuntime
             }
 
             ResetFightDataForCast();
+            _fight.LineLength = GetCastLineLength(holdDuration);
             _state = FishingState.Casting;
             _castingTimer = 0.8f;
-            ShowNotification("抛竿中...", 1f, Color.white);
+            ShowNotification($"抛竿中... 本次抛投 {_fight.LineLength:F1} m", 1f, Color.white);
         }
 
         public void OnPrevLureClicked()
@@ -196,7 +200,7 @@ namespace FishGameRuntime
 
             if (_state == FishingState.Idle && _view.CastZoneClickedThisFrame)
             {
-                OnCastClicked();
+                OnCastReleased(_view.CastZoneHoldDuration);
             }
         }
 
@@ -399,6 +403,7 @@ namespace FishGameRuntime
             _fight.StaminaMax = 0f;
             _fight.Resistance = 0f;
             _fight.Tension = 0f;
+            _fight.LineLengthMax = MaxCastLineLength;
             _fight.LineLength = DefaultCastLineLength;
             _fight.Reeling = false;
             _fight.Releasing = false;
@@ -530,17 +535,25 @@ namespace FishGameRuntime
             }
             else
             {
+                var currentCastLength = GetCastLineLength(_view.CastZoneHoldDuration);
+                var isChargingCast = _view.IsCastZonePressActive;
                 _view.SetBar(_view.StaminaFill, 0f);
                 _view.SetBar(_view.TensionFill, 0f);
                 _view.SetBar(_view.LineFill, 0f);
+                _view.LineFill.color = new Color(0.31f, 0.63f, 1f);
                 _view.StaminaValueText.text = "--";
                 _view.TensionValueText.text = "--";
                 _view.LineValueText.text = "--";
-                _view.LineText.text = "待命 / 点击中央抛竿区开始钓鱼。";
-                _view.HintText.text = "待命时只有中央抛竿区负责钓鱼输入；离开待命后，全屏只响应鼠标左键按下和松开。";
+                _view.LineText.text = isChargingCast
+                    ? $"蓄力抛竿 / 当前目标线长 {currentCastLength:F1} m"
+                    : "待命 / 按住中央抛竿区蓄力，松开鼠标左键抛竿。";
+                _view.HintText.text = isChargingCast
+                    ? "按住越久抛得越远，松开后立即抛竿。"
+                    : "待命时按住中央抛竿区蓄力抛竿；最短 5 m，最长 40 m。";
             }
 
             _view.ApplyInputMode(_state == FishingState.Idle);
+            _view.UpdateCastZoneChargeDisplay(currentDistance: GetCastLineLength(_view.CastZoneHoldDuration), chargeRatio: GetCastChargeRatio(_view.CastZoneHoldDuration), isCharging: _state == FishingState.Idle && _view.IsCastZonePressActive);
             RefreshInventoryText();
         }
 
@@ -589,6 +602,16 @@ namespace FishGameRuntime
         private void ResetHoldButtons()
         {
             _view?.ResetPointerState();
+        }
+
+        private static float GetCastChargeRatio(float holdDuration)
+        {
+            return Mathf.Clamp01(holdDuration / MaxCastChargeDuration);
+        }
+
+        private static float GetCastLineLength(float holdDuration)
+        {
+            return Mathf.Lerp(MinCastLineLength, MaxCastLineLength, GetCastChargeRatio(holdDuration));
         }
 
         private static Color GetRarityColor(string rarity)
