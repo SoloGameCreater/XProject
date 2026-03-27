@@ -560,9 +560,12 @@ namespace FishGameRuntime
                     weight *= 0.55f;
                 }
 
-                if (fish.Level > rod.RecommendFishLevelMax)
+                var levelGap = Mathf.Max(0f, fish.Level - rod.RecommendFishLevelMax);
+                var rodGap = Mathf.Max(0f, fish.RecommendRodLevel - rod.Level);
+                if (levelGap > 0f || rodGap > 0f)
                 {
-                    weight *= 0.92f;
+                    var recommendationPenalty = 1f - Mathf.Min(0.18f, levelGap * 0.04f + rodGap * 0.06f);
+                    weight *= Mathf.Max(0.72f, recommendationPenalty);
                 }
 
                 totalWeight += weight;
@@ -975,7 +978,9 @@ namespace FishGameRuntime
 
         private float GetFishPullSpeed(FishRodLevelConfig rod, float staminaRatio)
         {
-            var rodGap = Mathf.Max(0f, _fight.Fish.Level - rod.RecommendFishLevelMax);
+            var levelGap = Mathf.Max(0f, _fight.Fish.Level - rod.RecommendFishLevelMax);
+            var recommendRodGap = Mathf.Max(0f, _fight.Fish.RecommendRodLevel - rod.Level);
+            var rodGap = Mathf.Max(levelGap, recommendRodGap);
             var controlPenalty = Mathf.Max(0.55f, (_fight.Resistance / Mathf.Max(0.35f, rod.ControlPower)) - rod.EscapeMitigation + 0.55f);
             var speed = _fight.EscapeSpeed * controlPenalty * (0.65f + staminaRatio * 0.75f);
             speed *= 1f + rodGap * 0.22f;
