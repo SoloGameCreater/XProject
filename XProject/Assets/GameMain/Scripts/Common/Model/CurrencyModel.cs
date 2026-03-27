@@ -76,7 +76,7 @@ public class CurrencyModel : GlobalSystem<CurrencyModel>, IInitable
 
         var intResId = (int)typeId;
         if (!UserCurrency.ContainsKey(intResId)) return;
-        if (UserCurrency[intResId].GetValue() >= amount) return;
+        if (UserCurrency[intResId].GetValue() < amount) return;
 
         var preAmount = UserCurrency[intResId].GetValue();
         UserCurrency[intResId].SetValue(preAmount - amount);

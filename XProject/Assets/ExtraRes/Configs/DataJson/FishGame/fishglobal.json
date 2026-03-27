@@ -1,0 +1,19 @@
+[
+  {
+    "Id": 1,
+    "MinCastDistance": 5.0,
+    "NoBiteDistance": 5.0,
+    "MaxCastDistance": 40.0,
+    "FightFailDistance": 45.0,
+    "FightLineClampDistance": 50.0,
+    "AutoRetrieveSpeed": 18.0,
+    "WaitTimeMin": 2.0,
+    "WaitTimeMax": 7.0,
+    "EmptyHookCooldown": 1.2,
+    "CatchLineDistance": 1.5,
+    "StarterRodLevel": 1,
+    "StarterBaitId": 101,
+    "StarterBaitCount": 10,
+    "BaitPackCount": 10
+  }
+]

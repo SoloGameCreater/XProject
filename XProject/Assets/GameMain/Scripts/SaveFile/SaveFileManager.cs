@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using Framework;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Rijndael;
 using UnityEngine;
 
 namespace SaveFile
@@ -170,14 +170,13 @@ namespace SaveFile
             {
                 JsonSerializerSettings setting = new JsonSerializerSettings();
                 setting.NullValueHandling = NullValueHandling.Ignore;
-                string jsonData = JsonConvert.SerializeObject(storageMap, setting);
-                encryptedData = Convert.ToBase64String(RijndaelEncryptionManager.Instance.Encrypt(jsonData));
-                encryptedVersion = Convert.ToBase64String(RijndaelEncryptionManager.Instance.Encrypt(LocalVersion.ToString()));
+                encryptedData = JsonConvert.SerializeObject(storageMap, setting);
+                encryptedVersion = LocalVersion.ToString();
                 return true;
             }
             catch (Exception e)
             {
-                DebugUtil.LogError($"构建存档数据失败: {e.Message}");
+                DebugUtil.LogError($"Build save data failed: {e.Message}");
                 return false;
             }
         }
@@ -269,16 +268,7 @@ namespace SaveFile
             try
             {
                 var saveFileKey = PlayerPrefs.GetString(dataKey);
-                try
-                {
-                    byte[] encryptData = Convert.FromBase64String(saveFileKey);
-                    jsonData = RijndaelEncryptionManager.Instance.Decrypt(encryptData);
-                }
-                catch (FormatException)
-                {
-                    // 兼容旧格式：历史版本可能直接存明文 JSON。
-                    jsonData = saveFileKey;
-                }
+                jsonData = TryDecodeLegacyBase64(saveFileKey, out var decodedJson) ? decodedJson : saveFileKey;
 
                 if (PlayerPrefs.HasKey(versionKey))
                 {
@@ -293,7 +283,7 @@ namespace SaveFile
             }
             catch (Exception e)
             {
-                DebugUtil.LogError($"读取存档失败 dataKey={dataKey}: {e.Message}");
+                DebugUtil.LogError($"Read save failed dataKey={dataKey}: {e.Message}");
                 return false;
             }
         }
@@ -306,24 +296,25 @@ namespace SaveFile
                 return false;
             }
 
+            if (ulong.TryParse(rawVersion, out localVersion))
+            {
+                return true;
+            }
+
             try
             {
-                var versionText = RijndaelEncryptionManager.Instance.Decrypt(Convert.FromBase64String(rawVersion));
-                if (ulong.TryParse(versionText, out localVersion))
+                if (TryDecodeLegacyBase64(rawVersion, out var decodedVersion)
+                    && ulong.TryParse(decodedVersion, out localVersion))
                 {
                     return true;
                 }
             }
-            catch (FormatException)
-            {
-                // 兼容旧格式：版本号可能直接写入明文数字。
-            }
             catch (Exception)
             {
-                // 统一走明文解析兜底，避免重复抛异常。
+                // Fall back to plain text parsing below.
             }
 
-            return ulong.TryParse(rawVersion, out localVersion);
+            return false;
         }
 
         private void ClearCorruptedSlot(string dataKey, string versionKey, string sourceName)
@@ -365,6 +356,25 @@ namespace SaveFile
             catch (Exception e)
             {
                 DebugUtil.LogError($"{sourceName}反序列化失败: {e.Message}。该存档可能已损坏或来自不兼容的历史加密格式。");
+                return false;
+            }
+        }
+
+        private static bool TryDecodeLegacyBase64(string rawText, out string decodedText)
+        {
+            decodedText = string.Empty;
+            if (string.IsNullOrEmpty(rawText))
+            {
+                return false;
+            }
+
+            try
+            {
+                decodedText = Encoding.UTF8.GetString(Convert.FromBase64String(rawText));
+                return true;
+            }
+            catch (FormatException)
+            {
                 return false;
             }
         }

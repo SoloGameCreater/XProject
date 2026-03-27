@@ -38,13 +38,14 @@ namespace FishGameRuntime
         [ComponentBinder("HudPanel/TensionRow/TensionBar/Fill")] private Image _tensionFill;
         [ComponentBinder("HudPanel/LineRow/LineBar/Fill")] private Image _lineFill;
 
-        private FishGamePresenter _presenter;
+        private FishGamePresenterV2 _presenter;
         private readonly List<Button> _idleOnlyButtons = new List<Button>();
         private readonly List<Button> _alwaysHiddenButtons = new List<Button>();
         private RectTransform _castZoneVisual;
         private Text _castZoneLabel;
         private bool _isIdleInputMode = true;
         private bool _primaryHeld;
+        private bool _secondaryHeld;
         private bool _primaryPressedThisFrame;
         private bool _primaryReleasedThisFrame;
         private bool _castZoneClickedThisFrame;
@@ -65,12 +66,14 @@ namespace FishGameRuntime
         internal Button CastButton => _castButton;
         internal Button PrevLureButton => _prevLureButton;
         internal Button NextLureButton => _nextLureButton;
+        internal Button SwitchButton => _switchButton;
         internal Button ReelButton => _reelButton;
         internal Button ReleaseButton => _releaseButton;
         internal Image StaminaFill => _staminaFill;
         internal Image TensionFill => _tensionFill;
         internal Image LineFill => _lineFill;
         internal bool IsPrimaryHeld => _primaryHeld;
+        internal bool IsSecondaryHeld => _secondaryHeld;
         internal bool PrimaryPressedThisFrame => _primaryPressedThisFrame;
         internal bool PrimaryReleasedThisFrame => _primaryReleasedThisFrame;
         internal bool CastZoneClickedThisFrame => _castZoneClickedThisFrame;
@@ -87,11 +90,14 @@ namespace FishGameRuntime
             RegisterButtons();
             ApplyInputMode(true);
 
-            _presenter = new FishGamePresenter(this);
+            _presenter = new FishGamePresenterV2(this);
 
             _prevLureButton.onClick.AddListener(_presenter.OnPrevLureClicked);
             _nextLureButton.onClick.AddListener(_presenter.OnNextLureClicked);
             _switchButton.onClick.AddListener(_presenter.OnSwitchClicked);
+            _castButton.onClick.AddListener(_presenter.OnSellAllClicked);
+            _reelButton.onClick.AddListener(_presenter.OnBuyBaitClicked);
+            _releaseButton.onClick.AddListener(_presenter.OnUpgradeRodClicked);
         }
 
         public override async Task OnViewClose()
@@ -101,6 +107,9 @@ namespace FishGameRuntime
                 _prevLureButton.onClick.RemoveListener(_presenter.OnPrevLureClicked);
                 _nextLureButton.onClick.RemoveListener(_presenter.OnNextLureClicked);
                 _switchButton.onClick.RemoveListener(_presenter.OnSwitchClicked);
+                _castButton.onClick.RemoveListener(_presenter.OnSellAllClicked);
+                _reelButton.onClick.RemoveListener(_presenter.OnBuyBaitClicked);
+                _releaseButton.onClick.RemoveListener(_presenter.OnUpgradeRodClicked);
             }
 
             ResetPointerState();
@@ -125,6 +134,24 @@ namespace FishGameRuntime
             fillRect.sizeDelta = new Vector2(width * ratio, 0f);
         }
 
+        internal void SetButtonInteractable(Button button, bool interactable)
+        {
+            if (button == null)
+            {
+                return;
+            }
+
+            button.interactable = interactable;
+
+            var graphic = button.targetGraphic;
+            if (graphic != null)
+            {
+                var color = graphic.color;
+                color.a = interactable ? 1f : 0.45f;
+                graphic.color = color;
+            }
+        }
+
         internal void ApplyInputMode(bool isIdle)
         {
             _isIdleInputMode = isIdle;
@@ -136,7 +163,7 @@ namespace FishGameRuntime
 
             SetRootActive(_primaryActionsRoot, isIdle);
             SetRootActive(_lureActionsRoot, isIdle);
-            SetRootActive(_fightActionsRoot, false);
+            SetRootActive(_fightActionsRoot, isIdle);
 
             for (var i = 0; i < _idleOnlyButtons.Count; i++)
             {
@@ -165,14 +192,15 @@ namespace FishGameRuntime
             if (_actionHintText != null)
             {
                 _actionHintText.text = isIdle
-                    ? "待命阶段可切换玩法与鱼饵，按住中央抛竿区蓄力，松开后抛竿"
-                    : "钓鱼进行中，按住鼠标左键收线，松开后仅在鱼发力时被带线";
+                    ? "待命阶段可出售、购买和升级；按住中央抛竿区蓄力，松开后抛竿"
+                    : "钓鱼进行中，按住鼠标左键收线；松开左键并按住鼠标右键可锁线";
             }
         }
 
         internal void ResetPointerState()
         {
             _primaryHeld = false;
+            _secondaryHeld = false;
             _primaryPressedThisFrame = false;
             _primaryReleasedThisFrame = false;
             _castZoneClickedThisFrame = false;
@@ -188,10 +216,9 @@ namespace FishGameRuntime
             _idleOnlyButtons.Add(_switchButton);
             _idleOnlyButtons.Add(_prevLureButton);
             _idleOnlyButtons.Add(_nextLureButton);
-
-            _alwaysHiddenButtons.Add(_castButton);
-            _alwaysHiddenButtons.Add(_reelButton);
-            _alwaysHiddenButtons.Add(_releaseButton);
+            _idleOnlyButtons.Add(_castButton);
+            _idleOnlyButtons.Add(_reelButton);
+            _idleOnlyButtons.Add(_releaseButton);
         }
 
         private void BuildCastZoneVisual()
@@ -287,6 +314,7 @@ namespace FishGameRuntime
             _primaryPressedThisFrame = Input.GetMouseButtonDown(0);
             _primaryReleasedThisFrame = Input.GetMouseButtonUp(0);
             _primaryHeld = Input.GetMouseButton(0);
+            _secondaryHeld = !_isIdleInputMode && !Input.GetMouseButton(0) && Input.GetMouseButton(1);
             _castZoneClickedThisFrame = false;
 
             if (_primaryPressedThisFrame)
@@ -319,6 +347,20 @@ namespace FishGameRuntime
                 }
 
                 _pendingCastPress = false;
+            }
+        }
+
+        internal void SetButtonText(Button button, string value)
+        {
+            if (button == null)
+            {
+                return;
+            }
+
+            var label = button.GetComponentInChildren<Text>();
+            if (label != null)
+            {
+                label.text = value;
             }
         }
 

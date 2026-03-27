@@ -1,0 +1,50 @@
+[
+  {
+    "TierId": 1,
+    "MinDistance": 0.0,
+    "MaxDistance": 5.0,
+    "CanBite": false,
+    "FishLevelWeightBonus": 0.0,
+    "RarityWeightCommon": 1.0,
+    "RarityWeightUncommon": 0.0,
+    "RarityWeightRare": 0.0,
+    "RarityWeightLegendary": 0.0,
+    "WaitTimeMultiplier": 1.0
+  },
+  {
+    "TierId": 2,
+    "MinDistance": 5.01,
+    "MaxDistance": 15.0,
+    "CanBite": true,
+    "FishLevelWeightBonus": 0.02,
+    "RarityWeightCommon": 1.0,
+    "RarityWeightUncommon": 0.65,
+    "RarityWeightRare": 0.3,
+    "RarityWeightLegendary": 0.08,
+    "WaitTimeMultiplier": 1.0
+  },
+  {
+    "TierId": 3,
+    "MinDistance": 15.01,
+    "MaxDistance": 28.0,
+    "CanBite": true,
+    "FishLevelWeightBonus": 0.08,
+    "RarityWeightCommon": 0.85,
+    "RarityWeightUncommon": 0.92,
+    "RarityWeightRare": 0.6,
+    "RarityWeightLegendary": 0.16,
+    "WaitTimeMultiplier": 0.92
+  },
+  {
+    "TierId": 4,
+    "MinDistance": 28.01,
+    "MaxDistance": 40.0,
+    "CanBite": true,
+    "FishLevelWeightBonus": 0.16,
+    "RarityWeightCommon": 0.72,
+    "RarityWeightUncommon": 1.0,
+    "RarityWeightRare": 0.92,
+    "RarityWeightLegendary": 0.32,
+    "WaitTimeMultiplier": 0.84
+  }
+]
