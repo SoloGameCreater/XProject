@@ -1,0 +1,62 @@
+[
+  {
+    "RodId": 1,
+    "Name": "基础鱼竿",
+    "BuyCostCoin": 0,
+    "LineStrength": 60.0,
+    "ReelSpeed": 1.5,
+    "ControlPower": 1.0,
+    "SuppressPower": 0.0,
+    "SupportedBaitTypeMask": 1,
+    "SupportedBaitQualityMax": 1,
+    "RecommendFishLevelMax": 2
+  },
+  {
+    "RodId": 2,
+    "Name": "迅捷鱼竿",
+    "BuyCostCoin": 120,
+    "LineStrength": 60.0,
+    "ReelSpeed": 2.1,
+    "ControlPower": 1.0,
+    "SuppressPower": 0.0,
+    "SupportedBaitTypeMask": 1,
+    "SupportedBaitQualityMax": 2,
+    "RecommendFishLevelMax": 3
+  },
+  {
+    "RodId": 3,
+    "Name": "坚韧鱼竿",
+    "BuyCostCoin": 150,
+    "LineStrength": 94.0,
+    "ReelSpeed": 1.5,
+    "ControlPower": 1.0,
+    "SuppressPower": 0.0,
+    "SupportedBaitTypeMask": 1,
+    "SupportedBaitQualityMax": 3,
+    "RecommendFishLevelMax": 4
+  },
+  {
+    "RodId": 4,
+    "Name": "压制鱼竿",
+    "BuyCostCoin": 200,
+    "LineStrength": 60.0,
+    "ReelSpeed": 1.5,
+    "ControlPower": 1.6,
+    "SuppressPower": 0.35,
+    "SupportedBaitTypeMask": 3,
+    "SupportedBaitQualityMax": 4,
+    "RecommendFishLevelMax": 5
+  },
+  {
+    "RodId": 5,
+    "Name": "大师鱼竿",
+    "BuyCostCoin": 500,
+    "LineStrength": 100.0,
+    "ReelSpeed": 2.2,
+    "ControlPower": 1.8,
+    "SuppressPower": 0.3,
+    "SupportedBaitTypeMask": 3,
+    "SupportedBaitQualityMax": 5,
+    "RecommendFishLevelMax": 5
+  }
+]

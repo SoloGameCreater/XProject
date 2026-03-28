@@ -11,7 +11,7 @@
     "WaitTimeMax": 7.0,
     "EmptyHookCooldown": 1.2,
     "CatchLineDistance": 1.5,
-    "StarterRodLevel": 1,
+    "StarterRodId": 1,
     "StarterBaitId": 101,
     "StarterBaitCount": 0,
     "BaitPackCount": 10,

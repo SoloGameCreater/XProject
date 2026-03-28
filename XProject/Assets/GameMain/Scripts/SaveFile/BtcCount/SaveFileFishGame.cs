@@ -17,7 +17,7 @@ namespace SaveFile
     public class SaveFileFishGame : SaveFileBase
     {
         [JsonProperty] private bool _isInitialized;
-        [JsonProperty] private int _rodLevel;
+        [JsonProperty] private int _rodId;
         [JsonProperty] private int _equippedBaitId;
         [JsonProperty] private SaveFileDictionary<int, SaveFileSafeCount> _ownedBaits = new(true);
         [JsonProperty] private SaveFileDictionary<int, int> _unlockedLures = new();
@@ -40,14 +40,14 @@ namespace SaveFile
         }
 
         [JsonIgnore]
-        public int RodLevel
+        public int RodId
         {
-            get => _rodLevel;
+            get => _rodId;
             set
             {
-                if (_rodLevel != value)
+                if (_rodId != value)
                 {
-                    _rodLevel = value;
+                    _rodId = value;
                     SaveFileManager.Instance.LocalVersion++;
                 }
             }

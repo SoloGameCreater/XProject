@@ -218,31 +218,8 @@ namespace FishGameRuntime
                 return;
             }
 
-            var currentRod = GetCurrentRod();
-            var nextRod = _configManager?.GetNextRodLevelConfig(_save != null ? _save.RodLevel : 0);
-            if (currentRod == null)
-            {
-                ShowNotification("鱼竿配置未准备好。", 2f, new Color(1f, 0.45f, 0.45f));
-                return;
-            }
-
-            if (nextRod == null)
-            {
-                ShowNotification("鱼竿已达到最高等级。", 1.8f, Color.white);
-                return;
-            }
-
-            if (!CurrencyModel.Instance.IsCurrencyEnough(CurrencyType.Coin, nextRod.UpgradeCostCoin))
-            {
-                ShowNotification("金币不足，无法升级鱼竿。", 2f, new Color(1f, 0.45f, 0.45f));
-                return;
-            }
-
-            CurrencyModel.Instance.CostCurrency(CurrencyType.Coin, nextRod.UpgradeCostCoin);
-            _save.RodLevel = nextRod.Level;
-            EnsureSelectedBaitValid();
-            SaveFileManager.Instance.TryAutoSave("FishGame.UpgradeRod", true);
-            ShowNotification($"鱼竿升级成功：{currentRod.Name} -> {nextRod.Name}", 2.2f, new Color(0.45f, 1f, 0.55f));
+            // TODO: 打开鱼竿选择弹窗 prefab，展示所有可购买/已拥有的鱼竿，玩家自选后更新 _save.RodId
+            ShowNotification("鱼竿选择功能开发中。", 2f, Color.white);
         }
 
         private void UpdateInput()
@@ -364,7 +341,7 @@ namespace FishGameRuntime
             else
                 behaviorMul = 1f;
 
-            var pullForce = _fight.Resistance * behaviorMul * forceFactor;
+            var pullForce = Mathf.Max(0f, _fight.Resistance * behaviorMul * forceFactor - rod.SuppressPower);
 
             if (_fight.Behavior == FishBehavior.Struggling)
             {
@@ -682,22 +659,20 @@ namespace FishGameRuntime
             var baitCountLabel = GetBaitCountLabel(bait, baitCount);
             _view.EquipText.text = rod == null || bait == null
                 ? "装备配置 / 未初始化"
-                : $"装备配置 / {rod.Name} Lv.{rod.Level} / {bait.Name} x{baitCountLabel}";
+                : $"装备配置 / {rod.Name} / {bait.Name} x{baitCountLabel}";
             _view.ScoreText.text = $"金币\n{coins}";
 
-            var nextRod = _configManager?.GetNextRodLevelConfig(_save != null ? _save.RodLevel : 0);
             var selectableBaits = GetSelectableBaits();
             var canCycleBait = _state == FishingState.Idle && selectableBaits.Count > 1;
             var canSellAll = _state == FishingState.Idle && _save != null && _save.FishBag.Count > 0;
             var canBuyBait = _state == FishingState.Idle && CanBuyCurrentBait(bait, rod, coins);
-            var canUpgradeRod = _state == FishingState.Idle && nextRod != null && coins >= nextRod.UpgradeCostCoin;
 
             _view.SetButtonText(_view.SellAllButton, $"全部出售\n{bagValue} Coin");
             _view.SetButtonText(_view.BuyBaitButton, GetBuyBaitButtonText(bait));
-            _view.SetButtonText(_view.UpgradeRodButton, nextRod == null ? "鱼竿满级" : $"升级鱼竿\n{nextRod.UpgradeCostCoin} Coin");
+            _view.SetButtonText(_view.UpgradeRodButton, "选择鱼竿");
             _view.SetButtonInteractable(_view.SellAllButton, canSellAll);
             _view.SetButtonInteractable(_view.BuyBaitButton, canBuyBait);
-            _view.SetButtonInteractable(_view.UpgradeRodButton, canUpgradeRod);
+            _view.SetButtonInteractable(_view.UpgradeRodButton, _state == FishingState.Idle);
             _view.SetButtonInteractable(_view.PrevLureButton, canCycleBait);
             _view.SetButtonInteractable(_view.NextLureButton, canCycleBait);
             _view.SetButtonInteractable(_view.SwitchButton, _state == FishingState.Idle);
@@ -858,7 +833,7 @@ namespace FishGameRuntime
 
             if (!_save.IsInitialized)
             {
-                _save.RodLevel = Mathf.Max(1, global.StarterRodLevel);
+                _save.RodId = global.StarterRodId;
                 _save.EquippedBaitId = global.StarterBaitId;
                 if (_configManager.TryGetBaitConfig(global.StarterBaitId, out var starterBait) && !IsInfiniteBait(starterBait))
                 {
@@ -892,9 +867,9 @@ namespace FishGameRuntime
             }
         }
 
-        private FishRodLevelConfig GetCurrentRod()
+        private FishRodConfig GetCurrentRod()
         {
-            return _configManager?.GetRodLevelConfig(_save != null ? _save.RodLevel : 0);
+            return _configManager?.GetRodConfig(_save != null ? _save.RodId : 0);
         }
 
         private FishBaitConfig GetCurrentBait()
@@ -1034,7 +1009,7 @@ namespace FishGameRuntime
             return total;
         }
 
-        private static bool CanBuyCurrentBait(FishBaitConfig bait, FishRodLevelConfig rod, int coins)
+        private static bool CanBuyCurrentBait(FishBaitConfig bait, FishRodConfig rod, int coins)
         {
             if (bait == null || rod == null)
             {
@@ -1091,7 +1066,7 @@ namespace FishGameRuntime
             }
         }
 
-        private static bool SupportsBait(FishRodLevelConfig rod, FishBaitConfig bait)
+        private static bool SupportsBait(FishRodConfig rod, FishBaitConfig bait)
         {
             if (rod == null || bait == null)
             {
@@ -1099,8 +1074,7 @@ namespace FishGameRuntime
             }
 
             return FishBaitTypeMask.Supports(rod.SupportedBaitTypeMask, bait.BaitType)
-                && bait.Quality <= rod.SupportedBaitQualityMax
-                && rod.Level >= bait.UnlockRodLevel;
+                && bait.Quality <= rod.SupportedBaitQualityMax;
         }
 
         private static bool HasTagOverlap(string[] left, string[] right)

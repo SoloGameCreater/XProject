@@ -37,7 +37,7 @@ namespace Config.FishGame
         public float WaitTimeMax { get; set; }
         public float EmptyHookCooldown { get; set; }
         public float CatchLineDistance { get; set; }
-        public int StarterRodLevel { get; set; }
+        public int StarterRodId { get; set; }
         public int StarterBaitId { get; set; }
         public int StarterBaitCount { get; set; }
         public int BaitPackCount { get; set; }
@@ -50,17 +50,15 @@ namespace Config.FishGame
         public float RestForceMul { get; set; }
     }
 
-    public class FishRodLevelConfig
+    public class FishRodConfig
     {
-        public int Level { get; set; }
+        public int RodId { get; set; }
         public string Name { get; set; }
-        public int UpgradeCostCoin { get; set; }
+        public int BuyCostCoin { get; set; }
         public float LineStrength { get; set; }
         public float ReelSpeed { get; set; }
         public float ControlPower { get; set; }
-        public float EscapeMitigation { get; set; }
-        public float LockLineStaminaDamagePerSec { get; set; }
-        public float LockLineTensionGainPerSec { get; set; }
+        public float SuppressPower { get; set; }
         public int SupportedBaitTypeMask { get; set; }
         public int SupportedBaitQualityMax { get; set; }
         public int RecommendFishLevelMax { get; set; }
@@ -131,75 +129,40 @@ namespace Config.FishGame
         private readonly Dictionary<Type, string> _typeToSubModule = new()
         {
             [typeof(FishGlobalConfig)] = "fishglobal",
-            [typeof(FishRodLevelConfig)] = "fishrodlevel",
+            [typeof(FishRodConfig)] = "fishrod",
             [typeof(FishBaitConfig)] = "fishbait",
             [typeof(FishSpeciesConfig)] = "fishspecies",
             [typeof(FishDistanceTierConfig)] = "fishdistancetier"
         };
 
         private List<FishGlobalConfig> _fishGlobalList;
-        private List<FishRodLevelConfig> _fishRodLevelList;
+        private List<FishRodConfig> _fishRodList;
         private List<FishBaitConfig> _fishBaitList;
         private List<FishSpeciesConfig> _fishSpeciesList;
         private List<FishDistanceTierConfig> _fishDistanceTierList;
 
-        private readonly Dictionary<int, FishRodLevelConfig> _rodCache = new();
+        private readonly Dictionary<int, FishRodConfig> _rodCache = new();
         private readonly Dictionary<int, FishBaitConfig> _baitCache = new();
         private readonly Dictionary<int, FishSpeciesConfig> _speciesCache = new();
         private readonly List<FishBaitConfig> _enabledBaitsCache = new();
         private bool _enabledBaitsBuilt;
 
         public FishGlobalConfig GlobalConfig => GetSingleConfig<FishGlobalConfig>();
-        public List<FishRodLevelConfig> RodLevelConfigs => GetConfig<FishRodLevelConfig>();
+        public List<FishRodConfig> RodConfigs => GetConfig<FishRodConfig>();
         public List<FishBaitConfig> BaitConfigs => GetConfig<FishBaitConfig>();
         public List<FishSpeciesConfig> SpeciesConfigs => GetConfig<FishSpeciesConfig>();
         public List<FishDistanceTierConfig> DistanceTierConfigs => GetConfig<FishDistanceTierConfig>();
 
-        public FishRodLevelConfig GetRodLevelConfig(int level)
+        public FishRodConfig GetRodConfig(int rodId)
         {
-            if (TryGetRodLevelConfig(level, out var config))
+            if (_rodCache.TryGetValue(rodId, out var config))
             {
                 return config;
             }
 
-            FishRodLevelConfig fallback = null;
-            var configs = RodLevelConfigs;
-            for (var i = 0; i < configs.Count; i++)
-            {
-                if (configs[i].Level <= level && (fallback == null || configs[i].Level > fallback.Level))
-                {
-                    fallback = configs[i];
-                }
-            }
-
-            return fallback ?? (configs.Count > 0 ? configs[0] : null);
-        }
-
-        public bool TryGetRodLevelConfig(int level, out FishRodLevelConfig config)
-        {
-            if (_rodCache.TryGetValue(level, out config))
-            {
-                return config != null;
-            }
-
-            config = RodLevelConfigs.Find(item => item.Level == level);
-            _rodCache[level] = config;
-            return config != null;
-        }
-
-        public FishRodLevelConfig GetNextRodLevelConfig(int currentLevel)
-        {
-            FishRodLevelConfig candidate = null;
-            var configs = RodLevelConfigs;
-            for (var i = 0; i < configs.Count; i++)
-            {
-                if (configs[i].Level > currentLevel && (candidate == null || configs[i].Level < candidate.Level))
-                {
-                    candidate = configs[i];
-                }
-            }
-
-            return candidate;
+            config = RodConfigs.Find(item => item.RodId == rodId);
+            _rodCache[rodId] = config;
+            return config ?? (RodConfigs.Count > 0 ? RodConfigs[0] : null);
         }
 
         public bool TryGetBaitConfig(int baitId, out FishBaitConfig config)
@@ -301,7 +264,7 @@ namespace Config.FishGame
             return subModule switch
             {
                 "fishglobal" => _fishGlobalList as List<T>,
-                "fishrodlevel" => _fishRodLevelList as List<T>,
+                "fishrod" => _fishRodList as List<T>,
                 "fishbait" => _fishBaitList as List<T>,
                 "fishspecies" => _fishSpeciesList as List<T>,
                 "fishdistancetier" => _fishDistanceTierList as List<T>,
@@ -319,8 +282,8 @@ namespace Config.FishGame
                         return;
                     }
                     break;
-                case "fishrodlevel":
-                    if (_fishRodLevelList != null)
+                case "fishrod":
+                    if (_fishRodList != null)
                     {
                         return;
                     }
@@ -360,8 +323,8 @@ namespace Config.FishGame
                 case "fishglobal":
                     _fishGlobalList = JsonConvert.DeserializeObject<List<FishGlobalConfig>>(textAsset.text);
                     break;
-                case "fishrodlevel":
-                    _fishRodLevelList = JsonConvert.DeserializeObject<List<FishRodLevelConfig>>(textAsset.text);
+                case "fishrod":
+                    _fishRodList = JsonConvert.DeserializeObject<List<FishRodConfig>>(textAsset.text);
                     break;
                 case "fishbait":
                     _fishBaitList = JsonConvert.DeserializeObject<List<FishBaitConfig>>(textAsset.text);
