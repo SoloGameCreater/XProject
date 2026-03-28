@@ -165,7 +165,7 @@ public static class FishGameUIPrefabRefiner
     private static void CreateInventory(Transform parent)
     {
         var inventoryPanel = CreatePanel("InventoryPanel", parent, CardColor);
-        SetVerticalStretchRight(inventoryPanel, 24f, 188f, 24f, 420f);
+        SetVerticalStretchRight(inventoryPanel, 24f, 188f, 276f, 420f);
 
         var inventoryTitle = CreateText("InventoryTitle", inventoryPanel, "Catch Ledger", 24, TextAnchor.MiddleLeft, FontStyle.Bold, Color.white);
         SetRect((RectTransform)inventoryTitle.transform, new Vector2(20f, -20f), new Vector2(220f, 30f), new Vector2(0f, 1f));
@@ -183,31 +183,31 @@ public static class FishGameUIPrefabRefiner
     private static void CreateControls(Transform parent)
     {
         var controlsPanel = CreatePanel("ControlsPanel", parent, CardColor);
-        SetBottomStretch(controlsPanel, 24f, 468f, 24f, 196f);
+        SetRect(controlsPanel, new Vector2(-24f, 24f), new Vector2(420f, 228f), new Vector2(1f, 0f));
 
-        var controlsTitle = CreateText("ControlsTitle", controlsPanel, "Deck Controls", 24, TextAnchor.MiddleLeft, FontStyle.Bold, Color.white);
+        var controlsTitle = CreateText("ControlsTitle", controlsPanel, "Operations Dock", 24, TextAnchor.MiddleLeft, FontStyle.Bold, Color.white);
         SetRect((RectTransform)controlsTitle.transform, new Vector2(20f, -18f), new Vector2(220f, 32f), new Vector2(0f, 1f));
 
-        var controlsDesc = CreateText("ControlsDesc", controlsPanel, "主操作、饵料切换和遛鱼按钮分成三组，避免状态切换时找不到入口。", 16, TextAnchor.MiddleRight, FontStyle.Normal, MutedTextColor);
-        SetRect((RectTransform)controlsDesc.transform, new Vector2(-20f, -22f), new Vector2(760f, 24f), new Vector2(1f, 1f));
+        var controlsDesc = CreateText("ControlsDesc", controlsPanel, "把出售、购买、升级与鱼饵切换集中到右下角，避免和主界面信息区重叠。", 15, TextAnchor.MiddleLeft, FontStyle.Normal, MutedTextColor);
+        SetRect((RectTransform)controlsDesc.transform, new Vector2(20f, -52f), new Vector2(380f, 22f), new Vector2(0f, 1f));
 
         var primaryActions = CreateContainer("PrimaryActions", controlsPanel);
-        SetRect(primaryActions, new Vector2(20f, -64f), new Vector2(520f, 48f), new Vector2(0f, 1f));
-        CreateButton("CastButton", primaryActions, "抛竿 / 收竿", new Vector2(0f, 0f), new Vector2(260f, 48f), new Color(0.18f, 0.56f, 0.67f));
-        CreateButton("SwitchButton", primaryActions, "进入三消", new Vector2(276f, 0f), new Vector2(220f, 48f), new Color(0.76f, 0.46f, 0.14f));
+        SetRect(primaryActions, new Vector2(20f, -86f), new Vector2(380f, 44f), new Vector2(0f, 1f));
+        CreateButton("CastButton", primaryActions, "抛竿 / 收竿", new Vector2(0f, 0f), new Vector2(182f, 44f), new Color(0.18f, 0.56f, 0.67f));
+        CreateButton("SwitchButton", primaryActions, "进入三消", new Vector2(198f, 0f), new Vector2(182f, 44f), new Color(0.76f, 0.46f, 0.14f));
 
         var lureActions = CreateContainer("LureActions", controlsPanel);
-        SetRect(lureActions, new Vector2(20f, -122f), new Vector2(520f, 42f), new Vector2(0f, 1f));
-        CreateButton("PrevLureButton", lureActions, "上一种鱼饵", new Vector2(0f, 0f), new Vector2(248f, 42f), new Color(0.14f, 0.34f, 0.48f));
-        CreateButton("NextLureButton", lureActions, "下一种鱼饵", new Vector2(264f, 0f), new Vector2(248f, 42f), new Color(0.14f, 0.34f, 0.48f));
+        SetRect(lureActions, new Vector2(20f, -136f), new Vector2(380f, 42f), new Vector2(0f, 1f));
+        CreateButton("PrevLureButton", lureActions, "上一种鱼饵", new Vector2(0f, 0f), new Vector2(182f, 42f), new Color(0.14f, 0.34f, 0.48f));
+        CreateButton("NextLureButton", lureActions, "下一种鱼饵", new Vector2(198f, 0f), new Vector2(182f, 42f), new Color(0.14f, 0.34f, 0.48f));
 
         var fightActions = CreateContainer("FightActions", controlsPanel);
-        SetRect(fightActions, new Vector2(20f, 18f), new Vector2(620f, 48f), new Vector2(0f, 0f));
-        CreateButton("ReelButton", fightActions, "按住收线", new Vector2(0f, 0f), new Vector2(300f, 48f), new Color(0.15f, 0.49f, 0.24f));
-        CreateButton("ReleaseButton", fightActions, "按住放线", new Vector2(320f, 0f), new Vector2(300f, 48f), new Color(0.15f, 0.31f, 0.59f));
+        SetRect(fightActions, new Vector2(20f, 42f), new Vector2(380f, 44f), new Vector2(0f, 0f));
+        CreateButton("ReelButton", fightActions, "按住收线", new Vector2(0f, 0f), new Vector2(182f, 44f), new Color(0.15f, 0.49f, 0.24f));
+        CreateButton("ReleaseButton", fightActions, "按住放线", new Vector2(198f, 0f), new Vector2(182f, 44f), new Color(0.15f, 0.31f, 0.59f));
 
-        var actionHint = CreateText("ActionHint", controlsPanel, "Fight Buttons / 只有在遛鱼阶段才会显示", 16, TextAnchor.MiddleRight, FontStyle.Bold, new Color(0.86f, 0.95f, 1f, 1f));
-        SetRect((RectTransform)actionHint.transform, new Vector2(-20f, 32f), new Vector2(420f, 22f), new Vector2(1f, 0f));
+        var actionHint = CreateText("ActionHint", controlsPanel, "Idle Operations / 待命阶段的出售、鱼饵和升级操作都固定在这里", 15, TextAnchor.MiddleLeft, FontStyle.Bold, new Color(0.86f, 0.95f, 1f, 1f));
+        SetRect((RectTransform)actionHint.transform, new Vector2(20f, 16f), new Vector2(380f, 20f), new Vector2(0f, 0f));
     }
 
     private static RectTransform CreateContainer(string name, Transform parent)
