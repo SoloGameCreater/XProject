@@ -14,6 +14,13 @@
     "StarterRodLevel": 1,
     "StarterBaitId": 101,
     "StarterBaitCount": 0,
-    "BaitPackCount": 10
+    "BaitPackCount": 10,
+    "OverLevelWeightScale": 0.15,
+    "ReelDrainBonus": 0.5,
+    "LockDrainBonus": 0.3,
+    "StruggleReleaseDrainScale": 0.6,
+    "ControlSuppressionDivisor": 3.0,
+    "SprintForceMul": 1.8,
+    "RestForceMul": 0.2
   }
 ]

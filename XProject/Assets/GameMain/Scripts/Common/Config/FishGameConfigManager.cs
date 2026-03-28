@@ -41,6 +41,13 @@ namespace Config.FishGame
         public int StarterBaitId { get; set; }
         public int StarterBaitCount { get; set; }
         public int BaitPackCount { get; set; }
+        public float OverLevelWeightScale { get; set; }
+        public float ReelDrainBonus { get; set; }
+        public float LockDrainBonus { get; set; }
+        public float StruggleReleaseDrainScale { get; set; }
+        public float ControlSuppressionDivisor { get; set; }
+        public float SprintForceMul { get; set; }
+        public float RestForceMul { get; set; }
     }
 
     public class FishRodLevelConfig
@@ -88,12 +95,16 @@ namespace Config.FishGame
         public float WeightMin { get; set; }
         public float WeightMax { get; set; }
         public float BaseStamina { get; set; }
-        public float StaminaRecoveryPerSec { get; set; }
         public float Resistance { get; set; }
         public float EscapeSpeed { get; set; }
-        public float SprintInterval { get; set; }
-        public float SprintDuration { get; set; }
         public int BasePricePerKg { get; set; }
+        public float StruggleDurationMin { get; set; }
+        public float StruggleDurationMax { get; set; }
+        public float RestDurationMin { get; set; }
+        public float RestDurationMax { get; set; }
+        public float SprintChance { get; set; }
+        public float BaseDrainPerSec { get; set; }
+        public float RecoveryPerSec { get; set; }
         public string[] PreferredBaitTags { get; set; }
         public float CatchWeight { get; set; }
         public int RecommendRodLevel { get; set; }
