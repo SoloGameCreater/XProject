@@ -21,7 +21,7 @@
 
 基于当前仓库实现，以下约束已经确认：
 
-1. 当前有效钓鱼逻辑集中在 `Assets/GameMain/Scripts/FishGame/FishGamePresenter.cs`。
+1. 当前有效钓鱼逻辑集中在 `Assets/GameMain/Scripts/FishGame/FishGamePresenterV2.cs`。
 2. 当前有效输入采集集中在 `Assets/GameMain/Scripts/UI/FishGame/FishGameMainUI.cs`。
 3. 当前只采集鼠标左键输入，没有右键战斗逻辑。
 4. 当前鱼上钩后会立刻加入背包并同步增加 `_totalScore`，这与后续“一键出售全部”逻辑冲突。
@@ -509,7 +509,7 @@ FishGame 需要补专属存档，并由 `FishGameModule` 注册。
 
 1. 先补 FishGame 配置系统。
 2. 再补 FishGame 专属存档。
-3. 再重构 `FishGamePresenter` 状态机与规则逻辑。
+3. 再重构 `FishGamePresenterV2` 状态机与规则逻辑。
 4. 再扩展 `FishGameMainUI` 输入采集与 UI 入口。
 5. 最后接入购买、升级、出售和文案联调。
 
