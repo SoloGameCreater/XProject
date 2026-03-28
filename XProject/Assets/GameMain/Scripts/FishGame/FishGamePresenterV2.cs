@@ -39,6 +39,7 @@ namespace FishGameRuntime
         }
 
         private const float MaxCastChargeDuration = 1.5f;
+        private const float TensionRelaxDuration = 0.5f;
 
         private readonly FishGameMainUI _view;
         private readonly FishGameConfigManager _configManager;
@@ -340,7 +341,8 @@ namespace FishGameRuntime
             if (_fight.Reeling)
             {
                 var reelSpeed = rod.ReelSpeed * Mathf.Lerp(1.05f, 0.62f, Mathf.Clamp01(_fight.Resistance / 2.4f));
-                var netReelSpeed = Mathf.Max(0.05f, reelSpeed - fishPullSpeed * 0.32f);
+                var minimumReelSpeed = Mathf.Max(0.35f, rod.ReelSpeed * 0.4f);
+                var netReelSpeed = Mathf.Max(minimumReelSpeed, reelSpeed - fishPullSpeed * 0.18f);
                 _fight.LineLength = Mathf.Max(_fight.LineLengthMin, _fight.LineLength - netReelSpeed * deltaTime);
                 _fight.Stamina = Mathf.Max(0f, _fight.Stamina - (rod.ReelSpeed * (1.35f + _fight.Resistance * 0.65f)) * deltaTime);
                 _fight.Tension += (fishPullSpeed * 2.3f + _fight.Resistance * (5.2f + staminaRatio * 1.6f)) * deltaTime;
@@ -349,12 +351,12 @@ namespace FishGameRuntime
             {
                 var sprintBonus = _fight.IsSprinting ? 1.25f : 1f;
                 _fight.Stamina = Mathf.Max(0f, _fight.Stamina - rod.LockLineStaminaDamagePerSec * sprintBonus * deltaTime);
-                _fight.Tension += rod.LockLineTensionGainPerSec * (1f + staminaRatio * 0.6f + _fight.Resistance * 0.25f) * sprintBonus * deltaTime;
             }
             else
             {
+                var tensionRecoveryPerSecond = rod.LineStrength / TensionRelaxDuration;
                 _fight.LineLength = Mathf.Min(_fight.LineLengthMax, _fight.LineLength + fishPullSpeed * deltaTime);
-                _fight.Tension = Mathf.Max(0f, _fight.Tension - (10f + rod.ControlPower * 3.2f) * deltaTime);
+                _fight.Tension = Mathf.MoveTowards(_fight.Tension, 0f, tensionRecoveryPerSecond * deltaTime);
                 _fight.Stamina = Mathf.Min(_fight.StaminaMax, _fight.Stamina + _fight.Fish.StaminaRecoveryPerSec * (_fight.IsSprinting ? 0.4f : 1f) * deltaTime);
             }
 
@@ -662,10 +664,10 @@ namespace FishGameRuntime
                 _view.LineValueText.text = $"{_fight.LineLength:F1} m";
                 _view.LineText.text = $"目标鱼 / {_fight.Fish.Species} / {_fight.Weight:F1} kg / 等级 {_fight.Fish.Level} / 阻力 {_fight.Resistance:F2}";
                 _view.HintText.text = _fight.Locking
-                    ? "正在锁线：鱼距离被锁定，体力持续下降，但张力会缓慢增长。"
+                    ? "按住右键锁线：鱼的距离保持不变，体力持续下降，当前张力保持不变。"
                     : _fight.Reeling
-                        ? "按住左键持续收线；体力越高，张力增长越快。"
-                        : "松开左键会让鱼向外冲；按住右键可切换为锁线。";
+                        ? "按住左键持续收线；鱼线会稳定回收，同时张力会持续上涨。"
+                        : "松开左右键会卸力，张力会在 0.5 秒内回到 0；按住右键可锁线。";
             }
             else if (_state == FishingState.Waiting)
             {
