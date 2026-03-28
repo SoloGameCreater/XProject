@@ -13,7 +13,7 @@
     "CatchLineDistance": 1.5,
     "StarterRodLevel": 1,
     "StarterBaitId": 101,
-    "StarterBaitCount": 10,
+    "StarterBaitCount": 0,
     "BaitPackCount": 10
   }
 ]

@@ -623,9 +623,10 @@ namespace FishGameRuntime
             };
 
             var baitCount = bait != null ? GetBaitCount(bait.BaitId) : 0;
+            var baitCountLabel = GetBaitCountLabel(bait, baitCount);
             _view.EquipText.text = rod == null || bait == null
                 ? "装备配置 / 未初始化"
-                : $"装备配置 / {rod.Name} Lv.{rod.Level} / {bait.Name} x{baitCount}";
+                : $"装备配置 / {rod.Name} Lv.{rod.Level} / {bait.Name} x{baitCountLabel}";
             _view.ScoreText.text = $"金币\n{coins}";
 
             var nextRod = _configManager?.GetNextRodLevelConfig(_save != null ? _save.RodLevel : 0);
@@ -636,7 +637,7 @@ namespace FishGameRuntime
             var canUpgradeRod = _state == FishingState.Idle && nextRod != null && coins >= nextRod.UpgradeCostCoin;
 
             _view.SetButtonText(_view.CastButton, $"全部出售\n{bagValue} Coin");
-            _view.SetButtonText(_view.ReelButton, bait == null ? "购买鱼饵" : $"购买鱼饵\n{bait.BuyPriceCoin} Coin");
+            _view.SetButtonText(_view.ReelButton, GetBuyBaitButtonText(bait));
             _view.SetButtonText(_view.ReleaseButton, nextRod == null ? "鱼竿满级" : $"升级鱼竿\n{nextRod.UpgradeCostCoin} Coin");
             _view.SetButtonInteractable(_view.CastButton, canSellAll);
             _view.SetButtonInteractable(_view.ReelButton, canBuyBait);
@@ -783,7 +784,10 @@ namespace FishGameRuntime
             {
                 _save.RodLevel = Mathf.Max(1, global.StarterRodLevel);
                 _save.EquippedBaitId = global.StarterBaitId;
-                AddBaitCount(global.StarterBaitId, global.StarterBaitCount, false);
+                if (_configManager.TryGetBaitConfig(global.StarterBaitId, out var starterBait) && !IsInfiniteBait(starterBait))
+                {
+                    AddBaitCount(global.StarterBaitId, global.StarterBaitCount, false);
+                }
                 _save.IsInitialized = true;
                 SaveFileManager.Instance.TryAutoSave("FishGame.Init", true);
             }
@@ -913,6 +917,26 @@ namespace FishGameRuntime
             }
 
             return safeCount.GetValue();
+        }
+
+        private static bool IsInfiniteBait(FishBaitConfig bait)
+        {
+            return bait != null && bait.ConsumePerCast <= 0;
+        }
+
+        private static string GetBaitCountLabel(FishBaitConfig bait, int baitCount)
+        {
+            return IsInfiniteBait(bait) ? "∞" : baitCount.ToString();
+        }
+
+        private static string GetBuyBaitButtonText(FishBaitConfig bait)
+        {
+            if (bait == null)
+            {
+                return "购买鱼饵";
+            }
+
+            return bait.CanPurchase ? $"购买鱼饵\n{bait.BuyPriceCoin} Coin" : "当前鱼饵\n不可购买";
         }
 
         private int GetFishBagValue()

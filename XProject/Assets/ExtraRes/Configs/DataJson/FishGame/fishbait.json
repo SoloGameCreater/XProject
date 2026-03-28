@@ -4,15 +4,15 @@
     "Name": "基础飞蝇",
     "Type": 1,
     "Quality": 1,
-    "BuyPriceCoin": 25,
-    "ConsumePerCast": 1,
+    "BuyPriceCoin": 0,
+    "ConsumePerCast": 0,
     "TargetTags": ["bass", "trout"],
     "HookWeightBonus": 1.35,
     "HighLevelWeightBonus": 0.04,
     "WaitTimeMultiplier": 1.0,
     "UnlockRodLevel": 1,
     "EnabledPhase": 1,
-    "CanPurchase": true
+    "CanPurchase": false
   },
   {
     "BaitId": 102,

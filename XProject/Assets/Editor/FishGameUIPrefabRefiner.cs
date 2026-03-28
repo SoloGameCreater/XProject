@@ -197,7 +197,7 @@ public static class FishGameUIPrefabRefiner
         CreateButton("SwitchButton", primaryActions, "进入三消", new Vector2(198f, 0f), new Vector2(182f, 44f), new Color(0.76f, 0.46f, 0.14f));
 
         var lureActions = CreateContainer("LureActions", controlsPanel);
-        SetRect(lureActions, new Vector2(20f, -136f), new Vector2(380f, 42f), new Vector2(0f, 1f));
+        SetRect(lureActions, new Vector2(-400f, -173f), new Vector2(380f, 42f), new Vector2(0f, 1f));
         CreateButton("PrevLureButton", lureActions, "上一种鱼饵", new Vector2(0f, 0f), new Vector2(182f, 42f), new Color(0.14f, 0.34f, 0.48f));
         CreateButton("NextLureButton", lureActions, "下一种鱼饵", new Vector2(198f, 0f), new Vector2(182f, 42f), new Color(0.14f, 0.34f, 0.48f));
 
