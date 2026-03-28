@@ -46,6 +46,7 @@ namespace FishGameRuntime
         private readonly SaveFileFishGame _save;
         private readonly FightData _fight = new();
         private readonly List<FishBaitConfig> _selectableBaitsBuffer = new();
+        private readonly List<(FishSpeciesConfig fish, float weight)> _pickFishCandidates = new();
 
         private FishingState _state = FishingState.Idle;
         private float _castingTimer;
@@ -55,6 +56,8 @@ namespace FishGameRuntime
         private string _notificationMessage = string.Empty;
         private Color _notificationColor = Color.white;
         private bool _isSwitching;
+        private FishingState _lastUiState = (FishingState)(-1);
+        private bool _inventoryDirty = true;
 
         public FishGamePresenterV2(FishGameMainUI view)
         {
@@ -84,6 +87,14 @@ namespace FishGameRuntime
                 return;
             }
 
+            var castDistance = GetCastLineLength(holdDuration);
+            var global = _configManager?.GlobalConfig;
+            if (global != null && castDistance <= global.NoBiteDistance)
+            {
+                ShowNotification("蓄力不足，抛投距离过近，不消耗鱼饵。", 1.8f, new Color(1f, 0.82f, 0.3f));
+                return;
+            }
+
             if (!ConsumeCurrentBaitForCast())
             {
                 ShowNotification("当前鱼饵库存不足，无法抛竿。", 2.2f, new Color(1f, 0.45f, 0.45f));
@@ -91,7 +102,7 @@ namespace FishGameRuntime
             }
 
             ResetFightDataForCast();
-            _fight.LineLength = GetCastLineLength(holdDuration);
+            _fight.LineLength = castDistance;
             _state = FishingState.Casting;
             _castingTimer = 0.8f;
             ShowNotification($"抛竿中... 本次抛投 {_fight.LineLength:F1} m", 1f, Color.white);
@@ -149,6 +160,7 @@ namespace FishGameRuntime
 
             _save.FishBag.Clear();
             _save.TotalSoldCount += soldCount;
+            _inventoryDirty = true;
             CurrencyModel.Instance.AddCurrency(CurrencyType.Coin, totalPrice);
             SaveFileManager.Instance.TryAutoSave("FishGame.SellAll", true);
             ShowNotification($"一键出售完成，获得 {totalPrice} Coin。", 2.2f, new Color(0.45f, 1f, 0.55f));
@@ -351,6 +363,7 @@ namespace FishGameRuntime
             {
                 var sprintBonus = _fight.IsSprinting ? 1.25f : 1f;
                 _fight.Stamina = Mathf.Max(0f, _fight.Stamina - rod.LockLineStaminaDamagePerSec * sprintBonus * deltaTime);
+                _fight.Tension += rod.LockLineTensionGainPerSec * deltaTime;
             }
             else
             {
@@ -432,9 +445,18 @@ namespace FishGameRuntime
                 currentIndex = 0;
             }
 
-            _save.EquippedBaitId = selectableBaits[currentIndex].BaitId;
+            var selected = selectableBaits[currentIndex];
+            _save.EquippedBaitId = selected.BaitId;
             SaveFileManager.Instance.TryAutoSave("FishGame.ChangeBait");
-            ShowNotification($"已切换鱼饵：{selectableBaits[currentIndex].Name}", 1.8f, Color.white);
+
+            if (selected.BaitType == FishBaitType.Consumable && selected.ConsumePerCast > 0 && GetBaitCount(selected.BaitId) <= 0)
+            {
+                ShowNotification($"已切换鱼饵：{selected.Name}（库存为空，需先购买）", 2.2f, new Color(1f, 0.82f, 0.3f));
+            }
+            else
+            {
+                ShowNotification($"已切换鱼饵：{selected.Name}", 1.8f, Color.white);
+            }
         }
         private void StartFight(FishSpeciesConfig fish)
         {
@@ -483,6 +505,7 @@ namespace FishGameRuntime
                 SellPrice = price
             });
             _save.TotalCaughtCount += 1;
+            _inventoryDirty = true;
             SaveFileManager.Instance.TryAutoSave("FishGame.CatchFish", true);
             ShowNotification($"Caught: {_fight.Fish.Species} {_fight.Weight:F1} kg", 2.8f, new Color(0.45f, 1f, 0.55f));
             DebugUtil.Log($"FishGamePresenterV2: caught {_fight.Fish.Species}, weight={_fight.Weight:F1}, price={price}");
@@ -545,7 +568,7 @@ namespace FishGameRuntime
             }
 
             var totalWeight = 0f;
-            var weightedCandidates = new List<(FishSpeciesConfig fish, float weight)>();
+            _pickFishCandidates.Clear();
             for (var i = 0; i < speciesConfigs.Count; i++)
             {
                 var fish = speciesConfigs[i];
@@ -571,7 +594,7 @@ namespace FishGameRuntime
                 }
 
                 totalWeight += weight;
-                weightedCandidates.Add((fish, weight));
+                _pickFishCandidates.Add((fish, weight));
             }
 
             if (totalWeight <= 0f)
@@ -580,16 +603,16 @@ namespace FishGameRuntime
             }
 
             var randomValue = Random.Range(0f, totalWeight);
-            for (var i = 0; i < weightedCandidates.Count; i++)
+            for (var i = 0; i < _pickFishCandidates.Count; i++)
             {
-                randomValue -= weightedCandidates[i].weight;
+                randomValue -= _pickFishCandidates[i].weight;
                 if (randomValue <= 0f)
                 {
-                    return weightedCandidates[i].fish;
+                    return _pickFishCandidates[i].fish;
                 }
             }
 
-            return weightedCandidates[weightedCandidates.Count - 1].fish;
+            return _pickFishCandidates[_pickFishCandidates.Count - 1].fish;
         }
 
         private void RefreshUi()
@@ -636,12 +659,12 @@ namespace FishGameRuntime
             var canBuyBait = _state == FishingState.Idle && CanBuyCurrentBait(bait, rod, coins);
             var canUpgradeRod = _state == FishingState.Idle && nextRod != null && coins >= nextRod.UpgradeCostCoin;
 
-            _view.SetButtonText(_view.CastButton, $"全部出售\n{bagValue} Coin");
-            _view.SetButtonText(_view.ReelButton, GetBuyBaitButtonText(bait));
-            _view.SetButtonText(_view.ReleaseButton, nextRod == null ? "鱼竿满级" : $"升级鱼竿\n{nextRod.UpgradeCostCoin} Coin");
-            _view.SetButtonInteractable(_view.CastButton, canSellAll);
-            _view.SetButtonInteractable(_view.ReelButton, canBuyBait);
-            _view.SetButtonInteractable(_view.ReleaseButton, canUpgradeRod);
+            _view.SetButtonText(_view.SellAllButton, $"全部出售\n{bagValue} Coin");
+            _view.SetButtonText(_view.BuyBaitButton, GetBuyBaitButtonText(bait));
+            _view.SetButtonText(_view.UpgradeRodButton, nextRod == null ? "鱼竿满级" : $"升级鱼竿\n{nextRod.UpgradeCostCoin} Coin");
+            _view.SetButtonInteractable(_view.SellAllButton, canSellAll);
+            _view.SetButtonInteractable(_view.BuyBaitButton, canBuyBait);
+            _view.SetButtonInteractable(_view.UpgradeRodButton, canUpgradeRod);
             _view.SetButtonInteractable(_view.PrevLureButton, canCycleBait);
             _view.SetButtonInteractable(_view.NextLureButton, canCycleBait);
             _view.SetButtonInteractable(_view.SwitchButton, _state == FishingState.Idle);
@@ -715,7 +738,12 @@ namespace FishGameRuntime
                     : "待命时按住左键蓄力抛竿；战斗中左键收线，右键锁线。";
             }
 
-            _view.ApplyInputMode(_state == FishingState.Idle);
+            if (_lastUiState != _state)
+            {
+                _lastUiState = _state;
+                _view.ApplyInputMode(_state == FishingState.Idle);
+            }
+
             _view.UpdateCastZoneChargeDisplay(
                 currentDistance: GetCastLineLength(_view.CastZoneHoldDuration),
                 chargeRatio: GetCastChargeRatio(_view.CastZoneHoldDuration),
@@ -729,6 +757,13 @@ namespace FishGameRuntime
             {
                 return;
             }
+
+            if (!_inventoryDirty)
+            {
+                return;
+            }
+
+            _inventoryDirty = false;
 
             if (_save == null || _save.FishBag.Count == 0)
             {
@@ -832,6 +867,9 @@ namespace FishGameRuntime
             return bait != null && bait.EnabledPhase <= FishGameConfigManager.CurrentEnabledPhase ? bait : null;
         }
 
+        /// <summary>
+        /// 返回共享 buffer，调用方不得持有跨帧引用。
+        /// </summary>
         private List<FishBaitConfig> GetSelectableBaits()
         {
             _selectableBaitsBuffer.Clear();

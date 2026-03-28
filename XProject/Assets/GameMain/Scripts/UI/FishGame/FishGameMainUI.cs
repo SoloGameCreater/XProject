@@ -24,15 +24,15 @@ namespace FishGameRuntime
         [ComponentBinder("HudPanel/LineRow/ValueText")] private Text _lineValueText;
         [ComponentBinder("ControlsPanel/ActionHint")] private Text _actionHintText;
 
-        [ComponentBinder("ControlsPanel/PrimaryActions/CastButton")] private Button _castButton;
+        [ComponentBinder("ControlsPanel/PrimaryActions/CastButton")] private Button _sellAllButton;
         [ComponentBinder("ControlsPanel/LureActions/PrevLureButton")] private Button _prevLureButton;
         [ComponentBinder("ControlsPanel/LureActions/NextLureButton")] private Button _nextLureButton;
         [ComponentBinder("ControlsPanel/PrimaryActions/SwitchButton")] private Button _switchButton;
-        [ComponentBinder("ControlsPanel/FightActions/ReelButton")] private Button _reelButton;
-        [ComponentBinder("ControlsPanel/FightActions/ReleaseButton")] private Button _releaseButton;
+        [ComponentBinder("ControlsPanel/FightActions/ReelButton")] private Button _buyBaitButton;
+        [ComponentBinder("ControlsPanel/FightActions/ReleaseButton")] private Button _upgradeRodButton;
         [ComponentBinder("ControlsPanel/PrimaryActions")] private Transform _primaryActionsRoot;
         [ComponentBinder("ControlsPanel/LureActions")] private Transform _lureActionsRoot;
-        [ComponentBinder("ControlsPanel/FightActions")] private Transform _fightActionsRoot;
+        [ComponentBinder("ControlsPanel/FightActions")] private Transform _shopActionsRoot;
 
         [ComponentBinder("HudPanel/StaminaRow/StaminaBar/Fill")] private Image _staminaFill;
         [ComponentBinder("HudPanel/TensionRow/TensionBar/Fill")] private Image _tensionFill;
@@ -63,12 +63,12 @@ namespace FishGameRuntime
         internal Text TensionValueText => _tensionValueText;
         internal Text LineValueText => _lineValueText;
         internal Text ActionHintText => _actionHintText;
-        internal Button CastButton => _castButton;
+        internal Button SellAllButton => _sellAllButton;
         internal Button PrevLureButton => _prevLureButton;
         internal Button NextLureButton => _nextLureButton;
         internal Button SwitchButton => _switchButton;
-        internal Button ReelButton => _reelButton;
-        internal Button ReleaseButton => _releaseButton;
+        internal Button BuyBaitButton => _buyBaitButton;
+        internal Button UpgradeRodButton => _upgradeRodButton;
         internal Image StaminaFill => _staminaFill;
         internal Image TensionFill => _tensionFill;
         internal Image LineFill => _lineFill;
@@ -95,9 +95,9 @@ namespace FishGameRuntime
             _prevLureButton.onClick.AddListener(_presenter.OnPrevLureClicked);
             _nextLureButton.onClick.AddListener(_presenter.OnNextLureClicked);
             _switchButton.onClick.AddListener(_presenter.OnSwitchClicked);
-            _castButton.onClick.AddListener(_presenter.OnSellAllClicked);
-            _reelButton.onClick.AddListener(_presenter.OnBuyBaitClicked);
-            _releaseButton.onClick.AddListener(_presenter.OnUpgradeRodClicked);
+            _sellAllButton.onClick.AddListener(_presenter.OnSellAllClicked);
+            _buyBaitButton.onClick.AddListener(_presenter.OnBuyBaitClicked);
+            _upgradeRodButton.onClick.AddListener(_presenter.OnUpgradeRodClicked);
         }
 
         public override async Task OnViewClose()
@@ -107,9 +107,9 @@ namespace FishGameRuntime
                 _prevLureButton.onClick.RemoveListener(_presenter.OnPrevLureClicked);
                 _nextLureButton.onClick.RemoveListener(_presenter.OnNextLureClicked);
                 _switchButton.onClick.RemoveListener(_presenter.OnSwitchClicked);
-                _castButton.onClick.RemoveListener(_presenter.OnSellAllClicked);
-                _reelButton.onClick.RemoveListener(_presenter.OnBuyBaitClicked);
-                _releaseButton.onClick.RemoveListener(_presenter.OnUpgradeRodClicked);
+                _sellAllButton.onClick.RemoveListener(_presenter.OnSellAllClicked);
+                _buyBaitButton.onClick.RemoveListener(_presenter.OnBuyBaitClicked);
+                _upgradeRodButton.onClick.RemoveListener(_presenter.OnUpgradeRodClicked);
             }
 
             ResetPointerState();
@@ -163,7 +163,7 @@ namespace FishGameRuntime
 
             SetRootActive(_primaryActionsRoot, isIdle);
             SetRootActive(_lureActionsRoot, isIdle);
-            SetRootActive(_fightActionsRoot, isIdle);
+            SetRootActive(_shopActionsRoot, isIdle);
 
             for (var i = 0; i < _idleOnlyButtons.Count; i++)
             {
@@ -216,9 +216,9 @@ namespace FishGameRuntime
             _idleOnlyButtons.Add(_switchButton);
             _idleOnlyButtons.Add(_prevLureButton);
             _idleOnlyButtons.Add(_nextLureButton);
-            _idleOnlyButtons.Add(_castButton);
-            _idleOnlyButtons.Add(_reelButton);
-            _idleOnlyButtons.Add(_releaseButton);
+            _idleOnlyButtons.Add(_sellAllButton);
+            _idleOnlyButtons.Add(_buyBaitButton);
+            _idleOnlyButtons.Add(_upgradeRodButton);
         }
 
         private void BuildCastZoneVisual()
