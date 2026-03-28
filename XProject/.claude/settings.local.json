@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python scripts/analyze_commit_scope.py --cached)",
+      "Bash(rm -f \"Assets/ExtraRes/Configs/DataJson/FishGame/fishrodlevel_old.json.bak\")",
+      "Bash(rm -f \"Assets/ExtraRes/Configs/DataJson/FishGame/fishrodlevel.json.meta\")",
+      "Bash(ls \"Assets/ExtraRes/Configs/DataJson/FishGame/fishrod.json\"*)",
+      "mcp__UnityMCP__read_console",
+      "Bash(python -c \":*)"
+    ]
+  }
+}
