@@ -161,8 +161,13 @@ namespace Config.FishGame
             }
 
             config = RodConfigs.Find(item => item.RodId == rodId);
+            if (config == null && RodConfigs.Count > 0)
+            {
+                config = RodConfigs[0];
+            }
+
             _rodCache[rodId] = config;
-            return config ?? (RodConfigs.Count > 0 ? RodConfigs[0] : null);
+            return config;
         }
 
         public bool TryGetBaitConfig(int baitId, out FishBaitConfig config)

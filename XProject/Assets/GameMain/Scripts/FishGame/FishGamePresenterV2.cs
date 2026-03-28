@@ -831,7 +831,7 @@ namespace FishGameRuntime
                 return;
             }
 
-            if (!_save.IsInitialized)
+            if (!_save.IsInitialized || _save.RodId <= 0)
             {
                 _save.RodId = global.StarterRodId;
                 _save.EquippedBaitId = global.StarterBaitId;
