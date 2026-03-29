@@ -218,8 +218,68 @@ namespace FishGameRuntime
                 return;
             }
 
-            // TODO: 打开鱼竿选择弹窗 prefab，展示所有可购买/已拥有的鱼竿，玩家自选后更新 _save.RodId
-            ShowNotification("鱼竿选择功能开发中。", 2f, Color.white);
+            var ownedSet = new System.Collections.Generic.HashSet<int>(_save.OwnedRods.Keys);
+            var param = new FishRodSelectParam
+            {
+                CurrentRodId = _save.RodId,
+                OwnedRodIds = ownedSet,
+                OnRodEquipped = OnRodEquippedFromPopup,
+                OnRodPurchased = TryPurchaseRod
+            };
+            UIViewSystem.Instance.Open<FishRodSelectPopup>(param);
+        }
+
+        private void OnRodEquippedFromPopup(int rodId)
+        {
+            if (_save == null)
+            {
+                return;
+            }
+
+            var oldRodId = _save.RodId;
+            _save.RodId = rodId;
+
+            if (!_save.OwnedRods.ContainsKey(rodId))
+            {
+                _save.OwnedRods[rodId] = 1;
+            }
+
+            SaveFileManager.Instance.TryAutoSave("FishGame.EquipRod", true);
+
+            if (oldRodId != rodId)
+            {
+                EnsureSelectedBaitValid();
+            }
+
+            ShowNotification($"已装备 {_configManager.GetRodConfig(rodId)?.Name ?? "鱼竿"}", 2f, new Color(0.45f, 1f, 0.55f));
+        }
+
+        private bool TryPurchaseRod(int rodId)
+        {
+            var rodConfig = _configManager?.GetRodConfig(rodId);
+            if (rodConfig == null || _save == null)
+            {
+                return false;
+            }
+
+            if (_save.OwnedRods.ContainsKey(rodId))
+            {
+                return false;
+            }
+
+            if (rodConfig.BuyCostCoin > 0)
+            {
+                if (!CurrencyModel.Instance.IsCurrencyEnough(CurrencyType.Coin, rodConfig.BuyCostCoin))
+                {
+                    return false;
+                }
+
+                CurrencyModel.Instance.CostCurrency(CurrencyType.Coin, rodConfig.BuyCostCoin);
+            }
+
+            _save.OwnedRods[rodId] = 1;
+            SaveFileManager.Instance.TryAutoSave("FishGame.BuyRod", true);
+            return true;
         }
 
         private void UpdateInput()
@@ -839,8 +899,19 @@ namespace FishGameRuntime
                 {
                     AddBaitCount(global.StarterBaitId, global.StarterBaitCount, false);
                 }
+
+                if (!_save.OwnedRods.ContainsKey(global.StarterRodId))
+                {
+                    _save.OwnedRods[global.StarterRodId] = 1;
+                }
+
                 _save.IsInitialized = true;
                 SaveFileManager.Instance.TryAutoSave("FishGame.Init", true);
+            }
+
+            if (_save.RodId > 0 && !_save.OwnedRods.ContainsKey(_save.RodId))
+            {
+                _save.OwnedRods[_save.RodId] = 1;
             }
 
             EnsureSelectedBaitValid();

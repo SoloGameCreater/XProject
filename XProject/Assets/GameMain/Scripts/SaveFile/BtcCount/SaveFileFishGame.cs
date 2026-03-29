@@ -21,6 +21,7 @@ namespace SaveFile
         [JsonProperty] private int _equippedBaitId;
         [JsonProperty] private SaveFileDictionary<int, SaveFileSafeCount> _ownedBaits = new(true);
         [JsonProperty] private SaveFileDictionary<int, int> _unlockedLures = new();
+        [JsonProperty] private SaveFileDictionary<int, int> _ownedRods = new();
         [JsonProperty] private SaveFileList<SaveFileFishBagEntry> _fishBag = new();
         [JsonProperty] private int _totalCaughtCount;
         [JsonProperty] private int _totalSoldCount;
@@ -72,6 +73,9 @@ namespace SaveFile
 
         [JsonIgnore]
         public SaveFileDictionary<int, int> UnlockedLures => _unlockedLures;
+
+        [JsonIgnore]
+        public SaveFileDictionary<int, int> OwnedRods => _ownedRods;
 
         [JsonIgnore]
         public SaveFileList<SaveFileFishBagEntry> FishBag => _fishBag;
