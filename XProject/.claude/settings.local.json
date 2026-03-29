@@ -6,7 +6,11 @@
       "Bash(rm -f \"Assets/ExtraRes/Configs/DataJson/FishGame/fishrodlevel.json.meta\")",
       "Bash(ls \"Assets/ExtraRes/Configs/DataJson/FishGame/fishrod.json\"*)",
       "mcp__UnityMCP__read_console",
-      "Bash(python -c \":*)"
+      "Bash(python -c \":*)",
+      "Bash(python:*)",
+      "Bash(xargs grep:*)",
+      "Bash(xargs wc:*)",
+      "Bash(grep -v \"\\\\.meta$\")"
     ]
   }
 }
