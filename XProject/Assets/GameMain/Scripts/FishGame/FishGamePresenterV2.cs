@@ -218,6 +218,12 @@ namespace FishGameRuntime
                 return;
             }
 
+            if (_save == null || _configManager == null)
+            {
+                ShowNotification("鱼竿数据未准备好。", 2f, new Color(1f, 0.45f, 0.45f));
+                return;
+            }
+
             var ownedSet = new System.Collections.Generic.HashSet<int>(_save.OwnedRods.Keys);
             var param = new FishRodSelectParam
             {
@@ -254,24 +260,24 @@ namespace FishGameRuntime
             ShowNotification($"已装备 {_configManager.GetRodConfig(rodId)?.Name ?? "鱼竿"}", 2f, new Color(0.45f, 1f, 0.55f));
         }
 
-        private bool TryPurchaseRod(int rodId)
+        private RodPurchaseResult TryPurchaseRod(int rodId)
         {
             var rodConfig = _configManager?.GetRodConfig(rodId);
             if (rodConfig == null || _save == null)
             {
-                return false;
+                return RodPurchaseResult.ConfigError;
             }
 
             if (_save.OwnedRods.ContainsKey(rodId))
             {
-                return false;
+                return RodPurchaseResult.AlreadyOwned;
             }
 
             if (rodConfig.BuyCostCoin > 0)
             {
                 if (!CurrencyModel.Instance.IsCurrencyEnough(CurrencyType.Coin, rodConfig.BuyCostCoin))
                 {
-                    return false;
+                    return RodPurchaseResult.NotEnoughCoin;
                 }
 
                 CurrencyModel.Instance.CostCurrency(CurrencyType.Coin, rodConfig.BuyCostCoin);
@@ -279,7 +285,7 @@ namespace FishGameRuntime
 
             _save.OwnedRods[rodId] = 1;
             SaveFileManager.Instance.TryAutoSave("FishGame.BuyRod", true);
-            return true;
+            return RodPurchaseResult.Success;
         }
 
         private void UpdateInput()

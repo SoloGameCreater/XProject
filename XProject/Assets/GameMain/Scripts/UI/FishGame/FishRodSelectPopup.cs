@@ -8,12 +8,20 @@ using UnityEngine.UI;
 
 namespace FishGameRuntime
 {
+    public enum RodPurchaseResult
+    {
+        Success,
+        NotEnoughCoin,
+        AlreadyOwned,
+        ConfigError
+    }
+
     public class FishRodSelectParam : UIViewParam
     {
         public int CurrentRodId;
         public HashSet<int> OwnedRodIds;
         public Action<int> OnRodEquipped;
-        public Func<int, bool> OnRodPurchased;
+        public Func<int, RodPurchaseResult> OnRodPurchased;
     }
 
     [AssetAddress("UIFishGame/FishRodSelectPopup")]
@@ -148,8 +156,8 @@ namespace FishGameRuntime
                 return;
             }
 
-            var success = _param.OnRodPurchased?.Invoke(rod.RodId) ?? false;
-            if (success)
+            var result = _param.OnRodPurchased?.Invoke(rod.RodId) ?? RodPurchaseResult.ConfigError;
+            if (result == RodPurchaseResult.Success)
             {
                 _param.OwnedRodIds.Add(rod.RodId);
                 _param.CurrentRodId = rod.RodId;
@@ -157,12 +165,14 @@ namespace FishGameRuntime
                 RefreshCoinDisplay();
                 RefreshAllRows();
             }
-            else
+            else if (row.ErrorText != null)
             {
-                if (row.ErrorText != null)
+                row.ErrorText.text = result switch
                 {
-                    row.ErrorText.text = "金币不足";
-                }
+                    RodPurchaseResult.NotEnoughCoin => "金币不足",
+                    RodPurchaseResult.AlreadyOwned => "已拥有该鱼竿",
+                    _ => "购买失败"
+                };
             }
         }
 
