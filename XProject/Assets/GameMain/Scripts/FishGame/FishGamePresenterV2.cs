@@ -38,7 +38,6 @@ namespace FishGameRuntime
             public float LineLengthMax;
             public float LineLengthMin;
             public bool Reeling;
-            public bool Locking;
             public FishBehavior Behavior;
             public float BehaviorTimer;
             public bool IsSprintIntensity;
@@ -358,7 +357,6 @@ namespace FishGameRuntime
             }
 
             var isPrimaryHeld = _view != null && _view.IsPrimaryHeld;
-            var isSecondaryHeld = _view != null && _view.IsSecondaryHeld;
 
             if (_state == FishingState.Waiting)
             {
@@ -392,7 +390,6 @@ namespace FishGameRuntime
             }
 
             _fight.Reeling = isPrimaryHeld;
-            _fight.Locking = !isPrimaryHeld && isSecondaryHeld;
 
             UpdateFishBehavior(deltaTime);
 
@@ -411,13 +408,9 @@ namespace FishGameRuntime
 
             if (_fight.Behavior == FishBehavior.Struggling)
             {
-                float drainMul;
-                if (_fight.Reeling)
-                    drainMul = 1f + global.ReelDrainBonus;
-                else if (_fight.Locking)
-                    drainMul = 1f + global.LockDrainBonus;
-                else
-                    drainMul = global.StruggleReleaseDrainScale;
+                var drainMul = _fight.Reeling
+                    ? 1f + global.ReelDrainBonus
+                    : global.StruggleReleaseDrainScale;
                 _fight.Stamina = Mathf.Max(0f, _fight.Stamina - _fight.Fish.BaseDrainPerSec * drainMul * deltaTime);
             }
             else
@@ -431,11 +424,6 @@ namespace FishGameRuntime
                 _fight.Tension += (pullForce * 2.5f + rod.ReelSpeed * 0.8f) * deltaTime;
                 var netReel = rod.ReelSpeed - pullForce * 0.3f;
                 _fight.LineLength = Mathf.Max(_fight.LineLengthMin, _fight.LineLength - Mathf.Max(0.2f, netReel) * deltaTime);
-            }
-            else if (_fight.Locking)
-            {
-                _fight.Tension += pullForce * 1.5f * deltaTime;
-                _fight.LineLength += pullForce * 0.05f * deltaTime;
             }
             else
             {
@@ -553,7 +541,6 @@ namespace FishGameRuntime
             _fight.BehaviorTimer = Random.Range(fish.StruggleDurationMin, fish.StruggleDurationMax);
             _fight.IsSprintIntensity = Random.value < fish.SprintChance;
             _fight.Reeling = false;
-            _fight.Locking = false;
             _state = FishingState.Fighting;
             _view?.ResetPointerState();
             ShowNotification($"Hooked: {fish.Species} {_fight.Weight:F1} kg", 3f, GetRarityColor(fish.Rarity));
@@ -589,7 +576,6 @@ namespace FishGameRuntime
             ShowNotification(reason, 2.4f, new Color(1f, 0.45f, 0.45f));
             DebugUtil.LogWarning($"FishGamePresenterV2: auto retrieve fail, reason={reason}");
             _fight.Reeling = false;
-            _fight.Locking = false;
             _state = FishingState.AutoRetrieve;
         }
 
@@ -620,7 +606,6 @@ namespace FishGameRuntime
             _fight.LineLengthMax = global != null ? global.MaxCastDistance : 40f;
             _fight.LineLength = global != null ? global.MaxCastDistance * 0.5f : 20f;
             _fight.Reeling = false;
-            _fight.Locking = false;
             _fight.Behavior = FishBehavior.Resting;
             _fight.BehaviorTimer = 0f;
             _fight.IsSprintIntensity = false;
@@ -759,7 +744,7 @@ namespace FishGameRuntime
                 _view.StaminaFill.color = _fight.Behavior == FishBehavior.Struggling
                     ? (_fight.IsSprintIntensity ? new Color(0.86f, 0.26f, 0.26f) : new Color(0.95f, 0.72f, 0.12f))
                     : new Color(0.31f, 0.78f, 0.31f);
-                _view.LineFill.color = _fight.Locking ? new Color(1f, 0.78f, 0.25f) : new Color(0.31f, 0.63f, 1f);
+                _view.LineFill.color = new Color(0.31f, 0.63f, 1f);
                 _view.StaminaValueText.text = $"{_fight.Stamina:F0} / {_fight.StaminaMax:F0}";
                 _view.TensionValueText.text = $"{_fight.Tension:F0} / {rodLineStrength:F0}";
                 _view.LineValueText.text = $"{_fight.LineLength:F1} m";
@@ -770,7 +755,7 @@ namespace FishGameRuntime
                 _view.HintText.text = _fight.Behavior == FishBehavior.Resting
                     ? "鱼正在喘息，抓紧收线！这是最佳窗口。"
                     : _fight.IsSprintIntensity
-                        ? "鱼正在冲刺！松开或锁线保命，避免断线。"
+                        ? "鱼正在冲刺！松开收线避免断线，等鱼疲劳再拉。"
                         : _fight.Reeling
                             ? "鱼在挣扎中，收线会快速涨张力但也消耗鱼的体力。"
                             : "松开卸力中，张力会快速回落，但鱼也在拉线。";
@@ -817,7 +802,7 @@ namespace FishGameRuntime
                     : $"待命 / 鱼篓 {(_save != null ? _save.FishBag.Count : 0)} 条 / 当前总价值 {bagValue} Coin";
                 _view.HintText.text = isChargingCast
                     ? "按住越久抛得越远，超过 5m 才有机会咬钩。"
-                    : "待命时按住左键蓄力抛竿；战斗中左键收线，右键锁线。";
+                    : "待命时按住左键蓄力抛竿；战斗中按住左键收线，松开自动控鱼。";
             }
 
             if (_lastUiState != _state)

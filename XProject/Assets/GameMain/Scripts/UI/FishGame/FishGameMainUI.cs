@@ -193,7 +193,7 @@ namespace FishGameRuntime
             {
                 _actionHintText.text = isIdle
                     ? "待命阶段可出售、购买和升级；按住中央抛竿区蓄力，松开后抛竿"
-                    : "钓鱼进行中，左键持续收线并涨张力；松开左右键会快速卸力，右键锁线并保持张力";
+                    : "钓鱼进行中，按住左键收线并涨张力；松开后自动控鱼，张力缓慢下降";
             }
         }
 
@@ -314,7 +314,7 @@ namespace FishGameRuntime
             _primaryPressedThisFrame = Input.GetMouseButtonDown(0);
             _primaryReleasedThisFrame = Input.GetMouseButtonUp(0);
             _primaryHeld = Input.GetMouseButton(0);
-            _secondaryHeld = !_isIdleInputMode && !Input.GetMouseButton(0) && Input.GetMouseButton(1);
+            _secondaryHeld = false;
             _castZoneClickedThisFrame = false;
 
             if (_primaryPressedThisFrame)
