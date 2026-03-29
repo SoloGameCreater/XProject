@@ -42,6 +42,7 @@ namespace FishGameRuntime
             public FishPhase Phase;
             public float PhaseTimer;
             public float BurstReadyDelay;
+            public float BurstReelHoldTime;
         }
 
         private const float MaxCastChargeDuration = 1.5f;
@@ -54,6 +55,12 @@ namespace FishGameRuntime
         private const float FatigueCatchWindowOffset = 1.85f;
         private const float BurstReadyDelayMin = 0.4f;
         private const float BurstReadyDelayMax = 1.1f;
+        private const float BurstReelDangerWindow = 2f;
+        private const float BurstReelDangerTensionPressureMin = 0.18f;
+        private const float BurstReelDangerTensionPressureMax = 0.42f;
+        private const float BurstReelProgressCapRatio = 0.22f;
+        private const float BurstReelResistancePenaltyMin = 0.9f;
+        private const float BurstReelResistancePenaltyMax = 1.6f;
 
         private readonly FishGameMainUI _view;
         private readonly FishGameConfigManager _configManager;
@@ -401,6 +408,7 @@ namespace FishGameRuntime
             _fight.Reeling = isPrimaryHeld;
 
             UpdateFishPhase(deltaTime);
+            UpdateBurstReelPressure(deltaTime);
 
             var staminaRatio = _fight.StaminaMax > 0f ? _fight.Stamina / _fight.StaminaMax : 0f;
             var phaseForceMul = GetPhaseForceMultiplier(global);
@@ -419,12 +427,22 @@ namespace FishGameRuntime
             if (_fight.Reeling)
             {
                 var tensionGain = pullForce * GetPhaseTensionMultiplier(global) + rod.ReelSpeed * ReelTensionSpeedMul;
+                if (_fight.Phase == FishPhase.Burst)
+                {
+                    tensionGain += GetBurstReelDangerPressure(rod);
+                }
+
                 _fight.Tension += tensionGain * deltaTime;
 
                 var netReel = rod.ReelSpeed - pullForce * GetPhaseReelResistanceMultiplier(global);
                 if (_fight.Phase == FishPhase.Fatigue)
                 {
                     netReel += rod.ControlPower * 0.18f;
+                }
+                else if (_fight.Phase == FishPhase.Burst)
+                {
+                    netReel -= pullForce * GetBurstReelResistancePenalty();
+                    netReel = Mathf.Min(netReel, Mathf.Lerp(rod.ReelSpeed * BurstReelProgressCapRatio, MinimumReelSpeed, GetBurstReelDangerRatio()));
                 }
 
                 _fight.LineLength = Mathf.Max(_fight.LineLengthMin, _fight.LineLength - Mathf.Max(MinimumReelSpeed, netReel) * deltaTime);
@@ -544,6 +562,7 @@ namespace FishGameRuntime
             _fight.Phase = FishPhase.Steady;
             _fight.PhaseTimer = GetSteadyDuration(fish);
             _fight.BurstReadyDelay = Random.Range(BurstReadyDelayMin, BurstReadyDelayMax);
+            _fight.BurstReelHoldTime = 0f;
             _fight.Reeling = false;
             _state = FishingState.Fighting;
             _view?.ResetPointerState();
@@ -613,6 +632,7 @@ namespace FishGameRuntime
             _fight.Phase = FishPhase.Steady;
             _fight.PhaseTimer = 0f;
             _fight.BurstReadyDelay = 0f;
+            _fight.BurstReelHoldTime = 0f;
             _waitWillHook = false;
             _view?.ResetPointerState();
         }
@@ -1185,6 +1205,7 @@ namespace FishGameRuntime
             _fight.Phase = FishPhase.Steady;
             _fight.PhaseTimer = GetSteadyDuration(_fight.Fish);
             _fight.BurstReadyDelay = Random.Range(BurstReadyDelayMin, BurstReadyDelayMax);
+            _fight.BurstReelHoldTime = 0f;
         }
 
         private void EnterBurstPhase()
@@ -1192,6 +1213,7 @@ namespace FishGameRuntime
             _fight.Phase = FishPhase.Burst;
             _fight.PhaseTimer = Random.Range(_fight.Fish.StruggleDurationMin, _fight.Fish.StruggleDurationMax);
             _fight.BurstReadyDelay = 0f;
+            _fight.BurstReelHoldTime = 0f;
         }
 
         private void EnterFatiguePhase()
@@ -1199,6 +1221,18 @@ namespace FishGameRuntime
             _fight.Phase = FishPhase.Fatigue;
             _fight.PhaseTimer = Random.Range(_fight.Fish.RestDurationMin, _fight.Fish.RestDurationMax);
             _fight.BurstReadyDelay = 0f;
+            _fight.BurstReelHoldTime = 0f;
+        }
+
+        private void UpdateBurstReelPressure(float deltaTime)
+        {
+            if (_fight.Phase == FishPhase.Burst && _fight.Reeling)
+            {
+                _fight.BurstReelHoldTime = Mathf.Min(BurstReelDangerWindow, _fight.BurstReelHoldTime + deltaTime);
+                return;
+            }
+
+            _fight.BurstReelHoldTime = 0f;
         }
 
         private float GetPhaseForceMultiplier(FishGlobalConfig global)
@@ -1244,6 +1278,22 @@ namespace FishGameRuntime
         private float GetBurstDrainPerSecond(FishGlobalConfig global)
         {
             return _fight.Fish.BaseDrainPerSec * (1f + global.ReelDrainBonus);
+        }
+
+        private float GetBurstReelDangerRatio()
+        {
+            return Mathf.Clamp01(_fight.BurstReelHoldTime / BurstReelDangerWindow);
+        }
+
+        private float GetBurstReelDangerPressure(FishRodConfig rod)
+        {
+            var dangerRatio = GetBurstReelDangerRatio();
+            return rod.LineStrength * Mathf.Lerp(BurstReelDangerTensionPressureMin, BurstReelDangerTensionPressureMax, dangerRatio);
+        }
+
+        private float GetBurstReelResistancePenalty()
+        {
+            return Mathf.Lerp(BurstReelResistancePenaltyMin, BurstReelResistancePenaltyMax, GetBurstReelDangerRatio());
         }
 
         private float GetFatigueRecoveryPerSecond(FishGlobalConfig global, FishRodConfig rod)
