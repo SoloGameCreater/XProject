@@ -40,14 +40,10 @@ namespace FishGameRuntime
 
         private FishGamePresenterV2 _presenter;
         private readonly List<Button> _idleOnlyButtons = new List<Button>();
-        private readonly List<Button> _alwaysHiddenButtons = new List<Button>();
         private RectTransform _castZoneVisual;
         private Text _castZoneLabel;
         private bool _isIdleInputMode = true;
         private bool _primaryHeld;
-        private bool _secondaryHeld;
-        private bool _primaryPressedThisFrame;
-        private bool _primaryReleasedThisFrame;
         private bool _castZoneClickedThisFrame;
         private float _castZoneHoldDuration;
         private bool _pendingCastPress;
@@ -65,7 +61,6 @@ namespace FishGameRuntime
         internal Text StaminaValueText => _staminaValueText;
         internal Text TensionValueText => _tensionValueText;
         internal Text LineValueText => _lineValueText;
-        internal Text ActionHintText => _actionHintText;
         internal Button SellAllButton => _sellAllButton;
         internal Button PrevLureButton => _prevLureButton;
         internal Button NextLureButton => _nextLureButton;
@@ -76,9 +71,6 @@ namespace FishGameRuntime
         internal Image TensionFill => _tensionFill;
         internal Image LineFill => _lineFill;
         internal bool IsPrimaryHeld => _primaryHeld;
-        internal bool IsSecondaryHeld => _secondaryHeld;
-        internal bool PrimaryPressedThisFrame => _primaryPressedThisFrame;
-        internal bool PrimaryReleasedThisFrame => _primaryReleasedThisFrame;
         internal bool CastZoneClickedThisFrame => _castZoneClickedThisFrame;
         internal bool IsCastZonePressActive => _isIdleInputMode && _pendingCastPress && _primaryHeld;
         internal float CastZoneHoldDuration => _castZoneHoldDuration;
@@ -181,18 +173,6 @@ namespace FishGameRuntime
                 button.interactable = isIdle;
             }
 
-            for (var i = 0; i < _alwaysHiddenButtons.Count; i++)
-            {
-                var button = _alwaysHiddenButtons[i];
-                if (button == null)
-                {
-                    continue;
-                }
-
-                button.gameObject.SetActive(false);
-                button.interactable = false;
-            }
-
             if (_actionHintText != null)
             {
                 _actionHintText.text = isIdle
@@ -204,9 +184,6 @@ namespace FishGameRuntime
         internal void ResetPointerState()
         {
             _primaryHeld = false;
-            _secondaryHeld = false;
-            _primaryPressedThisFrame = false;
-            _primaryReleasedThisFrame = false;
             _castZoneClickedThisFrame = false;
             _castZoneHoldDuration = 0f;
             _pendingCastPress = false;
@@ -221,7 +198,6 @@ namespace FishGameRuntime
         private void RegisterButtons()
         {
             _idleOnlyButtons.Clear();
-            _alwaysHiddenButtons.Clear();
 
             _idleOnlyButtons.Add(_switchButton);
             _idleOnlyButtons.Add(_prevLureButton);
@@ -327,13 +303,12 @@ namespace FishGameRuntime
 
             UpdateCastZoneLayout();
 
-            _primaryPressedThisFrame = Input.GetMouseButtonDown(0);
-            _primaryReleasedThisFrame = Input.GetMouseButtonUp(0);
+            var primaryPressedThisFrame = Input.GetMouseButtonDown(0);
+            var primaryReleasedThisFrame = Input.GetMouseButtonUp(0);
             _primaryHeld = Input.GetMouseButton(0);
-            _secondaryHeld = false;
             _castZoneClickedThisFrame = false;
 
-            if (_primaryPressedThisFrame)
+            if (primaryPressedThisFrame)
             {
                 if (_isIdleInputMode)
                 {
@@ -355,7 +330,7 @@ namespace FishGameRuntime
                 _castZoneHoldDuration += deltaTime;
             }
 
-            if (_primaryReleasedThisFrame)
+            if (primaryReleasedThisFrame)
             {
                 if (_isIdleInputMode)
                 {
@@ -382,8 +357,6 @@ namespace FishGameRuntime
 
         private void ClearFrameInput()
         {
-            _primaryPressedThisFrame = false;
-            _primaryReleasedThisFrame = false;
             _castZoneClickedThisFrame = false;
         }
 

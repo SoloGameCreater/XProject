@@ -43,7 +43,6 @@ namespace Config.FishGame
         public int BaitPackCount { get; set; }
         public float OverLevelWeightScale { get; set; }
         public float ReelDrainBonus { get; set; }
-        public float LockDrainBonus { get; set; }
         public float StruggleReleaseDrainScale { get; set; }
         public float ControlSuppressionDivisor { get; set; }
         public float SprintForceMul { get; set; }
@@ -127,7 +126,6 @@ namespace Config.FishGame
         public float HookWeightBonus { get; set; }
         public float HighLevelWeightBonus { get; set; }
         public float WaitTimeMultiplier { get; set; }
-        public int UnlockRodLevel { get; set; }
         public int EnabledPhase { get; set; }
         public bool CanPurchase { get; set; }
 
@@ -156,12 +154,10 @@ namespace Config.FishGame
         public float RecoveryPerSec { get; set; }
         public string[] PreferredBaitTags { get; set; }
         public float CatchWeight { get; set; }
-        public int RecommendRodLevel { get; set; }
     }
 
     public class FishDistanceTierConfig
     {
-        public int TierId { get; set; }
         public float MinDistance { get; set; }
         public float MaxDistance { get; set; }
         public bool CanBite { get; set; }
@@ -194,7 +190,6 @@ namespace Config.FishGame
 
         private readonly Dictionary<int, FishRodConfig> _rodCache = new();
         private readonly Dictionary<int, FishBaitConfig> _baitCache = new();
-        private readonly Dictionary<int, FishSpeciesConfig> _speciesCache = new();
         private readonly List<FishBaitConfig> _enabledBaitsCache = new();
         private bool _enabledBaitsBuilt;
 
@@ -230,18 +225,6 @@ namespace Config.FishGame
 
             config = BaitConfigs.Find(item => item.BaitId == baitId);
             _baitCache[baitId] = config;
-            return config != null;
-        }
-
-        public bool TryGetSpeciesConfig(int fishId, out FishSpeciesConfig config)
-        {
-            if (_speciesCache.TryGetValue(fishId, out config))
-            {
-                return config != null;
-            }
-
-            config = SpeciesConfigs.Find(item => item.FishId == fishId);
-            _speciesCache[fishId] = config;
             return config != null;
         }
 

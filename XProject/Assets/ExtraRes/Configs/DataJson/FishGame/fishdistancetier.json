@@ -1,6 +1,5 @@
 [
   {
-    "TierId": 1,
     "MinDistance": 0.0,
     "MaxDistance": 5.0,
     "CanBite": false,
@@ -12,7 +11,6 @@
     "WaitTimeMultiplier": 1.0
   },
   {
-    "TierId": 2,
     "MinDistance": 5.01,
     "MaxDistance": 15.0,
     "CanBite": true,
@@ -24,7 +22,6 @@
     "WaitTimeMultiplier": 1.0
   },
   {
-    "TierId": 3,
     "MinDistance": 15.01,
     "MaxDistance": 28.0,
     "CanBite": true,
@@ -36,7 +33,6 @@
     "WaitTimeMultiplier": 0.92
   },
   {
-    "TierId": 4,
     "MinDistance": 28.01,
     "MaxDistance": 40.0,
     "CanBite": true,
