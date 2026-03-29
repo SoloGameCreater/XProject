@@ -45,21 +45,20 @@ namespace FishGameRuntime
             public float BurstReelHoldTime;
         }
 
-        private const float MaxCastChargeDuration = 1.5f;
-        private const float TensionRelaxDuration = 0.5f;
-        private const float BurstReadyStaminaRatio = 0.7f;
-        private const float ReelTensionSpeedMul = 0.75f;
-        private const float MinimumReelSpeed = 0.2f;
-        private const float NormalCatchWindowOffset = 1.5f;
-        private const float FatigueCatchWindowOffset = 1.85f;
-        private const float BurstReadyDelayMin = 0.4f;
-        private const float BurstReadyDelayMax = 1.1f;
-        private const float BurstReelDangerWindow = 2f;
-        private const float BurstReelDangerTensionPressureMin = 0.18f;
-        private const float BurstReelDangerTensionPressureMax = 0.42f;
-        private const float BurstReelProgressCapRatio = 0.22f;
-        private const float BurstReelResistancePenaltyMin = 0.9f;
-        private const float BurstReelResistancePenaltyMax = 1.6f;
+        // ── 通知语义颜色 ──
+        private static readonly Color NotifySuccess = new(0.45f, 1f, 0.55f);
+        private static readonly Color NotifyWarning = new(1f, 0.82f, 0.3f);
+        private static readonly Color NotifyError = new(1f, 0.45f, 0.45f);
+        private static readonly Color NotifyInfo = new(0.75f, 0.9f, 1f);
+        private static readonly Color NotifySwitching = new(1f, 0.84f, 0.35f);
+        private static readonly Color NotifyRodWarn = new(1f, 0.65f, 0.3f);
+
+        // ── 通知时长分级 ──
+        private const float NotifyShort = 1.2f;
+        private const float NotifyMedium = 1.8f;
+        private const float NotifyLong = 2.2f;
+        private const float NotifyFight = 2.4f;
+        private const float NotifyHook = 3f;
 
         private readonly FishGameMainUI _view;
         private readonly FishGameConfigManager _configManager;
@@ -87,7 +86,7 @@ namespace FishGameRuntime
 
             EnsurePersistentState();
             ResetFightDataForCast();
-            ShowNotification("按住屏幕中央的抛竿区蓄力，松开后开始钓鱼。", 3f, Color.white);
+            ShowNotification("按住屏幕中央的抛竿区蓄力，松开后开始钓鱼。", NotifyHook, Color.white);
             RefreshUi();
         }
 
@@ -111,21 +110,21 @@ namespace FishGameRuntime
             var global = _configManager?.GlobalConfig;
             if (global != null && castDistance <= global.NoBiteDistance)
             {
-                ShowNotification("蓄力不足，抛投距离过近，不消耗鱼饵。", 1.8f, new Color(1f, 0.82f, 0.3f));
+                ShowNotification("蓄力不足，抛投距离过近，不消耗鱼饵。", NotifyMedium, NotifyWarning);
                 return;
             }
 
             if (!ConsumeCurrentBaitForCast())
             {
-                ShowNotification("当前鱼饵库存不足，无法抛竿。", 2.2f, new Color(1f, 0.45f, 0.45f));
+                ShowNotification("当前鱼饵库存不足，无法抛竿。", NotifyLong, NotifyError);
                 return;
             }
 
             ResetFightDataForCast();
             _fight.LineLength = castDistance;
             _state = FishingState.Casting;
-            _castingTimer = 0.8f;
-            ShowNotification($"抛竿中... 本次抛投 {_fight.LineLength:F1} m", 1f, Color.white);
+            _castingTimer = global.CastingDelay;
+            ShowNotification($"抛竿中... 本次抛投 {_fight.LineLength:F1} m", NotifyShort, Color.white);
         }
 
         public void OnPrevLureClicked()
@@ -146,7 +145,7 @@ namespace FishGameRuntime
             }
 
             _isSwitching = true;
-            ShowNotification("正在切换到三消玩法...", 2f, new Color(1f, 0.84f, 0.35f));
+            ShowNotification("正在切换到三消玩法...", NotifyMedium, NotifySwitching);
             DebugUtil.Log("FishGamePresenterV2: switching to TripleMerge.");
             try
             {
@@ -167,7 +166,7 @@ namespace FishGameRuntime
 
             if (_save == null || _save.FishBag.Count == 0)
             {
-                ShowNotification("鱼篓为空，没有可出售的鱼。", 1.8f, Color.white);
+                ShowNotification("鱼篓为空，没有可出售的鱼。", NotifyMedium, Color.white);
                 return;
             }
 
@@ -183,7 +182,7 @@ namespace FishGameRuntime
             _inventoryDirty = true;
             CurrencyModel.Instance.AddCurrency(CurrencyType.Coin, totalPrice);
             SaveFileManager.Instance.TryAutoSave("FishGame.SellAll", true);
-            ShowNotification($"一键出售完成，获得 {totalPrice} Coin。", 2.2f, new Color(0.45f, 1f, 0.55f));
+            ShowNotification($"一键出售完成，获得 {totalPrice} Coin。", NotifyLong, NotifySuccess);
         }
 
         public void OnBuyBaitClicked()
@@ -198,31 +197,31 @@ namespace FishGameRuntime
             var global = _configManager?.GlobalConfig;
             if (bait == null || rod == null || global == null)
             {
-                ShowNotification("鱼饵配置未准备好。", 2f, new Color(1f, 0.45f, 0.45f));
+                ShowNotification("鱼饵配置未准备好。", NotifyMedium, NotifyError);
                 return;
             }
 
             if (bait.BaitType != FishBaitType.Consumable || !bait.CanPurchase)
             {
-                ShowNotification("当前鱼饵暂不支持购买。", 2f, Color.white);
+                ShowNotification("当前鱼饵暂不支持购买。", NotifyMedium, Color.white);
                 return;
             }
 
             if (!SupportsBait(rod, bait))
             {
-                ShowNotification("当前鱼竿等级不足，无法使用或购买该鱼饵。", 2.2f, new Color(1f, 0.65f, 0.3f));
+                ShowNotification("当前鱼竿等级不足，无法使用或购买该鱼饵。", NotifyLong, NotifyRodWarn);
                 return;
             }
 
             if (!CurrencyModel.Instance.IsCurrencyEnough(CurrencyType.Coin, bait.BuyPriceCoin))
             {
-                ShowNotification("金币不足，无法购买鱼饵。", 2f, new Color(1f, 0.45f, 0.45f));
+                ShowNotification("金币不足，无法购买鱼饵。", NotifyMedium, NotifyError);
                 return;
             }
 
             CurrencyModel.Instance.CostCurrency(CurrencyType.Coin, bait.BuyPriceCoin);
             AddBaitCount(bait.BaitId, global.BaitPackCount);
-            ShowNotification($"购买 {bait.Name} 成功，获得 {global.BaitPackCount} 个。", 2.2f, new Color(0.45f, 1f, 0.55f));
+            ShowNotification($"购买 {bait.Name} 成功，获得 {global.BaitPackCount} 个。", NotifyLong, NotifySuccess);
         }
 
         public void OnUpgradeRodClicked()
@@ -234,7 +233,7 @@ namespace FishGameRuntime
 
             if (_save == null || _configManager == null)
             {
-                ShowNotification("鱼竿数据未准备好。", 2f, new Color(1f, 0.45f, 0.45f));
+                ShowNotification("鱼竿数据未准备好。", NotifyMedium, NotifyError);
                 return;
             }
 
@@ -273,7 +272,7 @@ namespace FishGameRuntime
                 EnsureSelectedBaitValid();
             }
 
-            ShowNotification($"已装备 {_configManager.GetRodConfig(rodId)?.Name ?? "鱼竿"}", 2f, new Color(0.45f, 1f, 0.55f));
+            ShowNotification($"已装备 {_configManager.GetRodConfig(rodId)?.Name ?? "鱼竿"}", NotifyMedium, NotifySuccess);
         }
 
         private RodPurchaseResult TryPurchaseRod(int rodId)
@@ -357,7 +356,7 @@ namespace FishGameRuntime
                     }
                     else
                     {
-                        ShowNotification("本次抛投没有鱼咬钩。", 1.4f, Color.white);
+                        ShowNotification("本次抛投没有鱼咬钩。", NotifyShort, Color.white);
                         ResetFight();
                     }
                 }
@@ -379,10 +378,10 @@ namespace FishGameRuntime
             {
                 if (isPrimaryHeld)
                 {
-                    _fight.LineLength = Mathf.Max(_fight.LineLengthMin, _fight.LineLength - rod.ReelSpeed * 6f * deltaTime);
+                    _fight.LineLength = Mathf.Max(_fight.LineLengthMin, _fight.LineLength - rod.ReelSpeed * global.EarlyReelSpeedMul * deltaTime);
                     if (_fight.LineLength <= _fight.LineLengthMin + 0.05f)
                     {
-                        ShowNotification("鱼线已收回，返回待命。", 1.2f, Color.white);
+                        ShowNotification("鱼线已收回，返回待命。", NotifyShort, Color.white);
                         ResetFight();
                     }
                 }
@@ -409,12 +408,12 @@ namespace FishGameRuntime
             _fight.Reeling = isPrimaryHeld;
 
             UpdateFishPhase(deltaTime);
-            UpdateBurstReelPressure(deltaTime);
+            UpdateBurstReelPressure(deltaTime, global);
 
             var staminaRatio = _fight.StaminaMax > 0f ? _fight.Stamina / _fight.StaminaMax : 0f;
             var phaseForceMul = GetPhaseForceMultiplier(global);
             var escapeMul = GetPhaseEscapeMultiplier(global);
-            var pullForce = Mathf.Max(0f, _fight.Resistance * phaseForceMul * Mathf.Lerp(0.55f, 1f, staminaRatio) - rod.SuppressPower);
+            var pullForce = Mathf.Max(0f, _fight.Resistance * phaseForceMul * Mathf.Lerp(global.PullForceStaminaLerpMin, 1f, staminaRatio) - rod.SuppressPower);
 
             if (_fight.Phase == FishPhase.Burst)
             {
@@ -427,10 +426,10 @@ namespace FishGameRuntime
 
             if (_fight.Reeling)
             {
-                var tensionGain = pullForce * GetPhaseTensionMultiplier(global) + rod.ReelSpeed * ReelTensionSpeedMul;
+                var tensionGain = pullForce * GetPhaseTensionMultiplier(global) + rod.ReelSpeed * global.ReelTensionSpeedMul;
                 if (_fight.Phase == FishPhase.Burst)
                 {
-                    tensionGain += GetBurstReelDangerPressure(rod);
+                    tensionGain += GetBurstReelDangerPressure(rod, global);
                 }
 
                 _fight.Tension += tensionGain * deltaTime;
@@ -438,20 +437,20 @@ namespace FishGameRuntime
                 var netReel = rod.ReelSpeed - pullForce * GetPhaseReelResistanceMultiplier(global);
                 if (_fight.Phase == FishPhase.Fatigue)
                 {
-                    netReel += rod.ControlPower * 0.18f;
+                    netReel += rod.ControlPower * global.FatigueControlBonus;
                 }
                 else if (_fight.Phase == FishPhase.Burst)
                 {
-                    netReel -= pullForce * GetBurstReelResistancePenalty();
-                    netReel = Mathf.Min(netReel, Mathf.Lerp(rod.ReelSpeed * BurstReelProgressCapRatio, MinimumReelSpeed, GetBurstReelDangerRatio()));
+                    netReel -= pullForce * GetBurstReelResistancePenalty(global);
+                    netReel = Mathf.Min(netReel, Mathf.Lerp(rod.ReelSpeed * global.BurstReelProgressCapRatio, global.MinimumReelSpeed, GetBurstReelDangerRatio(global)));
                 }
 
-                _fight.LineLength = Mathf.Max(_fight.LineLengthMin, _fight.LineLength - Mathf.Max(MinimumReelSpeed, netReel) * deltaTime);
+                _fight.LineLength = Mathf.Max(_fight.LineLengthMin, _fight.LineLength - Mathf.Max(global.MinimumReelSpeed, netReel) * deltaTime);
             }
             else
             {
-                var relaxBoost = 1f + (1f - Mathf.Clamp01(pullForce / Mathf.Max(0.01f, _fight.Resistance + rod.ControlPower))) * 0.5f;
-                _fight.Tension = Mathf.MoveTowards(_fight.Tension, 0f, (rod.LineStrength / TensionRelaxDuration) * relaxBoost * deltaTime);
+                var relaxBoost = 1f + (1f - Mathf.Clamp01(pullForce / Mathf.Max(0.01f, _fight.Resistance + rod.ControlPower))) * global.RelaxBoostScale;
+                _fight.Tension = Mathf.MoveTowards(_fight.Tension, 0f, (rod.LineStrength / global.TensionRelaxDuration) * relaxBoost * deltaTime);
                 _fight.LineLength = Mathf.Min(_fight.LineLengthMax, _fight.LineLength + _fight.EscapeSpeed * escapeMul * deltaTime);
             }
 
@@ -467,7 +466,7 @@ namespace FishGameRuntime
                 return;
             }
 
-            var catchWindowOffset = _fight.Phase == FishPhase.Fatigue ? FatigueCatchWindowOffset : NormalCatchWindowOffset;
+            var catchWindowOffset = _fight.Phase == FishPhase.Fatigue ? global.FatigueCatchWindowOffset : global.NormalCatchWindowOffset;
             if (_fight.LineLength <= _fight.LineLengthMin + catchWindowOffset)
             {
                 CatchFish();
@@ -492,14 +491,14 @@ namespace FishGameRuntime
             {
                 _waitWillHook = false;
                 _waitTimer = global.EmptyHookCooldown;
-                ShowNotification("抛投距离过近，本次不会有鱼咬钩。", 1.8f, new Color(1f, 0.82f, 0.3f));
+                ShowNotification("抛投距离过近，本次不会有鱼咬钩。", NotifyMedium, NotifyWarning);
                 return;
             }
 
             _waitWillHook = true;
             var baseWait = Random.Range(global.WaitTimeMin, global.WaitTimeMax);
-            _waitTimer = baseWait * Mathf.Max(0.45f, bait.WaitTimeMultiplier) * Mathf.Max(0.45f, tier.WaitTimeMultiplier);
-            ShowNotification("鱼线已入水，等待咬钩。按住鼠标左键可提前收线。", 1.8f, new Color(0.75f, 0.9f, 1f));
+            _waitTimer = baseWait * Mathf.Max(global.WaitTimeMultiplierFloor, bait.WaitTimeMultiplier) * Mathf.Max(global.WaitTimeMultiplierFloor, tier.WaitTimeMultiplier);
+            ShowNotification("鱼线已入水，等待咬钩。按住鼠标左键可提前收线。", NotifyMedium, NotifyInfo);
         }
 
         private void ChangeBait(int direction)
@@ -507,7 +506,7 @@ namespace FishGameRuntime
             var selectableBaits = GetSelectableBaits();
             if (selectableBaits == null || selectableBaits.Count == 0)
             {
-                ShowNotification("当前没有可用鱼饵。", 1.8f, new Color(1f, 0.45f, 0.45f));
+                ShowNotification("当前没有可用鱼饵。", NotifyMedium, NotifyError);
                 return;
             }
 
@@ -534,11 +533,11 @@ namespace FishGameRuntime
 
             if (selected.BaitType == FishBaitType.Consumable && selected.ConsumePerCast > 0 && GetBaitCount(selected.BaitId) <= 0)
             {
-                ShowNotification($"已切换鱼饵：{selected.Name}（库存为空，需先购买）", 2.2f, new Color(1f, 0.82f, 0.3f));
+                ShowNotification($"已切换鱼饵：{selected.Name}（库存为空，需先购买）", NotifyLong, NotifyWarning);
             }
             else
             {
-                ShowNotification($"已切换鱼饵：{selected.Name}", 1.8f, Color.white);
+                ShowNotification($"已切换鱼饵：{selected.Name}", NotifyMedium, Color.white);
             }
         }
         private void StartFight(FishSpeciesConfig fish)
@@ -553,21 +552,21 @@ namespace FishGameRuntime
             _fight.Fish = fish;
             _fight.Weight = Mathf.Round(Random.Range(fish.WeightMin, fish.WeightMax) * 10f) / 10f;
             var weightRatio = fish.WeightMax <= fish.WeightMin ? 1f : Mathf.InverseLerp(fish.WeightMin, fish.WeightMax, _fight.Weight);
-            _fight.StaminaMax = fish.BaseStamina * Mathf.Lerp(0.88f, 1.18f, weightRatio);
+            _fight.StaminaMax = fish.BaseStamina * Mathf.Lerp(global.WeightStaminaLerpMin, global.WeightStaminaLerpMax, weightRatio);
             _fight.Stamina = _fight.StaminaMax;
-            _fight.Resistance = fish.Resistance * Mathf.Lerp(0.9f, 1.25f, weightRatio);
-            _fight.EscapeSpeed = fish.EscapeSpeed * Mathf.Lerp(0.92f, 1.18f, weightRatio);
+            _fight.Resistance = fish.Resistance * Mathf.Lerp(global.WeightResistanceLerpMin, global.WeightResistanceLerpMax, weightRatio);
+            _fight.EscapeSpeed = fish.EscapeSpeed * Mathf.Lerp(global.WeightEscapeLerpMin, global.WeightEscapeLerpMax, weightRatio);
             _fight.Tension = 0f;
             _fight.LineLength = Mathf.Clamp(_fight.LineLength, _fight.LineLengthMin, global.FightLineClampDistance);
             _fight.LineLengthMax = global.FightLineClampDistance;
             _fight.Phase = FishPhase.Steady;
-            _fight.PhaseTimer = GetSteadyDuration(fish);
-            _fight.BurstReadyDelay = Random.Range(BurstReadyDelayMin, BurstReadyDelayMax);
+            _fight.PhaseTimer = GetSteadyDuration(fish, global);
+            _fight.BurstReadyDelay = Random.Range(global.BurstReadyDelayMin, global.BurstReadyDelayMax);
             _fight.BurstReelHoldTime = 0f;
             _fight.Reeling = false;
             _state = FishingState.Fighting;
             _view?.ResetPointerState();
-            ShowNotification($"Hooked: {fish.Species} {_fight.Weight:F1} kg", 3f, GetRarityColor(fish.Rarity));
+            ShowNotification($"Hooked: {fish.Species} {_fight.Weight:F1} kg", NotifyHook, GetRarityColor(fish.Rarity));
         }
 
         private void CatchFish()
@@ -590,14 +589,14 @@ namespace FishGameRuntime
             _save.TotalCaughtCount += 1;
             _inventoryDirty = true;
             SaveFileManager.Instance.TryAutoSave("FishGame.CatchFish", true);
-            ShowNotification($"Caught: {_fight.Fish.Species} {_fight.Weight:F1} kg", 2.8f, new Color(0.45f, 1f, 0.55f));
+            ShowNotification($"Caught: {_fight.Fish.Species} {_fight.Weight:F1} kg", NotifyFight, NotifySuccess);
             DebugUtil.Log($"FishGamePresenterV2: caught {_fight.Fish.Species}, weight={_fight.Weight:F1}, price={price}");
             ResetFight();
         }
 
         private void BeginAutoRetrieveFail(string reason)
         {
-            ShowNotification(reason, 2.4f, new Color(1f, 0.45f, 0.45f));
+            ShowNotification(reason, NotifyFight, NotifyError);
             DebugUtil.LogWarning($"FishGamePresenterV2: auto retrieve fail, reason={reason}");
             _fight.Reeling = false;
             _state = FishingState.AutoRetrieve;
@@ -605,7 +604,7 @@ namespace FishGameRuntime
 
         private void FailAndReset(string reason)
         {
-            ShowNotification(reason, 2.4f, new Color(1f, 0.45f, 0.45f));
+            ShowNotification(reason, NotifyFight, NotifyError);
             DebugUtil.LogWarning($"FishGamePresenterV2: fishing failed, reason={reason}");
             ResetFight();
         }
@@ -665,7 +664,7 @@ namespace FishGameRuntime
                 }
                 else if (bait.TargetTags != null && bait.TargetTags.Length > 0)
                 {
-                    weight *= 0.55f;
+                    weight *= global.BaitMismatchWeightScale;
                 }
 
                 var levelDelta = fish.Level - rod.RecommendFishLevelMax;
@@ -724,10 +723,10 @@ namespace FishGameRuntime
             };
             _view.StateText.color = _state switch
             {
-                FishingState.Casting => new Color(1f, 0.84f, 0.35f),
-                FishingState.Waiting => new Color(0.72f, 0.9f, 1f),
-                FishingState.Fighting => new Color(0.45f, 1f, 0.55f),
-                FishingState.AutoRetrieve => new Color(1f, 0.55f, 0.35f),
+                FishingState.Casting => FishGameColors.StateCasting,
+                FishingState.Waiting => FishGameColors.StateWaiting,
+                FishingState.Fighting => FishGameColors.StateFighting,
+                FishingState.AutoRetrieve => FishGameColors.StateAutoRetrieve,
                 _ => Color.white
             };
 
@@ -762,26 +761,26 @@ namespace FishGameRuntime
                 _view.SetBar(_view.LineFill, 1f - Mathf.Clamp01((_fight.LineLength - _fight.LineLengthMin) / Mathf.Max(0.1f, _fight.LineLengthMax - _fight.LineLengthMin)));
                 _view.TensionFill.color = tensionRatio switch
                 {
-                    < 0.6f => new Color(0.31f, 0.78f, 0.31f),
-                    < 0.85f => new Color(0.95f, 0.72f, 0.12f),
-                    _ => new Color(0.86f, 0.26f, 0.26f)
+                    < 0.6f => FishGameColors.TensionLow,
+                    < 0.85f => FishGameColors.TensionMid,
+                    _ => FishGameColors.TensionHigh
                 };
                 if (_fight.Phase == FishPhase.Burst)
                 {
                     var burstFlash = Mathf.Lerp(0.2f, 1f, Mathf.PingPong(Time.time * 4f, 1f));
-                    _view.TensionFill.color = Color.Lerp(new Color(1f, 0.78f, 0.1f), new Color(0.86f, 0.26f, 0.26f), burstFlash);
-                    _view.StaminaFill.color = new Color(1f, 0.55f, 0.2f);
+                    _view.TensionFill.color = Color.Lerp(FishGameColors.TensionBurstFlashA, FishGameColors.TensionHigh, burstFlash);
+                    _view.StaminaFill.color = FishGameColors.StaminaBurst;
                 }
                 else if (_fight.Phase == FishPhase.Fatigue)
                 {
-                    _view.StaminaFill.color = new Color(0.31f, 0.78f, 0.31f);
+                    _view.StaminaFill.color = FishGameColors.StaminaFatigue;
                 }
                 else
                 {
-                    _view.StaminaFill.color = new Color(0.95f, 0.72f, 0.12f);
+                    _view.StaminaFill.color = FishGameColors.StaminaSteady;
                 }
 
-                _view.LineFill.color = new Color(0.31f, 0.63f, 1f);
+                _view.LineFill.color = FishGameColors.LineNormal;
                 _view.StaminaValueText.text = $"{_fight.Stamina:F0} / {_fight.StaminaMax:F0}";
                 _view.TensionValueText.text = $"{_fight.Tension:F0} / {rodLineStrength:F0}";
                 _view.LineValueText.text = $"{_fight.LineLength:F1} m";
@@ -812,7 +811,7 @@ namespace FishGameRuntime
                 _view.SetBar(_view.StaminaFill, 0f);
                 _view.SetBar(_view.TensionFill, 0f);
                 _view.SetBar(_view.LineFill, 1f - Mathf.Clamp01((_fight.LineLength - _fight.LineLengthMin) / Mathf.Max(0.1f, _fight.LineLengthMax - _fight.LineLengthMin)));
-                _view.LineFill.color = new Color(0.31f, 0.63f, 1f);
+                _view.LineFill.color = FishGameColors.LineNormal;
                 _view.StaminaValueText.text = "--";
                 _view.TensionValueText.text = rod != null ? $"0 / {rod.LineStrength:F0}" : "--";
                 _view.LineValueText.text = $"{_fight.LineLength:F1} m";
@@ -826,7 +825,7 @@ namespace FishGameRuntime
                 _view.SetBar(_view.StaminaFill, 0f);
                 _view.SetBar(_view.TensionFill, 0f);
                 _view.SetBar(_view.LineFill, 1f - Mathf.Clamp01((_fight.LineLength - _fight.LineLengthMin) / Mathf.Max(0.1f, _fight.LineLengthMax - _fight.LineLengthMin)));
-                _view.LineFill.color = _state == FishingState.AutoRetrieve ? new Color(1f, 0.55f, 0.35f) : new Color(0.31f, 0.63f, 1f);
+                _view.LineFill.color = _state == FishingState.AutoRetrieve ? FishGameColors.StateAutoRetrieve : FishGameColors.LineNormal;
                 _view.StaminaValueText.text = "--";
                 _view.TensionValueText.text = rod != null ? $"0 / {rod.LineStrength:F0}" : "--";
                 _view.LineValueText.text = $"{_fight.LineLength:F1} m";
@@ -840,7 +839,7 @@ namespace FishGameRuntime
                 _view.SetBar(_view.StaminaFill, 0f);
                 _view.SetBar(_view.TensionFill, 0f);
                 _view.SetBar(_view.LineFill, 0f);
-                _view.LineFill.color = new Color(0.31f, 0.63f, 1f);
+                _view.LineFill.color = FishGameColors.LineNormal;
                 _view.StaminaValueText.text = "--";
                 _view.TensionValueText.text = "--";
                 _view.LineValueText.text = "--";
@@ -858,6 +857,10 @@ namespace FishGameRuntime
                 _view.ApplyInputMode(_state == FishingState.Idle);
             }
 
+            var global = _configManager?.GlobalConfig;
+            _view.SetCastZoneDistanceRange(
+                global != null ? global.MinCastDistance : 5f,
+                global != null ? global.MaxCastDistance : 40f);
             _view.UpdateCastZoneChargeDisplay(
                 currentDistance: GetCastLineLength(_view.CastZoneHoldDuration),
                 chargeRatio: GetCastChargeRatio(_view.CastZoneHoldDuration),
@@ -1145,6 +1148,12 @@ namespace FishGameRuntime
                 return;
             }
 
+            var global = _configManager?.GlobalConfig;
+            if (global == null)
+            {
+                return;
+            }
+
             _fight.PhaseTimer = Mathf.Max(0f, _fight.PhaseTimer - deltaTime);
             _fight.BurstReadyDelay = Mathf.Max(0f, _fight.BurstReadyDelay - deltaTime);
 
@@ -1158,16 +1167,16 @@ namespace FishGameRuntime
                         return;
                     }
 
-                    if (staminaRatio >= BurstReadyStaminaRatio && _fight.BurstReadyDelay <= 0f && Random.value < _fight.Fish.SprintChance)
+                    if (staminaRatio >= global.BurstReadyStaminaRatio && _fight.BurstReadyDelay <= 0f && Random.value < _fight.Fish.SprintChance)
                     {
                         EnterBurstPhase();
                         return;
                     }
 
-                    _fight.PhaseTimer = GetSteadyDuration(_fight.Fish);
-                    if (staminaRatio >= BurstReadyStaminaRatio && _fight.BurstReadyDelay <= 0f)
+                    _fight.PhaseTimer = GetSteadyDuration(_fight.Fish, global);
+                    if (staminaRatio >= global.BurstReadyStaminaRatio && _fight.BurstReadyDelay <= 0f)
                     {
-                        _fight.BurstReadyDelay = Random.Range(BurstReadyDelayMin, BurstReadyDelayMax);
+                        _fight.BurstReadyDelay = Random.Range(global.BurstReadyDelayMin, global.BurstReadyDelayMax);
                     }
 
                     return;
@@ -1181,7 +1190,7 @@ namespace FishGameRuntime
 
                     if (_fight.PhaseTimer <= 0f)
                     {
-                        EnterSteadyPhase();
+                        EnterSteadyPhase(global);
                     }
 
                     return;
@@ -1192,26 +1201,26 @@ namespace FishGameRuntime
                         return;
                     }
 
-                    if (staminaRatio < BurstReadyStaminaRatio)
+                    if (staminaRatio < global.BurstReadyStaminaRatio)
                     {
                         _fight.PhaseTimer = 0.1f;
                         return;
                     }
 
-                    EnterSteadyPhase();
+                    EnterSteadyPhase(global);
                     return;
 
                 default:
-                    EnterSteadyPhase();
+                    EnterSteadyPhase(global);
                     return;
             }
         }
 
-        private void EnterSteadyPhase()
+        private void EnterSteadyPhase(FishGlobalConfig global)
         {
             _fight.Phase = FishPhase.Steady;
-            _fight.PhaseTimer = GetSteadyDuration(_fight.Fish);
-            _fight.BurstReadyDelay = Random.Range(BurstReadyDelayMin, BurstReadyDelayMax);
+            _fight.PhaseTimer = GetSteadyDuration(_fight.Fish, global);
+            _fight.BurstReadyDelay = Random.Range(global.BurstReadyDelayMin, global.BurstReadyDelayMax);
             _fight.BurstReelHoldTime = 0f;
         }
 
@@ -1231,11 +1240,11 @@ namespace FishGameRuntime
             _fight.BurstReelHoldTime = 0f;
         }
 
-        private void UpdateBurstReelPressure(float deltaTime)
+        private void UpdateBurstReelPressure(float deltaTime, FishGlobalConfig global)
         {
             if (_fight.Phase == FishPhase.Burst && _fight.Reeling)
             {
-                _fight.BurstReelHoldTime = Mathf.Min(BurstReelDangerWindow, _fight.BurstReelHoldTime + deltaTime);
+                _fight.BurstReelHoldTime = Mathf.Min(global.BurstReelDangerWindow, _fight.BurstReelHoldTime + deltaTime);
                 return;
             }
 
@@ -1248,7 +1257,7 @@ namespace FishGameRuntime
             {
                 FishPhase.Burst => global.SprintForceMul,
                 FishPhase.Fatigue => global.RestForceMul,
-                _ => Mathf.Lerp(global.RestForceMul, global.SprintForceMul, 0.35f)
+                _ => Mathf.Lerp(global.RestForceMul, global.SprintForceMul, global.SteadyForceLerpWeight)
             };
         }
 
@@ -1266,9 +1275,9 @@ namespace FishGameRuntime
         {
             return _fight.Phase switch
             {
-                FishPhase.Burst => global.SprintForceMul + global.ReelDrainBonus * 2.1f,
-                FishPhase.Fatigue => Mathf.Lerp(global.RestForceMul, 1f, 0.25f),
-                _ => 1f + global.ReelDrainBonus * 0.1f
+                FishPhase.Burst => global.SprintForceMul + global.ReelDrainBonus * global.BurstTensionDrainScale,
+                FishPhase.Fatigue => Mathf.Lerp(global.RestForceMul, 1f, global.FatigueTensionLerpWeight),
+                _ => 1f + global.ReelDrainBonus * global.SteadyTensionDrainScale
             };
         }
 
@@ -1276,9 +1285,9 @@ namespace FishGameRuntime
         {
             return _fight.Phase switch
             {
-                FishPhase.Burst => 0.2f + global.ReelDrainBonus * 0.24f + global.StruggleReleaseDrainScale * 0.3f,
-                FishPhase.Fatigue => Mathf.Max(0.08f, global.RestForceMul * 0.6f),
-                _ => 0.2f + global.ReelDrainBonus * 0.24f
+                FishPhase.Burst => global.ReelResistanceBase + global.ReelDrainBonus * global.ReelResistanceDrainScale + global.StruggleReleaseDrainScale * global.BurstReelStruggleScale,
+                FishPhase.Fatigue => Mathf.Max(global.FatigueReelResistanceFloor, global.RestForceMul * global.FatigueReelResistanceScale),
+                _ => global.ReelResistanceBase + global.ReelDrainBonus * global.ReelResistanceDrainScale
             };
         }
 
@@ -1287,29 +1296,29 @@ namespace FishGameRuntime
             return _fight.Fish.BaseDrainPerSec * (1f + global.ReelDrainBonus);
         }
 
-        private float GetBurstReelDangerRatio()
+        private float GetBurstReelDangerRatio(FishGlobalConfig global)
         {
-            return Mathf.Clamp01(_fight.BurstReelHoldTime / BurstReelDangerWindow);
+            return Mathf.Clamp01(_fight.BurstReelHoldTime / global.BurstReelDangerWindow);
         }
 
-        private float GetBurstReelDangerPressure(FishRodConfig rod)
+        private float GetBurstReelDangerPressure(FishRodConfig rod, FishGlobalConfig global)
         {
-            var dangerRatio = GetBurstReelDangerRatio();
-            return rod.LineStrength * Mathf.Lerp(BurstReelDangerTensionPressureMin, BurstReelDangerTensionPressureMax, dangerRatio);
+            var dangerRatio = GetBurstReelDangerRatio(global);
+            return rod.LineStrength * Mathf.Lerp(global.BurstReelDangerTensionPressureMin, global.BurstReelDangerTensionPressureMax, dangerRatio);
         }
 
-        private float GetBurstReelResistancePenalty()
+        private float GetBurstReelResistancePenalty(FishGlobalConfig global)
         {
-            return Mathf.Lerp(BurstReelResistancePenaltyMin, BurstReelResistancePenaltyMax, GetBurstReelDangerRatio());
+            return Mathf.Lerp(global.BurstReelResistancePenaltyMin, global.BurstReelResistancePenaltyMax, GetBurstReelDangerRatio(global));
         }
 
         private float GetFatigueRecoveryPerSecond(FishGlobalConfig global, FishRodConfig rod)
         {
-            var suppression = Mathf.Clamp(rod.ControlPower / Mathf.Max(0.1f, global.ControlSuppressionDivisor), 0f, 0.65f);
+            var suppression = Mathf.Clamp(rod.ControlPower / Mathf.Max(0.1f, global.ControlSuppressionDivisor), 0f, global.ControlSuppressionMax);
             return _fight.Fish.RecoveryPerSec * (1f - suppression);
         }
 
-        private static float GetSteadyDuration(FishSpeciesConfig fish)
+        private static float GetSteadyDuration(FishSpeciesConfig fish, FishGlobalConfig global)
         {
             if (fish == null)
             {
@@ -1318,7 +1327,7 @@ namespace FishGameRuntime
 
             var min = Mathf.Min(fish.RestDurationMin, fish.StruggleDurationMin);
             var max = Mathf.Max(fish.RestDurationMax, fish.StruggleDurationMax);
-            return Random.Range(min, max) * 0.7f;
+            return Random.Range(min, max) * global.SteadyDurationScale;
         }
 
         private static bool SupportsBait(FishRodConfig rod, FishBaitConfig bait)
@@ -1353,9 +1362,11 @@ namespace FishGameRuntime
             return false;
         }
 
-        private static float GetCastChargeRatio(float holdDuration)
+        private float GetCastChargeRatio(float holdDuration)
         {
-            return Mathf.Clamp01(holdDuration / MaxCastChargeDuration);
+            var global = _configManager?.GlobalConfig;
+            var maxCharge = global != null ? global.MaxCastChargeDuration : 1.5f;
+            return Mathf.Clamp01(holdDuration / maxCharge);
         }
 
         private float GetCastLineLength(float holdDuration)
@@ -1366,15 +1377,6 @@ namespace FishGameRuntime
             return Mathf.Lerp(min, max, GetCastChargeRatio(holdDuration));
         }
 
-        private static Color GetRarityColor(string rarity)
-        {
-            return rarity switch
-            {
-                "legendary" => new Color(0.76f, 0.47f, 1f),
-                "rare" => new Color(1f, 0.8f, 0.25f),
-                "uncommon" => new Color(0.53f, 0.92f, 0.63f),
-                _ => Color.white
-            };
-        }
+        private static Color GetRarityColor(string rarity) => FishGameColors.GetRarityColor(rarity);
     }
 }

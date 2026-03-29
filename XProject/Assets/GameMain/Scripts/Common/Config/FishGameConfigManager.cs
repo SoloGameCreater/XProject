@@ -48,6 +48,57 @@ namespace Config.FishGame
         public float ControlSuppressionDivisor { get; set; }
         public float SprintForceMul { get; set; }
         public float RestForceMul { get; set; }
+
+        // Cast
+        public float MaxCastChargeDuration { get; set; } = 1.5f;
+        public float CastingDelay { get; set; } = 0.8f;
+
+        // Fight - Tension & Reel
+        public float TensionRelaxDuration { get; set; } = 0.5f;
+        public float ReelTensionSpeedMul { get; set; } = 0.75f;
+        public float MinimumReelSpeed { get; set; } = 0.2f;
+        public float NormalCatchWindowOffset { get; set; } = 1.5f;
+        public float FatigueCatchWindowOffset { get; set; } = 1.85f;
+
+        // Fight - Burst System
+        public float BurstReadyStaminaRatio { get; set; } = 0.7f;
+        public float BurstReadyDelayMin { get; set; } = 0.4f;
+        public float BurstReadyDelayMax { get; set; } = 1.1f;
+        public float BurstReelDangerWindow { get; set; } = 2f;
+        public float BurstReelDangerTensionPressureMin { get; set; } = 0.18f;
+        public float BurstReelDangerTensionPressureMax { get; set; } = 0.42f;
+        public float BurstReelProgressCapRatio { get; set; } = 0.22f;
+        public float BurstReelResistancePenaltyMin { get; set; } = 0.9f;
+        public float BurstReelResistancePenaltyMax { get; set; } = 1.6f;
+
+        // Fight - Weight Variation
+        public float WeightStaminaLerpMin { get; set; } = 0.88f;
+        public float WeightStaminaLerpMax { get; set; } = 1.18f;
+        public float WeightResistanceLerpMin { get; set; } = 0.9f;
+        public float WeightResistanceLerpMax { get; set; } = 1.25f;
+        public float WeightEscapeLerpMin { get; set; } = 0.92f;
+        public float WeightEscapeLerpMax { get; set; } = 1.18f;
+
+        // Fight - Phase Multipliers
+        public float SteadyForceLerpWeight { get; set; } = 0.35f;
+        public float BurstTensionDrainScale { get; set; } = 2.1f;
+        public float FatigueTensionLerpWeight { get; set; } = 0.25f;
+        public float SteadyTensionDrainScale { get; set; } = 0.1f;
+        public float ReelResistanceBase { get; set; } = 0.2f;
+        public float ReelResistanceDrainScale { get; set; } = 0.24f;
+        public float BurstReelStruggleScale { get; set; } = 0.3f;
+        public float FatigueReelResistanceFloor { get; set; } = 0.08f;
+        public float FatigueReelResistanceScale { get; set; } = 0.6f;
+
+        // Fight - Misc
+        public float PullForceStaminaLerpMin { get; set; } = 0.55f;
+        public float FatigueControlBonus { get; set; } = 0.18f;
+        public float RelaxBoostScale { get; set; } = 0.5f;
+        public float EarlyReelSpeedMul { get; set; } = 6f;
+        public float WaitTimeMultiplierFloor { get; set; } = 0.45f;
+        public float ControlSuppressionMax { get; set; } = 0.65f;
+        public float SteadyDurationScale { get; set; } = 0.7f;
+        public float BaitMismatchWeightScale { get; set; } = 0.55f;
     }
 
     public class FishRodConfig

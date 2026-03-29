@@ -21,6 +21,50 @@
     "StruggleReleaseDrainScale": 0.6,
     "ControlSuppressionDivisor": 3.0,
     "SprintForceMul": 1.8,
-    "RestForceMul": 0.2
+    "RestForceMul": 0.2,
+
+    "MaxCastChargeDuration": 1.5,
+    "CastingDelay": 0.8,
+    "TensionRelaxDuration": 0.5,
+    "ReelTensionSpeedMul": 0.75,
+    "MinimumReelSpeed": 0.2,
+    "NormalCatchWindowOffset": 1.5,
+    "FatigueCatchWindowOffset": 1.85,
+
+    "BurstReadyStaminaRatio": 0.7,
+    "BurstReadyDelayMin": 0.4,
+    "BurstReadyDelayMax": 1.1,
+    "BurstReelDangerWindow": 2.0,
+    "BurstReelDangerTensionPressureMin": 0.18,
+    "BurstReelDangerTensionPressureMax": 0.42,
+    "BurstReelProgressCapRatio": 0.22,
+    "BurstReelResistancePenaltyMin": 0.9,
+    "BurstReelResistancePenaltyMax": 1.6,
+
+    "WeightStaminaLerpMin": 0.88,
+    "WeightStaminaLerpMax": 1.18,
+    "WeightResistanceLerpMin": 0.9,
+    "WeightResistanceLerpMax": 1.25,
+    "WeightEscapeLerpMin": 0.92,
+    "WeightEscapeLerpMax": 1.18,
+
+    "SteadyForceLerpWeight": 0.35,
+    "BurstTensionDrainScale": 2.1,
+    "FatigueTensionLerpWeight": 0.25,
+    "SteadyTensionDrainScale": 0.1,
+    "ReelResistanceBase": 0.2,
+    "ReelResistanceDrainScale": 0.24,
+    "BurstReelStruggleScale": 0.3,
+    "FatigueReelResistanceFloor": 0.08,
+    "FatigueReelResistanceScale": 0.6,
+
+    "PullForceStaminaLerpMin": 0.55,
+    "FatigueControlBonus": 0.18,
+    "RelaxBoostScale": 0.5,
+    "EarlyReelSpeedMul": 6.0,
+    "WaitTimeMultiplierFloor": 0.45,
+    "ControlSuppressionMax": 0.65,
+    "SteadyDurationScale": 0.7,
+    "BaitMismatchWeightScale": 0.55
   }
 ]

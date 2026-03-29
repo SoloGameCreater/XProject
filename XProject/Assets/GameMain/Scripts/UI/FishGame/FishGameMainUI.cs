@@ -52,6 +52,8 @@ namespace FishGameRuntime
         private float _castZoneHoldDuration;
         private bool _pendingCastPress;
         private bool _inputBlocked;
+        private float _castZoneMinDistance = 5f;
+        private float _castZoneMaxDistance = 40f;
 
         internal Text StateText => _stateText;
         internal Text EquipText => _equipText;
@@ -210,6 +212,12 @@ namespace FishGameRuntime
             _pendingCastPress = false;
         }
 
+        internal void SetCastZoneDistanceRange(float minDistance, float maxDistance)
+        {
+            _castZoneMinDistance = minDistance;
+            _castZoneMaxDistance = maxDistance;
+        }
+
         private void RegisterButtons()
         {
             _idleOnlyButtons.Clear();
@@ -236,11 +244,11 @@ namespace FishGameRuntime
 
             _castZoneVisual = castZoneObject.GetComponent<RectTransform>();
             var castZoneImage = castZoneObject.GetComponent<Image>();
-            castZoneImage.color = new Color(0.20f, 0.72f, 0.86f, 0.05f);
+            castZoneImage.color = FishGameColors.CastZoneFill;
             castZoneImage.raycastTarget = false;
 
             var outline = castZoneObject.AddComponent<Outline>();
-            outline.effectColor = new Color(0.42f, 0.84f, 0.98f, 0.22f);
+            outline.effectColor = FishGameColors.CastZoneOutline;
             outline.effectDistance = new Vector2(2f, -2f);
 
             var labelObject = new GameObject("Label", typeof(RectTransform), typeof(Text));
@@ -258,7 +266,7 @@ namespace FishGameRuntime
             _castZoneLabel.fontSize = 26;
             _castZoneLabel.alignment = TextAnchor.MiddleCenter;
             _castZoneLabel.fontStyle = FontStyle.Bold;
-            _castZoneLabel.color = new Color(0.88f, 0.95f, 0.98f, 1f);
+            _castZoneLabel.color = FishGameColors.CastZoneLabel;
             _castZoneLabel.horizontalOverflow = HorizontalWrapMode.Wrap;
             _castZoneLabel.verticalOverflow = VerticalWrapMode.Overflow;
             _castZoneLabel.raycastTarget = false;
@@ -301,12 +309,12 @@ namespace FishGameRuntime
             if (isCharging)
             {
                 _castZoneLabel.text = $"松开抛竿\n{currentDistance:F1} m";
-                _castZoneLabel.color = Color.Lerp(new Color(0.88f, 0.95f, 0.98f, 1f), new Color(1f, 0.92f, 0.45f, 1f), Mathf.Clamp01(chargeRatio));
+                _castZoneLabel.color = Color.Lerp(FishGameColors.CastZoneLabel, FishGameColors.CastZoneLabelCharged, Mathf.Clamp01(chargeRatio));
                 return;
             }
 
-            _castZoneLabel.text = "按住蓄力抛竿\n5m - 40m";
-            _castZoneLabel.color = new Color(0.88f, 0.95f, 0.98f, 1f);
+            _castZoneLabel.text = $"按住蓄力抛竿\n{_castZoneMinDistance:F0}m - {_castZoneMaxDistance:F0}m";
+            _castZoneLabel.color = FishGameColors.CastZoneLabel;
         }
 
         private void PollPointerInput(float deltaTime)

@@ -28,14 +28,14 @@ namespace FishGameRuntime
     [AssetAddress("UIFishGame/FishRodSelectPopup")]
     public class FishRodSelectPopup : UIPopup
     {
-        private static readonly Color CardInnerColor = new(0.10f, 0.20f, 0.27f, 0.78f);
-        private static readonly Color AccentColor = new(0.20f, 0.72f, 0.86f, 0.92f);
-        private static readonly Color MutedTextColor = new(0.72f, 0.83f, 0.88f, 1f);
-        private static readonly Color EquippedBtnColor = new(0.15f, 0.49f, 0.24f);
-        private static readonly Color EquipBtnColor = new(0.18f, 0.56f, 0.67f);
-        private static readonly Color BuyBtnColor = new(0.76f, 0.46f, 0.14f);
-        private static readonly Color DisabledBtnColor = new(0.3f, 0.3f, 0.3f, 0.6f);
-        private static readonly Color ErrorColor = new(1f, 0.45f, 0.45f);
+        private static readonly Color CardInnerColor = FishGameColors.RodCardInner;
+        private static readonly Color AccentColor = FishGameColors.RodAccent;
+        private static readonly Color MutedTextColor = FishGameColors.RodMutedText;
+        private static readonly Color EquippedBtnColor = FishGameColors.RodEquippedBtn;
+        private static readonly Color EquipBtnColor = FishGameColors.RodEquipBtn;
+        private static readonly Color BuyBtnColor = FishGameColors.RodBuyBtn;
+        private static readonly Color DisabledBtnColor = FishGameColors.RodDisabledBtn;
+        private static readonly Color ErrorColor = FishGameColors.RodError;
 
         [ComponentBinder("DialogPanel/TitleBar/CoinText")] private Text _coinText;
         [ComponentBinder("DialogPanel/TitleBar/CloseButton")] private Button _closeButton;
