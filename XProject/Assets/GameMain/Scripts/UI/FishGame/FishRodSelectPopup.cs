@@ -22,6 +22,7 @@ namespace FishGameRuntime
         public HashSet<int> OwnedRodIds;
         public Action<int> OnRodEquipped;
         public Func<int, RodPurchaseResult> OnRodPurchased;
+        public Action OnPopupClosed;
     }
 
     [AssetAddress("UIFishGame/FishRodSelectPopup")]
@@ -62,9 +63,11 @@ namespace FishGameRuntime
         public override async Task OnViewClose()
         {
             _closeButton.onClick.RemoveListener(DoViewClose);
+            var onClosed = _param?.OnPopupClosed;
             _param = null;
             _rows.Clear();
             await base.OnViewClose();
+            onClosed?.Invoke();
         }
 
         private void BuildRodList()

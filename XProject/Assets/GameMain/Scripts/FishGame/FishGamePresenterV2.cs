@@ -47,7 +47,6 @@ namespace FishGameRuntime
 
         private const float MaxCastChargeDuration = 1.5f;
         private const float TensionRelaxDuration = 0.5f;
-        private const float FatigueEnterStaminaRatio = 0.32f;
         private const float BurstReadyStaminaRatio = 0.7f;
         private const float ReelTensionSpeedMul = 0.75f;
         private const float MinimumReelSpeed = 0.2f;
@@ -245,8 +244,10 @@ namespace FishGameRuntime
                 CurrentRodId = _save.RodId,
                 OwnedRodIds = ownedSet,
                 OnRodEquipped = OnRodEquippedFromPopup,
-                OnRodPurchased = TryPurchaseRod
+                OnRodPurchased = TryPurchaseRod,
+                OnPopupClosed = () => { if (_view != null) _view.InputBlocked = false; }
             };
+            _view.InputBlocked = true;
             UIViewSystem.Instance.Open<FishRodSelectPopup>(param);
         }
 
@@ -1172,9 +1173,15 @@ namespace FishGameRuntime
                     return;
 
                 case FishPhase.Burst:
-                    if (staminaRatio <= FatigueEnterStaminaRatio || _fight.PhaseTimer <= 0f)
+                    if (_fight.Stamina <= 0f)
                     {
                         EnterFatiguePhase();
+                        return;
+                    }
+
+                    if (_fight.PhaseTimer <= 0f)
+                    {
+                        EnterSteadyPhase();
                     }
 
                     return;

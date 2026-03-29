@@ -51,6 +51,7 @@ namespace FishGameRuntime
         private bool _castZoneClickedThisFrame;
         private float _castZoneHoldDuration;
         private bool _pendingCastPress;
+        private bool _inputBlocked;
 
         internal Text StateText => _stateText;
         internal Text EquipText => _equipText;
@@ -79,6 +80,7 @@ namespace FishGameRuntime
         internal bool CastZoneClickedThisFrame => _castZoneClickedThisFrame;
         internal bool IsCastZonePressActive => _isIdleInputMode && _pendingCastPress && _primaryHeld;
         internal float CastZoneHoldDuration => _castZoneHoldDuration;
+        internal bool InputBlocked { get => _inputBlocked; set => _inputBlocked = value; }
 
         public override UIViewLayer ViewLayer => UIViewLayer.Normal;
 
@@ -309,6 +311,12 @@ namespace FishGameRuntime
 
         private void PollPointerInput(float deltaTime)
         {
+            if (_inputBlocked)
+            {
+                ResetPointerState();
+                return;
+            }
+
             UpdateCastZoneLayout();
 
             _primaryPressedThisFrame = Input.GetMouseButtonDown(0);
